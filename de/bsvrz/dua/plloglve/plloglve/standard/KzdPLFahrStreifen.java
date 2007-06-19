@@ -1,66 +1,62 @@
-package de.bsvrz.dua.plloglve.plloglve;
+/** 
+ * Segment 4 Datenübernahme und Aufbereitung (DUA), SWE 4.2 Plausibilitätsprüfung logisch LVE
+ * Copyright (C) 2007 BitCtrl Systems GmbH 
+ * 
+ * This program is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU General Public License as published by the Free Software
+ * Foundation; either version 2 of the License, or (at your option) any later
+ * version.
+ *
+ * This program is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
+ * details.
+ *
+ * You should have received a copy of the GNU General Public License along with
+ * this program; if not, write to the Free Software Foundation, Inc., 51
+ * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ *
+ * Contact Information:<br>
+ * BitCtrl Systems GmbH<br>
+ * Weißenfelser Straße 67<br>
+ * 04229 Leipzig<br>
+ * Phone: +49 341-490670<br>
+ * mailto: info@bitctrl.de
+ */
+
+package de.bsvrz.dua.plloglve.plloglve.standard;
 
 import java.util.Collections;
 import java.util.Map;
 import java.util.TreeMap;
 
-import stauma.dav.clientside.ClientReceiverInterface;
+import stauma.dav.clientside.ClientDavInterface;
 import stauma.dav.clientside.Data;
 import stauma.dav.clientside.DataDescription;
 import stauma.dav.clientside.ReceiveOptions;
 import stauma.dav.clientside.ReceiverRole;
 import stauma.dav.clientside.ResultData;
+import stauma.dav.configuration.interfaces.AttributeGroup;
 import stauma.dav.configuration.interfaces.SystemObject;
-import sys.funclib.debug.Debug;
-import de.bsvrz.dua.plloglve.plloglve.daten.AtgVerkehrsDatenKZIPlPruefLogisch;
-import de.bsvrz.dua.plloglve.plloglve.typen.OptionenPlausibilitaetsPruefungLogischVerkehr;
+import de.bsvrz.dua.plloglve.plloglve.PLLOGKonstanten;
 import de.bsvrz.sys.funclib.bitctrl.daf.Konstanten;
 import de.bsvrz.sys.funclib.bitctrl.dua.DUAKonstanten;
-import de.bsvrz.sys.funclib.bitctrl.dua.DUAUtensilien;
 import de.bsvrz.sys.funclib.bitctrl.dua.schnittstellen.IVerwaltung;
-import de.bsvrz.sys.funclib.bitctrl.modell.AbstractSystemObjekt;
-import de.bsvrz.sys.funclib.bitctrl.modell.SystemObjekt;
-import de.bsvrz.sys.funclib.bitctrl.modell.SystemObjektTyp;
+import de.bsvrz.sys.funclib.bitctrl.konstante.Konstante;
 
 /**
  * 
- * @author Thierfelder
+ * @author BitCtrl Systems GmbH, Thierfelder
  *
  */
-public class PlausLogLVEFahrStreifen
-extends AbstractSystemObjekt
-implements Comparable<PlausLogLVEFahrStreifen>, ClientReceiverInterface{
+public class KzdPLFahrStreifen
+extends AbstraktPLFahrStreifen{
 	
 	/**
-	 * Debug-Logger
-	 */
-	private static final Debug LOGGER = Debug.getLogger();
-	
-	/**
-	 * Verbindung zum Verwaltungsmodul
-	 */
-	protected static IVerwaltung VERWALTUNG = null;
-	
-	/**
-	 * Datenbeschreibung für <code>atg.tlsLveBetriebsParameter</code>
+	 * Datenbeschreibung für <code>atg.tlsLveBetriebsParameter</code> zur Bestimmung der
+	 * Art der Mittelwertbildung
 	 */
 	private static DataDescription DE_BETRIEBS_PARAMETER = null;
-	
-	/**
-	 * Datenbeschreibung für <code>atg.verkehrsDatenKurzZeitIntervallPlausibilitätsPrüfungLogisch</code>
-	 */
-	private static DataDescription KZD_PL_LOG_PARAMETER = null;	
-	
-	/**
-	 * Alle statischen Instanzen dieser Klasse
-	 */
-	private static Map<SystemObject, PlausLogLVEFahrStreifen> INSTANZEN = Collections.synchronizedMap(
-			new TreeMap<SystemObject, PlausLogLVEFahrStreifen>());
-
-	/**
-	 * Parametersatz <code>atg.verkehrsDatenKurzZeitIntervallPlausibilitätsPrüfungLogisch</code>
-	 */
-	private AtgVerkehrsDatenKZIPlPruefLogisch parameterAtgLog = null;
 	
 	/**
 	 * Die Art der Mittelwertbildung
@@ -72,19 +68,22 @@ implements Comparable<PlausLogLVEFahrStreifen>, ClientReceiverInterface{
 	 */
 	private ResultData letztesKZDatum = null;
 	
+	/**
+	 * Alle statischen Instanzen dieser Klasse
+	 */
+	protected static Map<SystemObject, KzdPLFahrStreifen> INSTANZEN = Collections.synchronizedMap(
+			new TreeMap<SystemObject, KzdPLFahrStreifen>());
+	
 
 	/**
 	 * Standartdkonstruktor 
 	 * 
 	 * @param obj das mit dem Fahrstreifen assoziierte Systemobjekt
 	 */
-	private PlausLogLVEFahrStreifen(final SystemObject obj)
+	private KzdPLFahrStreifen(final SystemObject obj)
 	throws Exception{
 		super(obj);
-		
-		VERWALTUNG.getVerbindung().subscribeReceiver(this, obj, KZD_PL_LOG_PARAMETER,
-				ReceiveOptions.normal(), ReceiverRole.receiver());		
-		
+				
 		/**
 		 * Versuche die Daten der assoziierten DE auszulesen
 		 * um die Art der Mittelwertbindung zu ermitteln
@@ -117,7 +116,14 @@ implements Comparable<PlausLogLVEFahrStreifen>, ClientReceiverInterface{
 	}
 	
 
-	public static final synchronized PlausLogLVEFahrStreifen getInstanz(final SystemObject obj,
+	/**
+	 * 
+	 * @param obj
+	 * @param verwaltung
+	 * @return
+	 * @throws Exception
+	 */
+	public static final synchronized KzdPLFahrStreifen getInstanz(final SystemObject obj,
 																  final IVerwaltung verwaltung)
 	throws Exception{
 		if(VERWALTUNG == null){
@@ -126,17 +132,12 @@ implements Comparable<PlausLogLVEFahrStreifen>, ClientReceiverInterface{
 					VERWALTUNG.getVerbindung().getDataModel().getAttributeGroup("atg.tlsLveBetriebsParameter"), //$NON-NLS-1$
 					VERWALTUNG.getVerbindung().getDataModel().getAspect(Konstanten.ASP_PARAMETER_SOLL),
 					(short)0);
-			KZD_PL_LOG_PARAMETER = new DataDescription(
-					VERWALTUNG.getVerbindung().getDataModel().getAttributeGroup(
-							"atg.verkehrsDatenKurzZeitIntervallPlausibilitätsPrüfungLogisch"), //$NON-NLS-1$
-					VERWALTUNG.getVerbindung().getDataModel().getAspect(Konstanten.ASP_PARAMETER_SOLL),
-					(short)0);
 		}
 		
-		PlausLogLVEFahrStreifen dummy = INSTANZEN.get(obj);
+		KzdPLFahrStreifen dummy = INSTANZEN.get(obj);
 		
-		if(dummy != null){
-			dummy = new PlausLogLVEFahrStreifen(obj);
+		if(dummy == null){
+			dummy = new KzdPLFahrStreifen(obj);
 			INSTANZEN.put(obj, dummy);
 		}
 		
@@ -148,21 +149,17 @@ implements Comparable<PlausLogLVEFahrStreifen>, ClientReceiverInterface{
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public void update(ResultData[] parameterFeld) {
+		super.update(parameterFeld);
+		
 		if(parameterFeld != null){
 			for(ResultData parameter:parameterFeld){
 				if(parameter != null && parameter.getData() != null){
 					if(parameter.getDataDescription().getAttributeGroup().equals(
-							KZD_PL_LOG_PARAMETER.getAttributeGroup())){
-						synchronized (this.parameterAtgLog) {
-							this.parameterAtgLog = new AtgVerkehrsDatenKZIPlPruefLogisch(parameter.getData());
-						}
-					}else if(parameter.getDataDescription().getAttributeGroup().equals(
 							DE_BETRIEBS_PARAMETER.getAttributeGroup())){
 						this.mittelWertBildungIstArithmethisch = parameter.getData().
 								getUnscaledValue("ArtMittelWertBildung").intValue() == 1; //$NON-NLS-1$
-					}else{
-						LOGGER.warning("Unbekanntes Datum empfangen:\n" + parameter); //$NON-NLS-1$
 					}
 				}
 			}
@@ -170,56 +167,34 @@ implements Comparable<PlausLogLVEFahrStreifen>, ClientReceiverInterface{
 	}
 	
 
-	protected final Data plausibilisiere(final ResultData resultat){
-		Data data = null;
-//		if(parameter == null){
-//			LOGGER.warning("Für das Objekt " + resultat.getObject().getPid() + " liegen keine Parameter der " + //$NON-NLS-1$ //$NON-NLS-2$
-//			"Attributgruppe \"atg.verkehrsDatenKurzZeitIntervallPlausibilitätsPrüfungLogisch\" vor"); //$NON-NLS-1$
-//		}else if(resultat.getData() != null){
-//			Data copy = resultat.getData().createModifiableCopy();
-//			
-//			if(copy != null){
-//				
-//			}else{
-//				LOGGER.warning("Es konnte keine Kopie von Datensatz erzeugt werden:\n" //$NON-NLS-1$
-//						+ resultat);
-//			}
-//		}
+	@Override
+	protected Data plausibilisiere(final ResultData resultat){
+		Data copy = null;
+		
+		if(resultat.getData() != null){
+			try{
+				copy = resultat.getData().createModifiableCopy();
+			}catch(IllegalStateException e){
+				LOGGER.error(Konstante.LEERSTRING, e);
+			}
+			
+			if(copy != null){
+				this.berechneQPkw(copy);
+				this.ueberpruefeKontextFehler(copy, resultat);
+				this.grenzWertTests(copy);
+			}else{
+				LOGGER.warning("Es konnte keine Kopie von Datensatz erzeugt werden:\n" //$NON-NLS-1$
+						+ resultat);
+			}
+		}
 		this.letztesKZDatum = resultat;
 
-		return data;
-	}
-
-	
-	private final void berechneQPkw(Data data){
-		
-		/**
-		 * TODO: Güte
-		 */
-		final int qKfz = data.getItem("qKfz").getUnscaledValue("Wert").intValue(); //$NON-NLS-1$ //$NON-NLS-2$
-		final int qLkw = data.getItem("qLkw").getUnscaledValue("Wert").intValue(); //$NON-NLS-1$ //$NON-NLS-2$
-		int qPkw = PLLOGKonstanten.NICHT_ERMITTELBAR;
-		if(qKfz >= 0 && qLkw >= 0){
-			qPkw = qKfz - qLkw;
-		}		
-		data.getItem("qPkw").getUnscaledValue("Wert").set(qPkw); //$NON-NLS-1$ //$NON-NLS-2$
-		
-		final int vPkw = data.getItem("vPkw").getUnscaledValue("Wert").intValue(); //$NON-NLS-1$ //$NON-NLS-2$
-		final int vLkw = data.getItem("vLkw").getUnscaledValue("Wert").intValue(); //$NON-NLS-1$ //$NON-NLS-2$
-		int vKfz = PLLOGKonstanten.NICHT_ERMITTELBAR;
-		if(qKfz > 0 && qPkw >= 0 && vPkw >= 0 && qLkw >= 0 && vLkw >= 0){
-			vKfz = (qPkw * vPkw + qLkw * vLkw) / qKfz;
-		}
-		data.getItem("vKfz").getUnscaledValue("Wert").set(vKfz);  //$NON-NLS-1$//$NON-NLS-2$
+		return copy;
 	}
 	
 
-	/**
-	 * 
-	 * @param data
-	 * @param resultat
-	 */
-	private final void ueberpruefeKontextFehler(Data data, ResultData resultat){
+	@Override
+	protected void ueberpruefeKontextFehler(Data data, ResultData resultat){
 
 		final int qKfz = data.getItem("qKfz").getUnscaledValue("Wert").intValue(); //$NON-NLS-1$ //$NON-NLS-2$
 		final int qLkw = data.getItem("qLkw").getUnscaledValue("Wert").intValue(); //$NON-NLS-1$ //$NON-NLS-2$
@@ -392,138 +367,70 @@ implements Comparable<PlausLogLVEFahrStreifen>, ClientReceiverInterface{
 			data.getItem("b").getItem("Status").getItem("MessWertErsetzung").   //$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$
 			getUnscaledValue("Implausibel").set(DUAKonstanten.JA); //$NON-NLS-1$			
 		}
-
-		grenzWertTests(data);
 	}
 	
-	private final void grenzWertTests(Data data){
+	@Override
+	protected void grenzWertTests(Data data){
 		if(this.parameterAtgLog != null){
 			synchronized (this.parameterAtgLog) {				
 				/**
 				 * Regel Nr.12 (aus SE-02.00.00.00.00-AFo-4.0, S.95)
 				 */
-				data = this.untersucheWerteBereich(data, "qKfz", this.parameterAtgLog.getQKfzBereichMin(),  //$NON-NLS-1$
-																	this.parameterAtgLog.getQKfzBereichMax());
+				this.untersucheWerteBereich(data, "qKfz", this.parameterAtgLog.getQKfzBereichMin(),  //$NON-NLS-1$
+														  this.parameterAtgLog.getQKfzBereichMax());
 	
 				/**
 				 * Regel Nr.13 (aus SE-02.00.00.00.00-AFo-4.0, S.95)
 				 */
-				data = this.untersucheWerteBereich(data, "qPkw", this.parameterAtgLog.getQPkwBereichMin(),  //$NON-NLS-1$
-																	this.parameterAtgLog.getQPkwBereichMax());
+				this.untersucheWerteBereich(data, "qPkw", this.parameterAtgLog.getQPkwBereichMin(),  //$NON-NLS-1$
+								  					      this.parameterAtgLog.getQPkwBereichMax());
 
 				/**
 				 * Regel Nr.14 (aus SE-02.00.00.00.00-AFo-4.0, S.95)
 				 */
-				data = this.untersucheWerteBereich(data, "qLkw", this.parameterAtgLog.getQLkwBereichMin(),  //$NON-NLS-1$
-																	this.parameterAtgLog.getQLkwBereichMax());
+				this.untersucheWerteBereich(data, "qLkw", this.parameterAtgLog.getQLkwBereichMin(),  //$NON-NLS-1$
+														  this.parameterAtgLog.getQLkwBereichMax());
 
 				/**
 				 * Regel Nr.15 (aus SE-02.00.00.00.00-AFo-4.0, S.95)
 				 */
-				data = this.untersucheWerteBereich(data, "vKfz", this.parameterAtgLog.getVKfzBereichMin(),  //$NON-NLS-1$
-																	this.parameterAtgLog.getVKfzBereichMax());
+				this.untersucheWerteBereich(data, "vKfz", this.parameterAtgLog.getVKfzBereichMin(),  //$NON-NLS-1$
+														  this.parameterAtgLog.getVKfzBereichMax());
 
 				/**
 				 * Regel Nr.16 (aus SE-02.00.00.00.00-AFo-4.0, S.96)
 				 */
-				data = this.untersucheWerteBereich(data, "vLkw", this.parameterAtgLog.getVLkwBereichMin(),  //$NON-NLS-1$
-																	this.parameterAtgLog.getVLkwBereichMax());
+				this.untersucheWerteBereich(data, "vLkw", this.parameterAtgLog.getVLkwBereichMin(),  //$NON-NLS-1$
+														  this.parameterAtgLog.getVLkwBereichMax());
 
 				/**
 				 * Regel Nr.17 (aus SE-02.00.00.00.00-AFo-4.0, S.96)
 				 */
-				data = this.untersucheWerteBereich(data, "vPkw", this.parameterAtgLog.getVPkwBereichMin(),  //$NON-NLS-1$
-																	this.parameterAtgLog.getVPkwBereichMax());
+				this.untersucheWerteBereich(data, "vPkw", this.parameterAtgLog.getVPkwBereichMin(),  //$NON-NLS-1$
+														  this.parameterAtgLog.getVPkwBereichMax());
 
 				/**
 				 * Regel Nr.18 (aus SE-02.00.00.00.00-AFo-4.0, S.96)
 				 */
-				data = this.untersucheWerteBereich(data, "vgKfz", this.parameterAtgLog.getVgKfzBereichMin(),  //$NON-NLS-1$
-																	this.parameterAtgLog.getVgKfzBereichMax());
+				this.untersucheWerteBereich(data, "vgKfz", this.parameterAtgLog.getVgKfzBereichMin(),  //$NON-NLS-1$
+														   this.parameterAtgLog.getVgKfzBereichMax());
 
 				/**
 				 * Regel Nr.19 (aus SE-02.00.00.00.00-AFo-4.0, S.96)
 				 */
-				data = this.untersucheWerteBereich(data, "b", this.parameterAtgLog.getBelegungBereichMin(),  //$NON-NLS-1$
-																	this.parameterAtgLog.getBelegungBereichMax());
-			}
-		}			
-	}
-	
-	
-	private Data untersucheWerteBereich(Data davDatum, final String wertName, final int min, final int max){
-		if(davDatum != null && this.parameterAtgLog != null){
-			OptionenPlausibilitaetsPruefungLogischVerkehr optionen = this.parameterAtgLog.getOptionen();
-
-			if(!optionen.equals(OptionenPlausibilitaetsPruefungLogischVerkehr.KEINE_PRUEFUNG)){
-				int wert = davDatum.getItem(wertName).getUnscaledValue("Wert").intValue(); //$NON-NLS-1$
-				
-				/**
-				 * sonst handelt es sich nicht um einen Messwert
-				 */
-				if(wert >= 0){
-					boolean minVerletzt = wert < min;
-					boolean maxVerletzt = wert > max;
-		
-					if(minVerletzt){
-						DUAUtensilien.getAttributDatum(wertName + ".Status.PlLogisch.WertMinLogisch", davDatum). //$NON-NLS-1$
-									asUnscaledValue().set(DUAKonstanten.JA);
-					}
-					if(maxVerletzt){
-						DUAUtensilien.getAttributDatum(wertName + ".Status.PlLogisch.WertMaxLogisch", davDatum). //$NON-NLS-1$
-									asUnscaledValue().set(DUAKonstanten.JA);
-					}
-						
-					if(optionen.equals(OptionenPlausibilitaetsPruefungLogischVerkehr.SETZE_MAX)){
-						if(maxVerletzt){
-							DUAUtensilien.getAttributDatum(wertName + ".Wert", davDatum). //$NON-NLS-1$
-								asUnscaledValue().set(max);
-						}					
-					}else if(optionen.equals(OptionenPlausibilitaetsPruefungLogischVerkehr.SETZE_MIN)){
-						if(minVerletzt){
-							DUAUtensilien.getAttributDatum(wertName + ".Wert", davDatum). //$NON-NLS-1$
-								asUnscaledValue().set(min);
-						}															
-					}else if(optionen.equals(OptionenPlausibilitaetsPruefungLogischVerkehr.SETZE_MIN_MAX)){
-						if(maxVerletzt){
-							DUAUtensilien.getAttributDatum(wertName + ".Wert", davDatum). //$NON-NLS-1$
-								asUnscaledValue().set(max);
-						}else					
-						if(minVerletzt){
-							DUAUtensilien.getAttributDatum(wertName + ".Wert", davDatum). //$NON-NLS-1$
-								asUnscaledValue().set(min);
-						}															
-					}
-				}
+				this.untersucheWerteBereich(data, "b", this.parameterAtgLog.getBelegungBereichMin(),  //$NON-NLS-1$
+													   this.parameterAtgLog.getBelegungBereichMax());
 			}
 		}
-		
-		return davDatum;
 	}
 
 
 	/**
 	 * {@inheritDoc}
 	 */
-	public SystemObjektTyp getTyp() {
-		return new SystemObjektTyp(){
-
-			public Class<? extends SystemObjekt> getKlasse() {
-				return PlausLogLVEFahrStreifen.class;
-			}
-
-			public String getPid() {
-				return getSystemObject().getType().getPid();
-			}
-			
-		};
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	public int compareTo(PlausLogLVEFahrStreifen that) {
-		return new Long(this.getId()).compareTo(that.getId());
-	}
+	@Override
+	protected AttributeGroup getPlausibilisierungsParameterAtg(ClientDavInterface dav) {
+		return dav.getDataModel().getAttributeGroup(AtgVerkehrsDatenKZIPlPruefLogisch.getPid());
+	}	
 	
 }
