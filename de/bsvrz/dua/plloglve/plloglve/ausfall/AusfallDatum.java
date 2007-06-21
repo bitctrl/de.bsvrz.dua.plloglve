@@ -26,15 +26,14 @@
 
 package de.bsvrz.dua.plloglve.plloglve.ausfall;
 
-import java.text.SimpleDateFormat;
 import java.util.Date;
-
-import de.bsvrz.dua.plloglve.plloglve.PLLOGKonstanten;
-import de.bsvrz.sys.funclib.bitctrl.dua.DUAKonstanten;
-import de.bsvrz.sys.funclib.bitctrl.konstante.Konstante;
 
 import stauma.dav.clientside.Data;
 import stauma.dav.clientside.ResultData;
+import de.bsvrz.dua.plloglve.plloglve.AbstraktDAVZeitEinzelDatum;
+import de.bsvrz.dua.plloglve.plloglve.PLLOGKonstanten;
+import de.bsvrz.sys.funclib.bitctrl.dua.DUAKonstanten;
+import de.bsvrz.sys.funclib.bitctrl.konstante.Konstante;
 
 /**
  * 
@@ -42,13 +41,8 @@ import stauma.dav.clientside.ResultData;
  *
  */
 public class AusfallDatum 
-implements Comparable<AusfallDatum>{
-	
-	/**
-	 * 
-	 */
-	private static final SimpleDateFormat FORMAT = new SimpleDateFormat("dd.MM.yyyy HH:mm:ss.SSS");  //$NON-NLS-1$
-	
+extends AbstraktDAVZeitEinzelDatum{
+		
 	/**
 	 * 
 	 */
@@ -58,16 +52,6 @@ implements Comparable<AusfallDatum>{
 	 * 
 	 */
 	private boolean ausgefallen = false;
-	
-	/**
-	 * 
-	 */
-	private long datenZeit = -1;
-	
-	/**
-	 * 
-	 */
-	private long intervallLaenge = -1;
 
 	
 	/**
@@ -161,20 +145,12 @@ implements Comparable<AusfallDatum>{
 			
 		return datum;
 	}
+
 	
 	/**
 	 * 
-	 * @return
 	 */
-	public final long getIntervallLaenge(){
-		return this.intervallLaenge;
-	}
-	
-	/**
-	 * 
-	 * @return
-	 */
-	public final boolean isDatumVeraltet(){
+	public boolean isDatumVeraltet(){
 		return this.datenZeit + PLLOGKonstanten.EIN_TAG_IN_MS < System.currentTimeMillis();
 	}
 	
@@ -184,37 +160,6 @@ implements Comparable<AusfallDatum>{
 	 */
 	public final boolean isAusgefallen() {
 		return this.ausgefallen;
-	}
-
-	/**
-	 * 
-	 * @return
-	 */
-	protected final long getDatenZeit(){
-		return this.datenZeit;
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	public int compareTo(AusfallDatum that) {
-		return new Long(this.getDatenZeit()).compareTo(that.getDatenZeit());
-	}
-
-
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public boolean equals(Object obj) {
-		boolean resultat = false;
-		
-		if(obj instanceof AusfallDatum){
-			AusfallDatum that = (AusfallDatum)obj;
-			resultat = this.getDatenZeit() == that.getDatenZeit();
-		}
-		
-		return resultat;
 	}
 
 	/**

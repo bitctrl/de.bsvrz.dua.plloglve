@@ -1,5 +1,5 @@
 /**
- * Segment 4 Datenübernahme und Aufbereitung (DUA), SWE 4.2 Plausibilitätsprüfung logisch LVE
+ * Segment 4 Datenübernahme und Aufbereitung (DUA), SWE 4.2 Pl-Prüfung logisch LVE
  * Copyright (C) 2007 BitCtrl Systems GmbH 
  * 
  * This program is free software; you can redistribute it and/or modify it under
@@ -31,6 +31,7 @@ import de.bsvrz.dua.plloglve.plloglve.ausfall.Ausfallhaeufigkeit;
 import de.bsvrz.dua.plloglve.plloglve.diff.DifferenzialKontrolle;
 import de.bsvrz.dua.plloglve.plloglve.standard.PlLogischLVEStandard;
 import de.bsvrz.dua.plloglve.plloglve.vb.Vertrauensbereich;
+import de.bsvrz.dua.plloglve.vew.PPLogLVEStandardAspekteVersorger;
 import de.bsvrz.sys.funclib.bitctrl.dua.DUAInitialisierungsException;
 import de.bsvrz.sys.funclib.bitctrl.dua.adapter.AbstraktBearbeitungsKnotenAdapter;
 import de.bsvrz.sys.funclib.bitctrl.dua.dfs.schnittstellen.IDatenFlussSteuerung;
@@ -48,6 +49,11 @@ import de.bsvrz.sys.funclib.bitctrl.dua.schnittstellen.IVerwaltung;
  */
 public class PlPruefungLogischLVE
 extends AbstraktBearbeitungsKnotenAdapter{
+	
+	/**
+	 * Startzeit der des Moduls Pl-Prüfung logisch LVE
+	 */
+	public static final long START_ZEIT = System.currentTimeMillis();
 
 	/**
 	 * Submodul Pl-Prüfung logisch LVE standard
@@ -67,7 +73,7 @@ extends AbstraktBearbeitungsKnotenAdapter{
 	/**
 	 * Submodul Vertrauensbereich
 	 */	
-	private Vertrauensbereich vb = new Vertrauensbereich();
+	private Vertrauensbereich vb = null;
 	
 	
 	/**
@@ -90,6 +96,9 @@ extends AbstraktBearbeitungsKnotenAdapter{
 	public void initialisiere(IVerwaltung dieVerwaltung)
 	throws DUAInitialisierungsException {
 		super.initialisiere(dieVerwaltung);
+		
+		this.vb = new Vertrauensbereich(new PPLogLVEStandardAspekteVersorger(
+				dieVerwaltung).getStandardPubInfos());
 	
 		this.standard.initialisiere(dieVerwaltung);
 		this.standard.setNaechstenBearbeitungsKnoten(this.diff);

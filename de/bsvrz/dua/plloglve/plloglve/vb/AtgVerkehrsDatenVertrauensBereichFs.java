@@ -40,21 +40,21 @@ public class AtgVerkehrsDatenVertrauensBereichFs
 extends AtgDatenObjekt{
 
 	/**
-	 * Bezugszeitraum für die Vertrauensbereichsüberprüfung.
+	 * Bezugszeitraum für die Vertrauensbereichsüberprüfung
 	 */
-	private int bezugsZeitraum;
+	private int bezugsZeitraum = -1;
 	
 	/**
 	 * Einschaltschwelle für den Vertrauensbereich eines Fahrstreifens im
-	 * Bezugszeitraum. Bei Überschreiten dieses Wertes wird eine entsprechende Fehlermeldung generiert.
+	 * Bezugszeitraum. Bei Überschreiten dieses Wertes wird eine entsprechende Fehlermeldung generiert
 	 */
-	private int maxAusfallProBezugsZeitraumEin;
+	private int maxAusfallProBezugsZeitraumEin = -1;
 	
 	/**
 	 * Ausschaltschwelle für den Vertrauensbereich eines Fahrstreifens im Bezugszeitraum.
 	 * Bei Unterschreiten dieses Wertes wird eine entsprechende Fehlermeldung zurückgenommen
 	 */
-	private int maxAusfallProBezugsZeitraumAus;  
+	private int maxAusfallProBezugsZeitraumAus = -1;  
 
 	
 	/**
@@ -71,34 +71,50 @@ extends AtgDatenObjekt{
 		this.maxAusfallProBezugsZeitraumAus = data.getUnscaledValue("maxAusfallProBezugsZeitraumAus").intValue(); //$NON-NLS-1$
 	}
 
+	
+	/**
+	 * Erfragt, ob sich diese Parameter zur Überprüfung eines Datensatzes eignen. Dies
+	 * ist nur der Fall, wenn alle Parameter >= 0 sind. 
+	 * 
+	 * @return ob sich diese Parameter zur Überprüfung eines Datensatzes eignen
+	 */
+	public final boolean isAuswertbar(){
+		return this.bezugsZeitraum >= 0 && 
+			   this.maxAusfallProBezugsZeitraumAus >= 0 &&
+			   this.maxAusfallProBezugsZeitraumEin >= 0;
+	}
+	
 
 	/**
-	 * Erfragt BezugsZeitraum
+	 * Erfragt Bezugszeitraum für die Vertrauensbereichsüberprüfung
 	 * 
-	 * @return bezugsZeitraum
+	 * @return Bezugszeitraum in Stunden
 	 */
 	public final int getBezugsZeitraum() {
-		return bezugsZeitraum;
+		return this.bezugsZeitraum;
 	}
 
 
 	/**
-	 * Erfragt maxAusfallProBezugsZeitraumAus
+	 * Erfragt Ausschaltschwelle für den Vertrauensbereich eines Fahrstreifens im Bezugszeitraum
+	 * Bei Unterschreiten dieses Wertes wird eine entsprechende Fehlermeldung zurückgenommen
 	 * 
-	 * @return maxAusfallProBezugsZeitraumAus
+	 * @return Ausschaltschwelle für den Vertrauensbereich eines Fahrstreifens
 	 */
 	public final int getMaxAusfallProBezugsZeitraumAus() {
-		return maxAusfallProBezugsZeitraumAus;
+		return this.maxAusfallProBezugsZeitraumAus;
 	}
 
 
 	/**
-	 * Erfragt maxAusfallProBezugsZeitraumEin
+	 * Erfragt Einschaltschwelle für den Vertrauensbereich eines Fahrstreifens im
+	 * Bezugszeitraum. Bei Überschreiten dieses Wertes wird eine entsprechende
+	 * Fehlermeldung generiert.
 	 * 
-	 * @return maxAusfallProBezugsZeitraumEin
+	 * @return Einschaltschwelle für den Vertrauensbereich in %
 	 */
 	public final int getMaxAusfallProBezugsZeitraumEin() {
-		return maxAusfallProBezugsZeitraumEin;
+		return this.maxAusfallProBezugsZeitraumEin;
 	}
 	
 }
