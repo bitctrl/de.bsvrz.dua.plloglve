@@ -11,6 +11,9 @@ import stauma.dav.clientside.DataDescription;
 import stauma.dav.clientside.ResultData;
 import stauma.dav.clientside.SenderRole;
 import stauma.dav.configuration.interfaces.SystemObject;
+import de.bsvrz.dua.plloglve.plloglve.standard.KzdPLFahrStreifen;
+import de.bsvrz.dua.plloglve.plloglve.typen.OptionenPlausibilitaetsPruefungLogischVerkehr;
+import de.bsvrz.dua.plloglve.util.para.ParaKZDLogImport;
 import de.bsvrz.sys.funclib.bitctrl.dua.DUAKonstanten;
 
 /**
@@ -92,13 +95,47 @@ implements ClientSenderInterface{
 	 */
 	@Test
 	public void testAlles()throws Exception{
-		TestFahrstreifenImporter paraImp = new TestFahrstreifenImporter(this.dav, TEST_DATEN_VERZ + "fahrstreifen2"); //$NON-NLS-1$
+//		TestFahrstreifenImporter paraImp = new TestFahrstreifenImporter(this.dav, TEST_DATEN_VERZ + "fahrstreifen2"); //$NON-NLS-1$
+//		
+//		Data zeile = null;
+//		while( (zeile = paraImp.getNaechstenDatensatz(DD_KZD_SEND.getAttributeGroup())) != null ){
+//			ResultData resultat = new ResultData(FS1, DD_KZD_SEND, System.currentTimeMillis(), zeile);
+//			this.dav.sendData(resultat);
+//		}
 		
-		Data zeile = null;
-		while( (zeile = paraImp.getNaechstenDatensatz(DD_KZD_SEND.getAttributeGroup())) != null ){
-			ResultData resultat = new ResultData(FS1, DD_KZD_SEND, System.currentTimeMillis(), zeile);
-			this.dav.sendData(resultat);
-		}		
+		ParaKZDLogImport kzdImport1 = new ParaKZDLogImport(dav, FS1, TEST_DATEN_VERZ + "parameter"); //$NON-NLS-1$
+		ParaKZDLogImport kzdImport2 = new ParaKZDLogImport(dav, FS2, TEST_DATEN_VERZ + "parameter"); //$NON-NLS-1$
+		
+		kzdImport1.setOptionen(OptionenPlausibilitaetsPruefungLogischVerkehr.KEINE_PRUEFUNG);
+		kzdImport1.importiereParameter(1);
+		
+		kzdImport1.setOptionen(OptionenPlausibilitaetsPruefungLogischVerkehr.NUR_PRUEFUNG);
+		kzdImport1.importiereParameter(1);
+		
+		kzdImport1.setOptionen(OptionenPlausibilitaetsPruefungLogischVerkehr.SETZE_MAX);
+		kzdImport1.importiereParameter(1);
+		
+		kzdImport1.setOptionen(OptionenPlausibilitaetsPruefungLogischVerkehr.SETZE_MIN);
+		kzdImport1.importiereParameter(1);
+		
+		kzdImport1.setOptionen(OptionenPlausibilitaetsPruefungLogischVerkehr.SETZE_MIN_MAX);
+		kzdImport1.importiereParameter(1);
+		
+		kzdImport2.setOptionen(OptionenPlausibilitaetsPruefungLogischVerkehr.KEINE_PRUEFUNG);
+		kzdImport2.importiereParameter(2);
+		
+		kzdImport2.setOptionen(OptionenPlausibilitaetsPruefungLogischVerkehr.NUR_PRUEFUNG);
+		kzdImport2.importiereParameter(2);
+		
+		kzdImport2.setOptionen(OptionenPlausibilitaetsPruefungLogischVerkehr.SETZE_MAX);
+		kzdImport2.importiereParameter(2);
+		
+		kzdImport2.setOptionen(OptionenPlausibilitaetsPruefungLogischVerkehr.SETZE_MIN);
+		kzdImport2.importiereParameter(2);
+		
+		kzdImport2.setOptionen(OptionenPlausibilitaetsPruefungLogischVerkehr.SETZE_MIN_MAX);
+		kzdImport2.importiereParameter(2);
+
 	}
 
 	

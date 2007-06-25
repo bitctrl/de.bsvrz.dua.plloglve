@@ -4,7 +4,8 @@ import java.text.SimpleDateFormat;
 
 import de.bsvrz.dua.plloglve.plloglve.ausfall.AusfallDatum;
 
-public class AbstraktDAVZeitEinzelDatum {
+public class AbstraktDAVZeitEinzelDatum 
+implements Comparable<AbstraktDAVZeitEinzelDatum>{
 	
 	/**
 	 * 

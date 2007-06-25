@@ -86,7 +86,9 @@ extends AbstraktBearbeitungsKnotenAdapter{
 		super.initialisiere(dieVerwaltung);
 			
 		for(SystemObject obj:dieVerwaltung.getSystemObjekte()){
-			lzdFahrStreifen.put(obj, new LzdPLFahrStreifen(dieVerwaltung, obj));
+			if(obj.getType().getPid().equals(DUAKonstanten.TYP_FAHRSTREIFEN_LZ)){
+				lzdFahrStreifen.put(obj, new LzdPLFahrStreifen(dieVerwaltung, obj));
+			}
 			kzdFahrStreifen.put(obj, new KzdPLFahrStreifen(dieVerwaltung, obj));
 		}
 	}

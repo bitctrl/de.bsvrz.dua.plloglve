@@ -30,6 +30,7 @@ import stauma.dav.clientside.ClientDavInterface;
 import stauma.dav.clientside.ClientSenderInterface;
 import stauma.dav.clientside.Data;
 import stauma.dav.clientside.DataDescription;
+import stauma.dav.clientside.ResultData;
 import stauma.dav.clientside.SenderRole;
 import stauma.dav.configuration.interfaces.AttributeGroup;
 import stauma.dav.configuration.interfaces.SystemObject;
@@ -53,22 +54,35 @@ implements ClientSenderInterface{
 	 * Verbindung zum Datenverteiler
 	 */
 	protected static ClientDavInterface DAV = null;
+	
+	/**
+	 * Systemobjekt, für das die Parameter gesetzt werden sollen
+	 */
+	protected SystemObject objekt = null;
 		
 
 	/**
 	 * Standardkonstruktor
 	 * 
 	 * @param dav Datenverteier-Verbindung
+	 * @param objekt das Systemobjekt, für das die Parameter gesetzt werden sollen
 	 * @param csvQuelle Quelle der Daten (CSV-Datei)
 	 * @throws Exception falls dieses Objekt nicht vollständig initialisiert werden konnte
 	 */
 	public AbstraktParameterImport(final ClientDavInterface dav, 
-						   final String csvQuelle)
+								   final SystemObject objekt,
+						   		   final String csvQuelle)
 	throws Exception{
 		super(csvQuelle);
 		if(DAV == null){
 			DAV = dav;
 		}
+		
+		this.objekt = objekt;
+		DAV.subscribeSender(this, objekt, new DataDescription(
+				this.getParameterAtg(), 
+				DAV.getDataModel().getAspect(Konstante.DAV_ASP_PARAMETER_VORGABE),
+				(short)0), SenderRole.sender());
 		
 		/**
 		 * Tabellenkopf überspringen
@@ -76,31 +90,18 @@ implements ClientSenderInterface{
 		this.getNaechsteZeile();
 	}
 	
-	
-	/**
-	 * Führt eine Sendeanmeldung für Parameter durch
-	 * 
-	 * @param obj das Objekt, für das sich zum Senden angemeldet werden soll
-	 * @throws Exception wenn die Datenanmeldung nicht durchgeführt werden
-	 * konnte
-	 */
-	public void anmeldnen(final SystemObject obj)
-	throws Exception{
-		DAV.subscribeSender(this, obj, new DataDescription(
-				this.getParameterAtg(), 
-				DAV.getDataModel().getAspect(Konstante.DAV_ASP_PARAMETER_VORGABE),
-				(short)0), SenderRole.sender());
-	}
-
-	
+		
 	/**
 	 * Führt den Parameterimport aus
 	 * 
+	 * @param int index
 	 * @throws Exception wenn die Parameter nicht vollständig
 	 * importiert werden konnten
 	 */
-	public final void importiereParameter()
+	public final void importiereParameter(int index)
 	throws Exception{
+		this.reset();
+		this.getNaechsteZeile();
 		String[] zeile = null;
 		
 		Data parameter = DAV.createData(this.getParameterAtg());
@@ -109,7 +110,7 @@ implements ClientSenderInterface{
 			String attributInCSVDatei = zeile[0];
 			String wert = zeile[1];
 			
-			String attPfad = getAttributPfadVon(attributInCSVDatei);
+			String attPfad = getAttributPfadVon(attributInCSVDatei, index);
 			if(attPfad != null){
 				try{
 					long l = Long.parseLong(wert);
@@ -120,6 +121,25 @@ implements ClientSenderInterface{
 				}
 			}
 		}
+		
+		
+		ResultData resultat = new ResultData(this.objekt, new DataDescription(
+				this.getParameterAtg(), 
+				DAV.getDataModel().getAspect(Konstante.DAV_ASP_PARAMETER_VORGABE),
+				(short)0), System.currentTimeMillis(), this.fuelleRestAttribute(parameter));
+		DAV.sendData(resultat);
+	}
+	
+
+	/**
+	 * Setzt alle restlichen Attribute innerhalb von diesem Datensatz
+	 * abhängig von der tatsächlichen Attributgruppe
+	 * 
+	 * @param datensatz ein Datensatz
+	 * @return der veränderte (vollständig ausgefüllte Datensatz)
+	 */
+	public Data fuelleRestAttribute(Data datensatz){
+		return datensatz;
 	}
 
 	
@@ -128,9 +148,11 @@ implements ClientSenderInterface{
 	 * den übergebenen Namen hat
 	 *  
 	 * @param attributInCSVDatei Attributname innerhalb der CSV-Datei
+	 * @param index index innerhalb von CVS-Datei
 	 * @return den kompletten Attributpfad zum assoziierten DAV-Attribut
 	 */
-	protected abstract String getAttributPfadVon(final String attributInCSVDatei);
+	protected abstract String getAttributPfadVon(final String attributInCSVDatei,
+												 final int index);
 	
 	
 	/**
@@ -139,7 +161,7 @@ implements ClientSenderInterface{
 	 * @return die Parameter-Atg
 	 */
 	protected abstract AttributeGroup getParameterAtg();
-
+	
 	
 	/**
 	 * {@inheritDoc}

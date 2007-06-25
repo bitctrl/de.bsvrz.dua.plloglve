@@ -150,6 +150,7 @@ extends AbstraktVerwaltungsAdapter{
         				UncaughtExceptionHandler(){
             public void uncaughtException(@SuppressWarnings("unused")
 			Thread t, Throwable e) {
+            	e.printStackTrace();
                 LOGGER.error("Applikation wird wegen" +  //$NON-NLS-1$
                 		" unerwartetem Fehler beendet", e);  //$NON-NLS-1$
                 Runtime.getRuntime().exit(0);

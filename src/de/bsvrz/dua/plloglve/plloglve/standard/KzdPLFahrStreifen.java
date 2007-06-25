@@ -265,11 +265,15 @@ extends AbstraktPLFahrStreifen{
 		/**
 		 * Regel Nr.11 (aus SE-02.00.00.00.00-AFo-4.0, S.94)
 		 */
-		if(vKfz > parameterAtgLog.getVKfzGrenz() && b >= parameterAtgLog.getBGrenz() ){
-			data.getItem("b").getUnscaledValue("Wert").set(PLLOGKonstanten.FEHLERHAFT); //$NON-NLS-1$ //$NON-NLS-2$
+		if(this.parameterAtgLog != null){
+			synchronized (this.parameterAtgLog) {				
+				if(vKfz > parameterAtgLog.getVKfzGrenz() && b >= parameterAtgLog.getBGrenz() ){
+					data.getItem("b").getUnscaledValue("Wert").set(PLLOGKonstanten.FEHLERHAFT); //$NON-NLS-1$ //$NON-NLS-2$
 
-			data.getItem("b").getItem("Status").getItem("MessWertErsetzung").   //$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$
-			getUnscaledValue("Implausibel").set(DUAKonstanten.JA); //$NON-NLS-1$			
+					data.getItem("b").getItem("Status").getItem("MessWertErsetzung").   //$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$
+					getUnscaledValue("Implausibel").set(DUAKonstanten.JA); //$NON-NLS-1$			
+				}
+			}
 		}
 	}
 	

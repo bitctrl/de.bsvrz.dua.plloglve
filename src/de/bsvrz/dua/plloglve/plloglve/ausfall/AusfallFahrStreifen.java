@@ -96,8 +96,6 @@ implements ClientReceiverInterface{
 	private Collection<AusfallDatum> gleitenderTag = 
 				Collections.synchronizedCollection(new TreeSet<AusfallDatum>());
 
-
-
 	
 	protected AusfallFahrStreifen(final IVerwaltung verwaltung, final SystemObject obj){
 		super(obj);
@@ -149,6 +147,7 @@ implements ClientReceiverInterface{
 					}
 				}				
 			}
+			
 			
 			for(AusfallDatum veraltet:veralteteDaten){
 				this.gleitenderTag.remove(veraltet);

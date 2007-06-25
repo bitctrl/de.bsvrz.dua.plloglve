@@ -129,6 +129,19 @@ public class CSVImporter{
 		
 		return s;
 	}
+	
+	
+	/**
+	 * Setzt den Dateizeiger wieder auf Anfang
+	 */
+	public final void reset(){
+		try {
+			this.leser.close();
+			this.leser = new BufferedReader(new FileReader(this.csvDatei));
+		} catch (IOException ex) {
+			LOGGER.error(Konstante.LEERSTRING, ex);
+		}
+	}
 
 
 	/**
