@@ -1,0 +1,8 @@
+
+
+Test:
+1. de.bsvrz.sys.funclib.bitctrl.test.datagen.DatenGenerator 
+   -datenverteiler=192.168.1.191:8083 -benutzer=Tester -authentifizierung=c:\passwd
+   -modus=CONFIG -verzeichnis="c:\temp\importParameter"
+ 
+2. 
