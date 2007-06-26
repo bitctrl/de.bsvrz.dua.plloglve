@@ -127,8 +127,12 @@ implements ClientReceiverInterface{
 		int qPkw = PLLOGKonstanten.NICHT_ERMITTELBAR;
 		if(qKfz >= 0 && qLkw >= 0){
 			qPkw = qKfz - qLkw;
-		}		
-		data.getItem("qPkw").getUnscaledValue("Wert").set(qPkw); //$NON-NLS-1$ //$NON-NLS-2$
+		}
+		if(DUAUtensilien.isWertInWerteBereich(data.getItem("qPkw").getItem("Wert"), qPkw)){ //$NON-NLS-1$ //$NON-NLS-2$
+			data.getItem("qPkw").getUnscaledValue("Wert").set(qPkw); //$NON-NLS-1$ //$NON-NLS-2$	
+		}else{
+			data.getItem("qPkw").getUnscaledValue("Wert").set(PLLOGKonstanten.NICHT_ERMITTELBAR_BZW_FEHLERHAFT);  //$NON-NLS-1$//$NON-NLS-2$
+		}
 		
 		final int vPkw = data.getItem("vPkw").getUnscaledValue("Wert").intValue(); //$NON-NLS-1$ //$NON-NLS-2$
 		final int vLkw = data.getItem("vLkw").getUnscaledValue("Wert").intValue(); //$NON-NLS-1$ //$NON-NLS-2$
@@ -136,7 +140,11 @@ implements ClientReceiverInterface{
 		if(qKfz > 0 && qPkw >= 0 && vPkw >= 0 && qLkw >= 0 && vLkw >= 0){
 			vKfz = (qPkw * vPkw + qLkw * vLkw) / qKfz;
 		}
-		data.getItem("vKfz").getUnscaledValue("Wert").set(vKfz);  //$NON-NLS-1$//$NON-NLS-2$
+		if(DUAUtensilien.isWertInWerteBereich(data.getItem("vKfz").getItem("Wert"), vKfz)){ //$NON-NLS-1$ //$NON-NLS-2$
+			data.getItem("vKfz").getUnscaledValue("Wert").set(vKfz); //$NON-NLS-1$ //$NON-NLS-2$	
+		}else{
+			data.getItem("vKfz").getUnscaledValue("Wert").set(PLLOGKonstanten.NICHT_ERMITTELBAR_BZW_FEHLERHAFT);  //$NON-NLS-1$//$NON-NLS-2$
+		}
 		
 		return data;
 	}
