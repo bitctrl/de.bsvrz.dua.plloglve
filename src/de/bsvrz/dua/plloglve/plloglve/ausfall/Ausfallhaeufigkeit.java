@@ -1,5 +1,5 @@
 /** 
- * Segment 4 Datenübernahme und Aufbereitung (DUA), SWE 4.2 Plausibilitätsprüfung logisch LVE
+ * Segment 4 Datenübernahme und Aufbereitung (DUA), SWE 4.2 Pl-Prüfung logisch LVE
  * Copyright (C) 2007 BitCtrl Systems GmbH 
  * 
  * This program is free software; you can redistribute it and/or modify it under
@@ -40,6 +40,8 @@ import de.bsvrz.sys.funclib.bitctrl.dua.dfs.typen.ModulTyp;
 import de.bsvrz.sys.funclib.bitctrl.dua.schnittstellen.IVerwaltung;
 
 /**
+ * Dieses Submodul überprüft, ob die parametrierte maximal zulässige
+ * Ausfallhäufigkeit eines Fahrstreifens pro Tag überschritten wurde
  * 
  * @author BitCtrl Systems GmbH, Thierfelder
  *
@@ -48,7 +50,8 @@ public class Ausfallhaeufigkeit
 extends AbstraktBearbeitungsKnotenAdapter{
 
 	/**
-	 * 
+	 * Mapt FS-Systemobjekte auf Fahrstreifenobjekte mit den für dieses
+	 * Submodul notwendigen Informationen
 	 */
 	private Map<SystemObject, AusfallFahrStreifen> fahrStreifen =
 									new TreeMap<SystemObject, AusfallFahrStreifen>();

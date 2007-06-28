@@ -112,7 +112,7 @@ extends AbstraktVerwaltungsAdapter{
 		this.plPruefungFormal.initialisiere(this);
 
 		this.plPruefungLogischLVE = new PlPruefungLogischLVE(
-				new PPLogLVEStandardAspekteVersorger(this).getStandardPubInfos());
+				new PlLogLVEStandardAspekteVersorger(this).getStandardPubInfos());
 		this.plPruefungLogischLVE.setPublikation(true);
 		this.plPruefungLogischLVE.initialisiere(this);
 		
@@ -157,7 +157,7 @@ extends AbstraktVerwaltungsAdapter{
             }
         });
 		StandardApplicationRunner.run(
-					new VerwaltungPlPruefungLogischLVE(),argumente);
+					new VerwaltungPlPruefungLogischLVE(), argumente);
 	}
 	
 }

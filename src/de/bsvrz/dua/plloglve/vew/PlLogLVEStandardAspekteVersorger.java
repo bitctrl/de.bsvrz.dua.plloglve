@@ -41,13 +41,13 @@ import de.bsvrz.sys.funclib.bitctrl.dua.schnittstellen.IVerwaltung;
  * @author BitCtrl Systems GmbH, Thierfelder
  *
  */
-public class PPLogLVEStandardAspekteVersorger 
+public class PlLogLVEStandardAspekteVersorger 
 extends StandardAspekteVersorger{
 
 	/**
 	 * {@inheritDoc}
 	 */
-	public PPLogLVEStandardAspekteVersorger(IVerwaltung verwaltung)
+	public PlLogLVEStandardAspekteVersorger(IVerwaltung verwaltung)
 	throws DUAInitialisierungsException {
 		super(verwaltung);
 	}

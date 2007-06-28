@@ -1,5 +1,5 @@
 /** 
- * Segment 4 Datenübernahme und Aufbereitung (DUA), SWE 4.2 Plausibilitätsprüfung logisch LVE
+ * Segment 4 Datenübernahme und Aufbereitung (DUA), SWE 4.2 Pl-Prüfung logisch LVE
  * Copyright (C) 2007 BitCtrl Systems GmbH 
  * 
  * This program is free software; you can redistribute it and/or modify it under
@@ -36,6 +36,7 @@ import de.bsvrz.sys.funclib.bitctrl.dua.DUAKonstanten;
 import de.bsvrz.sys.funclib.bitctrl.konstante.Konstante;
 
 /**
+ * Repräsentiert ein ausgefallenes KZ-Datum
  * 
  * @author BitCtrl Systems GmbH, Thierfelder
  *
@@ -44,19 +45,20 @@ public class AusfallDatum
 extends AbstraktDAVZeitEinzelDatum{
 		
 	/**
-	 * 
+	 * eine Zeichenkette, die den Ausfall illustriert (formatiert für Betriebsmeldungen)
 	 */
 	private String ausfallStr = null;
 	
 	/**
-	 * 
+	 * ist dieses Datum "ausgefallen"
 	 */
 	private boolean ausgefallen = false;
 
 	
 	/**
+	 * Standardkonstruktor
 	 * 
-	 * @param datum
+	 * @param datum ein KZD-Datum
 	 */
 	private AusfallDatum(ResultData resultat){
 		Data data = resultat.getData();
@@ -133,8 +135,9 @@ extends AbstraktDAVZeitEinzelDatum{
 	 * auch im Sinne der Plausibilisierung ausgewertet werden kann
 	 * Also z.B. nicht "Keine Quelle"
 	 * 
-	 * @param resultat
-	 * @return
+	 * @param resultat ein Kz-Datum
+	 * @return eine mit dem übergebenen Datum korrespondierende Instanz dieser Klasse
+	 * oder <code>null</code> für keine Quelle usw.
 	 */
 	public static final AusfallDatum getAusfallDatumVon(final ResultData resultat){
 		AusfallDatum datum = null;
@@ -148,7 +151,9 @@ extends AbstraktDAVZeitEinzelDatum{
 
 	
 	/**
+	 * Erfragt, ob dieses Datum im Sinne des gleitenden Tages veraltet ist
 	 * 
+	 * @return ob dieses Datum im Sinne des gleitenden Tages veraltet ist
 	 */
 	public boolean isDatumVeraltet(){
 		return this.datenZeit + PLLOGKonstanten.EIN_TAG_IN_MS < System.currentTimeMillis();
@@ -156,7 +161,9 @@ extends AbstraktDAVZeitEinzelDatum{
 	
 	
 	/**
-	 * @return ausfall
+	 * Erfragt ob dieses Datum ausgefallen ist
+	 * 
+	 * @return ob dieses Datum ausgefallen ist
 	 */
 	public final boolean isAusgefallen() {
 		return this.ausgefallen;

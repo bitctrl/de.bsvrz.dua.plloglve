@@ -1,5 +1,5 @@
 /** 
- * Segment 4 Datenübernahme und Aufbereitung (DUA), SWE 4.2 Plausibilitätsprüfung logisch LVE
+ * Segment 4 Datenübernahme und Aufbereitung (DUA), SWE 4.2 Pl-Prüfung logisch LVE
  * Copyright (C) 2007 BitCtrl Systems GmbH 
  * 
  * This program is free software; you can redistribute it and/or modify it under
@@ -42,6 +42,7 @@ import sys.funclib.operatingMessage.MessageGrade;
 import sys.funclib.operatingMessage.MessageState;
 import sys.funclib.operatingMessage.MessageType;
 import de.bsvrz.dua.plloglve.plloglve.PLLOGKonstanten;
+import de.bsvrz.dua.plloglve.plloglve.PlPruefungLogischLVE;
 import de.bsvrz.sys.funclib.bitctrl.daf.Konstanten;
 import de.bsvrz.sys.funclib.bitctrl.dua.DUAKonstanten;
 import de.bsvrz.sys.funclib.bitctrl.dua.schnittstellen.IVerwaltung;
@@ -51,6 +52,7 @@ import de.bsvrz.sys.funclib.bitctrl.modell.SystemObjekt;
 import de.bsvrz.sys.funclib.bitctrl.modell.SystemObjektTyp;
 
 /**
+ * Speichert die Ausfallhäufigkeit eine Fahrstreifens über einem gleitenden Tag
  * 
  * @author BitCtrl Systems GmbH, Thierfelder
  *
@@ -58,12 +60,7 @@ import de.bsvrz.sys.funclib.bitctrl.modell.SystemObjektTyp;
 public class AusfallFahrStreifen 
 extends AbstractSystemObjekt
 implements ClientReceiverInterface{
-	
-	/**
-	 * Zeitpunkt, zu dem dieses Submodul gestartet wurde
-	 */
-	private static final long START_ZEIT = System.currentTimeMillis();
-	
+		
 	/**
 	 * Format der Zeitangabe innerhalb der Betriebsmeldung
 	 */
@@ -97,6 +94,12 @@ implements ClientReceiverInterface{
 				Collections.synchronizedCollection(new TreeSet<AusfallDatum>());
 
 	
+	/**
+	 * Standardkonstruktor
+	 * 
+	 * @param verwaltung Verbindung zum Verwaltungsmodul
+	 * @param obj das mit einem Fahrstreifen assoziierte Systemobjekt
+	 */
 	protected AusfallFahrStreifen(final IVerwaltung verwaltung, final SystemObject obj){
 		super(obj);
 		
@@ -113,26 +116,33 @@ implements ClientReceiverInterface{
 	}
 	
 	
+	/**
+	 * Führt die Plausibilisierung durch. (nur für KZD)
+	 * 
+	 * @param resultat ein Fahrstreifendatum (KZD)
+	 */
 	protected final void plausibilisiere(final ResultData resultat){		
-		if(resultat != null && resultat.getData() != null){
-			if(resultat.getDataDescription().getAttributeGroup().getPid().
-					equals(DUAKonstanten.ATG_KZD)){
-				AusfallDatum ausfallDatum = AusfallDatum.getAusfallDatumVon(resultat);
-				if(ausfallDatum != null){
-					synchronized (this.gleitenderTag) {
-						gleitenderTag.add(ausfallDatum);	
-					}					
-				}
-				this.testAufAusfall();
-			}			
-		}
+		if(resultat != null && resultat.getData() != null && 
+				resultat.getDataDescription().getAttributeGroup().getPid().equals(DUAKonstanten.ATG_KZD)){
+
+			AusfallDatum ausfallDatum = AusfallDatum.getAusfallDatumVon(resultat);
+			if(ausfallDatum != null){
+				synchronized (this.gleitenderTag) {
+					if(ausfallDatum.isAusgefallen()){
+						gleitenderTag.add(ausfallDatum);
+					}
+				}					
+			}
+			this.testAufAusfall();
+		}			
 	}
 	
 	
+	/**
+	 * Erreichnet den Ausfall dieses Fahrstreifens und gibt ggf. eine Betriebsmeldung aus 
+	 **/
 	private final void testAufAusfall(){
 		Collection<AusfallDatum> veralteteDaten = new TreeSet<AusfallDatum>();
-		double datensaetzeAusfall = 0;
-		double datensaetzeInsgesamt = 0;
 		long ausfallZeit = 0;
 		
 		synchronized (this.gleitenderTag) {
@@ -140,14 +150,9 @@ implements ClientReceiverInterface{
 				if(ausfallDatum.isDatumVeraltet()){
 					veralteteDaten.add(ausfallDatum);
 				}else{
-					datensaetzeInsgesamt++;
-					if(ausfallDatum.isAusgefallen()){
-						datensaetzeAusfall++;
-						ausfallZeit += ausfallDatum.getIntervallLaenge();
-					}
+					ausfallZeit += ausfallDatum.getIntervallLaenge();
 				}				
-			}
-			
+			}			
 			
 			for(AusfallDatum veraltet:veralteteDaten){
 				this.gleitenderTag.remove(veraltet);
@@ -157,23 +162,21 @@ implements ClientReceiverInterface{
 		if(programmLaeuftSchonLaengerAlsEinTag()){
 			synchronized (this) {
 				if(this.maxAusfallProTag >= 0){
-					if(datensaetzeInsgesamt > 0){
-						int ausfallInProzent = (int)((datensaetzeAusfall / datensaetzeInsgesamt * 100.0) + .5);
-						if(ausfallInProzent > this.maxAusfallProTag){
-							long stunden = ausfallZeit / 1000l / 60l / 60l;
-							long minuten = (ausfallZeit - (stunden * 1000l / 60l / 60l)) / 1000l / 60l;
-								
-							String nachricht = "Ausfallhäufigkeit innerhalb der letzten 24 Stunden überschritten. Im Zeitraum von " +  //$NON-NLS-1$
-								FORMAT.format(new Date(System.currentTimeMillis() - PLLOGKonstanten.EIN_TAG_IN_MS)) + " Uhr bis " +  //$NON-NLS-1$
-								FORMAT.format(new Date(System.currentTimeMillis())) + " Uhr (1 Tag) implausible Fahrstreifenwerte am Fahrstreifen " + //$NON-NLS-1$
-								this.getSystemObject() + " von " + ausfallInProzent + "% (> " + this.maxAusfallProTag +  //$NON-NLS-1$//$NON-NLS-2$
-									"%) entspricht Ausfall von " + stunden + " Stunde(n) " + minuten + " Minute(n).";  //$NON-NLS-1$ //$NON-NLS-2$//$NON-NLS-3$
-							
-							VERWALTUNG.sendeBetriebsMeldung(MELDUNGS_ID, MessageType.APPLICATION_DOMAIN, Konstante.LEERSTRING,
-									MessageGrade.WARNING, MessageState.MESSAGE, nachricht);
-						}
+					int ausfallInProzent = (int)((((double)ausfallZeit / (double)Konstante.TAG_24_IN_MS) * 100.0) + 0.5);
+					if(ausfallInProzent > this.maxAusfallProTag){
+						long stunden = ausfallZeit / Konstante.STUNDE_IN_MS;
+						long minuten = (ausfallZeit - (stunden * Konstante.STUNDE_IN_MS)) / Konstante.MINUTE_IN_MS;
+
+						String nachricht = "Ausfallhäufigkeit innerhalb der letzten 24 Stunden überschritten. Im Zeitraum von " +  //$NON-NLS-1$
+						FORMAT.format(new Date(System.currentTimeMillis() - PLLOGKonstanten.EIN_TAG_IN_MS)) + " Uhr bis " +  //$NON-NLS-1$
+						FORMAT.format(new Date(System.currentTimeMillis())) + " Uhr (1 Tag) implausible Fahrstreifenwerte am Fahrstreifen " + //$NON-NLS-1$
+						this.getSystemObject() + " von " + ausfallInProzent + "% (> " + this.maxAusfallProTag +  //$NON-NLS-1$//$NON-NLS-2$
+						"%) entspricht Ausfall von " + stunden + " Stunde(n) " + minuten + " Minute(n).";  //$NON-NLS-1$ //$NON-NLS-2$//$NON-NLS-3$
+
+						VERWALTUNG.sendeBetriebsMeldung(MELDUNGS_ID, MessageType.APPLICATION_DOMAIN, Konstante.LEERSTRING,
+								MessageGrade.WARNING, MessageState.MESSAGE, nachricht);
 					}
-				}				
+				}
 			}
 		}		
 	}
@@ -214,8 +217,15 @@ implements ClientReceiverInterface{
 	}
 	
 
+	/**
+	 * Erfragt, ob diese Applikation (eigentlich das Modul Pl-Prüfung logisch LVE)
+	 * schon länger als einen Tag läuft (erst dann solltes Objekt Daten markieren
+	 * bzw. Betriebsmeldungen ausgeben)
+	 * 
+	 * @return ob diese Applikation schon länger als einen Tag läuft
+	 */
 	private static final boolean programmLaeuftSchonLaengerAlsEinTag(){
-		return START_ZEIT + PLLOGKonstanten.EIN_TAG_IN_MS < System.currentTimeMillis(); 
+		return PlPruefungLogischLVE.START_ZEIT + Konstante.TAG_24_IN_MS < System.currentTimeMillis(); 
 	}	
 
 }
