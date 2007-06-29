@@ -30,7 +30,6 @@ import java.util.Date;
 
 import stauma.dav.clientside.ResultData;
 import de.bsvrz.dua.plloglve.plloglve.AbstraktDAVZeitEinzelDatum;
-import de.bsvrz.dua.plloglve.plloglve.PLLOGKonstanten;
 import de.bsvrz.sys.funclib.bitctrl.dua.DUAKonstanten;
 import de.bsvrz.sys.funclib.bitctrl.konstante.Konstante;
 
@@ -62,7 +61,7 @@ extends AbstraktDAVZeitEinzelDatum{
 		this.intervallLaenge = originalDatum.getData().
 									getUnscaledValue("T").longValue(); //$NON-NLS-1$		
 		this.ausgefallen = 
-			originalDatum.getData().getUnscaledValue(name).intValue() == PLLOGKonstanten.FEHLERHAFT ||
+			originalDatum.getData().getUnscaledValue(name).intValue() == DUAKonstanten.FEHLERHAFT ||
 			originalDatum.getData().getItem(name).getItem("Status").getItem("MessWertErsetzung").   //$NON-NLS-1$//$NON-NLS-2$
 					getUnscaledValue("Implausibel").intValue() == DUAKonstanten.JA;   //$NON-NLS-1$
 	}

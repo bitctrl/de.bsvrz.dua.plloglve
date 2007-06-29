@@ -36,7 +36,6 @@ import stauma.dav.clientside.ResultData;
 import stauma.dav.configuration.interfaces.AttributeGroup;
 import stauma.dav.configuration.interfaces.SystemObject;
 import sys.funclib.debug.Debug;
-import de.bsvrz.dua.plloglve.plloglve.PLLOGKonstanten;
 import de.bsvrz.dua.plloglve.plloglve.typen.OptionenPlausibilitaetsPruefungLogischVerkehr;
 import de.bsvrz.sys.funclib.bitctrl.daf.Konstanten;
 import de.bsvrz.sys.funclib.bitctrl.dua.DUAKonstanten;
@@ -124,26 +123,26 @@ implements ClientReceiverInterface{
 	protected Data berechneQPkw(Data data){
 		final int qKfz = data.getItem("qKfz").getUnscaledValue("Wert").intValue(); //$NON-NLS-1$ //$NON-NLS-2$
 		final int qLkw = data.getItem("qLkw").getUnscaledValue("Wert").intValue(); //$NON-NLS-1$ //$NON-NLS-2$
-		int qPkw = PLLOGKonstanten.NICHT_ERMITTELBAR;
+		int qPkw = DUAKonstanten.NICHT_ERMITTELBAR;
 		if(qKfz >= 0 && qLkw >= 0){
 			qPkw = qKfz - qLkw;
 		}
 		if(DUAUtensilien.isWertInWerteBereich(data.getItem("qPkw").getItem("Wert"), qPkw)){ //$NON-NLS-1$ //$NON-NLS-2$
 			data.getItem("qPkw").getUnscaledValue("Wert").set(qPkw); //$NON-NLS-1$ //$NON-NLS-2$	
 		}else{
-			data.getItem("qPkw").getUnscaledValue("Wert").set(PLLOGKonstanten.NICHT_ERMITTELBAR_BZW_FEHLERHAFT);  //$NON-NLS-1$//$NON-NLS-2$
+			data.getItem("qPkw").getUnscaledValue("Wert").set(DUAKonstanten.NICHT_ERMITTELBAR_BZW_FEHLERHAFT);  //$NON-NLS-1$//$NON-NLS-2$
 		}
 		
 		final int vPkw = data.getItem("vPkw").getUnscaledValue("Wert").intValue(); //$NON-NLS-1$ //$NON-NLS-2$
 		final int vLkw = data.getItem("vLkw").getUnscaledValue("Wert").intValue(); //$NON-NLS-1$ //$NON-NLS-2$
-		int vKfz = PLLOGKonstanten.NICHT_ERMITTELBAR;
+		int vKfz = DUAKonstanten.NICHT_ERMITTELBAR;
 		if(qKfz > 0 && qPkw >= 0 && vPkw >= 0 && qLkw >= 0 && vLkw >= 0){
 			vKfz = (qPkw * vPkw + qLkw * vLkw) / qKfz;
 		}
 		if(DUAUtensilien.isWertInWerteBereich(data.getItem("vKfz").getItem("Wert"), vKfz)){ //$NON-NLS-1$ //$NON-NLS-2$
 			data.getItem("vKfz").getUnscaledValue("Wert").set(vKfz); //$NON-NLS-1$ //$NON-NLS-2$	
 		}else{
-			data.getItem("vKfz").getUnscaledValue("Wert").set(PLLOGKonstanten.NICHT_ERMITTELBAR_BZW_FEHLERHAFT);  //$NON-NLS-1$//$NON-NLS-2$
+			data.getItem("vKfz").getUnscaledValue("Wert").set(DUAKonstanten.NICHT_ERMITTELBAR_BZW_FEHLERHAFT);  //$NON-NLS-1$//$NON-NLS-2$
 		}
 		
 		return data;

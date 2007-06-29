@@ -31,7 +31,6 @@ import java.util.Date;
 import stauma.dav.clientside.Data;
 import stauma.dav.clientside.ResultData;
 import de.bsvrz.dua.plloglve.plloglve.AbstraktDAVZeitEinzelDatum;
-import de.bsvrz.dua.plloglve.plloglve.PLLOGKonstanten;
 import de.bsvrz.sys.funclib.bitctrl.dua.DUAKonstanten;
 import de.bsvrz.sys.funclib.bitctrl.konstante.Konstante;
 
@@ -92,35 +91,35 @@ extends AbstraktDAVZeitEinzelDatum{
 								getUnscaledValue("Implausibel").intValue(); //$NON-NLS-1$
 		
 		this.ausfallStr = Konstante.LEERSTRING;
-		if(qKfzWert == PLLOGKonstanten.FEHLERHAFT || qKfzImpl == DUAKonstanten.JA){
+		if(qKfzWert == DUAKonstanten.FEHLERHAFT || qKfzImpl == DUAKonstanten.JA){
 			this.ausgefallen = true;
 			this.ausfallStr += "qKfz, "; //$NON-NLS-1$
 		}
-		if(qLkwWert == PLLOGKonstanten.FEHLERHAFT || qLkwImpl == DUAKonstanten.JA){
+		if(qLkwWert == DUAKonstanten.FEHLERHAFT || qLkwImpl == DUAKonstanten.JA){
 			this.ausgefallen = true;
 			this.ausfallStr += "qLkw, "; //$NON-NLS-1$
 		}
-		if(qPkwWert == PLLOGKonstanten.FEHLERHAFT || qPkwImpl == DUAKonstanten.JA){
+		if(qPkwWert == DUAKonstanten.FEHLERHAFT || qPkwImpl == DUAKonstanten.JA){
 			this.ausgefallen = true;
 			this.ausfallStr += "qPkw, "; //$NON-NLS-1$
 		}
-		if(vKfzWert == PLLOGKonstanten.FEHLERHAFT || vKfzImpl == DUAKonstanten.JA){
+		if(vKfzWert == DUAKonstanten.FEHLERHAFT || vKfzImpl == DUAKonstanten.JA){
 			this.ausgefallen = true;
 			this.ausfallStr += "vKfz, "; //$NON-NLS-1$
 		}
-		if(vLkwWert == PLLOGKonstanten.FEHLERHAFT || vLkwImpl == DUAKonstanten.JA){
+		if(vLkwWert == DUAKonstanten.FEHLERHAFT || vLkwImpl == DUAKonstanten.JA){
 			this.ausgefallen = true;
 			this.ausfallStr += "vLkw, "; //$NON-NLS-1$
 		}
-		if(vPkwWert == PLLOGKonstanten.FEHLERHAFT || vPkwImpl == DUAKonstanten.JA){
+		if(vPkwWert == DUAKonstanten.FEHLERHAFT || vPkwImpl == DUAKonstanten.JA){
 			this.ausgefallen = true;
 			this.ausfallStr += "vPkw, "; //$NON-NLS-1$
 		}
-		if(sKfzWert == PLLOGKonstanten.FEHLERHAFT || sKfzImpl == DUAKonstanten.JA){
+		if(sKfzWert == DUAKonstanten.FEHLERHAFT || sKfzImpl == DUAKonstanten.JA){
 			this.ausgefallen = true;
 			this.ausfallStr += "sKfz, "; //$NON-NLS-1$
 		}
-		if(bWert == PLLOGKonstanten.FEHLERHAFT || bImpl == DUAKonstanten.JA){
+		if(bWert == DUAKonstanten.FEHLERHAFT || bImpl == DUAKonstanten.JA){
 			this.ausgefallen = true;
 			this.ausfallStr += "b, "; //$NON-NLS-1$
 		}
@@ -156,7 +155,7 @@ extends AbstraktDAVZeitEinzelDatum{
 	 * @return ob dieses Datum im Sinne des gleitenden Tages veraltet ist
 	 */
 	public boolean isDatumVeraltet(){
-		return this.datenZeit + PLLOGKonstanten.EIN_TAG_IN_MS < System.currentTimeMillis();
+		return this.datenZeit + Konstante.TAG_24_IN_MS < System.currentTimeMillis();
 	}
 	
 	

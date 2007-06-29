@@ -41,7 +41,6 @@ import stauma.dav.configuration.interfaces.SystemObject;
 import sys.funclib.operatingMessage.MessageGrade;
 import sys.funclib.operatingMessage.MessageState;
 import sys.funclib.operatingMessage.MessageType;
-import de.bsvrz.dua.plloglve.plloglve.PLLOGKonstanten;
 import de.bsvrz.dua.plloglve.plloglve.PlPruefungLogischLVE;
 import de.bsvrz.sys.funclib.bitctrl.daf.Konstanten;
 import de.bsvrz.sys.funclib.bitctrl.dua.DUAKonstanten;
@@ -168,7 +167,7 @@ implements ClientReceiverInterface{
 						long minuten = (ausfallZeit - (stunden * Konstante.STUNDE_IN_MS)) / Konstante.MINUTE_IN_MS;
 
 						String nachricht = "Ausfallhäufigkeit innerhalb der letzten 24 Stunden überschritten. Im Zeitraum von " +  //$NON-NLS-1$
-						FORMAT.format(new Date(System.currentTimeMillis() - PLLOGKonstanten.EIN_TAG_IN_MS)) + " Uhr bis " +  //$NON-NLS-1$
+						FORMAT.format(new Date(System.currentTimeMillis() - Konstante.TAG_24_IN_MS)) + " Uhr bis " +  //$NON-NLS-1$
 						FORMAT.format(new Date(System.currentTimeMillis())) + " Uhr (1 Tag) implausible Fahrstreifenwerte am Fahrstreifen " + //$NON-NLS-1$
 						this.getSystemObject() + " von " + ausfallInProzent + "% (> " + this.maxAusfallProTag +  //$NON-NLS-1$//$NON-NLS-2$
 						"%) entspricht Ausfall von " + stunden + " Stunde(n) " + minuten + " Minute(n).";  //$NON-NLS-1$ //$NON-NLS-2$//$NON-NLS-3$

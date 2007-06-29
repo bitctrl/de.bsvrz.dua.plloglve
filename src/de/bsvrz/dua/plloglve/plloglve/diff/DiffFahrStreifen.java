@@ -40,9 +40,9 @@ import sys.funclib.debug.Debug;
 import sys.funclib.operatingMessage.MessageGrade;
 import sys.funclib.operatingMessage.MessageState;
 import sys.funclib.operatingMessage.MessageType;
-import de.bsvrz.dua.plloglve.plloglve.PLLOGKonstanten;
 import de.bsvrz.sys.funclib.bitctrl.daf.Konstanten;
 import de.bsvrz.sys.funclib.bitctrl.dua.DUAKonstanten;
+import de.bsvrz.sys.funclib.bitctrl.dua.VariableMitKonstanzZaehler;
 import de.bsvrz.sys.funclib.bitctrl.dua.schnittstellen.IVerwaltung;
 import de.bsvrz.sys.funclib.bitctrl.konstante.Konstante;
 import de.bsvrz.sys.funclib.bitctrl.modell.AbstractSystemObjekt;
@@ -86,50 +86,50 @@ implements Comparable<DiffFahrStreifen>, ClientReceiverInterface{
 	/**
 	 * 
 	 */
-	private WertMitKonstanzZaehler qKfzZaehler = 
-								new WertMitKonstanzZaehler("qKfz");  //$NON-NLS-1$
+	private VariableMitKonstanzZaehler<Integer> qKfzZaehler = 
+								new VariableMitKonstanzZaehler<Integer>("qKfz");  //$NON-NLS-1$
 
 	/**
 	 * 
 	 */
-	private WertMitKonstanzZaehler qLkwZaehler = 
-								new WertMitKonstanzZaehler("qLkw");  //$NON-NLS-1$
+	private VariableMitKonstanzZaehler<Integer> qLkwZaehler = 
+								new VariableMitKonstanzZaehler<Integer>("qLkw");  //$NON-NLS-1$
 
 	/**
 	 * 
 	 */
-	private WertMitKonstanzZaehler qPkwZaehler = 
-								new WertMitKonstanzZaehler("qPkw");  //$NON-NLS-1$
+	private VariableMitKonstanzZaehler<Integer> qPkwZaehler = 
+								new VariableMitKonstanzZaehler<Integer>("qPkw");  //$NON-NLS-1$
 	
 	/**
 	 * 
 	 */
-	private WertMitKonstanzZaehler vKfzZaehler = 
-								new WertMitKonstanzZaehler("vKfz");  //$NON-NLS-1$
+	private VariableMitKonstanzZaehler<Integer> vKfzZaehler = 
+								new VariableMitKonstanzZaehler<Integer>("vKfz");  //$NON-NLS-1$
 	
 	/**
 	 * 
 	 */
-	private WertMitKonstanzZaehler vLkwZaehler = 
-								new WertMitKonstanzZaehler("vLkw");  //$NON-NLS-1$
+	private VariableMitKonstanzZaehler<Integer> vLkwZaehler = 
+								new VariableMitKonstanzZaehler<Integer>("vLkw");  //$NON-NLS-1$
 
 	/**
 	 * 
 	 */
-	private WertMitKonstanzZaehler vPkwZaehler = 
-								new WertMitKonstanzZaehler("vPkw");  //$NON-NLS-1$
+	private VariableMitKonstanzZaehler<Integer> vPkwZaehler = 
+								new VariableMitKonstanzZaehler<Integer>("vPkw");  //$NON-NLS-1$
 
 	/**
 	 * 
 	 */
-	private WertMitKonstanzZaehler sKfzZaehler = 
-								new WertMitKonstanzZaehler("sKfz");  //$NON-NLS-1$
+	private VariableMitKonstanzZaehler<Integer> sKfzZaehler = 
+								new VariableMitKonstanzZaehler<Integer>("sKfz");  //$NON-NLS-1$
 
 	/**
 	 * 
 	 */
-	private WertMitKonstanzZaehler bZaehler = 
-								new WertMitKonstanzZaehler("b");  //$NON-NLS-1$
+	private VariableMitKonstanzZaehler<Integer> bZaehler = 
+								new VariableMitKonstanzZaehler<Integer>("b");  //$NON-NLS-1$
 
 
 
@@ -169,56 +169,48 @@ implements Comparable<DiffFahrStreifen>, ClientReceiverInterface{
 					final int b = data.getItem("b").getUnscaledValue("Wert").intValue(); //$NON-NLS-1$ //$NON-NLS-2$
 					final int sKfz = data.getItem("sKfz").getUnscaledValue("Wert").intValue(); //$NON-NLS-1$ //$NON-NLS-2$
 					
-					this.qKfzZaehler.update(qKfz);
-					this.qLkwZaehler.update(qLkw);
-					this.qPkwZaehler.update(qPkw);
-					this.vKfzZaehler.update(vKfz);
-					this.vLkwZaehler.update(vLkw);
-					this.vPkwZaehler.update(vPkw);
-					this.sKfzZaehler.update(sKfz);
-					this.bZaehler.update(b);
+					this.qKfzZaehler.aktualisiere(qKfz);
+					this.qLkwZaehler.aktualisiere(qLkw);
+					this.qPkwZaehler.aktualisiere(qPkw);
+					this.vKfzZaehler.aktualisiere(vKfz);
+					this.vLkwZaehler.aktualisiere(vLkw);
+					this.vPkwZaehler.aktualisiere(vPkw);
+					this.sKfzZaehler.aktualisiere(sKfz);
+					this.bZaehler.aktualisiere(b);
 					
-					Collection<WertMitKonstanzZaehler> puffer = new ArrayList<WertMitKonstanzZaehler>();
+					Collection<VariableMitKonstanzZaehler<Integer>> puffer = new ArrayList<VariableMitKonstanzZaehler<Integer>>();
 					synchronized (this.parameter) {
-						if(this.qKfzZaehler.getWert() > 0 &&
-								this.qKfzZaehler.getWertIstKonstantSeit() > this.parameter.getMaxAnzKonstanzqKfz()){
+						if(this.qKfzZaehler.getWertIstKonstantSeit() > this.parameter.getMaxAnzKonstanzqKfz()){
 							puffer.add(this.qKfzZaehler);
 						}
-						if(this.qLkwZaehler.getWert() > 0 &&
-								this.qLkwZaehler.getWertIstKonstantSeit() > this.parameter.getMaxAnzKonstanzqLkw()){
+						if(this.qLkwZaehler.getWertIstKonstantSeit() > this.parameter.getMaxAnzKonstanzqLkw()){
 							puffer.add(this.qLkwZaehler);
 						}
-						if(this.qPkwZaehler.getWert() > 0 &&
-								this.qPkwZaehler.getWertIstKonstantSeit() > this.parameter.getMaxAnzKonstanzqPkw()){
+						if(this.qPkwZaehler.getWertIstKonstantSeit() > this.parameter.getMaxAnzKonstanzqPkw()){
 							puffer.add(this.qPkwZaehler);
 						}
 						
-						if(this.vKfzZaehler.getWert() > 0 &&
-								this.vKfzZaehler.getWertIstKonstantSeit() > this.parameter.getMaxAnzKonstanzvKfz()){
+						if(this.vKfzZaehler.getWertIstKonstantSeit() > this.parameter.getMaxAnzKonstanzvKfz()){
 							puffer.add(this.vKfzZaehler);
 						}
-						if(this.vLkwZaehler.getWert() > 0 &&
-								this.vLkwZaehler.getWertIstKonstantSeit() > this.parameter.getMaxAnzKonstanzvLkw()){
+						if(this.vLkwZaehler.getWertIstKonstantSeit() > this.parameter.getMaxAnzKonstanzvLkw()){
 							puffer.add(this.vLkwZaehler);
 						}
-						if(this.vPkwZaehler.getWert() > 0 &&
-								this.vPkwZaehler.getWertIstKonstantSeit() > this.parameter.getMaxAnzKonstanzvPkw()){
+						if(this.vPkwZaehler.getWertIstKonstantSeit() > this.parameter.getMaxAnzKonstanzvPkw()){
 							puffer.add(this.vPkwZaehler);
 						}
 						
-						if(this.sKfzZaehler.getWert() > 0 &&
-								this.sKfzZaehler.getWertIstKonstantSeit() > this.parameter.getMaxAnzKonstanzStreung()){
+						if(this.sKfzZaehler.getWertIstKonstantSeit() > this.parameter.getMaxAnzKonstanzStreung()){
 							puffer.add(this.sKfzZaehler);
 						}
-						if(this.bZaehler.getWert() > 0 &&
-								this.bZaehler.getWertIstKonstantSeit() > this.parameter.getMaxAnzKonstanzBelegung()){
+						if(this.bZaehler.getWertIstKonstantSeit() > this.parameter.getMaxAnzKonstanzBelegung()){
 							puffer.add(this.bZaehler);
 						}
 
 						if(!puffer.isEmpty()){
 							copy = VERWALTUNG.getVerbindung().createData(resultat.getDataDescription().getAttributeGroup());
-							for(WertMitKonstanzZaehler wert:puffer){
-								data.getItem(wert.getName()).getUnscaledValue("Wert").set(PLLOGKonstanten.FEHLERHAFT); //$NON-NLS-1$			
+							for(VariableMitKonstanzZaehler<Integer> wert:puffer){
+								data.getItem(wert.getName()).getUnscaledValue("Wert").set(DUAKonstanten.FEHLERHAFT); //$NON-NLS-1$			
 								data.getItem(wert.getName()).getItem("Status").getItem("MessWertErsetzung").   //$NON-NLS-1$//$NON-NLS-2$
 								getUnscaledValue("Implausibel").set(DUAKonstanten.JA); //$NON-NLS-1$	
 								VERWALTUNG.sendeBetriebsMeldung(MELDUNGS_ID, MessageType.APPLICATION_DOMAIN, Konstante.LEERSTRING,
