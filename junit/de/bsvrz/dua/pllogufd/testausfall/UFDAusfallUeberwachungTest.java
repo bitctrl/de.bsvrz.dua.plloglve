@@ -219,7 +219,7 @@ implements ClientSenderInterface, ClientReceiverInterface{
 	private final void ergebnisUeberpruefen(){
 		if(!this.ergebnisIst.isEmpty() && !this.ergebnisSoll.isEmpty()){				
 			for(SystemObject sensor:PlPruefungLogischUFDTest.SENSOREN){
-				System.out.println("Vergleiche " + sensor.getPid() + ": Soll(" + (this.ergebnisSoll.get(sensor)?"timeout":"in time") +//$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
+				System.out.println("Vergleiche (AUSFALL)" + sensor.getPid() + ": Soll(" + (this.ergebnisSoll.get(sensor)?"timeout":"in time") +//$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
 						"), Ist("  //$NON-NLS-1$
 						+ (this.ergebnisIst.get(sensor)?"timeout":"in time") + ") --> " + //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ 
 						(this.ergebnisSoll.get(sensor) == this.ergebnisIst.get(sensor)?"Ok":"!!!FEHLER!!!")); //$NON-NLS-1$ //$NON-NLS-2$
@@ -286,17 +286,17 @@ implements ClientSenderInterface, ClientReceiverInterface{
 				if(sensor.getPid().endsWith("1")){ //$NON-NLS-1$
 					this.ergebnisSoll.put(sensor, System.currentTimeMillis() - start > 10000);
 					System.out.println("Sende: " + sensor.getName() +  //$NON-NLS-1$
-							(System.currentTimeMillis() - start > 10000?" timeout":" in time"));  //$NON-NLS-1$//$NON-NLS-2$
+							(System.currentTimeMillis() - start > 10000?" --> timeout":" --> in time"));  //$NON-NLS-1$//$NON-NLS-2$
 				}
 				if(sensor.getPid().endsWith("2")){ //$NON-NLS-1$
 					this.ergebnisSoll.put(sensor, System.currentTimeMillis() - start > 15000);
 					System.out.println("Sende: " + sensor.getName() +  //$NON-NLS-1$
-							(System.currentTimeMillis() - start > 15000?" timeout":" in time"));  //$NON-NLS-1$//$NON-NLS-2$
+							(System.currentTimeMillis() - start > 15000?" --> timeout":" --> in time"));  //$NON-NLS-1$//$NON-NLS-2$
 				}
 				if(sensor.getPid().endsWith("3")){ //$NON-NLS-1$
 					this.ergebnisSoll.put(sensor, System.currentTimeMillis() - start > 20000);
 					System.out.println("Sende: " + sensor.getName() +  //$NON-NLS-1$
-							(System.currentTimeMillis() - start > 20000?" timeout":" in time"));  //$NON-NLS-1$//$NON-NLS-2$
+							(System.currentTimeMillis() - start > 20000?" --> timeout":" --> in time"));  //$NON-NLS-1$//$NON-NLS-2$
 				}
 				
 				Pause.warte(1000L);
@@ -333,7 +333,7 @@ implements ClientSenderInterface, ClientReceiverInterface{
 						this.ergebnisIst.put(resultat.getObject(), 
 								ufdDatum.getStatusErfassungNichtErfasst() == DUAKonstanten.JA);
 						System.out.println("Empfange: " + resultat.getObject().getName() +  //$NON-NLS-1$
-								(ufdDatum.getStatusErfassungNichtErfasst() == DUAKonstanten.JA?" timeout":" in time")); //$NON-NLS-1$ //$NON-NLS-2$
+								(ufdDatum.getStatusErfassungNichtErfasst() == DUAKonstanten.JA?" --> timeout":" --> in time")); //$NON-NLS-1$ //$NON-NLS-2$
 					}
 				}
 			}
