@@ -58,6 +58,14 @@ implements ClientSenderInterface{
 	public static SystemObject ni2 = null; 
 	public static SystemObject ni3 = null; 
 
+	public static SystemObject ns1 = null;
+	public static SystemObject ns2 = null; 
+	public static SystemObject ns3 = null; 
+
+	public static SystemObject fbz1 = null;
+	public static SystemObject fbz2 = null; 
+	public static SystemObject fbz3 = null; 
+	
 	public static SystemObject wfd1 = null;
 	public static SystemObject wfd2 = null;
 	public static SystemObject wfd3 = null;
@@ -150,10 +158,27 @@ implements ClientSenderInterface{
 		if(DAV == null){
 			DAV = DAVTest.getDav();
 			UmfeldDatenArt.initialisiere(DAV);
+
+			
+//			SENSOREN.add(ni1 = DAV.getDataModel().getObject("AAA.pllogufd.NI.1")); //$NON-NLS-1$
+//			SENSOREN.add(fbz1 = DAV.getDataModel().getObject("AAA.pllogufd.FBZ.1")); //$NON-NLS-1$
+//			SENSOREN.add(ns1 = DAV.getDataModel().getObject("AAA.pllogufd.NS.1")); //$NON-NLS-1$
+//			SENSOREN.add(wfd1 = DAV.getDataModel().getObject("AAA.pllogufd.WFD.1")); //$NON-NLS-1$
+//			SENSOREN.add(lt1 = DAV.getDataModel().getObject("AAA.pllogufd.LT.1")); //$NON-NLS-1$
+//			SENSOREN.add(rlf1 = DAV.getDataModel().getObject("AAA.pllogufd.RLF.1")); //$NON-NLS-1$
+//			SENSOREN.add(sw1 = DAV.getDataModel().getObject("AAA.pllogufd.SW.1")); //$NON-NLS-1$
 			
 			SENSOREN.add(ni1 = DAV.getDataModel().getObject("AAA.pllogufd.NI.1")); //$NON-NLS-1$
 			SENSOREN.add(ni2 = DAV.getDataModel().getObject("AAA.pllogufd.NI.2")); //$NON-NLS-1$
 			SENSOREN.add(ni3 = DAV.getDataModel().getObject("AAA.pllogufd.NI.3")); //$NON-NLS-1$
+
+			SENSOREN.add(fbz1 = DAV.getDataModel().getObject("AAA.pllogufd.FBZ.1")); //$NON-NLS-1$
+			SENSOREN.add(fbz2 = DAV.getDataModel().getObject("AAA.pllogufd.FBZ.2")); //$NON-NLS-1$
+			SENSOREN.add(fbz3 = DAV.getDataModel().getObject("AAA.pllogufd.FBZ.3")); //$NON-NLS-1$
+
+			SENSOREN.add(ns1 = DAV.getDataModel().getObject("AAA.pllogufd.NS.1")); //$NON-NLS-1$
+			SENSOREN.add(ns2 = DAV.getDataModel().getObject("AAA.pllogufd.NS.2")); //$NON-NLS-1$
+			SENSOREN.add(ns3 = DAV.getDataModel().getObject("AAA.pllogufd.NS.3")); //$NON-NLS-1$
 			
 			SENSOREN.add(wfd1 = DAV.getDataModel().getObject("AAA.pllogufd.WFD.1")); //$NON-NLS-1$
 			SENSOREN.add(wfd2 = DAV.getDataModel().getObject("AAA.pllogufd.WFD.2")); //$NON-NLS-1$

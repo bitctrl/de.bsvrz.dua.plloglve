@@ -26,6 +26,9 @@
 
 package de.bsvrz.dua.pllogufd.testausfall;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -57,7 +60,7 @@ import de.bsvrz.sys.funclib.bitctrl.konstante.Konstante;
 
 /**
  * Test des Moduls Ausfallüberwachung.<br>
- * Voraussetzungen:<br>
+ * Voraussetzungen (Testbedingungen):<br>
  * 1.) Alle Sensoren im Konfigurationsbereich <code>kb.duaTestObjekteUFD</code> werden überwacht<br>
  * 2.) Daten werden im Minutenintervall zur vollen Minute gesendet (Datenzeitstempel)<br>
  * 3.) Datenverzug wird auf 10s (für Sensoren xxx1), 15s (für Sensoren xxx2) und 20s (für Sensoren xxx3)
@@ -86,6 +89,37 @@ import de.bsvrz.sys.funclib.bitctrl.konstante.Konstante;
  */
 public class UFDAusfallUeberwachungTest 
 implements ClientSenderInterface, ClientReceiverInterface{
+
+	/**
+	 * Die Daten werden im Abstand von <code>ABSTAND + Random.nextInt(ABSTAND)</code> versendet
+	 */
+	protected static final int ABSTAND = 500;
+	
+	/**
+	 * Die Zeit (in ms) die die erwartete Eintreffzeit eines Datums von
+	 * der tatsächlichen Eintreffzeit differieren darf
+	 */
+	protected static final long ERGEBNIS_TOLERANZ = 500;
+	
+	/**
+	 * jeder sovielte Sensor-Wert wird nicht versandt
+	 */
+	protected static final int AUSFALL = 5;
+	
+	/**
+	 * Parameter <code>maxZeitVerzug</code> für Sensoren xxx1
+	 */
+	private static final long MAX_VERZUG_1 = 3000L;
+	
+	/**
+	 * Parameter <code>maxZeitVerzug</code> für Sensoren xxx2
+	 */
+	private static final long MAX_VERZUG_2 = 4000L;
+	
+	/**
+	 * Parameter <code>maxZeitVerzug</code> für Sensoren xxx3
+	 */
+	private static final long MAX_VERZUG_3 = 6000L;
 	
 	/**
 	 * Debug-Logger
@@ -103,15 +137,18 @@ implements ClientSenderInterface, ClientReceiverInterface{
 	private ClientDavInterface dav = null;
 	
 	/**
-	 * letzter Soll-Ergebnis-Wert <code>Ausgefallen</code> von einem Sensor   
+	 * letzter Soll-Ergebnis-Wert von einem Sensor   
 	 */
-	private Map<SystemObject, Boolean> ergebnisSoll = new HashMap<SystemObject, Boolean>();
+	private Map<SystemObject, Ergebnis> ergebnisSoll = new HashMap<SystemObject, Ergebnis>();
 
 	/**
-	 * letzter Ist-Ergebnis-Wert <code>Ausgefallen</code> von einem Sensor 
+	 * letzte Ist-Ergebnis-Werte von einem Sensor.
+	 * Dies sind hier mehrere, da ggf. auch mehrere Datensätze pro Intervall empfangen werden können,
+	 * wenn z.B. die Ausfallkontrolle <b>und</b> die Testapplikation einen Wert senden
 	 */
-	private Map<SystemObject, Boolean> ergebnisIst = new HashMap<SystemObject, Boolean>();
-	
+	private Map<SystemObject, Collection<Ergebnis>> ergebnisIst = new HashMap<SystemObject, Collection<Ergebnis>>();
+
+
 	
 	/**
 	 * {@inheritDoc}
@@ -129,26 +166,30 @@ implements ClientSenderInterface, ClientReceiverInterface{
 				dav.getDataModel().getAspect(Konstante.DAV_ASP_PARAMETER_VORGABE),
 				(short)0);
 		dav.subscribeSender(this, PlPruefungLogischUFDTest.SENSOREN, paraAusfallUeberwachung, SenderRole.sender());
+
+		/**
+		 * Warte bis Anmeldung sicher durch ist
+		 */
+		Pause.warte(1000L);
 		
 		/**
 		 * Parameter setzen auf 10s (für Sensoren xxx1), 15s (für Sensoren xxx2) und 20s (für Sensoren xxx3)
 		 */
 		for(SystemObject sensor:PlPruefungLogischUFDTest.SENSOREN){
 			if(sensor.getPid().endsWith("1")){ //$NON-NLS-1$
-				this.setMaxAusfallFuerSensor(sensor, 10000L);
+				this.setMaxAusfallFuerSensor(sensor, MAX_VERZUG_1);
 			}else
 			if(sensor.getPid().endsWith("2")){ //$NON-NLS-1$
-				this.setMaxAusfallFuerSensor(sensor, 15000L);
+				this.setMaxAusfallFuerSensor(sensor, MAX_VERZUG_2);
 			}else
 			if(sensor.getPid().endsWith("3")){ //$NON-NLS-1$
-				this.setMaxAusfallFuerSensor(sensor, 20000L);
+				this.setMaxAusfallFuerSensor(sensor, MAX_VERZUG_3);
 			}
 		}
 		
 		/**
 		 * Warte eine Sekunde bis die Parameter sicher da sind
 		 */
-		Pause.warte(1000L);
 		
 				
 		/**
@@ -217,17 +258,47 @@ implements ClientSenderInterface, ClientReceiverInterface{
 	 * gelöscht
 	 */
 	private final void ergebnisUeberpruefen(){
-		if(!this.ergebnisIst.isEmpty() && !this.ergebnisSoll.isEmpty()){				
+		if(!this.ergebnisIst.isEmpty() && !this.ergebnisSoll.isEmpty()){
 			for(SystemObject sensor:PlPruefungLogischUFDTest.SENSOREN){
-				System.out.println("Vergleiche (AUSFALL)" + sensor.getPid() + ": Soll(" + (this.ergebnisSoll.get(sensor)?"timeout":"in time") +//$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
-						"), Ist("  //$NON-NLS-1$
-						+ (this.ergebnisIst.get(sensor)?"timeout":"in time") + ") --> " + //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ 
-						(this.ergebnisSoll.get(sensor) == this.ergebnisIst.get(sensor)?"Ok":"!!!FEHLER!!!")); //$NON-NLS-1$ //$NON-NLS-2$
-				Assert.assertEquals("Objekt: " + sensor.toString(), //$NON-NLS-1$
-						this.ergebnisSoll.get(sensor), 
-						this.ergebnisIst.get(sensor));
-			}				
+
+				Collection<Ergebnis> istErgebnisse = this.ergebnisIst.get(sensor);
+				Ergebnis erfolgsErgebnis = null;
+				if(istErgebnisse == null){
+					System.out.println("NULL: " + sensor); //$NON-NLS-1$
+				}else{
+					for(Ergebnis istErgebnis:istErgebnisse){
+						if(istErgebnis.equals(this.ergebnisSoll.get(sensor))){
+							erfolgsErgebnis = istErgebnis;
+							break;
+						}
+					}
+					
+					if(erfolgsErgebnis != null){
+						System.out.println("Vergleiche (AUSFALL)" + sensor.getPid() + ": Soll(" + this.ergebnisSoll.get(sensor) +//$NON-NLS-1$ //$NON-NLS-2$
+									"), Ist(" + erfolgsErgebnis + ") --> Ok"); //$NON-NLS-1$ //$NON-NLS-2$
+					}else{
+						System.out.println("!!!!!!!!!!!!!!!!!!!!!!!!!!!Fehler!!!!!!!!!!!!!!!!!!!!!!!!!!!"); //$NON-NLS-1$
+						System.out.println("!!!!!!!!!!!!!!!!!!!!!!!!!!!Fehler!!!!!!!!!!!!!!!!!!!!!!!!!!!"); //$NON-NLS-1$
+						System.out.println("  Soll: " + this.ergebnisSoll.get(sensor)); //$NON-NLS-1$
+						System.out.println("  Ist-Werte: "); //$NON-NLS-1$
+						for(Ergebnis istErgebnis:istErgebnisse){
+							System.out.println("    " + istErgebnis); //$NON-NLS-1$
+						}
+						System.out.println("!!!!!!!!!!!!!!!!!!!!!!!!!!!Fehler!!!!!!!!!!!!!!!!!!!!!!!!!!!"); //$NON-NLS-1$
+						System.out.println("!!!!!!!!!!!!!!!!!!!!!!!!!!!Fehler!!!!!!!!!!!!!!!!!!!!!!!!!!!"); //$NON-NLS-1$
+					}
+				}
+				
+				/**
+				 * JUnit-Test
+				 */
+				//Assert.assertTrue("Felher an Sensor: " + sensor.getPid(), erfolgsErgebnis != null); //$NON-NLS-1$
+			}			
 		}
+		
+		/**
+		 * Lösche Soll- und Ist-Ergebnissmenge vor nächstem Durchlauf
+		 */
 		this.ergebnisIst.clear();
 		this.ergebnisSoll.clear();		
 	}
@@ -236,7 +307,7 @@ implements ClientSenderInterface, ClientReceiverInterface{
 	/**
 	 * Anzahl der Intervalle, die der Test der Ausfallüberwachung laufen soll
 	 */
-	private static final int TEST_AUSFALL_UEBERWACHUNG_LAEUFE = 100;
+	private static final int TEST_AUSFALL_UEBERWACHUNG_LAEUFE = 10000;
 	
 	
 	/**
@@ -251,20 +322,21 @@ implements ClientSenderInterface, ClientReceiverInterface{
 		 */
 		for(int testZaehler = 0; testZaehler < TEST_AUSFALL_UEBERWACHUNG_LAEUFE; testZaehler++){
 	
-			System.out.println("---\nTestlauf Nr." + (testZaehler+1) + "\n---"); //$NON-NLS-1$ //$NON-NLS-2$
-			
-			this.ergebnisUeberpruefen();
-			
 			/**
 			 * Warte bis zum Anfang der nächsten Minute
 			 */
 			final long start = TestUtensilien.getBeginNaechsterMinute();
-			Pause.warte(start - System.currentTimeMillis());
+			Pause.warte(start - System.currentTimeMillis() + 100);
+			
+			this.ergebnisUeberpruefen();
+			
+			System.out.println("---\nTestlauf Nr." + (testZaehler+1) + "\n---"); //$NON-NLS-1$ //$NON-NLS-2$
+			
 
 			/**
-			 * In dieser Schleife wird für jeden Sensor im Takt von einer Sekunde jeweils 
+			 * In dieser Schleife wird für jeden Sensor im stochastischen Takt jeweils 
 			 * ein Datum gesendet. Die Reihenfolge der Sensoren wird dabei vor jedem Durchlauf
-			 * neu "ausgewürfelt". Jeder zehnte Sensor wird ignoriert
+			 * neu "ausgewürfelt". Jeder <code>AUSFALL</code>-te Sensor wird ignoriert
 			 */
 			int[] indexFeld = DAVTest.getZufaelligeZahlen(PlPruefungLogischUFDTest.SENSOREN.size());
 			for(int i = 0; i<indexFeld.length; i++){
@@ -273,9 +345,10 @@ implements ClientSenderInterface, ClientReceiverInterface{
 				/**
 				 * Dieser Wert fällt komplett aus
 				 */
-				if(DAVTest.R.nextInt(10) == 0){
-					this.ergebnisSoll.put(sensor, true);
-					System.out.println("Sende nicht: " + sensor.getName());  //$NON-NLS-1$
+				if(DAVTest.R.nextInt(AUSFALL) == 0){
+					Ergebnis erwartetesErgebnis = new Ergebnis(sensor, start - Konstante.MINUTE_IN_MS, true);
+					this.ergebnisSoll.put(sensor, erwartetesErgebnis);
+					System.out.println("Sende nicht: " + erwartetesErgebnis);  //$NON-NLS-1$
 					continue;
 				}
 				
@@ -283,23 +356,36 @@ implements ClientSenderInterface, ClientReceiverInterface{
 				resultat.setDataTime(start - Konstante.MINUTE_IN_MS);
 				PlPruefungLogischUFDTest.SENDER.sende(resultat);
 				
+				/**
+				 * Berechne den Status (ob <code>nicht erfasst</code>)
+				 * des gerade versendeten Datums
+				 */
+				Boolean nichtErfasst = null;	// == egal
+				
 				if(sensor.getPid().endsWith("1")){ //$NON-NLS-1$
-					this.ergebnisSoll.put(sensor, System.currentTimeMillis() - start > 10000);
-					System.out.println("Sende: " + sensor.getName() +  //$NON-NLS-1$
-							(System.currentTimeMillis() - start > 10000?" --> timeout":" --> in time"));  //$NON-NLS-1$//$NON-NLS-2$
+					if(Math.abs(System.currentTimeMillis() - start - MAX_VERZUG_1) > ERGEBNIS_TOLERANZ){
+						nichtErfasst = System.currentTimeMillis() - start > MAX_VERZUG_1;	
+					}
 				}
 				if(sensor.getPid().endsWith("2")){ //$NON-NLS-1$
-					this.ergebnisSoll.put(sensor, System.currentTimeMillis() - start > 15000);
-					System.out.println("Sende: " + sensor.getName() +  //$NON-NLS-1$
-							(System.currentTimeMillis() - start > 15000?" --> timeout":" --> in time"));  //$NON-NLS-1$//$NON-NLS-2$
+					if(Math.abs(System.currentTimeMillis() - start - MAX_VERZUG_2) > ERGEBNIS_TOLERANZ){
+						nichtErfasst = System.currentTimeMillis() - start > MAX_VERZUG_2;	
+					}
 				}
 				if(sensor.getPid().endsWith("3")){ //$NON-NLS-1$
-					this.ergebnisSoll.put(sensor, System.currentTimeMillis() - start > 20000);
-					System.out.println("Sende: " + sensor.getName() +  //$NON-NLS-1$
-							(System.currentTimeMillis() - start > 20000?" --> timeout":" --> in time"));  //$NON-NLS-1$//$NON-NLS-2$
+					if(Math.abs(System.currentTimeMillis() - start - MAX_VERZUG_3) > ERGEBNIS_TOLERANZ){
+						nichtErfasst = System.currentTimeMillis() - start > MAX_VERZUG_3;	
+					}
 				}
+
+				Ergebnis erwartetesErgebnis = new Ergebnis(sensor,
+								start - Konstante.MINUTE_IN_MS,
+								nichtErfasst);
 				
-				Pause.warte(1000L);
+				this.ergebnisSoll.put(sensor, erwartetesErgebnis);
+				System.out.println(jetzt() + "Sende: " + erwartetesErgebnis);  //$NON-NLS-1$
+				
+				Pause.warte(ABSTAND + DAVTest.R.nextInt(ABSTAND));
 			}			
 		}		
 	}
@@ -329,14 +415,115 @@ implements ClientSenderInterface, ClientReceiverInterface{
 			for(ResultData resultat:resultate){
 				if(resultat != null && resultat.getData() != null){
 					UmfeldDatenSensorDatum ufdDatum = new UmfeldDatenSensorDatum(resultat);
-					if(this.ergebnisIst.get(resultat.getObject()) == null){
-						this.ergebnisIst.put(resultat.getObject(), 
-								ufdDatum.getStatusErfassungNichtErfasst() == DUAKonstanten.JA);
-						System.out.println("Empfange: " + resultat.getObject().getName() +  //$NON-NLS-1$
-								(ufdDatum.getStatusErfassungNichtErfasst() == DUAKonstanten.JA?" --> timeout":" --> in time")); //$NON-NLS-1$ //$NON-NLS-2$
+					
+					Ergebnis ergebnisIstFuerSensor = new Ergebnis(resultat.getObject(), resultat.getDataTime(),
+																  ufdDatum.getStatusErfassungNichtErfasst() == DUAKonstanten.JA);					 
+
+					Collection<Ergebnis> ergebnisseBisJetzt = this.ergebnisIst.get(resultat.getObject());
+					if(ergebnisseBisJetzt == null){
+						ergebnisseBisJetzt = new ArrayList<Ergebnis>();
+						ergebnisseBisJetzt.add(ergebnisIstFuerSensor);
+						this.ergebnisIst.put(resultat.getObject(), ergebnisseBisJetzt);
+					}else{
+						ergebnisseBisJetzt.add(ergebnisIstFuerSensor);
+					}
+					
+					System.out.println(jetzt() + ", Empfange: " + ergebnisIstFuerSensor); //$NON-NLS-1$
+				}
+			}
+		}
+	}
+	
+	
+	/**
+	 * Erfragt die aktuelle Zeit als String
+	 * 
+	 * @return die aktuelle Zeit als String
+	 */
+	private final String jetzt(){
+		return "(JETZT:" + DUAKonstanten.ZEIT_FORMAT_GENAU.format(new Date(System.currentTimeMillis())) + ")"; //$NON-NLS-1$ //$NON-NLS-2$
+	}
+	
+	
+	/**
+	 * Für den Test der Ausfallkontrolle relevanter Teil der Informationen
+	 * eines Sensorwertes. Über Objekte dieser Klasse wird der Soll-Ist-Vergleich
+	 * vorgenommen.
+	 * 
+	 * @author BitCtrl Systems GmbH, Thierfelder
+	 *
+	 */
+	private class Ergebnis{
+		
+		/**
+		 * Datenzeit
+		 */
+		protected long datenZeit = 1;
+		
+		/**
+		 * Systemobjekt eines Umfelddatensensors
+		 */
+		protected SystemObject sensor = null;
+		
+		/**
+		 * ob das Datum als <code>nicht erfasst</code> gekennzeichnet erwartet
+		 * wird. <code>null</code> gildt als "egal"
+		 */
+		protected Boolean nichtErfasst = false;
+		
+		
+		/**
+		 * Standardkontruktor
+		 * 
+		 * @param sensor Systemobjekt eines Umfelddatensensors
+		 * @param datenZeit Datenzeit
+		 * @param nichtErfasst ob das Datum als <code>nicht erfasst</code> gekennzeichnet erwartet
+		 * wird. <code>null</code> gilt als "egal"<br>
+		 * <b>Achtung:</b> Die Markierung "egal" wird verwendet, wenn die Zeit, zu der das Datum
+		 * verschickt wurde und die Zeit, zu der es die Ausfallkontrolle hätte ebenfalls verschicken
+		 * sollen, innerhalb des Toleranzbereichs </code>ERGEBNIS_TOLERANZ</code> liegen 
+		 */
+		public Ergebnis(SystemObject sensor, long datenZeit, Boolean nichtErfasst){
+			this.sensor = sensor;
+			this.datenZeit = datenZeit;
+			this.nichtErfasst = nichtErfasst;
+		}
+
+
+		/**
+		 * Zwei Ergebnisdatensätze gelten als gleich, wenn:<br>
+		 * - die Sensoren identisch sind,<br>
+		 * - die erwarteten Datenzeiten identisch sind und<br>
+		 * - die Markierungen als <code>nicht erfasst</code> identisch sind (so diese nicht als "egal" markiert sind) 
+		 */
+		@Override
+		public boolean equals(Object obj) {
+			boolean ergebnis = false;
+
+			if(obj instanceof Ergebnis){
+				Ergebnis that = (Ergebnis)obj;
+				if(this.sensor.equals(that.sensor) && this.datenZeit == that.datenZeit){
+					ergebnis = true;
+					if(this.nichtErfasst != null && that.nichtErfasst != null){
+						ergebnis &= this.nichtErfasst == that.nichtErfasst;
 					}
 				}
 			}
+
+			return ergebnis;
+		}
+
+
+		/**
+		 * {@inheritDoc}
+		 */
+		@Override
+		public String toString() {
+			String nichtErfasstStr = (this.nichtErfasst == null?"egal":(this.nichtErfasst?"ja":"nein")); //$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$
+			
+			return "Sensor: " + this.sensor.getPid() + ", Daten: " +   //$NON-NLS-1$//$NON-NLS-2$
+				DUAKonstanten.NUR_ZEIT_FORMAT_GENAU.format(new Date(this.datenZeit)) +
+				", nicht Erfasst: " + nichtErfasstStr;  //$NON-NLS-1$
 		}
 	}
 }

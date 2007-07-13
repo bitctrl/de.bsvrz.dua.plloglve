@@ -27,8 +27,10 @@
 package de.bsvrz.dua.pllogufd.testdiff;
 
 import java.util.Calendar;
+import java.util.Collection;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
 
 import junit.framework.Assert;
@@ -75,6 +77,11 @@ implements ClientSenderInterface, ClientReceiverInterface{
 	 * standardmäßige maximal zulässige Ergebniskonstanz in Intervallen 
 	 */
 	private static final long STANDARD_MAX_INTERVALLE = 3;
+	
+	/**
+	 * die hier betrachteten Sensoren
+	 */
+	private Collection<SystemObject> untersuchteSensoren = new HashSet<SystemObject>();
 
 	/**
 	 * Datenverteiler-Verbindung
@@ -102,11 +109,21 @@ implements ClientSenderInterface, ClientReceiverInterface{
 		this.dav = DAVTest.getDav();
 		PlPruefungLogischUFDTest.initialisiere();
 
+		/**
+		 * filtere FBZ heraus
+		 */
+		for(SystemObject sensor:PlPruefungLogischUFDTest.SENSOREN){
+			UmfeldDatenArt datenArt = UmfeldDatenArt.getUmfeldDatenArtVon(sensor);
+			if(!datenArt.equals(UmfeldDatenArt.FBZ)){
+				this.untersuchteSensoren.add(sensor);
+			}
+		}		
+		
 
 		/**
 		 * Anmeldung auf alle Parameter
 		 */
-		for(SystemObject sensor:PlPruefungLogischUFDTest.SENSOREN){
+		for(SystemObject sensor:this.untersuchteSensoren){
 			UmfeldDatenArt datenArt = UmfeldDatenArt.getUmfeldDatenArtVon(sensor);
 			DataDescription paraDifferenzialkontrolle = new DataDescription(
 					dav.getDataModel().getAttributeGroup("atg.ufdsDifferenzialKontrolle" + datenArt.getName()), //$NON-NLS-1$
@@ -119,7 +136,7 @@ implements ClientSenderInterface, ClientReceiverInterface{
 		 * maximal zulässige Zeitdauer der Ergebniskonstanz auf <code>STANDARD_T * STANDARD_MAX_INTERVALLE</code> stellen
 		 * Eine Überprüfung findet nur statt, wenn ein eingetroffener Wert "<" als der Grenzwert von 5 ist
 		 */
-		for(SystemObject sensor:PlPruefungLogischUFDTest.SENSOREN){
+		for(SystemObject sensor:this.untersuchteSensoren){
 			UmfeldDatenArt datenArt = UmfeldDatenArt.getUmfeldDatenArtVon(sensor);
 			Data datum = dav.createData(dav.getDataModel().getAttributeGroup(
 					"atg.ufdsDifferenzialKontrolle" + datenArt.getName())); //$NON-NLS-1$
@@ -145,7 +162,7 @@ implements ClientSenderInterface, ClientReceiverInterface{
 		/**
 		 * Anmeldung auf alle Daten die aus der Applikation Pl-Prüfung logisch UFD kommen
 		 */
-		for(SystemObject sensor:PlPruefungLogischUFDTest.SENSOREN){
+		for(SystemObject sensor:this.untersuchteSensoren){
 			UmfeldDatenArt datenArt = UmfeldDatenArt.getUmfeldDatenArtVon(sensor);
 			DataDescription datenBeschreibung = new DataDescription(
 					dav.getDataModel().getAttributeGroup("atg.ufds" + datenArt.getName()), //$NON-NLS-1$
@@ -171,7 +188,7 @@ implements ClientSenderInterface, ClientReceiverInterface{
 	 */
 	private final void ergebnisUeberpruefen(){
 		if(!this.ergebnisIst.isEmpty() && !this.ergebnisSoll.isEmpty()){				
-			for(SystemObject sensor:PlPruefungLogischUFDTest.SENSOREN){
+			for(SystemObject sensor:this.untersuchteSensoren){
 				System.out.println("Vergleiche (DIFF)" + sensor.getPid() + ": Soll(" + (this.ergebnisSoll.get(sensor)?"impl":"ok") +//$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
 						"), Ist("  //$NON-NLS-1$
 						+ (this.ergebnisIst.get(sensor)?"impl":"ok") + ") --> " + //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ 
@@ -256,7 +273,7 @@ implements ClientSenderInterface, ClientReceiverInterface{
 			 * Produziere Werte, die getestet werden und "unbeschädigt"
 			 * durch die Diff-Prüfung kommen
 			 */
-			for(SystemObject sensor:PlPruefungLogischUFDTest.SENSOREN){
+			for(SystemObject sensor:this.untersuchteSensoren){
 				ResultData resultat = TestUtensilien.getExterneErfassungDatum(sensor);
 				UmfeldDatenSensorDatum datum = new UmfeldDatenSensorDatum(resultat);
 				datum.setT(STANDARD_T);
