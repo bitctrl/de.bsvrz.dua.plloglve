@@ -28,8 +28,8 @@ package de.bsvrz.dua.plloglve.plloglve.ausfall;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.Map;
-import java.util.TreeMap;
 
 import stauma.dav.clientside.ResultData;
 import stauma.dav.configuration.interfaces.SystemObject;
@@ -54,7 +54,7 @@ extends AbstraktBearbeitungsKnotenAdapter{
 	 * Submodul notwendigen Informationen
 	 */
 	private Map<SystemObject, AusfallFahrStreifen> fahrStreifen =
-									new TreeMap<SystemObject, AusfallFahrStreifen>();
+									new HashMap<SystemObject, AusfallFahrStreifen>();
 	
 	
 	/**
@@ -70,6 +70,7 @@ extends AbstraktBearbeitungsKnotenAdapter{
 		}
 	}
 
+	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -97,12 +98,14 @@ extends AbstraktBearbeitungsKnotenAdapter{
 		}
 	}
 
+	
 	/**
 	 * {@inheritDoc}
 	 */
 	public ModulTyp getModulTyp() {
 		return null;
 	}
+	
 
 	/**
 	 * {@inheritDoc}

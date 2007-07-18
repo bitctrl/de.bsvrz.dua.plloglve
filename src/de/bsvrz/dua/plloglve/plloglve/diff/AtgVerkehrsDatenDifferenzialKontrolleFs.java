@@ -30,7 +30,7 @@ import de.bsvrz.sys.funclib.bitctrl.dua.AtgDatenObjekt;
 import stauma.dav.clientside.Data;
 
 /**
- * Repräsentiert die DAV-ATG
+ * Repräsentiert aktuelle Daten der DAV-ATG
  * <code>atg.verkehrsDatenDifferenzialKontrolleFs</code>
  * 
  * @author BitCtrl Systems GmbH, Thierfelder
@@ -40,42 +40,42 @@ public class AtgVerkehrsDatenDifferenzialKontrolleFs
 extends AtgDatenObjekt{
 
 	/**
-	 * Maximal zulässige Anzahl von Intervallen mit Ergebniskonstanz für qKfz.
+	 * Maximal zulässige Anzahl von Intervallen mit Ergebniskonstanz für qKfz
 	 */
 	private int maxAnzKonstanzqKfz;
 	
 	/**
-	 * Maximal zulässige Anzahl von Intervallen mit Ergebniskonstanz für qLkw.
+	 * Maximal zulässige Anzahl von Intervallen mit Ergebniskonstanz für qLkw
 	 */
 	private int maxAnzKonstanzqLkw;
 	
 	/**
-	 * Maximal zulässige Anzahl von Intervallen mit Ergebniskonstanz für qPkw.
+	 * Maximal zulässige Anzahl von Intervallen mit Ergebniskonstanz für qPkw
 	 */
 	private int maxAnzKonstanzqPkw;
 	
 	/**
-	 * Maximal zulässige Anzahl von Intervallen mit Ergebniskonstanz für vKfz.
+	 * Maximal zulässige Anzahl von Intervallen mit Ergebniskonstanz für vKfz
 	 */
 	private int maxAnzKonstanzvKfz;
 	
 	/**
-	 * Maximal zulässige Anzahl von Intervallen mit Ergebniskonstanz für vLkw.
+	 * Maximal zulässige Anzahl von Intervallen mit Ergebniskonstanz für vLkw
 	 */
 	private int maxAnzKonstanzvLkw;
 	
 	/**
-	 * Maximal zulässige Anzahl von Intervallen mit Ergebniskonstanz für vPkw.
+	 * Maximal zulässige Anzahl von Intervallen mit Ergebniskonstanz für vPkw
 	 */
 	private int maxAnzKonstanzvPkw;
 	
 	/**
-	 * Maximal zulässige Anzahl von Intervallen mit Ergebniskonstanz für die Streung S.
+	 * Maximal zulässige Anzahl von Intervallen mit Ergebniskonstanz für die Streung S
 	 */
 	private int maxAnzKonstanzStreung;
 	
 	/**
-	 * Maximal zulässige Anzahl von Intervallen mit Ergebniskonstanz für die Belegung b.
+	 * Maximal zulässige Anzahl von Intervallen mit Ergebniskonstanz für die Belegung b
 	 */
 	private int maxAnzKonstanzBelegung;  
 

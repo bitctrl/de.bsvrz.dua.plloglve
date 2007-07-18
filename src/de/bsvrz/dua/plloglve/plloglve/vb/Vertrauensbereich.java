@@ -26,8 +26,8 @@
 
 package de.bsvrz.dua.plloglve.plloglve.vb;
 
+import java.util.HashMap;
 import java.util.Map;
-import java.util.TreeMap;
 
 import stauma.dav.clientside.Data;
 import stauma.dav.clientside.DataDescription;
@@ -64,7 +64,7 @@ extends AbstraktBearbeitungsKnotenAdapter{
 	 * zu den jeweiligen Vertrauensbereichsverletzungen
 	 */
 	private Map<SystemObject, VertrauensFahrStreifen> fahrStreifenMap = 
-				new TreeMap<SystemObject, VertrauensFahrStreifen>();
+				new HashMap<SystemObject, VertrauensFahrStreifen>();
 	
 	
 	/**

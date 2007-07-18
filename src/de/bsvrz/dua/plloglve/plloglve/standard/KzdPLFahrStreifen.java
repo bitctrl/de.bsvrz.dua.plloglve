@@ -26,10 +26,6 @@
 
 package de.bsvrz.dua.plloglve.plloglve.standard;
 
-import java.util.Collections;
-import java.util.Map;
-import java.util.TreeMap;
-
 import stauma.dav.clientside.ClientDavInterface;
 import stauma.dav.clientside.Data;
 import stauma.dav.clientside.ResultData;
@@ -52,12 +48,6 @@ extends AbstraktPLFahrStreifen{
 	 */
 	private ResultData letztesKZDatum = null;
 	
-	/**
-	 * Alle statischen Instanzen dieser Klasse
-	 */
-	protected static Map<SystemObject, KzdPLFahrStreifen> INSTANZEN = Collections.synchronizedMap(
-			new TreeMap<SystemObject, KzdPLFahrStreifen>());
-	
 
 	/**
 	 * Standartdkonstruktor 
@@ -70,6 +60,9 @@ extends AbstraktPLFahrStreifen{
 	}
 	
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	protected Data plausibilisiere(final ResultData resultat){
 		Data copy = null;
@@ -96,6 +89,9 @@ extends AbstraktPLFahrStreifen{
 	}
 	
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	protected void ueberpruefeKontextFehler(Data data, ResultData resultat){
 
@@ -276,6 +272,10 @@ extends AbstraktPLFahrStreifen{
 		}
 	}
 	
+	
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	protected void grenzWertTests(Data data){
 		if(this.parameterAtgLog != null){

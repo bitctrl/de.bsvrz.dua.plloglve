@@ -28,8 +28,8 @@ package de.bsvrz.dua.plloglve.plloglve.standard;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.Map;
-import java.util.TreeMap;
 
 import stauma.dav.clientside.Data;
 import stauma.dav.clientside.ResultData;
@@ -67,14 +67,14 @@ extends AbstraktBearbeitungsKnotenAdapter{
 	 * LZD parametrierte Fahrstreifenobjekte 
 	 */
 	private Map<SystemObject, AbstraktPLFahrStreifen> lzdFahrStreifen = 
-								new TreeMap<SystemObject, AbstraktPLFahrStreifen>();
+								new HashMap<SystemObject, AbstraktPLFahrStreifen>();
 
 	/**
 	 * Mapt alle FS-Systemobjekte auf für die Standardplausbibilisierung für 
 	 * KZD parametrierte Fahrstreifenobjekte 
 	 */
 	private Map<SystemObject, AbstraktPLFahrStreifen> kzdFahrStreifen =
-								new TreeMap<SystemObject, AbstraktPLFahrStreifen>();
+								new HashMap<SystemObject, AbstraktPLFahrStreifen>();
 
 	
 	/**

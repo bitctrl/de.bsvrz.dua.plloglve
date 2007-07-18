@@ -28,8 +28,8 @@ package de.bsvrz.dua.plloglve.plloglve.diff;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.Map;
-import java.util.TreeMap;
 
 import stauma.dav.clientside.Data;
 import stauma.dav.clientside.ResultData;
@@ -41,7 +41,9 @@ import de.bsvrz.sys.funclib.bitctrl.dua.dfs.typen.ModulTyp;
 import de.bsvrz.sys.funclib.bitctrl.dua.schnittstellen.IVerwaltung;
 
 /**
- * Submodul Differentialkontrolle
+ * Submodul Differentialkontrolle. Dieses Submodul überprüft, ob die maximal
+ * zulässige Anzahl von Intervallen mit Ergebniskonstanz überschritten wurde
+ * und generiert ggf. eine Betriebsmeldung
  * 
  * @author BitCtrl Systems GmbH, Thierfelder
  *
@@ -50,10 +52,10 @@ public class DifferenzialKontrolle
 extends AbstraktBearbeitungsKnotenAdapter{
 
 	/**
-	 * 
+	 * Map von Fahrtreifen-Systemobjekten auf Objekte mit Konstanzzählern
 	 */
 	private Map<SystemObject, DiffFahrStreifen> fahrStreifen =
-									new TreeMap<SystemObject, DiffFahrStreifen>();
+									new HashMap<SystemObject, DiffFahrStreifen>();
 	
 	
 	/**
@@ -68,6 +70,7 @@ extends AbstraktBearbeitungsKnotenAdapter{
 			this.fahrStreifen.put(obj, new DiffFahrStreifen(dieVerwaltung, obj));
 		}
 	}
+	
 
 	/**
 	 * {@inheritDoc}

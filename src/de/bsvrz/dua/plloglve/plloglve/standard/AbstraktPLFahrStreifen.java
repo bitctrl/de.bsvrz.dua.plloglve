@@ -248,17 +248,18 @@ implements ClientReceiverInterface{
 
 	
 	/**
-	 * 
+	 * Führt eine
 	 * 
 	 * @param data
-	 * @param resultat
+	 * @param resultat der Original-Datensatz
 	 */
 	protected abstract void ueberpruefeKontextFehler(Data data, final ResultData resultat);
 	
 	
 	/**
+	 * Testet das übergebene Datum darauf, ob es sich im parametrierten Intervall befindet
 	 * 
-	 * @param data
+	 * @param data ein FG1-Datum (dieses kann verändert werden)
 	 */
 	protected abstract void grenzWertTests(Data data);
 

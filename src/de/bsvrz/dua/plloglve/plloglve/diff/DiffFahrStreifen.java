@@ -50,13 +50,15 @@ import de.bsvrz.sys.funclib.bitctrl.modell.SystemObjekt;
 import de.bsvrz.sys.funclib.bitctrl.modell.SystemObjektTyp;
 
 /**
+ * Speichert, wie lange einzelne KZD-Werte eines bestimmten Fahrstreifens
+ * in folge konstant sind
  * 
  * @author BitCtrl Systems GmbH, Thierfelder
  *
  */
 public class DiffFahrStreifen 
 extends AbstractSystemObjekt
-implements Comparable<DiffFahrStreifen>, ClientReceiverInterface{
+implements ClientReceiverInterface{
 	
 	/**
 	 * Debug-Logger
@@ -74,66 +76,71 @@ implements Comparable<DiffFahrStreifen>, ClientReceiverInterface{
 	private static IVerwaltung VERWALTUNG = null;
 	
 	/**
-	 * 
+	 * Datenbeschreibung für Parameter der Differezialkontrolle
 	 */
 	private static DataDescription DIFF_PARA_BESCHREIBUNG = null;
 	
 	/**
-	 * 
+	 * Fahrstreifenbezogene Parameter der Differezialkontrolle
 	 */
 	private AtgVerkehrsDatenDifferenzialKontrolleFs parameter = null;
 	
 	/**
-	 * 
+	 * Variable <code>qKfz</code> mit der Information wie lange diese Variable schon konstant ist
 	 */
 	private VariableMitKonstanzZaehler<Integer> qKfzZaehler = 
 								new VariableMitKonstanzZaehler<Integer>("qKfz");  //$NON-NLS-1$
 
 	/**
-	 * 
+	 * Variable <code>qLkw</code> mit der Information wie lange diese Variable schon konstant ist
 	 */
 	private VariableMitKonstanzZaehler<Integer> qLkwZaehler = 
 								new VariableMitKonstanzZaehler<Integer>("qLkw");  //$NON-NLS-1$
 
 	/**
-	 * 
+	 * Variable <code>qPkw</code> mit der Information wie lange diese Variable schon konstant ist
 	 */
 	private VariableMitKonstanzZaehler<Integer> qPkwZaehler = 
 								new VariableMitKonstanzZaehler<Integer>("qPkw");  //$NON-NLS-1$
 	
 	/**
-	 * 
+	 * Variable <code>vKfz</code> mit der Information wie lange diese Variable schon konstant ist
 	 */
 	private VariableMitKonstanzZaehler<Integer> vKfzZaehler = 
 								new VariableMitKonstanzZaehler<Integer>("vKfz");  //$NON-NLS-1$
 	
 	/**
-	 * 
+	 * Variable <codevLkw</code> mit der Information wie lange diese Variable schon konstant ist
 	 */
 	private VariableMitKonstanzZaehler<Integer> vLkwZaehler = 
 								new VariableMitKonstanzZaehler<Integer>("vLkw");  //$NON-NLS-1$
 
 	/**
-	 * 
+	 * Variable <code>vPkw</code> mit der Information wie lange diese Variable schon konstant ist
 	 */
 	private VariableMitKonstanzZaehler<Integer> vPkwZaehler = 
 								new VariableMitKonstanzZaehler<Integer>("vPkw");  //$NON-NLS-1$
 
 	/**
-	 * 
+	 * Variable <code>sKfz</code> mit der Information wie lange diese Variable schon konstant ist
 	 */
 	private VariableMitKonstanzZaehler<Integer> sKfzZaehler = 
 								new VariableMitKonstanzZaehler<Integer>("sKfz");  //$NON-NLS-1$
 
 	/**
-	 * 
+	 * Variable <code>b</code> mit der Information wie lange diese Variable schon konstant ist
 	 */
 	private VariableMitKonstanzZaehler<Integer> bZaehler = 
 								new VariableMitKonstanzZaehler<Integer>("b");  //$NON-NLS-1$
 
 
 
-	
+	/**
+	 * Standardkonstruktor
+	 * 
+	 * @param verwaltung Verbindung zum Verwaltungsmodul
+	 * @param obj ein Systemobjekt eines Fahrstreifens
+	 */
 	protected DiffFahrStreifen(final IVerwaltung verwaltung, final SystemObject obj){
 		super(obj);
 		
@@ -151,6 +158,18 @@ implements Comparable<DiffFahrStreifen>, ClientReceiverInterface{
 	}
 	
 	
+	/**
+	 * Für die empfangenen Daten wird geprüft, ob innerhalb eines zu definierenden Zeitraums
+	 * (parametrierbare Anzahl der Erfassungsintervalle, parametrierbar je Fahrstreifen) eine
+	 * Änderung des Messwerts vorliegt. Liegt eine Ergebniskonstanz für eine frei parametrierbare
+	 * Anzahl von Erfassungsintervallen für einzelne (oder alle Werte) vor, so erfolgt eine
+	 * Kennzeichnung der Werte als Implausibel und Fehlerhaft. Darüber hinaus wird eine entsprechende
+	 * Betriebsmeldung versendet.
+	 *  
+	 * @param resultat ein emfangenes FS-KZ-Datum
+	 * @return eine gekennzeichnete Kopie des originalen Datensatzes oder <code>null</code>, wenn
+	 * der Datensatz durch die Plausibilisierung nicht beanstandet wurde
+	 */
 	protected Data plausibilisiere(final ResultData resultat){
 		Data copy = null;
 		
@@ -261,14 +280,6 @@ implements Comparable<DiffFahrStreifen>, ClientReceiverInterface{
 			}
 			
 		};
-	}
-
-	
-	/**
-	 * {@inheritDoc}
-	 */
-	public int compareTo(DiffFahrStreifen that) {
-		return new Long(this.getId()).compareTo(that.getId());
 	}
 
 }
