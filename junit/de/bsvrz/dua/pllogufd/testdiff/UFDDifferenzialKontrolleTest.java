@@ -28,6 +28,7 @@ package de.bsvrz.dua.pllogufd.testdiff;
 
 import java.util.Calendar;
 import java.util.Collection;
+import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -41,22 +42,17 @@ import org.junit.Test;
 import stauma.dav.clientside.ClientDavInterface;
 import stauma.dav.clientside.ClientReceiverInterface;
 import stauma.dav.clientside.ClientSenderInterface;
-import stauma.dav.clientside.Data;
 import stauma.dav.clientside.DataDescription;
 import stauma.dav.clientside.ReceiveOptions;
 import stauma.dav.clientside.ReceiverRole;
 import stauma.dav.clientside.ResultData;
-import stauma.dav.clientside.SenderRole;
 import stauma.dav.configuration.interfaces.SystemObject;
 import de.bsvrz.dua.pllogufd.DAVTest;
 import de.bsvrz.dua.pllogufd.PlPruefungLogischUFDTest;
 import de.bsvrz.dua.pllogufd.TestUtensilien;
 import de.bsvrz.dua.pllogufd.UmfeldDatenSensorDatum;
-import de.bsvrz.dua.pllogufd.typen.UfdsVergleichsOperator;
 import de.bsvrz.dua.pllogufd.typen.UmfeldDatenArt;
-import de.bsvrz.sys.funclib.bitctrl.app.Pause;
 import de.bsvrz.sys.funclib.bitctrl.dua.DUAKonstanten;
-import de.bsvrz.sys.funclib.bitctrl.konstante.Konstante;
 
 /**
  * Test des Moduls Differenzialkontrolle<br>
@@ -67,11 +63,6 @@ import de.bsvrz.sys.funclib.bitctrl.konstante.Konstante;
  */
 public class UFDDifferenzialKontrolleTest 
 implements ClientSenderInterface, ClientReceiverInterface{
-	
-	/**
-	 * Standardintervalllänge für Testdaten 5s
-	 */
-	private static final long STANDARD_T = Konstante.SEKUNDE_IN_MS * 5;
 	
 	/**
 	 * standardmäßige maximal zulässige Ergebniskonstanz in Intervallen 
@@ -99,6 +90,16 @@ implements ClientSenderInterface, ClientReceiverInterface{
 	 * (<code>Implausibel</code> und <code>fehlerhaft</code> == <code>true</code>)
 	 */
 	private Map<SystemObject, Boolean> ergebnisIst = new HashMap<SystemObject, Boolean>();
+
+	/**
+	 * letzter für einen Sensor eingetroffener Ergebnisdatensatz (für Debugging)
+	 */
+	private Map<SystemObject, ResultData> ergebnisEingetroffen = new HashMap<SystemObject, ResultData>();
+	
+	/**
+	 * aktuelles Intervall für Testdaten
+	 */
+	private long aktuellesIntervall = -1;
 	
 	
 	/**
@@ -108,7 +109,9 @@ implements ClientSenderInterface, ClientReceiverInterface{
 	public void setUp() throws Exception {
 		this.dav = DAVTest.getDav();
 		PlPruefungLogischUFDTest.initialisiere();
-
+		PlPruefungLogischUFDTest.SENDER.setMeteoKontrolle(false);
+		
+		
 		/**
 		 * filtere FBZ heraus
 		 */
@@ -118,46 +121,14 @@ implements ClientSenderInterface, ClientReceiverInterface{
 				this.untersuchteSensoren.add(sensor);
 			}
 		}		
-		
 
-		/**
-		 * Anmeldung auf alle Parameter
-		 */
-		for(SystemObject sensor:this.untersuchteSensoren){
-			UmfeldDatenArt datenArt = UmfeldDatenArt.getUmfeldDatenArtVon(sensor);
-			DataDescription paraDifferenzialkontrolle = new DataDescription(
-					dav.getDataModel().getAttributeGroup("atg.ufdsDifferenzialKontrolle" + datenArt.getName()), //$NON-NLS-1$
-					dav.getDataModel().getAspect(Konstante.DAV_ASP_PARAMETER_VORGABE),
-					(short)0);
-			dav.subscribeSender(this, sensor, paraDifferenzialkontrolle, SenderRole.sender());			
-		}
-		
 		/**
 		 * maximal zulässige Zeitdauer der Ergebniskonstanz auf <code>STANDARD_T * STANDARD_MAX_INTERVALLE</code> stellen
 		 * Eine Überprüfung findet nur statt, wenn ein eingetroffener Wert "<" als der Grenzwert von 5 ist
 		 */
 		for(SystemObject sensor:this.untersuchteSensoren){
-			UmfeldDatenArt datenArt = UmfeldDatenArt.getUmfeldDatenArtVon(sensor);
-			Data datum = dav.createData(dav.getDataModel().getAttributeGroup(
-					"atg.ufdsDifferenzialKontrolle" + datenArt.getName())); //$NON-NLS-1$
-			
-			datum.getUnscaledValue("Operator").set(UfdsVergleichsOperator.KLEINER.getCode()); //$NON-NLS-1$
-			datum.getUnscaledValue(datenArt.getAbkuerzung() + "Grenz").set(5); //$NON-NLS-1$
-			datum.getTimeValue(datenArt.getAbkuerzung() + "maxZeit").setMillis(STANDARD_T * STANDARD_MAX_INTERVALLE); //$NON-NLS-1$
-			
-			DataDescription paraDifferenzialkontrolle = new DataDescription(
-					dav.getDataModel().getAttributeGroup("atg.ufdsDifferenzialKontrolle" + datenArt.getName()), //$NON-NLS-1$
-					dav.getDataModel().getAspect(Konstante.DAV_ASP_PARAMETER_VORGABE),
-					(short)0);
-			ResultData parameterSatz = new ResultData(sensor, paraDifferenzialkontrolle, System.currentTimeMillis(), datum);
-			dav.sendData(parameterSatz);
-		}
-		
-		/**
-		 * Warte eine Sekunde bis die Parameter sicher da sind
-		 */
-		Pause.warte(1000L);
-		
+			PlPruefungLogischUFDTest.SENDER.setDiffPara(sensor, 5, PlPruefungLogischUFDTest.STANDARD_T * STANDARD_MAX_INTERVALLE);
+		}		
 				
 		/**
 		 * Anmeldung auf alle Daten die aus der Applikation Pl-Prüfung logisch UFD kommen
@@ -172,10 +143,44 @@ implements ClientSenderInterface, ClientReceiverInterface{
 					ReceiveOptions.delayed(), ReceiverRole.receiver());
 		}
 		
+		
 		/**
-		 * Warte eine Sekunde bis Datenanmeldung durch ist
+		 * Stelle Ausfallüberwachung so ein, dass nach 0,5s
+		 * nicht erfasste Werte produziert werden
 		 */
-		Pause.warte(1000L);
+		for(SystemObject sensor:PlPruefungLogischUFDTest.SENSOREN){
+			PlPruefungLogischUFDTest.SENDER.setMaxAusfallFuerSensor(sensor, 500L);
+		}
+		
+		/**
+		 * Produziere initialie Werte, die noch nicht getestet werden, um Seiteneffekte mit anderen 
+		 * Pl-Prüfungen innerhalb dieser SWE zu vermeiden. Es wird hier je Sensor ein Wert mit dem
+		 * Zeitstempel dieser Sekunden und dem Intervall von 2s geschickt
+		 */
+		GregorianCalendar kal = new GregorianCalendar();
+		kal.setTimeInMillis(System.currentTimeMillis());
+		kal.set(Calendar.MILLISECOND, 0);
+		final long zeitStempel = kal.getTimeInMillis();
+		aktuellesIntervall = zeitStempel + 4 * PlPruefungLogischUFDTest.STANDARD_T;
+		
+		DAVTest.warteBis(zeitStempel + PlPruefungLogischUFDTest.STANDARD_T + 10);
+		
+		for(SystemObject sensor:PlPruefungLogischUFDTest.SENSOREN){
+			ResultData resultat = TestUtensilien.getExterneErfassungDatum(sensor);
+			UmfeldDatenSensorDatum datum = new UmfeldDatenSensorDatum(resultat);
+			datum.setT(PlPruefungLogischUFDTest.STANDARD_T);
+			datum.getWert().setFehlerhaftAn();
+			
+			ResultData sendeDatum = new ResultData(datum.getOriginalDatum().getObject(),
+					    datum.getOriginalDatum().getDataDescription(), 
+					    zeitStempel, datum.getDatum());
+			
+			System.out.println("Sende initial: " +  //$NON-NLS-1$
+					DUAKonstanten.ZEIT_FORMAT_GENAU.format(new Date(sendeDatum.getDataTime())) + ", " + //$NON-NLS-1$
+					datum.getOriginalDatum().getObject());
+			
+			PlPruefungLogischUFDTest.SENDER.sende(sendeDatum);
+		}
 	}
 	
 	
@@ -193,7 +198,7 @@ implements ClientSenderInterface, ClientReceiverInterface{
 						"), Ist("  //$NON-NLS-1$
 						+ (this.ergebnisIst.get(sensor)?"impl":"ok") + ") --> " + //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ 
 						(this.ergebnisSoll.get(sensor) == this.ergebnisIst.get(sensor)?"Ok":"!!!FEHLER!!!")); //$NON-NLS-1$ //$NON-NLS-2$
-				Assert.assertEquals("Objekt: " + sensor.toString(), //$NON-NLS-1$
+				Assert.assertEquals("fehlerhaftes Resultat: " + this.ergebnisEingetroffen.get(sensor), //$NON-NLS-1$
 						this.ergebnisSoll.get(sensor), 
 						this.ergebnisIst.get(sensor));
 			}				
@@ -208,7 +213,7 @@ implements ClientSenderInterface, ClientReceiverInterface{
 	/**
 	 * Anzahl der Intervalle, die der Test der Differenzialkontrolle laufen soll
 	 */
-	private static final int TEST_DIFF_KONTROLLE_LAEUFE = 10;
+	private static final int TEST_DIFF_KONTROLLE_LAEUFE = 20;
 	
 	/**
 	 * der eigentliche Test
@@ -255,16 +260,20 @@ implements ClientSenderInterface, ClientReceiverInterface{
 		 * Messwert, der sich vom Vorgängerwert unterscheidet<br>
 		 * Dies sind alle anderen Sensoren
 		 */
-				
+		
+		DAVTest.warteBis(aktuellesIntervall);
 		
 		for(int durchlauf = 0; durchlauf<TEST_DIFF_KONTROLLE_LAEUFE; durchlauf++){
 			
+			/**
+			 * Ergebnisse überprüfen, so schon welche eingetroffen sind
+			 */
 			this.ergebnisUeberpruefen();
 			
-			GregorianCalendar kal = new GregorianCalendar();
-			kal.setTimeInMillis(System.currentTimeMillis());
-			kal.set(Calendar.MILLISECOND, 0);
-			final long zeitStempel = kal.getTimeInMillis();
+			/**
+			 * nach dem Anfang des nächsten Intervalls geht es los
+			 */
+			DAVTest.warteBis(aktuellesIntervall + PlPruefungLogischUFDTest.STANDARD_T + 50);
 			
 			konstanzZaehler_Impl++;
 			konstanzZaehler_OK++;
@@ -276,7 +285,7 @@ implements ClientSenderInterface, ClientReceiverInterface{
 			for(SystemObject sensor:this.untersuchteSensoren){
 				ResultData resultat = TestUtensilien.getExterneErfassungDatum(sensor);
 				UmfeldDatenSensorDatum datum = new UmfeldDatenSensorDatum(resultat);
-				datum.setT(STANDARD_T);
+				datum.setT(PlPruefungLogischUFDTest.STANDARD_T);
 				/**
 				 * Setzte Wert erst mal immer auf alternierend 1 und 2
 				 */
@@ -284,6 +293,9 @@ implements ClientSenderInterface, ClientReceiverInterface{
 				
 				ResultData sendeDatum = null;
 				
+				/**
+				 * Manipuliere die Testwerte
+				 */
 				if(sensor.equals(objImmerGleichUndKeineKontrolle)){
 					datum.getWert().setWert(5);
 					this.ergebnisSoll.put(resultat.getObject(), false);
@@ -312,7 +324,7 @@ implements ClientSenderInterface, ClientReceiverInterface{
 				}
 				sendeDatum = new ResultData(datum.getOriginalDatum().getObject(),
 						    datum.getOriginalDatum().getDataDescription(), 
-						zeitStempel, datum.getDatum());
+						    aktuellesIntervall, datum.getDatum());
 				
 				PlPruefungLogischUFDTest.SENDER.sende(sendeDatum);
 			}
@@ -320,7 +332,8 @@ implements ClientSenderInterface, ClientReceiverInterface{
 			/**
 			 * Warte bis zum nächsten Intervall
 			 */
-			Pause.warte(STANDARD_T);
+			aktuellesIntervall += PlPruefungLogischUFDTest.STANDARD_T;
+			DAVTest.warteBis(aktuellesIntervall + PlPruefungLogischUFDTest.STANDARD_T / 20 * 18);
 		}
 		
 	}
@@ -353,6 +366,12 @@ implements ClientSenderInterface, ClientReceiverInterface{
 					boolean implausibelUndFehlerhaft = ufdDatum.getWert().isFehlerhaft() &&
 													   ufdDatum.getStatusMessWertErsetzungImplausibel() == DUAKonstanten.JA;
 					this.ergebnisIst.put(resultat.getObject(), implausibelUndFehlerhaft);
+					this.ergebnisEingetroffen.put(resultat.getObject(), resultat);
+					
+					System.out.println(TestUtensilien.jzt() + ", Empfange: " +  //$NON-NLS-1$
+							DUAKonstanten.ZEIT_FORMAT_GENAU.format(new Date(resultat.getDataTime())) + ", " + //$NON-NLS-1$
+							resultat.getObject() + ", T: " + ufdDatum.getT() + ", impl: " + //$NON-NLS-1$ //$NON-NLS-2$ 
+							(implausibelUndFehlerhaft?"ja":"nein")); //$NON-NLS-1$ //$NON-NLS-2$
 				}
 			}
 		}

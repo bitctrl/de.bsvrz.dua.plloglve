@@ -4,7 +4,6 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 
-import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -13,14 +12,10 @@ import stauma.dav.clientside.ClientReceiverInterface;
 import stauma.dav.clientside.ClientSenderInterface;
 import stauma.dav.clientside.Data;
 import stauma.dav.clientside.DataDescription;
-import stauma.dav.clientside.DataNotSubscribedException;
 import stauma.dav.clientside.ReceiveOptions;
 import stauma.dav.clientside.ReceiverRole;
 import stauma.dav.clientside.ResultData;
-import stauma.dav.clientside.SenderRole;
-import stauma.dav.common.SendSubscriptionNotConfirmed;
 import stauma.dav.configuration.interfaces.SystemObject;
-import sys.funclib.debug.Debug;
 import de.bsvrz.dua.pllogufd.DAVTest;
 import de.bsvrz.dua.pllogufd.PlPruefungLogischUFDTest;
 import de.bsvrz.dua.pllogufd.TestUtensilien;
@@ -28,7 +23,6 @@ import de.bsvrz.dua.pllogufd.UmfeldDatenSensorDatum;
 import de.bsvrz.dua.pllogufd.typen.UmfeldDatenArt;
 import de.bsvrz.sys.funclib.bitctrl.app.Pause;
 import de.bsvrz.sys.funclib.bitctrl.dua.DUAKonstanten;
-import de.bsvrz.sys.funclib.bitctrl.konstante.Konstante;
 
 public class MeinTest
 implements ClientSenderInterface, ClientReceiverInterface{
@@ -52,16 +46,6 @@ implements ClientSenderInterface, ClientReceiverInterface{
 	 * Parameter <code>maxZeitVerzug</code> für Sensoren xxx3
 	 */
 	private static final long MAX_VERZUG_3 = 1500L;
-	
-	/**
-	 * Debug-Logger
-	 */
-	private static final Debug LOGGER = Debug.getLogger();
-
-	/**
-	 * Parameterbeschreibung der Ausfallüberwachung
-	 */
-	private DataDescription paraAusfallUeberwachung = null;
 	
 	/**
 	 * Datenverteiler-Verbindung
@@ -90,15 +74,6 @@ implements ClientSenderInterface, ClientReceiverInterface{
 		PlPruefungLogischUFDTest.initialisiere();
 		
 		/**
-		 * Anmeldung auf alle Parameter
-		 */
-		paraAusfallUeberwachung = new DataDescription(
-				dav.getDataModel().getAttributeGroup("atg.ufdsAusfallÜberwachung"), //$NON-NLS-1$
-				dav.getDataModel().getAspect(Konstante.DAV_ASP_PARAMETER_VORGABE),
-				(short)0);
-		dav.subscribeSender(this, PlPruefungLogischUFDTest.SENSOREN, paraAusfallUeberwachung, SenderRole.sender());
-
-		/**
 		 * Warte bis Anmeldung sicher durch ist
 		 */
 		Pause.warte(1000L);
@@ -108,13 +83,13 @@ implements ClientSenderInterface, ClientReceiverInterface{
 		 */
 		for(SystemObject sensor:PlPruefungLogischUFDTest.SENSOREN){
 			if(sensor.getPid().endsWith("1")){ //$NON-NLS-1$
-				this.setMaxAusfallFuerSensor(sensor, MAX_VERZUG_1);
+				PlPruefungLogischUFDTest.SENDER.setMaxAusfallFuerSensor(sensor, MAX_VERZUG_1);
 			}else
 			if(sensor.getPid().endsWith("2")){ //$NON-NLS-1$
-				this.setMaxAusfallFuerSensor(sensor, MAX_VERZUG_2);
+				PlPruefungLogischUFDTest.SENDER.setMaxAusfallFuerSensor(sensor, MAX_VERZUG_2);
 			}else
 			if(sensor.getPid().endsWith("3")){ //$NON-NLS-1$
-				this.setMaxAusfallFuerSensor(sensor, MAX_VERZUG_3);
+				PlPruefungLogischUFDTest.SENDER.setMaxAusfallFuerSensor(sensor, MAX_VERZUG_3);
 			}
 		}
 		
@@ -141,32 +116,6 @@ implements ClientSenderInterface, ClientReceiverInterface{
 		 */
 		Pause.warte(1000L);		
 	}
-
-	
-	/**
-	 * Setzt den maximalen Zeitverzug eines Umfelddatensensors
-	 * 
-	 * @param obj Umfelddatensensor
-	 * @param verzugInMillis maximalen Zeitverzug in ms
-	 */
-	private final void setMaxAusfallFuerSensor(final SystemObject obj, final long verzugInMillis){
-		Data parameterData = dav.createData(dav.getDataModel().
-				getAttributeGroup("atg.ufdsAusfallÜberwachung")); //$NON-NLS-1$
-		parameterData.getTimeValue("maxZeitVerzug").setMillis(verzugInMillis); //$NON-NLS-1$
-		ResultData parameter = new ResultData(obj, 
-				this.paraAusfallUeberwachung, System.currentTimeMillis(), parameterData);
-		
-		try {
-			this.dav.sendData(parameter);
-		} catch (DataNotSubscribedException e) {
-			e.printStackTrace();
-			LOGGER.error(Konstante.LEERSTRING, e);
-		} catch (SendSubscriptionNotConfirmed e) {
-			e.printStackTrace();
-			LOGGER.error(Konstante.LEERSTRING, e);
-		}
-	}
-
 	
 	
 	/**

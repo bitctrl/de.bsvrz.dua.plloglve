@@ -28,6 +28,8 @@ package de.bsvrz.dua.pllogufd;
 
 import java.util.Random;
 
+import de.bsvrz.sys.funclib.bitctrl.app.Pause;
+
 import stauma.dav.clientside.ClientDavInterface;
 import sys.funclib.ArgumentList;
 import sys.funclib.application.StandardApplication;
@@ -91,6 +93,18 @@ public class DAVTest {
 		}
 		
 		return VERBINDUNG;
+	}
+	
+	
+	/**
+	 * Wartet bis zu dem übergebenen Zeitpunkt
+	 * 
+	 * @param zeitStempel ein Zeitstempel in ms
+	 */
+	public static final void warteBis(final long zeitStempel){
+		while(System.currentTimeMillis() <= zeitStempel){
+			Pause.warte(5L);
+		}
 	}
 
 

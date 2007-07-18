@@ -31,11 +31,21 @@ import java.util.List;
 
 import stauma.dav.clientside.ClientDavInterface;
 import stauma.dav.clientside.ClientSenderInterface;
+import stauma.dav.clientside.Data;
 import stauma.dav.clientside.DataDescription;
+import stauma.dav.clientside.DataNotSubscribedException;
 import stauma.dav.clientside.ResultData;
 import stauma.dav.clientside.SenderRole;
+import stauma.dav.common.SendSubscriptionNotConfirmed;
+import stauma.dav.configuration.interfaces.Aspect;
+import stauma.dav.configuration.interfaces.AttributeGroup;
 import stauma.dav.configuration.interfaces.SystemObject;
+import sys.funclib.debug.Debug;
+import de.bsvrz.dua.pllogufd.testmeteo.MeteoKonst;
+import de.bsvrz.dua.pllogufd.typen.UfdsVergleichsOperator;
 import de.bsvrz.dua.pllogufd.typen.UmfeldDatenArt;
+import de.bsvrz.sys.funclib.bitctrl.app.Pause;
+import de.bsvrz.sys.funclib.bitctrl.konstante.Konstante;
 
 /**
  * Basisklasse der Tests der SWE Pl-Prüfung logisch UFD
@@ -45,6 +55,16 @@ import de.bsvrz.dua.pllogufd.typen.UmfeldDatenArt;
  */
 public class PlPruefungLogischUFDTest
 implements ClientSenderInterface{
+	
+	/**
+	 * Standardintervalllänge für die meisten Tests (1s)
+	 */
+	public static final long STANDARD_T = 2000L;
+	
+	/**
+	 * Debug-Logger
+	 */
+	private static final Debug LOGGER = Debug.getLogger();
 	
 	/**
 	 * Sender-Instanz
@@ -132,12 +152,18 @@ implements ClientSenderInterface{
 	 */
 	public static ClientDavInterface DAV = null;
 	
+	/**
+	 * Parameterdatenbeschreibung für die Ausfallüberwachung
+	 */
+	public static DataDescription paraAusfallUeberwachung = null;
+	
 	
 	/**
 	 * Standardkonstruktor
 	 */
 	public PlPruefungLogischUFDTest()
 	throws Exception{
+		
 		for(SystemObject sensor:SENSOREN){
 			UmfeldDatenArt datenArt = UmfeldDatenArt.getUmfeldDatenArtVon(sensor);
 			
@@ -147,6 +173,52 @@ implements ClientSenderInterface{
 						(short)0);
 			DAV.subscribeSender(this, sensor, datenBeschreibung, SenderRole.source());
 		}
+		
+		/**
+		 * Anmelden zum Senden von Parameter für die Meteorologische Kontrolle
+		 */
+		for(SystemObject sensor:PlPruefungLogischUFDTest.SENSOREN){
+			UmfeldDatenArt datenArt = UmfeldDatenArt.getUmfeldDatenArtVon(sensor);
+
+			if(datenArt.equals(UmfeldDatenArt.NS) || 
+			   datenArt.equals(UmfeldDatenArt.NI) ||
+			   datenArt.equals(UmfeldDatenArt.WFD) ||
+			   datenArt.equals(UmfeldDatenArt.SW)){
+				DataDescription parameterBeschreibung = new DataDescription(
+						DAV.getDataModel().getAttributeGroup("atg.ufdsMeteorologischeKontrolle" + //$NON-NLS-1$
+								UmfeldDatenArt.getUmfeldDatenArtVon(sensor).getName()),
+								DAV.getDataModel().getAspect(Konstante.DAV_ASP_PARAMETER_VORGABE),
+					    (short)0);
+				DAV.subscribeSender(this, sensor, parameterBeschreibung, SenderRole.sender());
+			}
+		}
+				
+		/**
+		 * Anmeldung auf alle Parameter für die Ausfallkontrolle
+		 */
+		paraAusfallUeberwachung = new DataDescription(
+				DAV.getDataModel().getAttributeGroup("atg.ufdsAusfallÜberwachung"), //$NON-NLS-1$
+				DAV.getDataModel().getAspect(Konstante.DAV_ASP_PARAMETER_VORGABE),
+				(short)0);
+		DAV.subscribeSender(this, PlPruefungLogischUFDTest.SENSOREN, paraAusfallUeberwachung, SenderRole.sender());
+
+		
+		/**
+		 * Anmeldung auf die Parameter der Differenzialkontrolle
+		 */
+		for(SystemObject sensor:PlPruefungLogischUFDTest.SENSOREN){
+			UmfeldDatenArt datenArt = UmfeldDatenArt.getUmfeldDatenArtVon(sensor);
+			DataDescription paraDifferenzialkontrolle = new DataDescription(
+					DAV.getDataModel().getAttributeGroup("atg.ufdsDifferenzialKontrolle" + datenArt.getName()), //$NON-NLS-1$
+					DAV.getDataModel().getAspect(Konstante.DAV_ASP_PARAMETER_VORGABE),
+					(short)0);
+			DAV.subscribeSender(this, sensor, paraDifferenzialkontrolle, SenderRole.sender());			
+		}
+
+		/**
+		 * Warte bis Anmeldung sicher durch ist
+		 */
+		Pause.warte(1000L);
 	}
 	
 	
@@ -251,8 +323,285 @@ implements ClientSenderInterface{
 	throws Exception{
 		DAV.sendData(resultat);
 	}
+	
+	
+	/**
+	 * Setzt alle Parameter der Meteorologischen Kontrolle an bzw. aus 
+	 *
+	 * @param an Standardparameter anschalten?
+	 */
+	public final void setMeteoKontrolle(boolean an){
+		Aspect vorgabeAspekt = DAV.getDataModel().getAspect(Konstante.DAV_ASP_PARAMETER_VORGABE);	
+
+		if(an){
+			/**
+			 * Standardparameter senden
+			 */
+			for(SystemObject sensor:PlPruefungLogischUFDTest.SENSOREN){
+				UmfeldDatenArt datenArt = UmfeldDatenArt.getUmfeldDatenArtVon(sensor);
+				 
+				if(datenArt.equals(UmfeldDatenArt.NS)){
+					AttributeGroup atg = DAV.getDataModel().
+							getAttributeGroup("atg.ufdsMeteorologischeKontrolle" + //$NON-NLS-1$
+							UmfeldDatenArt.getUmfeldDatenArtVon(sensor).getName());
+					Data parameterDatum = DAV.createData(atg);
+					
+					parameterDatum.getUnscaledValue("NSGrenzLT").set(MeteoKonst.NSGrenzLT); //$NON-NLS-1$
+					parameterDatum.getUnscaledValue("NSGrenzTrockenRLF").set(MeteoKonst.NIgrenzTrockenRLF); //$NON-NLS-1$
+					parameterDatum.getScaledValue("NSminNI").set(MeteoKonst.NSminNI); //$NON-NLS-1$
+					parameterDatum.getUnscaledValue("NSGrenzRLF").set(MeteoKonst.NSGrenzRLF); //$NON-NLS-1$
+					ResultData parameterResultat = new ResultData(sensor,
+							new DataDescription(atg, vorgabeAspekt, (short)0), System.currentTimeMillis(), parameterDatum);
+					try {
+						DAV.sendData(parameterResultat);
+					} catch (Exception e) {
+						e.printStackTrace();
+						LOGGER.error(Konstante.LEERSTRING, e);
+					}
+				}
+
+				if(datenArt.equals(UmfeldDatenArt.NI)){
+					AttributeGroup atg = DAV.getDataModel().
+							getAttributeGroup("atg.ufdsMeteorologischeKontrolle" + //$NON-NLS-1$
+							UmfeldDatenArt.getUmfeldDatenArtVon(sensor).getName());
+					Data parameterDatum = DAV.createData(atg);
+					
+					parameterDatum.getScaledValue("NIgrenzNassNI").set(MeteoKonst.NIgrenzNassNI); //$NON-NLS-1$
+					parameterDatum.getUnscaledValue("NIgrenzNassRLF").set(MeteoKonst.NIgrenzNassRLF); //$NON-NLS-1$
+					parameterDatum.getScaledValue("NIminNI").set(MeteoKonst.NIminNI); //$NON-NLS-1$
+					parameterDatum.getUnscaledValue("NIgrenzTrockenRLF").set(MeteoKonst.NIgrenzTrockenRLF); //$NON-NLS-1$
+					parameterDatum.getTimeValue("NIminTrockenRLF").setMillis(MeteoKonst.NIminTrockenRLF); //$NON-NLS-1$
+					ResultData parameterResultat = new ResultData(sensor,
+							new DataDescription(atg, vorgabeAspekt, (short)0), System.currentTimeMillis(), parameterDatum);
+					try {
+						DAV.sendData(parameterResultat);
+					} catch (Exception e) {
+						e.printStackTrace();
+						LOGGER.error(Konstante.LEERSTRING, e);
+					}
+				}
+
+				if(datenArt.equals(UmfeldDatenArt.WFD)){
+					AttributeGroup atg = DAV.getDataModel().
+							getAttributeGroup("atg.ufdsMeteorologischeKontrolle" + //$NON-NLS-1$
+							UmfeldDatenArt.getUmfeldDatenArtVon(sensor).getName());
+					Data parameterDatum = DAV.createData(atg);
+					
+					parameterDatum.getScaledValue("WFDgrenzNassNI").set(MeteoKonst.WFDgrenzNassNI); //$NON-NLS-1$
+					parameterDatum.getUnscaledValue("WFDgrenzNassRLF").set(MeteoKonst.WFDgrenzNassRLF); //$NON-NLS-1$
+					parameterDatum.getTimeValue("WDFminNassRLF").setMillis(MeteoKonst.WDFminNassRLF); //$NON-NLS-1$
+					ResultData parameterResultat = new ResultData(sensor,
+							new DataDescription(atg, vorgabeAspekt, (short)0), System.currentTimeMillis(), parameterDatum);
+					try {
+						DAV.sendData(parameterResultat);
+					} catch (Exception e) {
+						e.printStackTrace();
+						LOGGER.error(Konstante.LEERSTRING, e);
+					}
+				}
+
+				if(datenArt.equals(UmfeldDatenArt.SW)){
+					AttributeGroup atg = DAV.getDataModel().
+							getAttributeGroup("atg.ufdsMeteorologischeKontrolle" + //$NON-NLS-1$
+							UmfeldDatenArt.getUmfeldDatenArtVon(sensor).getName());
+					Data parameterDatum = DAV.createData(atg);
+
+					parameterDatum.getUnscaledValue("SWgrenzTrockenRLF").set(MeteoKonst.SWgrenzTrockenRLF); //$NON-NLS-1$
+					parameterDatum.getUnscaledValue("SWgrenzSW").set(MeteoKonst.SWgrenzSW); //$NON-NLS-1$
+
+					ResultData parameterResultat = new ResultData(sensor,
+							new DataDescription(atg, vorgabeAspekt, (short)0), System.currentTimeMillis(), parameterDatum);
+					try {
+						DAV.sendData(parameterResultat);
+					} catch (Exception e) {
+						e.printStackTrace();
+						LOGGER.error(Konstante.LEERSTRING, e);
+					}
+				}			
+			}
+		}else{
+			/**
+			 * Alle Vergleichswerte auf <code>fehlerhaft</code> setzen
+			 */
+			for(SystemObject sensor:PlPruefungLogischUFDTest.SENSOREN){
+				UmfeldDatenArt datenArt = UmfeldDatenArt.getUmfeldDatenArtVon(sensor);
+				 
+				if(datenArt.equals(UmfeldDatenArt.NS)){
+					AttributeGroup atg = DAV.getDataModel().
+							getAttributeGroup("atg.ufdsMeteorologischeKontrolle" + //$NON-NLS-1$
+							UmfeldDatenArt.getUmfeldDatenArtVon(sensor).getName());
+					Data parameterDatum = DAV.createData(atg);
+					
+					UmfeldDatenSensorWert ltWert = new UmfeldDatenSensorWert(UmfeldDatenArt.LT);
+					ltWert.setFehlerhaftAn();
+					parameterDatum.getUnscaledValue("NSGrenzLT").set(ltWert.getWert()); //$NON-NLS-1$
+
+					UmfeldDatenSensorWert rlfWert = new UmfeldDatenSensorWert(UmfeldDatenArt.RLF);
+					rlfWert.setFehlerhaftAn();
+					parameterDatum.getUnscaledValue("NSGrenzTrockenRLF").set(rlfWert.getWert()); //$NON-NLS-1$
+					
+					UmfeldDatenSensorWert niWert = new UmfeldDatenSensorWert(UmfeldDatenArt.NI);
+					niWert.setFehlerhaftAn();
+					parameterDatum.getUnscaledValue("NSminNI").set(niWert.getWert()); //$NON-NLS-1$
+
+					UmfeldDatenSensorWert nsRlfWert = new UmfeldDatenSensorWert(UmfeldDatenArt.RLF);
+					nsRlfWert.setFehlerhaftAn();
+					parameterDatum.getUnscaledValue("NSGrenzRLF").set(nsRlfWert.getWert()); //$NON-NLS-1$
+					ResultData parameterResultat = new ResultData(sensor,
+							new DataDescription(atg, vorgabeAspekt, (short)0), System.currentTimeMillis(), parameterDatum);
+					try {
+						DAV.sendData(parameterResultat);
+					} catch (Exception e) {
+						e.printStackTrace();
+						LOGGER.error(Konstante.LEERSTRING, e);
+					}
+				}
+
+				if(datenArt.equals(UmfeldDatenArt.NI)){
+					AttributeGroup atg = DAV.getDataModel().
+							getAttributeGroup("atg.ufdsMeteorologischeKontrolle" + //$NON-NLS-1$
+							UmfeldDatenArt.getUmfeldDatenArtVon(sensor).getName());
+					Data parameterDatum = DAV.createData(atg);
+					
+					UmfeldDatenSensorWert niWert = new UmfeldDatenSensorWert(UmfeldDatenArt.NI);
+					niWert.setFehlerhaftAn();
+					parameterDatum.getUnscaledValue("NIgrenzNassNI").set(niWert.getWert()); //$NON-NLS-1$
+					
+					UmfeldDatenSensorWert rlfWert = new UmfeldDatenSensorWert(UmfeldDatenArt.RLF);
+					rlfWert.setFehlerhaftAn();
+					parameterDatum.getUnscaledValue("NIgrenzNassRLF").set(rlfWert.getWert()); //$NON-NLS-1$
+					
+					niWert = new UmfeldDatenSensorWert(UmfeldDatenArt.NI);
+					niWert.setFehlerhaftAn();
+					parameterDatum.getUnscaledValue("NIminNI").set(niWert.getWert()); //$NON-NLS-1$
+
+					rlfWert = new UmfeldDatenSensorWert(UmfeldDatenArt.RLF);
+					rlfWert.setFehlerhaftAn();
+					parameterDatum.getUnscaledValue("NIgrenzTrockenRLF").set(rlfWert.getWert()); //$NON-NLS-1$
+					
+					parameterDatum.getTimeValue("NIminTrockenRLF").setMillis(STANDARD_T * 2); //$NON-NLS-1$
+					ResultData parameterResultat = new ResultData(sensor,
+							new DataDescription(atg, vorgabeAspekt, (short)0), System.currentTimeMillis(), parameterDatum);
+					try {
+						DAV.sendData(parameterResultat);
+					} catch (Exception e) {
+						e.printStackTrace();
+						LOGGER.error(Konstante.LEERSTRING, e);
+					}
+				}
+
+				if(datenArt.equals(UmfeldDatenArt.WFD)){
+					AttributeGroup atg = DAV.getDataModel().
+							getAttributeGroup("atg.ufdsMeteorologischeKontrolle" + //$NON-NLS-1$
+							UmfeldDatenArt.getUmfeldDatenArtVon(sensor).getName());
+					Data parameterDatum = DAV.createData(atg);
+					
+					UmfeldDatenSensorWert niWert = new UmfeldDatenSensorWert(UmfeldDatenArt.NI);
+					niWert.setFehlerhaftAn();
+					parameterDatum.getUnscaledValue("WFDgrenzNassNI").set(niWert.getWert()); //$NON-NLS-1$
+					
+					UmfeldDatenSensorWert rlfWert = new UmfeldDatenSensorWert(UmfeldDatenArt.RLF);
+					rlfWert.setFehlerhaftAn();
+					parameterDatum.getUnscaledValue("WFDgrenzNassRLF").set(rlfWert.getWert()); //$NON-NLS-1$
+					
+					parameterDatum.getTimeValue("WDFminNassRLF").setMillis(STANDARD_T * 2); //$NON-NLS-1$
+					ResultData parameterResultat = new ResultData(sensor,
+							new DataDescription(atg, vorgabeAspekt, (short)0), System.currentTimeMillis(), parameterDatum);
+					try {
+						DAV.sendData(parameterResultat);
+					} catch (Exception e) {
+						e.printStackTrace();
+						LOGGER.error(Konstante.LEERSTRING, e);
+					}
+				}
+
+				if(datenArt.equals(UmfeldDatenArt.SW)){
+					AttributeGroup atg = DAV.getDataModel().
+							getAttributeGroup("atg.ufdsMeteorologischeKontrolle" + //$NON-NLS-1$
+							UmfeldDatenArt.getUmfeldDatenArtVon(sensor).getName());
+					Data parameterDatum = DAV.createData(atg);
+
+					UmfeldDatenSensorWert rlfWert = new UmfeldDatenSensorWert(UmfeldDatenArt.RLF);
+					rlfWert.setFehlerhaftAn();
+					parameterDatum.getUnscaledValue("SWgrenzTrockenRLF").set(rlfWert.getWert()); //$NON-NLS-1$
+					
+					UmfeldDatenSensorWert swWert = new UmfeldDatenSensorWert(UmfeldDatenArt.RLF);
+					swWert.setFehlerhaftAn();
+					parameterDatum.getUnscaledValue("SWgrenzSW").set(swWert.getWert()); //$NON-NLS-1$
+
+					ResultData parameterResultat = new ResultData(sensor,
+							new DataDescription(atg, vorgabeAspekt, (short)0), System.currentTimeMillis(), parameterDatum);
+					try {
+						DAV.sendData(parameterResultat);
+					} catch (Exception e) {
+						e.printStackTrace();
+						LOGGER.error(Konstante.LEERSTRING, e);
+					}
+				}			
+			}
+		}
+	}
+	
+	
+	/**
+	 * Setzt den maximalen Zeitverzug eines Umfelddatensensors
+	 * 
+	 * @param obj Umfelddatensensor
+	 * @param verzugInMillis maximalen Zeitverzug in ms
+	 */
+	public final void setMaxAusfallFuerSensor(final SystemObject obj, final long verzugInMillis){
+		Data parameterData = DAV.createData(DAV.getDataModel().
+				getAttributeGroup("atg.ufdsAusfallÜberwachung")); //$NON-NLS-1$
+		parameterData.getTimeValue("maxZeitVerzug").setMillis(verzugInMillis); //$NON-NLS-1$
+		ResultData parameter = new ResultData(obj, 
+				paraAusfallUeberwachung, System.currentTimeMillis(), parameterData);
+		
+		try {
+			DAV.sendData(parameter);
+		} catch (DataNotSubscribedException e) {
+			e.printStackTrace();
+			LOGGER.error(Konstante.LEERSTRING, e);
+		} catch (SendSubscriptionNotConfirmed e) {
+			e.printStackTrace();
+			LOGGER.error(Konstante.LEERSTRING, e);
+		}
+	}
 
 
+	/**
+	 * Setzt die Parameter eines Umfelddatensensors für de Differenzialkontrolle
+	 * 
+	 * @param sensor der Sensor
+	 * @param wert der Vergleichswert, demgegenüber der Sensorwert kleiner sein muss, damit die
+	 * Differenzialkontrolle durchgeführt werden kann
+	 * @param zeit die Zeit, die ein Wert maximal gleich bleiben darf
+	 */
+	public final void setDiffPara(SystemObject sensor, int wert, long zeit){
+		UmfeldDatenArt datenArt = UmfeldDatenArt.getUmfeldDatenArtVon(sensor);
+		Data datum = DAV.createData(DAV.getDataModel().getAttributeGroup(
+				"atg.ufdsDifferenzialKontrolle" + datenArt.getName())); //$NON-NLS-1$
+
+		datum.getUnscaledValue("Operator").set(UfdsVergleichsOperator.KLEINER.getCode()); //$NON-NLS-1$
+		datum.getUnscaledValue(datenArt.getAbkuerzung() + "Grenz").set(wert); //$NON-NLS-1$
+		datum.getTimeValue(datenArt.getAbkuerzung() + "maxZeit").setMillis(zeit); //$NON-NLS-1$
+
+		DataDescription paraDifferenzialkontrolle = new DataDescription(
+				DAV.getDataModel().getAttributeGroup("atg.ufdsDifferenzialKontrolle" + datenArt.getName()), //$NON-NLS-1$
+				DAV.getDataModel().getAspect(Konstante.DAV_ASP_PARAMETER_VORGABE),
+				(short)0);
+		ResultData parameterSatz = new ResultData(sensor, paraDifferenzialkontrolle, System.currentTimeMillis(), datum);
+		try {
+			DAV.sendData(parameterSatz);
+		} catch (DataNotSubscribedException e) {
+			e.printStackTrace();
+			LOGGER.error(Konstante.LEERSTRING, e);
+		} catch (SendSubscriptionNotConfirmed e) {
+			e.printStackTrace();
+			LOGGER.error(Konstante.LEERSTRING, e);
+		}
+	}
+
+	
 	/**
 	 * {@inheritDoc}
 	 */

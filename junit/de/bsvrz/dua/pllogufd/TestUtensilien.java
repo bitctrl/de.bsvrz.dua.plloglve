@@ -27,6 +27,7 @@
 package de.bsvrz.dua.pllogufd;
 
 import java.util.Calendar;
+import java.util.Date;
 import java.util.GregorianCalendar;
 
 import stauma.dav.clientside.Data;
@@ -55,6 +56,19 @@ public class TestUtensilien {
 		kal.setTimeInMillis(System.currentTimeMillis());
 		kal.add(Calendar.MINUTE, 1);
 		kal.set(Calendar.SECOND, 0);
+		kal.set(Calendar.MILLISECOND, 0);
+		return kal.getTimeInMillis();
+	}
+	
+
+	/**
+	 * Erfragt den Zeitpunkt des Beginns der aktuellen Sekunde
+	 * 
+	 * @return der Zeitpunkt des Beginns der aktuellen Sekunde
+	 */
+	public static final long getBeginAktuellerSekunde(){
+		GregorianCalendar kal = new GregorianCalendar();
+		kal.setTimeInMillis(System.currentTimeMillis());
 		kal.set(Calendar.MILLISECOND, 0);
 		return kal.getTimeInMillis();
 	}
@@ -96,4 +110,13 @@ public class TestUtensilien {
 		return new ResultData(sensor, datenBeschreibung, System.currentTimeMillis(), datum);
 	}	
 	
+	/**
+	 * Erfragt die aktuelle Zeit
+	 * 
+	 * @return die aktuelle Zeit
+	 */
+	public static final String jzt(){
+		return "(NOW:" + DUAKonstanten.ZEIT_FORMAT_GENAU.format(new Date(System.currentTimeMillis())) + ")"; //$NON-NLS-1$ //$NON-NLS-2$
+	}
+
 }

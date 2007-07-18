@@ -32,23 +32,19 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.junit.Assert;
+import junit.framework.Assert;
+
 import org.junit.Before;
 import org.junit.Test;
 
 import stauma.dav.clientside.ClientDavInterface;
 import stauma.dav.clientside.ClientReceiverInterface;
 import stauma.dav.clientside.ClientSenderInterface;
-import stauma.dav.clientside.Data;
 import stauma.dav.clientside.DataDescription;
-import stauma.dav.clientside.DataNotSubscribedException;
 import stauma.dav.clientside.ReceiveOptions;
 import stauma.dav.clientside.ReceiverRole;
 import stauma.dav.clientside.ResultData;
-import stauma.dav.clientside.SenderRole;
-import stauma.dav.common.SendSubscriptionNotConfirmed;
 import stauma.dav.configuration.interfaces.SystemObject;
-import sys.funclib.debug.Debug;
 import de.bsvrz.dua.pllogufd.DAVTest;
 import de.bsvrz.dua.pllogufd.PlPruefungLogischUFDTest;
 import de.bsvrz.dua.pllogufd.TestUtensilien;
@@ -122,16 +118,6 @@ implements ClientSenderInterface, ClientReceiverInterface{
 	private static final long MAX_VERZUG_3 = 6000L;
 	
 	/**
-	 * Debug-Logger
-	 */
-	private static final Debug LOGGER = Debug.getLogger();
-
-	/**
-	 * Parameterbeschreibung der Ausfallüberwachung
-	 */
-	private DataDescription paraAusfallUeberwachung = null;
-	
-	/**
 	 * Datenverteiler-Verbindung
 	 */
 	private ClientDavInterface dav = null;
@@ -159,38 +145,19 @@ implements ClientSenderInterface, ClientReceiverInterface{
 		PlPruefungLogischUFDTest.initialisiere();
 		
 		/**
-		 * Anmeldung auf alle Parameter
-		 */
-		paraAusfallUeberwachung = new DataDescription(
-				dav.getDataModel().getAttributeGroup("atg.ufdsAusfallÜberwachung"), //$NON-NLS-1$
-				dav.getDataModel().getAspect(Konstante.DAV_ASP_PARAMETER_VORGABE),
-				(short)0);
-		dav.subscribeSender(this, PlPruefungLogischUFDTest.SENSOREN, paraAusfallUeberwachung, SenderRole.sender());
-
-		/**
-		 * Warte bis Anmeldung sicher durch ist
-		 */
-		Pause.warte(1000L);
-		
-		/**
-		 * Parameter setzen auf 10s (für Sensoren xxx1), 15s (für Sensoren xxx2) und 20s (für Sensoren xxx3)
+		 * Parameter setzen auf 3s (für Sensoren xxx1), 4s (für Sensoren xxx2) und 6s (für Sensoren xxx3)
 		 */
 		for(SystemObject sensor:PlPruefungLogischUFDTest.SENSOREN){
 			if(sensor.getPid().endsWith("1")){ //$NON-NLS-1$
-				this.setMaxAusfallFuerSensor(sensor, MAX_VERZUG_1);
+				PlPruefungLogischUFDTest.SENDER.setMaxAusfallFuerSensor(sensor, MAX_VERZUG_1);
 			}else
 			if(sensor.getPid().endsWith("2")){ //$NON-NLS-1$
-				this.setMaxAusfallFuerSensor(sensor, MAX_VERZUG_2);
+				PlPruefungLogischUFDTest.SENDER.setMaxAusfallFuerSensor(sensor, MAX_VERZUG_2);
 			}else
 			if(sensor.getPid().endsWith("3")){ //$NON-NLS-1$
-				this.setMaxAusfallFuerSensor(sensor, MAX_VERZUG_3);
+				PlPruefungLogischUFDTest.SENDER.setMaxAusfallFuerSensor(sensor, MAX_VERZUG_3);
 			}
-		}
-		
-		/**
-		 * Warte eine Sekunde bis die Parameter sicher da sind
-		 */
-		
+		}		
 				
 		/**
 		 * Anmeldung auf alle Daten die aus der Applikation Pl-Prüfung logisch UFD kommen
@@ -206,7 +173,7 @@ implements ClientSenderInterface, ClientReceiverInterface{
 		}
 		
 		/**
-		 * Warte eine Sekunde bis Datenanmeldung durch ist
+		 * Warte eine Sekunde bis Datenanmeldung durch ist und Parameter da sind
 		 */
 		Pause.warte(1000L);
 		
@@ -219,33 +186,6 @@ implements ClientSenderInterface, ClientReceiverInterface{
 			ResultData resultat = TestUtensilien.getExterneErfassungDatum(sensor);
 			resultat.setDataTime(ersteDatenZeit);
 			PlPruefungLogischUFDTest.SENDER.sende(resultat);
-		}
-		
-		Pause.warte(1000L);
-	}
-
-	
-	/**
-	 * Setzt den maximalen Zeitverzug eines Umfelddatensensors
-	 * 
-	 * @param obj Umfelddatensensor
-	 * @param verzugInMillis maximalen Zeitverzug in ms
-	 */
-	private final void setMaxAusfallFuerSensor(final SystemObject obj, final long verzugInMillis){
-		Data parameterData = dav.createData(dav.getDataModel().
-				getAttributeGroup("atg.ufdsAusfallÜberwachung")); //$NON-NLS-1$
-		parameterData.getTimeValue("maxZeitVerzug").setMillis(verzugInMillis); //$NON-NLS-1$
-		ResultData parameter = new ResultData(obj, 
-				this.paraAusfallUeberwachung, System.currentTimeMillis(), parameterData);
-		
-		try {
-			this.dav.sendData(parameter);
-		} catch (DataNotSubscribedException e) {
-			e.printStackTrace();
-			LOGGER.error(Konstante.LEERSTRING, e);
-		} catch (SendSubscriptionNotConfirmed e) {
-			e.printStackTrace();
-			LOGGER.error(Konstante.LEERSTRING, e);
 		}
 	}
 	
@@ -292,7 +232,7 @@ implements ClientSenderInterface, ClientReceiverInterface{
 				/**
 				 * JUnit-Test
 				 */
-				//Assert.assertTrue("Felher an Sensor: " + sensor.getPid(), erfolgsErgebnis != null); //$NON-NLS-1$
+				Assert.assertTrue("Felher an Sensor: " + sensor.getPid(), erfolgsErgebnis != null); //$NON-NLS-1$
 			}			
 		}
 		
