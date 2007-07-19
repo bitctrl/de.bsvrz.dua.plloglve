@@ -111,7 +111,7 @@ extends CSVImporter{
 					int vLkw = Integer.parseInt(zeile[3+OFFSET]);
 					int vgKfz = Integer.parseInt(zeile[4+OFFSET]);
 					int b = Integer.parseInt(zeile[5+OFFSET]);
-					int tNetto = Integer.parseInt(zeile[6+OFFSET]);
+					long tNetto = Long.parseLong(zeile[6+OFFSET]) * 1000;
 					int sKfz = Integer.parseInt(zeile[7+OFFSET]);
 					int vKfz = -1;
 					int qPkw = -1;
@@ -155,7 +155,7 @@ extends CSVImporter{
 	 * @param datensatz der Datensatz
 	 * @return der veränderte Datensatz
 	 */
-	private final Data setAttribut(final String attributName, final int wert, Data datensatz){
+	private final Data setAttribut(final String attributName, final long wert, Data datensatz){
 		Data data = datensatz;
 
 		DUAUtensilien.getAttributDatum(attributName + ".Wert", data).asUnscaledValue().set(wert); //$NON-NLS-1$

@@ -15,6 +15,7 @@ import stauma.dav.configuration.interfaces.SystemObject;
 import de.bsvrz.dua.plloglve.plloglve.typen.OptionenPlausibilitaetsPruefungLogischVerkehr;
 import de.bsvrz.dua.plloglve.util.para.ParaKZDLogImport;
 import de.bsvrz.dua.plloglve.pruef.PruefeKZDLogisch;
+import de.bsvrz.sys.funclib.bitctrl.app.Pause;
 import de.bsvrz.sys.funclib.bitctrl.dua.DUAKonstanten;
 import de.bsvrz.sys.funclib.bitctrl.konstante.Konstante;
 import sys.funclib.debug.Debug;
@@ -98,6 +99,7 @@ implements ClientSenderInterface {
 		this.dav.subscribeSender(this, new SystemObject[]{FS1, FS2, FS3}, 
 				DD_LZD_SEND, SenderRole.source());
 		
+		Pause.warte(1000L);
 		Debug.init("PlPruefungLogisch", alLogger);
 		LOGGER = Debug.getLogger();
 	}
@@ -229,18 +231,18 @@ implements ClientSenderInterface {
 				this.dav.sendData(resultat1);
 			} else datenFS1Vorhanden = false;
 
-			if((zeileFS2 = paraImpFS2.getNaechstenDatensatz(DD_LZD_SEND.getAttributeGroup())) != null) {
+			if((zeileFS2 = paraImpFS2.getNaechstenDatensatz(DD_KZD_SEND.getAttributeGroup())) != null) {
 				LOGGER.info("Sende Daten fuer FS2");
-				ResultData resultat2 = new ResultData(FS2, DD_LZD_SEND, aktZeit, zeileFS2);
+				ResultData resultat2 = new ResultData(FS2, DD_KZD_SEND, aktZeit, zeileFS2);
 				this.dav.sendData(resultat2);
 			} else datenFS2Vorhanden = false;
 	
-			if((zeileFS3 = paraImpFS3.getNaechstenDatensatz(DD_LZD_SEND.getAttributeGroup())) != null) {
+			if((zeileFS3 = paraImpFS3.getNaechstenDatensatz(DD_KZD_SEND.getAttributeGroup())) != null) {
 				LOGGER.info("Sende Daten fuer FS3");
-				ResultData resultat3 = new ResultData(FS3, DD_LZD_SEND, aktZeit, zeileFS3);
+				ResultData resultat3 = new ResultData(FS3, DD_KZD_SEND, aktZeit, zeileFS3);
 				this.dav.sendData(resultat3);
 			} else datenFS3Vorhanden = false;
-
+			
 			//Erhoehe CSV Index
 			csvIndex++;
 			

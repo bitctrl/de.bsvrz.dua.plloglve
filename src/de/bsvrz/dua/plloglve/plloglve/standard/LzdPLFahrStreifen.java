@@ -31,7 +31,7 @@ import stauma.dav.clientside.Data;
 import stauma.dav.clientside.ResultData;
 import stauma.dav.configuration.interfaces.AttributeGroup;
 import stauma.dav.configuration.interfaces.SystemObject;
-import de.bsvrz.sys.funclib.bitctrl.dua.schnittstellen.IVerwaltung;
+import de.bsvrz.sys.funclib.bitctrl.dua.schnittstellen.IVerwaltungMitGuete;
 import de.bsvrz.sys.funclib.bitctrl.konstante.Konstante;
 
 /**
@@ -46,7 +46,7 @@ extends AbstraktPLFahrStreifen{
 	/**
 	 * {@inheritDoc}
 	 */
-	protected LzdPLFahrStreifen(final IVerwaltung verwaltung, final SystemObject obj){
+	protected LzdPLFahrStreifen(final IVerwaltungMitGuete verwaltung, final SystemObject obj){
 		super(verwaltung, obj);
 	}
 	

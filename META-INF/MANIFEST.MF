@@ -6,5 +6,6 @@ Bundle-Version: 1.0.0
 Bundle-Localization: plugin
 Require-Bundle: de.bitctrl.dav.daf,
  de.bitctrl.sys.funclib,
- de.bsvrz.dua.plformal
+ de.bsvrz.dua.plformal,
+ de.bsvrz.dua.guete
 Bundle-Vendor: BitCtrl Systems GmbH

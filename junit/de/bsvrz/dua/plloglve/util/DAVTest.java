@@ -16,14 +16,24 @@ import sys.funclib.application.StandardApplicationRunner;
  */
 public class DAVTest {
 
+//	/**
+//	 * Verbindungsdaten
+//	 */
+//	private static final String[] CON_DATA = new String[] {
+//			"-datenverteiler=localhost:8083", //$NON-NLS-1$ 
+//			"-benutzer=Tester", //$NON-NLS-1$
+//			"-authentifizierung=c:\\passwd" }; //$NON-NLS-1$
+
 	/**
 	 * Verbindungsdaten
 	 */
 	private static final String[] CON_DATA = new String[] {
-			"-datenverteiler=localhost:8083", //$NON-NLS-1$ 
+			"-datenverteiler=192.168.1.191:8083", //$NON-NLS-1$ 
 			"-benutzer=Tester", //$NON-NLS-1$
-			"-authentifizierung=c:\\passwd" }; //$NON-NLS-1$
+			"-authentifizierung=c:\\passwd1" }; //$NON-NLS-1$
 
+	
+	
 	/**
 	 * Verbindung zum Datenverteiler
 	 */

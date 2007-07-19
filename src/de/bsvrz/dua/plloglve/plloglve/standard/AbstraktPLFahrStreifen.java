@@ -36,11 +36,15 @@ import stauma.dav.clientside.ResultData;
 import stauma.dav.configuration.interfaces.AttributeGroup;
 import stauma.dav.configuration.interfaces.SystemObject;
 import sys.funclib.debug.Debug;
+import de.bsvrz.dua.guete.GueteException;
+import de.bsvrz.dua.guete.GueteUtil;
+import de.bsvrz.dua.guete.GueteVerfahren;
+import de.bsvrz.dua.guete.IGuete;
 import de.bsvrz.dua.plloglve.plloglve.typen.OptionenPlausibilitaetsPruefungLogischVerkehr;
 import de.bsvrz.sys.funclib.bitctrl.daf.Konstanten;
 import de.bsvrz.sys.funclib.bitctrl.dua.DUAKonstanten;
 import de.bsvrz.sys.funclib.bitctrl.dua.DUAUtensilien;
-import de.bsvrz.sys.funclib.bitctrl.dua.schnittstellen.IVerwaltung;
+import de.bsvrz.sys.funclib.bitctrl.dua.schnittstellen.IVerwaltungMitGuete;
 import de.bsvrz.sys.funclib.bitctrl.modell.AbstractSystemObjekt;
 import de.bsvrz.sys.funclib.bitctrl.modell.SystemObjekt;
 import de.bsvrz.sys.funclib.bitctrl.modell.SystemObjektTyp;
@@ -63,14 +67,19 @@ implements ClientReceiverInterface{
 	protected static final Debug LOGGER = Debug.getLogger();
 	
 	/**
-	 * Verbindung zum Verwaltungsmodul
+	 * Standard-Verfahren der Gueteberechnung
 	 */
-	protected static IVerwaltung VERWALTUNG = null;
+	protected static final IGuete G = GueteVerfahren.STANDARD.getBerechnungsVorschrift();
+	
+	/**
+	 * Verbindung zum Verwaltungsmodul mit Guetefaktor
+	 */
+	protected static IVerwaltungMitGuete VERWALTUNG = null;
 
 	/**
 	 * Schnittstelle zu den Parametern der Grenzwertprüfung 
 	 */
-	protected AbstraktAtgPLLogischLVEParameter parameterAtgLog = null;
+	protected AbstraktAtgPLLogischLVEParameter parameterAtgLog = null;	
 			
 
 	/**
@@ -79,7 +88,7 @@ implements ClientReceiverInterface{
 	 * @param verwaltung Verbindung zum Verwaltungsmodul
 	 * @param obj das mit dem Fahrstreifen assoziierte Systemobjekt
 	 */
-	protected AbstraktPLFahrStreifen(final IVerwaltung verwaltung, final SystemObject obj){
+	protected AbstraktPLFahrStreifen(final IVerwaltungMitGuete verwaltung, final SystemObject obj){
 		super(obj);
 		
 		if(VERWALTUNG == null){
@@ -94,6 +103,7 @@ implements ClientReceiverInterface{
 		VERWALTUNG.getVerbindung().subscribeReceiver(this, obj, logParaDesc,
 				ReceiveOptions.normal(), ReceiverRole.receiver());
 	}
+	
 	
 	/**
 	 * {@inheritDoc}
@@ -124,26 +134,67 @@ implements ClientReceiverInterface{
 		final int qKfz = data.getItem("qKfz").getUnscaledValue("Wert").intValue(); //$NON-NLS-1$ //$NON-NLS-2$
 		final int qLkw = data.getItem("qLkw").getUnscaledValue("Wert").intValue(); //$NON-NLS-1$ //$NON-NLS-2$
 		int qPkw = DUAKonstanten.NICHT_ERMITTELBAR;
+		double qPkwGuete = -1;
 		if(qKfz >= 0 && qLkw >= 0){
 			qPkw = qKfz - qLkw;
+
+			try {
+				qPkwGuete = GueteVerfahren.getDVonData(data.getItem("qKfz").getItem("Güte"),  //$NON-NLS-1$ //$NON-NLS-2$
+											data.getItem("qLkw").getItem("Güte"));  //$NON-NLS-1$ //$NON-NLS-2$
+			} catch (GueteException e) {
+				e.printStackTrace();
+				LOGGER.error("Berechnung der Guete von qPkw fehlgeschlagen", e); //$NON-NLS-1$
+			}
 		}
+		
 		if(DUAUtensilien.isWertInWerteBereich(data.getItem("qPkw").getItem("Wert"), qPkw)){ //$NON-NLS-1$ //$NON-NLS-2$
 			data.getItem("qPkw").getUnscaledValue("Wert").set(qPkw); //$NON-NLS-1$ //$NON-NLS-2$	
+			if(qPkwGuete >= 0.0){
+				data.getItem("qPkw").getItem("Güte").getScaledValue("Index").set(qPkwGuete); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+			}
 		}else{
 			data.getItem("qPkw").getUnscaledValue("Wert").set(DUAKonstanten.NICHT_ERMITTELBAR_BZW_FEHLERHAFT);  //$NON-NLS-1$//$NON-NLS-2$
 		}
 		
 		final int vPkw = data.getItem("vPkw").getUnscaledValue("Wert").intValue(); //$NON-NLS-1$ //$NON-NLS-2$
 		final int vLkw = data.getItem("vLkw").getUnscaledValue("Wert").intValue(); //$NON-NLS-1$ //$NON-NLS-2$
-		int vKfz = DUAKonstanten.NICHT_ERMITTELBAR;
+		long vKfz = DUAKonstanten.NICHT_ERMITTELBAR;
+		double vKfzGuete = -1;
 		if(qKfz > 0 && qPkw >= 0 && vPkw >= 0 && qLkw >= 0 && vLkw >= 0){
-			vKfz = (qPkw * vPkw + qLkw * vLkw) / qKfz;
+			vKfz = (long)((qPkw * vPkw + qLkw * vLkw) / qKfz + 0.5);
+
+			try {
+				double qPkwG = GueteUtil.getGueteIndex(data, "qPkw"); //$NON-NLS-1$
+				double vPkwG = GueteUtil.getGueteIndex(data, "vPkw"); //$NON-NLS-1$
+				double qLkwG = GueteUtil.getGueteIndex(data, "qLkw"); //$NON-NLS-1$
+				double vLkwG = GueteUtil.getGueteIndex(data, "vLkw"); //$NON-NLS-1$
+				double qKfzG = GueteUtil.getGueteIndex(data, "qKfz"); //$NON-NLS-1$
+				
+				vKfzGuete = G.q(
+								G.s(
+									G.p(qPkwG, vPkwG),
+									G.p(qLkwG, vLkwG)
+								),
+								qKfzG
+							);
+				
+			} catch (GueteException e) {
+				e.printStackTrace();
+				LOGGER.error("Berechnung der Guete von vKfz fehlgeschlagen", e); //$NON-NLS-1$
+			}
 		}
+		
 		if(DUAUtensilien.isWertInWerteBereich(data.getItem("vKfz").getItem("Wert"), vKfz)){ //$NON-NLS-1$ //$NON-NLS-2$
-			data.getItem("vKfz").getUnscaledValue("Wert").set(vKfz); //$NON-NLS-1$ //$NON-NLS-2$	
+			data.getItem("vKfz").getUnscaledValue("Wert").set(vKfz); //$NON-NLS-1$ //$NON-NLS-2$
+			if(vKfzGuete >= 0.0){
+				data.getItem("vKfz").getItem("Güte").getScaledValue("Index").set(vKfzGuete); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+			}
 		}else{
 			data.getItem("vKfz").getUnscaledValue("Wert").set(DUAKonstanten.NICHT_ERMITTELBAR_BZW_FEHLERHAFT);  //$NON-NLS-1$//$NON-NLS-2$
 		}
+		
+		DUAUtensilien.getAttributDatum("qPkw.Status.Erfassung.NichtErfasst", data).asUnscaledValue().set(DUAKonstanten.JA); //$NON-NLS-1$
+		DUAUtensilien.getAttributDatum("vKfz.Status.Erfassung.NichtErfasst", data).asUnscaledValue().set(DUAKonstanten.JA); //$NON-NLS-1$
 		
 		return data;
 	}
@@ -171,6 +222,7 @@ implements ClientReceiverInterface{
 				if(wert >= 0){
 					boolean minVerletzt = wert < min;
 					boolean maxVerletzt = wert > max;
+					boolean gueteNeuBerechnen = false;
 		
 					if(minVerletzt){
 						DUAUtensilien.getAttributDatum(wertName + ".Status.PlLogisch.WertMinLogisch", davDatum). //$NON-NLS-1$
@@ -178,18 +230,20 @@ implements ClientReceiverInterface{
 					}
 					if(maxVerletzt){
 						DUAUtensilien.getAttributDatum(wertName + ".Status.PlLogisch.WertMaxLogisch", davDatum). //$NON-NLS-1$
-									asUnscaledValue().set(DUAKonstanten.JA);
+									asUnscaledValue().set(DUAKonstanten.JA);						
 					}
 						
 					if(optionen.equals(OptionenPlausibilitaetsPruefungLogischVerkehr.SETZE_MAX)){
 						if(maxVerletzt){
 							DUAUtensilien.getAttributDatum(wertName + ".Wert", davDatum). //$NON-NLS-1$
 								asUnscaledValue().set(max);
+							gueteNeuBerechnen = true;
 						}					
 					}else if(optionen.equals(OptionenPlausibilitaetsPruefungLogischVerkehr.SETZE_MIN)){
 						if(minVerletzt){
 							DUAUtensilien.getAttributDatum(wertName + ".Wert", davDatum). //$NON-NLS-1$
 								asUnscaledValue().set(min);
+							gueteNeuBerechnen = true;
 						}															
 					}else if(optionen.equals(OptionenPlausibilitaetsPruefungLogischVerkehr.SETZE_MIN_MAX)){
 						if(maxVerletzt){
@@ -199,8 +253,17 @@ implements ClientReceiverInterface{
 						if(minVerletzt){
 							DUAUtensilien.getAttributDatum(wertName + ".Wert", davDatum). //$NON-NLS-1$
 								asUnscaledValue().set(min);
-						}															
+						}
+						gueteNeuBerechnen = true;
 					}
+					
+//					if(gueteNeuBerechnen){
+//						double guete = DUAUtensilien.getAttributDatum(wertName + "Güte.Index", davDatum). //$NON-NLS-1$
+//												asScaledValue().doubleValue();
+//						guete *= VERWALTUNG.getGueteFaktor();
+//						DUAUtensilien.getAttributDatum(wertName + "Güte.Index", davDatum). //$NON-NLS-1$
+//												asScaledValue().set(guete);
+//					}
 				}
 			}
 		}

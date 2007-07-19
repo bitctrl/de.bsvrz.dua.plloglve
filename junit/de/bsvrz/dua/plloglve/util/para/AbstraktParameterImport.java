@@ -35,6 +35,7 @@ import stauma.dav.clientside.SenderRole;
 import stauma.dav.configuration.interfaces.AttributeGroup;
 import stauma.dav.configuration.interfaces.SystemObject;
 import de.bsvrz.dua.plloglve.util.CSVImporter;
+import de.bsvrz.sys.funclib.bitctrl.app.Pause;
 import de.bsvrz.sys.funclib.bitctrl.dua.DUAUtensilien;
 import de.bsvrz.sys.funclib.bitctrl.konstante.Konstante;
 
@@ -84,6 +85,11 @@ implements ClientSenderInterface{
 				DAV.getDataModel().getAspect(Konstante.DAV_ASP_PARAMETER_VORGABE),
 				(short)0), SenderRole.sender());
 		
+		System.out.println("Obj: " + objekt + "An: " + new DataDescription(
+				this.getParameterAtg(), 
+				DAV.getDataModel().getAspect(Konstante.DAV_ASP_PARAMETER_VORGABE),
+				(short)0));
+		
 		/**
 		 * Tabellenkopf überspringen
 		 */
@@ -127,6 +133,7 @@ implements ClientSenderInterface{
 				this.getParameterAtg(), 
 				DAV.getDataModel().getAspect(Konstante.DAV_ASP_PARAMETER_VORGABE),
 				(short)0), System.currentTimeMillis(), this.fuelleRestAttribute(parameter));
+		System.out.println(resultat);
 		DAV.sendData(resultat);
 	}
 	

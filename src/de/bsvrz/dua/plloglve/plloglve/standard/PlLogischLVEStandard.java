@@ -41,6 +41,7 @@ import de.bsvrz.sys.funclib.bitctrl.dua.adapter.AbstraktBearbeitungsKnotenAdapte
 import de.bsvrz.sys.funclib.bitctrl.dua.dfs.schnittstellen.IDatenFlussSteuerung;
 import de.bsvrz.sys.funclib.bitctrl.dua.dfs.typen.ModulTyp;
 import de.bsvrz.sys.funclib.bitctrl.dua.schnittstellen.IVerwaltung;
+import de.bsvrz.sys.funclib.bitctrl.dua.schnittstellen.IVerwaltungMitGuete;
 
 /**
  * Das Submodul PL-Prüfung logisch LVE standard führt zunächst eine Wertebereichsprüfung
@@ -75,8 +76,8 @@ extends AbstraktBearbeitungsKnotenAdapter{
 	 */
 	private Map<SystemObject, AbstraktPLFahrStreifen> kzdFahrStreifen =
 								new HashMap<SystemObject, AbstraktPLFahrStreifen>();
-
 	
+
 	/**
 	 * {@inheritDoc}
 	 */
@@ -84,15 +85,23 @@ extends AbstraktBearbeitungsKnotenAdapter{
 	public void initialisiere(IVerwaltung dieVerwaltung)
 	throws DUAInitialisierungsException {
 		super.initialisiere(dieVerwaltung);
+		
+		IVerwaltungMitGuete verwaltungMitGuete = null;
+		if(dieVerwaltung instanceof IVerwaltungMitGuete){
+			verwaltungMitGuete = (IVerwaltungMitGuete)dieVerwaltung;
+		}else{
+			throw new RuntimeException("Dieses Modul benötigt Informationen" + //$NON-NLS-1$
+					" zum Guetefaktor der angeschlossenen SWE"); //$NON-NLS-1$
+		}
 			
 		for(SystemObject obj:dieVerwaltung.getSystemObjekte()){
 			if(obj.getType().getPid().equals(DUAKonstanten.TYP_FAHRSTREIFEN_LZ)){
-				lzdFahrStreifen.put(obj, new LzdPLFahrStreifen(dieVerwaltung, obj));
+				lzdFahrStreifen.put(obj, new LzdPLFahrStreifen(verwaltungMitGuete, obj));
 			}
-			kzdFahrStreifen.put(obj, new KzdPLFahrStreifen(dieVerwaltung, obj));
+			kzdFahrStreifen.put(obj, new KzdPLFahrStreifen(verwaltungMitGuete, obj));
 		}
 	}
-	
+
 	
 	/**
 	 * {@inheritDoc}
@@ -102,6 +111,9 @@ extends AbstraktBearbeitungsKnotenAdapter{
 			Collection<ResultData> weiterzuleitendeResultate = new ArrayList<ResultData>();
 			for(ResultData resultat:resultate){
 				if(resultat != null){
+					
+					System.out.println("Datum: " + resultat);
+					
 					AbstraktPLFahrStreifen fahrStreifen = null;
 					
 					if(resultat.getDataDescription().getAttributeGroup().getPid().equals(

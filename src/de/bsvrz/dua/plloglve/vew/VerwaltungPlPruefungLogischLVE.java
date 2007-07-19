@@ -34,14 +34,13 @@ import stauma.dav.clientside.ReceiverRole;
 import stauma.dav.clientside.ResultData;
 import stauma.dav.configuration.interfaces.SystemObject;
 import sys.funclib.application.StandardApplicationRunner;
-import sys.funclib.debug.Debug;
 import de.bsvrz.dua.plformal.plformal.PlPruefungFormal;
 import de.bsvrz.dua.plformal.vew.PPFStandardAspekteVersorger;
 import de.bsvrz.dua.plloglve.plloglve.PlPruefungLogischLVE;
 import de.bsvrz.sys.funclib.bitctrl.dua.DUAInitialisierungsException;
 import de.bsvrz.sys.funclib.bitctrl.dua.DUAKonstanten;
 import de.bsvrz.sys.funclib.bitctrl.dua.DUAUtensilien;
-import de.bsvrz.sys.funclib.bitctrl.dua.adapter.AbstraktVerwaltungsAdapter;
+import de.bsvrz.sys.funclib.bitctrl.dua.adapter.AbstraktVerwaltungsAdapterMitGuete;
 import de.bsvrz.sys.funclib.bitctrl.dua.dfs.typen.SWETyp;
 import de.bsvrz.sys.funclib.bitctrl.konstante.Konstante;
 
@@ -55,20 +54,7 @@ import de.bsvrz.sys.funclib.bitctrl.konstante.Konstante;
  *
  */
 public class VerwaltungPlPruefungLogischLVE
-extends AbstraktVerwaltungsAdapter{
-	
-	/**
-	 * Gütefaktor für Ersetzungen (97%)<br>
-	 * Wenn das Modul Pl-Prüfung logisch LVE einen Messwert ersetzt (eigentlich
-	 * nur bei Wertebereichsprüfung) so vermindert sich die Güte des Ausgangswertes
-	 * um diesen Faktor  
-	 */
-	public static final double GUETE_FAKTOR = 0.97; 
-	
-	/**
-	 * Debug-Logger
-	 */
-	protected static final Debug LOGGER = Debug.getLogger();
+extends AbstraktVerwaltungsAdapterMitGuete{
 
 	/**
 	 * Instanz des Moduls PL-Prüfung formal
@@ -79,6 +65,8 @@ extends AbstraktVerwaltungsAdapter{
 	 * Instanz des Moduls PL-Prüfung logisch LVE
 	 */
 	private PlPruefungLogischLVE plPruefungLogischLVE = null;
+	
+	
 	
 	
 	/**
@@ -94,7 +82,7 @@ extends AbstraktVerwaltungsAdapter{
 	@Override
 	protected void initialisiere()
 	throws DUAInitialisierungsException {
-
+		
 		String infoStr = Konstante.LEERSTRING;
 		Collection<SystemObject> plLogLveObjekte = DUAUtensilien.getBasisInstanzen(
 				this.verbindung.getDataModel().getType(DUAKonstanten.TYP_FAHRSTREIFEN),
@@ -158,6 +146,20 @@ extends AbstraktVerwaltungsAdapter{
         });
 		StandardApplicationRunner.run(
 					new VerwaltungPlPruefungLogischLVE(), argumente);
+	}
+
+	
+	/**
+	 * {@inheritDoc}.<br>
+	 * 
+	 * Standard-Gütefaktor für Ersetzungen (90%)<br>
+	 * Wenn das Modul Pl-Prüfung logisch LVE einen Messwert ersetzt (eigentlich
+	 * nur bei Wertebereichsprüfung) so vermindert sich die Güte des Ausgangswertes
+	 * um diesen Faktor (wenn kein anderer Wert über die Kommandozeile übergeben wurde)
+	 */
+	@Override
+	public double getStandardGueteFaktor() {
+		return 0.9;
 	}
 	
 }

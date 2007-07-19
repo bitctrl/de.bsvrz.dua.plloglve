@@ -32,7 +32,7 @@ import stauma.dav.clientside.ResultData;
 import stauma.dav.configuration.interfaces.AttributeGroup;
 import stauma.dav.configuration.interfaces.SystemObject;
 import de.bsvrz.sys.funclib.bitctrl.dua.DUAKonstanten;
-import de.bsvrz.sys.funclib.bitctrl.dua.schnittstellen.IVerwaltung;
+import de.bsvrz.sys.funclib.bitctrl.dua.schnittstellen.IVerwaltungMitGuete;
 import de.bsvrz.sys.funclib.bitctrl.konstante.Konstante;
 
 /**
@@ -55,7 +55,7 @@ extends AbstraktPLFahrStreifen{
 	 * @param verwaltung Verbindung zum Verwaltungsmodul
 	 * @param obj das mit dem Fahrstreifen assoziierte Systemobjekt
 	 */
-	public KzdPLFahrStreifen(final IVerwaltung verwaltung, final SystemObject obj){
+	public KzdPLFahrStreifen(final IVerwaltungMitGuete verwaltung, final SystemObject obj){
 		super(verwaltung, obj);				
 	}
 	
