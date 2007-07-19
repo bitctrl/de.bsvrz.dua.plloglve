@@ -33,7 +33,7 @@ implements ClientSenderInterface {
 	 * Verzeichnis, in dem sich die CSV-Dateien mit den Testdaten befinden
 	 */
 	protected static final String TEST_DATEN_VERZ =
-		"D:\\goerlitz\\eclipse32\\workspace\\de.bsvrz.dua.plloglve\\testDaten\\"; //$NON-NLS-1$
+		".\\testDaten\\"; //$NON-NLS-1$
 	
 	/**
 	 * TestFS1
@@ -67,6 +67,7 @@ implements ClientSenderInterface {
 	
 	/**
 	 * Logger
+	 * Pfadangabe mit Argument: -debugFilePath=[Pfad]
 	 */
 	protected Debug LOGGER;
 	private String[] argumente = new String[] {"-debugLevelFileText=ALL"};
