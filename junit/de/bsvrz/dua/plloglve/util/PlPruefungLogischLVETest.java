@@ -299,7 +299,7 @@ implements ClientSenderInterface {
 		Data zeileFSFehler;
 		
 		//Aktuelle Zeit
-		Long aktZeit = System.currentTimeMillis()-(Konstante.MINUTE_IN_MS*2);
+		Long aktZeit = System.currentTimeMillis()-(Konstante.MINUTE_IN_MS*1440*2);
 		
 		//Leere Daten (Vortag)
 		
