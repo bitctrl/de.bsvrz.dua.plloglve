@@ -3,6 +3,8 @@ package de.bsvrz.dua.plloglve.util;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.lang.Math;
+
 import stauma.dav.clientside.ClientDavInterface;
 import stauma.dav.clientside.ClientSenderInterface;
 import stauma.dav.clientside.Data;
@@ -10,12 +12,11 @@ import stauma.dav.clientside.DataDescription;
 import stauma.dav.clientside.ResultData;
 import stauma.dav.clientside.SenderRole;
 import stauma.dav.configuration.interfaces.SystemObject;
-//import de.bsvrz.dua.plloglve.plloglve.standard.KzdPLFahrStreifen;
 import de.bsvrz.dua.plloglve.plloglve.typen.OptionenPlausibilitaetsPruefungLogischVerkehr;
 import de.bsvrz.dua.plloglve.util.para.ParaKZDLogImport;
 import de.bsvrz.dua.plloglve.pruef.PruefeKZDLogisch;
 import de.bsvrz.sys.funclib.bitctrl.dua.DUAKonstanten;
-//import de.bsvrz.sys.funclib.bitctrl.dua.DUAUtensilien;
+import de.bsvrz.sys.funclib.bitctrl.konstante.Konstante;
 import sys.funclib.debug.Debug;
 import sys.funclib.ArgumentList;
 
@@ -65,18 +66,6 @@ implements ClientSenderInterface {
 	private ClientDavInterface dav = null;
 	
 	/**
-	 * Fahrstriefen Prameter Importer
-	 */
-	private TestFahrstreifenImporter paraImpFS1 = null;
-	private TestFahrstreifenImporter paraImpFS2 = null;
-	private TestFahrstreifenImporter paraImpFS3 = null;
-	
-	/**
-	 * Gibt an, ob CSV Daten vorhanden sind
-	 */
-	private boolean csvDatenVorhanden = true;
-
-	/**
 	 * Logger
 	 */
 	protected Debug LOGGER;
@@ -118,9 +107,12 @@ implements ClientSenderInterface {
 	@Test
 	public void testAlles()throws Exception{
 		
-		ParaKZDLogImport kzdImport1 = new ParaKZDLogImport(dav, FS1, TEST_DATEN_VERZ + "parameter"); //$NON-NLS-1$
-		ParaKZDLogImport kzdImport2 = new ParaKZDLogImport(dav, FS2, TEST_DATEN_VERZ + "parameter"); //$NON-NLS-1$
-		ParaKZDLogImport kzdImport3 = new ParaKZDLogImport(dav, FS3, TEST_DATEN_VERZ + "parameter"); //$NON-NLS-1$
+		//Definiert die Parameter Datei
+		String csvParameterDatei = "Parameter_TLS";
+		
+		ParaKZDLogImport kzdImport1 = new ParaKZDLogImport(dav, FS1, TEST_DATEN_VERZ + csvParameterDatei); //$NON-NLS-1$
+		ParaKZDLogImport kzdImport2 = new ParaKZDLogImport(dav, FS2, TEST_DATEN_VERZ + csvParameterDatei); //$NON-NLS-1$
+		ParaKZDLogImport kzdImport3 = new ParaKZDLogImport(dav, FS3, TEST_DATEN_VERZ + csvParameterDatei); //$NON-NLS-1$
 
 		kzdImport1.setOptionen(OptionenPlausibilitaetsPruefungLogischVerkehr.KEINE_PRUEFUNG);
 		kzdImport1.importiereParameter(1);
@@ -168,7 +160,9 @@ implements ClientSenderInterface {
 		kzdImport3.importiereParameter(3);
 		
 		//Pruefungen
-		plPruefungKZDLogisch();
+		//plPruefungKZDLogisch();	//Logische Prüfung
+		//plPruefungKZDDiff();		//Pruefung Differentialkontrolle
+		plPruefungKZDAusfall();	//Pruefung Ausfallhaeufigkeit
 	}
 	
 	/*
@@ -176,14 +170,21 @@ implements ClientSenderInterface {
 	 */
 	private void plPruefungKZDLogisch() throws Exception {
 		//Initialisiere Parameter Importer
-		paraImpFS1 = new TestFahrstreifenImporter(this.dav, TEST_DATEN_VERZ + "fahrstreifen1"); //$NON-NLS-1$
+		TestFahrstreifenImporter paraImpFS1 = null;
+		TestFahrstreifenImporter paraImpFS2 = null;
+		TestFahrstreifenImporter paraImpFS3 = null;
+		paraImpFS1 = new TestFahrstreifenImporter(this.dav, TEST_DATEN_VERZ + "fahrstreifen1_ok"); //$NON-NLS-1$
 		paraImpFS2 = new TestFahrstreifenImporter(this.dav, TEST_DATEN_VERZ + "fahrstreifen2"); //$NON-NLS-1$
 		paraImpFS3 = new TestFahrstreifenImporter(this.dav, TEST_DATEN_VERZ + "fahrstreifen3"); //$NON-NLS-1$
 		
 		//Initialisiere Daten-Listener (ClientReceiver)
 		LOGGER.info("Initialisiere Prueferobjekt");
-		PruefeKZDLogisch fsPruefer = new PruefeKZDLogisch(this, new SystemObject[]{FS1, FS2, FS3}, TEST_DATEN_VERZ + "PL-Pruef_LVE_TLS");	
-		//PruefKZDLog fsPruefer = new PruefKZDLog(this, new SystemObject[]{FS1, FS2, FS3}, TEST_DATEN_VERZ + "Messwerters.LVE");
+
+		String csvPruefDatei = "PL-Pruef_LVE_TLS";		//Pruefdatei KZD TLS
+		//String csvPruefDatei = "PL-Pruef_LVE_Grenz";		//Pruefdatei KZD Grenzwerte
+		//String csvPruefDatei = "PL-Pruefung_LZD";		//Pruefdatei LZD
+		
+		PruefeKZDLogisch fsPruefer = new PruefeKZDLogisch(this, new SystemObject[]{FS1, FS2, FS3}, TEST_DATEN_VERZ + csvPruefDatei);
 		
 		//Aktueller Index (Zeile) in CSV Datei
 		int csvIndex = 0;
@@ -201,40 +202,41 @@ implements ClientSenderInterface {
 		//Aktueller Zeitstempel
 		long aktZeit;
 		
-		//Prueffall nettoZeitluecke
+		//Definition der Intervalldauer fuer Prueffall Netto-Zeitluecke
 		/*
 		paraImpFS1.setT(1L);
 		paraImpFS2.setT(1L);
 		paraImpFS3.setT(1L);
 		*/
 		
+		boolean csvDatenVorhanden = true;
+		
 		while(csvDatenVorhanden) {
 			aktZeit = System.currentTimeMillis();  //setze aktuelle Zeit
 
 			//uebergebe CSV Index und Zeitstempel an Listener
-			LOGGER.info("Setze Offset und Zeitstempel fuer Pruefer");
+			LOGGER.info("Setze CSV-Offset und Zeitstempel fuer Pruefer -> Offset:"+csvIndex+" Zeit:"+aktZeit);
 			fsPruefer.listen(csvIndex,aktZeit);
 			
 			//Lese CSV Parameter und Ergebnisdatensatz erstellen + senden
 			//Es werden die Daten der Fahrstreifen FS1-FS3 gesendet bis keine
 			//CSV Daten mehr zur Verfuegung stehen 
-			/*
+			
 			if((zeileFS1 = paraImpFS1.getNaechstenDatensatz(DD_KZD_SEND.getAttributeGroup())) != null) {
-				LOGGER.info("Sende Daten fuer FS1 -> "+aktZeit);		
+				LOGGER.info("Sende Daten fuer FS1");		
 				ResultData resultat1 = new ResultData(FS1, DD_KZD_SEND, aktZeit, zeileFS1);
 				this.dav.sendData(resultat1);
 			} else datenFS1Vorhanden = false;
-			*/
-			
-			if((zeileFS2 = paraImpFS2.getNaechstenDatensatz(DD_KZD_SEND.getAttributeGroup())) != null) {
-				LOGGER.info("Sende Daten fuer FS2 -> "+aktZeit);
-				ResultData resultat2 = new ResultData(FS2, DD_KZD_SEND, aktZeit, zeileFS2);
+
+			if((zeileFS2 = paraImpFS2.getNaechstenDatensatz(DD_LZD_SEND.getAttributeGroup())) != null) {
+				LOGGER.info("Sende Daten fuer FS2");
+				ResultData resultat2 = new ResultData(FS2, DD_LZD_SEND, aktZeit, zeileFS2);
 				this.dav.sendData(resultat2);
 			} else datenFS2Vorhanden = false;
 	
-			if((zeileFS3 = paraImpFS3.getNaechstenDatensatz(DD_KZD_SEND.getAttributeGroup())) != null) {
-				LOGGER.info("Sende Daten fuer FS3 -> "+aktZeit);
-				ResultData resultat3 = new ResultData(FS3, DD_KZD_SEND, aktZeit, zeileFS3);
+			if((zeileFS3 = paraImpFS3.getNaechstenDatensatz(DD_LZD_SEND.getAttributeGroup())) != null) {
+				LOGGER.info("Sende Daten fuer FS3");
+				ResultData resultat3 = new ResultData(FS3, DD_LZD_SEND, aktZeit, zeileFS3);
 				this.dav.sendData(resultat3);
 			} else datenFS3Vorhanden = false;
 
@@ -242,8 +244,7 @@ implements ClientSenderInterface {
 			csvIndex++;
 			
 			//Wenn keine CSV Daten mehr
-			//if(!datenFS1Vorhanden && !datenFS2Vorhanden && !datenFS3Vorhanden)
-			if(!datenFS2Vorhanden && !datenFS3Vorhanden) {
+			if(!datenFS1Vorhanden && !datenFS2Vorhanden && !datenFS3Vorhanden) {
 				csvDatenVorhanden = false;
 				LOGGER.info("Keine Daten mehr vorhanedn. Beende Pruefung");
 			} else {
@@ -253,6 +254,145 @@ implements ClientSenderInterface {
 		}		
 	}
 
+	/*
+	 * Pruefeng Deifferential
+	 */
+	private void plPruefungKZDDiff() throws Exception {
+		//Initialisiere Parameter Importer
+		TestFahrstreifenImporter paraImpFSDiff = null;
+		paraImpFSDiff = new TestFahrstreifenImporter(this.dav, TEST_DATEN_VERZ + "fahrstreifen2_Diff"); //$NON-NLS-1$
+		
+		//Ergibnisdaten der jeweiligen Fahrstreifen
+		Data zeileFSDiff;
+		
+		//Aktuelle Zeit
+		Long aktZeit = System.currentTimeMillis();
+		
+		//Sende Differentialkontrolldaten (3x)
+		int dsCount = 0;
+		for(int i=0;i<3;i++) {
+			while((zeileFSDiff = paraImpFSDiff.getNaechstenDatensatz(DD_KZD_SEND.getAttributeGroup())) != null) {
+				ResultData resultat1 = new ResultData(FS1, DD_KZD_SEND, aktZeit, zeileFSDiff);
+				this.dav.sendData(resultat1);	
+				dsCount++;
+				LOGGER.info("Durchlauf:"+i+" - Datensatz:"+dsCount+" - Zeit:"+aktZeit);
+				
+				aktZeit = aktZeit + Konstante.MINUTE_IN_MS;
+			}
+			paraImpFSDiff.reset();
+			paraImpFSDiff.getNaechsteZeile();
+		}
+	}
+	
+	/*
+	 * Pruefeng Ausfall
+	 */
+	private void plPruefungKZDAusfall() throws Exception {
+		//Initialisiere Parameter Importer
+		TestFahrstreifenImporter paraImpFSOK = null;
+		TestFahrstreifenImporter paraImpFSFehler = null;
+		paraImpFSOK = new TestFahrstreifenImporter(this.dav, TEST_DATEN_VERZ + "fahrstreifen1_OK"); //$NON-NLS-1$
+		paraImpFSFehler = new TestFahrstreifenImporter(this.dav, TEST_DATEN_VERZ + "fahrstreifen1_Fehler"); //$NON-NLS-1$
+		
+		//Ergibnisdaten der jeweiligen Fahrstreifen
+		Data zeileFSOK;
+		Data zeileFSFehler;
+		
+		//Aktuelle Zeit
+		Long aktZeit = System.currentTimeMillis()-(Konstante.MINUTE_IN_MS*2);
+		
+		//Leere Daten (Vortag)
+		
+		for(int i=1;i<=1440;i++) {
+			if((zeileFSOK = paraImpFSOK.getNaechstenDatensatz(DD_KZD_SEND.getAttributeGroup())) == null) {
+				paraImpFSOK.reset();
+				paraImpFSOK.getNaechsteZeile();
+				zeileFSOK = paraImpFSOK.getNaechstenDatensatz(DD_KZD_SEND.getAttributeGroup());
+			}
+			ResultData resultat1 = new ResultData(FS1, DD_KZD_SEND, aktZeit, zeileFSOK);
+			this.dav.sendData(resultat1);
+			
+			aktZeit = aktZeit + Konstante.MINUTE_IN_MS;
+		}
+		
+		
+		//Ueberschreite Ausfallhauufigkeit
+		boolean simAusfall = false;
+		
+		int aAusfall = 0;
+		int aOK = 0;
+		int countAusfall = 0;
+		int countOK = 0;
+		
+		for(int i=1;i<=1440;i++) {
+			if(aAusfall == 0 && aOK == 0) {
+				aOK = getaOK();
+				aAusfall = getaAusfall();
+				//LOGGER.info("Zufallszahlen: OK "+aOK+" - Ausfall "+aAusfall);
+			}
+			
+			if(!simAusfall) {
+				aOK--;
+				countOK++;
+				if(aOK == 0) {
+					LOGGER.info("Wechsel zu Ausfall");
+					simAusfall = true;
+				}
+				//Sende daten
+				//LOGGER.info("OK - Interval "+i+" ("+aOK+") => OK gesamt: "+countOK);
+				if((zeileFSOK = paraImpFSOK.getNaechstenDatensatz(DD_KZD_SEND.getAttributeGroup())) == null) {
+					paraImpFSOK.reset();
+					paraImpFSOK.getNaechsteZeile();
+					zeileFSOK = paraImpFSOK.getNaechstenDatensatz(DD_KZD_SEND.getAttributeGroup());
+				}
+				ResultData resultat1 = new ResultData(FS1, DD_KZD_SEND, aktZeit, zeileFSOK);
+				this.dav.sendData(resultat1);
+				
+			} else {
+				aAusfall--;
+				countAusfall++;
+				if(aAusfall == 0) {
+					LOGGER.info("Wechsel zu OK");
+					simAusfall = false;
+				}
+				//Sende TLS-Datum bei dem mind. 1 Attribut
+				//als Fehlerhaft und/oder Implausibel gekennzeichnet wird
+				//LOGGER.info("Ausfall - Interval "+i+" ("+aAusfall+") => Ausfälle gesamt: "+countAusfall);
+				if((zeileFSFehler = paraImpFSFehler.getNaechstenDatensatz(DD_KZD_SEND.getAttributeGroup())) == null) {
+					paraImpFSFehler.reset();
+					paraImpFSFehler.getNaechsteZeile();
+					zeileFSFehler = paraImpFSFehler.getNaechstenDatensatz(DD_KZD_SEND.getAttributeGroup());
+				}
+				ResultData resultat1 = new ResultData(FS1, DD_KZD_SEND, aktZeit, zeileFSFehler);
+				this.dav.sendData(resultat1);
+			}
+			
+			aktZeit = aktZeit + Konstante.MINUTE_IN_MS;
+		}
+		
+	}
+	
+	private int getaOK() {
+		int iZufall = 0;
+		while(iZufall == 0) {
+			iZufall = zufallsZahl();
+		}
+		return iZufall*20;
+	}
+	
+	private int getaAusfall() {
+		int iZufall = 0;
+		while(iZufall == 0) {
+			iZufall = zufallsZahl();
+		}
+		return iZufall;
+	}
+	
+	private int zufallsZahl() {
+		Double dZufall = Math.random()*5;
+		return dZufall.intValue();
+	}
+	
 	/*
 	 * Weckt diesen Thread
 	 */

@@ -64,11 +64,6 @@ implements ClientReceiverInterface {
 	private ArrayList<Long> alCSVWerttNettoFS3 = new ArrayList<Long>();
 	
 	/*
-	 * Die empfangenen Daten vom DAV
-	 */
-	private Data daten;
-	
-	/*
 	 * Zeitstempel der zu pruefenden Daten
 	 */
 	private long pruefZeitstempel;
@@ -81,9 +76,10 @@ implements ClientReceiverInterface {
 	private boolean pruefungFS3Fertig = false;
 	
 	/**
-	 * Empfange-Datenbeschreibung für KZD
+	 * Empfange-Datenbeschreibung für KZD und LZD
 	 */
 	public static DataDescription DD_KZD_EMPF = null;
+	public static DataDescription DD_LZD_EMPF = null;
 	
 	public PruefeKZDLogisch(PlPruefungLogischLVETest caller, SystemObject[] fs, String csvQuelle)
 	throws Exception {
@@ -95,9 +91,16 @@ implements ClientReceiverInterface {
 			      this.dav.getDataModel().getAspect(DUAKonstanten.ASP_PL_PRUEFUNG_LOGISCH),
 			      (short)0);
 		
+		DD_LZD_EMPF = new DataDescription(this.dav.getDataModel().getAttributeGroup(DUAKonstanten.ATG_LZD),
+			      this.dav.getDataModel().getAspect(DUAKonstanten.ASP_PL_PRUEFUNG_LOGISCH),
+			      (short)0);
+		
 		//Empfänger anmelden
 		this.dav.subscribeReceiver(this, fs, 
 				DD_KZD_EMPF, ReceiveOptions.normal(), ReceiverRole.receiver());
+		
+		this.dav.subscribeReceiver(this, fs, 
+				DD_LZD_EMPF, ReceiveOptions.normal(), ReceiverRole.receiver());
 		
 		try {
 			//CSV Importer initialisieren
@@ -211,6 +214,8 @@ implements ClientReceiverInterface {
 		
 		String[] statusGeteilt = status.split(" ");
 
+		Float guete = null;
+		
 		Integer errCode = 0;
 		
 		for(int i = 0; i<statusGeteilt.length;i++) {
@@ -255,6 +260,13 @@ implements ClientReceiverInterface {
 				hmCSVStatus.put(praefix+".Status.PlFormal.WertMin", DUAKonstanten.JA);
 			else if(!hmCSVStatus.containsKey(praefix+".Status.PlFormal.WertMin"))
 				hmCSVStatus.put(praefix+".Status.PlFormal.WertMin", DUAKonstanten.NEIN);
+			
+			try {
+				guete = Float.parseFloat(statusGeteilt[i].replace(",", "."))*100;
+				hmCSVStatus.put(praefix+".Güte.Index",guete.intValue());
+			} catch (Exception e) {
+				//kein float wert
+			}
 		}
 		
 		if(errCode < 0) {
@@ -265,8 +277,7 @@ implements ClientReceiverInterface {
 			}
 		}
 			
-		
-		hmCSVStatus.put(praefix+".Güte.Index",100);
+		//hmCSVStatus.put(praefix+".Güte.Index",100);
 		
 		return hmCSVStatus;
 	}
@@ -294,22 +305,21 @@ implements ClientReceiverInterface {
 	public void update(ResultData[] results) {
 		for (ResultData result : results) {
 			//Pruefe Ergebnisdatensatz auf Zeitstempel
-			if (result.getDataDescription().equals(DD_KZD_EMPF) &&
+			if ((result.getDataDescription().equals(DD_KZD_EMPF) ||
+				result.getDataDescription().equals(DD_LZD_EMPF)) &&
 				result.getData() != null &&
 				result.getDataTime() == pruefZeitstempel) {
 
-				this.daten = result.getData();  //uebernehme Daten aus Ergebnis
-				
 				try {
 					//Ermittle FS und pruefe Daten
 					if(result.getObject().getName().endsWith(".1")) {
-						//new VergleicheKZD(this,daten,csvZeilenFS1,1,csvOffset);
+						new VergleicheKZD(this,result,csvZeilenFS1,1,csvOffset);
 						pruefungFS1Fertig = true;
 					} else if(result.getObject().getName().endsWith(".2")) {
-						new VergleicheKZD(this,daten,csvZeilenFS2,2,csvOffset);
+						new VergleicheKZD(this,result,csvZeilenFS2,2,csvOffset);
 						pruefungFS2Fertig = true;
 					} else if(result.getObject().getName().endsWith(".3")) {
-						new VergleicheKZD(this,daten,csvZeilenFS3,3,csvOffset);
+						new VergleicheKZD(this,result,csvZeilenFS3,3,csvOffset);
 						pruefungFS3Fertig = true;
 					}
 				} catch(Exception e) {}
@@ -325,7 +335,7 @@ implements ClientReceiverInterface {
 	 * Prueft ob alle 3 FS geprueft worden
 	 */
 	private void pruefungFertig() {
-		if(pruefungFS2Fertig && pruefungFS3Fertig) {
+		if(pruefungFS1Fertig && pruefungFS2Fertig && pruefungFS3Fertig) {
 			LOGGER.info("Pruefung der Fahrstreifen abgeschlossen. Benachrichtige Hauptthread...");
 			doWait();  //Warte 250ms
 			caller.doNotify();  //Benachrichtige aufrufende Klasse
@@ -383,15 +393,7 @@ class VergleicheKZD extends Thread {
 	/*
 	 * Attribut-Praefixe
 	 */
-	private String[] attributNamenPraefix = {"qKfz",
-											 "qPkw",
-											 "qLkw",
-											 "vKfz",
-											 "vPkw",
-											 "vLkw",
-											 "vgKfz",
-											 "b",
-											 "tNetto"};
+	private String[] attributNamenPraefix = null;
 
 	/*
 	 * Attributnamen
@@ -424,16 +426,39 @@ class VergleicheKZD extends Thread {
 	/*
 	 * Initialisiere Pruefer-Klasse
 	 */
-	public VergleicheKZD(PruefeKZDLogisch caller, Data daten, ArrayList<HashMap<String,Integer>> csvZeilen, int fsIndex, int csvOffset) {
+	public VergleicheKZD(PruefeKZDLogisch caller, ResultData result, ArrayList<HashMap<String,Integer>> csvZeilen, int fsIndex, int csvOffset) {
 		this.caller = caller;  //uebernehme aufrufende Klasse
-		this.daten = daten;  //uebernehme Ergebnisdaten
+		this.daten = result.getData();  //uebernehme Ergebnisdaten
 		this.csvZeilen = csvZeilen;  //uebernehme CSV Daten
 		this.fsIndex = fsIndex;  //uebernehme FS-Index
 		this.csvOffset = csvOffset;  //uebernehme CSV Index
+
+		setzeAttributNamen(result.getDataDescription().getAttributeGroup().getPid());
 		
 		this.start();  //starte Thread
 	}
 
+	private void setzeAttributNamen(String atg) {
+		if(atg.equals(DUAKonstanten.ATG_KZD)) {
+			attributNamenPraefix = new String[]{"qKfz",
+												"qPkw",
+												"qLkw",
+												"vKfz",
+												"vPkw",
+												"vLkw",
+												"vgKfz",
+												"b",
+				 								"tNetto"};
+		} else if(atg.equals(DUAKonstanten.ATG_LZD)){
+			attributNamenPraefix = new String[]{"qKfz",
+												"qPkw",
+												"qLkw",
+												"vKfz",
+												"vPkw",
+												"vLkw"};
+		}
+	}
+	
 	public void run() {
 		try {
 			pruefeDaten(csvZeilen, fsIndex, csvOffset);  //Pruefe Daten

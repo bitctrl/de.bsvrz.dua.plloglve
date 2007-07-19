@@ -58,8 +58,6 @@ extends CSVImporter{
 	 */
 	private static long INTERVALL = Konstante.MINUTE_IN_MS; 
 
-	
-
 	/**
 	 * Standardkonstruktor
 	 * 
@@ -102,7 +100,7 @@ extends CSVImporter{
 	 */
 	public final Data getNaechstenDatensatz(final AttributeGroup atg){
 		Data datensatz = DAV.createData(atg);
-		
+
 		if(datensatz != null){
 			String[] zeile = this.getNaechsteZeile();
 			if(zeile != null){
@@ -118,18 +116,25 @@ extends CSVImporter{
 					int vKfz = -1;
 					int qPkw = -1;
 			
+					if(atg.getPid().equals(DUAKonstanten.ATG_LZD))
+						datensatz = setLZDleer(datensatz);
+					
 					datensatz.getTimeValue("T").setMillis(INTERVALL); //$NON-NLS-1$
-					datensatz.getUnscaledValue("ArtMittelwertbildung").set(1); //$NON-NLS-1$
 					datensatz = setAttribut("qKfz", qKfz, datensatz); //$NON-NLS-1$
-					datensatz = setAttribut("vKfz", vKfz, datensatz); //$NON-NLS-1$
 					datensatz = setAttribut("qLkw", qLkw, datensatz); //$NON-NLS-1$
 					datensatz = setAttribut("vLkw", vLkw, datensatz); //$NON-NLS-1$
-					datensatz = setAttribut("qPkw", qPkw, datensatz); //$NON-NLS-1$
 					datensatz = setAttribut("vPkw", vPkw, datensatz); //$NON-NLS-1$				
-					datensatz = setAttribut("vgKfz", vgKfz, datensatz); //$NON-NLS-1$
-					datensatz = setAttribut("b", b, datensatz); //$NON-NLS-1$
-					datensatz = setAttribut("tNetto", tNetto, datensatz); //$NON-NLS-1$
-					datensatz = setAttribut("sKfz", sKfz, datensatz); //$NON-NLS-1$
+					
+					if(!atg.getPid().equals(DUAKonstanten.ATG_LZD)) {
+						datensatz.getUnscaledValue("ArtMittelwertbildung").set(1); //$NON-NLS-1$					
+						datensatz = setAttribut("vKfz", vKfz, datensatz); //$NON-NLS-1$
+						datensatz = setAttribut("qPkw", qPkw, datensatz); //$NON-NLS-1$
+						datensatz = setAttribut("vgKfz", vgKfz, datensatz); //$NON-NLS-1$
+						datensatz = setAttribut("b", b, datensatz); //$NON-NLS-1$
+						datensatz = setAttribut("tNetto", tNetto, datensatz); //$NON-NLS-1$
+						datensatz = setAttribut("sKfz", sKfz, datensatz); //$NON-NLS-1$
+					}
+				
 				}catch(ArrayIndexOutOfBoundsException ex){
 					datensatz = null;
 				}
@@ -167,4 +172,17 @@ extends CSVImporter{
 		return datensatz;
 	}
 	
+	private final  Data setLZDleer(Data datensatz) {
+		String[] praefix = new String[] {"q","v","s","v85"};
+		String[] aName = new String[] {"Kfz","PkwÄ","KfzNk","PkwG","Pkw","Krad","Lfw","LkwÄ",
+									   "PkwA","Lkw","Bus","LkwK","LkwA","SattelKfz"};
+
+		for(int i=0;i<praefix.length;i++) {
+			for(int j=0;j<aName.length;j++) {
+				datensatz = setAttribut(praefix[i]+aName[j], -1, datensatz);
+			}
+		}
+		
+		return datensatz;
+	}
 }
