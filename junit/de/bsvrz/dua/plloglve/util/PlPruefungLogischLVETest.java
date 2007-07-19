@@ -160,9 +160,9 @@ implements ClientSenderInterface {
 		kzdImport3.importiereParameter(3);
 		
 		//Pruefungen
-		//plPruefungKZDLogisch();	//Logische Prüfung
+		plPruefungKZDLogisch();	//Logische Prüfung
 		//plPruefungKZDDiff();		//Pruefung Differentialkontrolle
-		plPruefungKZDAusfall();	//Pruefung Ausfallhaeufigkeit
+		//plPruefungKZDAusfall();	//Pruefung Ausfallhaeufigkeit
 	}
 	
 	/*
@@ -173,7 +173,7 @@ implements ClientSenderInterface {
 		TestFahrstreifenImporter paraImpFS1 = null;
 		TestFahrstreifenImporter paraImpFS2 = null;
 		TestFahrstreifenImporter paraImpFS3 = null;
-		paraImpFS1 = new TestFahrstreifenImporter(this.dav, TEST_DATEN_VERZ + "fahrstreifen1_ok"); //$NON-NLS-1$
+		paraImpFS1 = new TestFahrstreifenImporter(this.dav, TEST_DATEN_VERZ + "fahrstreifen1_Korr"); //$NON-NLS-1$
 		paraImpFS2 = new TestFahrstreifenImporter(this.dav, TEST_DATEN_VERZ + "fahrstreifen2"); //$NON-NLS-1$
 		paraImpFS3 = new TestFahrstreifenImporter(this.dav, TEST_DATEN_VERZ + "fahrstreifen3"); //$NON-NLS-1$
 		
@@ -316,7 +316,7 @@ implements ClientSenderInterface {
 		}
 		
 		
-		//Ueberschreite Ausfallhauufigkeit
+		//Ueberschreite Ausfallhaeufigkeit
 		boolean simAusfall = false;
 		
 		int aAusfall = 0;
