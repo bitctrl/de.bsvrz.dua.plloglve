@@ -1,8 +1,5 @@
 package de.bsvrz.dua.plloglve.util;
 
-
-import java.io.*;
-
 import org.junit.Before;
 import org.junit.Test;
 
@@ -16,8 +13,11 @@ import stauma.dav.configuration.interfaces.SystemObject;
 //import de.bsvrz.dua.plloglve.plloglve.standard.KzdPLFahrStreifen;
 import de.bsvrz.dua.plloglve.plloglve.typen.OptionenPlausibilitaetsPruefungLogischVerkehr;
 import de.bsvrz.dua.plloglve.util.para.ParaKZDLogImport;
-import de.bsvrz.dua.plloglve.pruef.PruefKZDLog;
+import de.bsvrz.dua.plloglve.pruef.PruefeKZDLogisch;
 import de.bsvrz.sys.funclib.bitctrl.dua.DUAKonstanten;
+//import de.bsvrz.sys.funclib.bitctrl.dua.DUAUtensilien;
+import sys.funclib.debug.Debug;
+import sys.funclib.ArgumentList;
 
 /**
  * Automatisierter Test nach Pr¸fspezifikation f¸r SWE Pl-Pr¸fung logisch LVE
@@ -77,9 +77,11 @@ implements ClientSenderInterface {
 	private boolean csvDatenVorhanden = true;
 
 	/**
-	 * TODO: Log Writer
+	 * Logger
 	 */
-	public BufferedWriter br;
+	protected Debug LOGGER;
+	private String[] argumente = new String[] {"-debugLevelFileText=ALL"};
+	private ArgumentList alLogger = new ArgumentList(argumente);
 	
 	/**
 	 * {@inheritDoc}
@@ -106,8 +108,8 @@ implements ClientSenderInterface {
 		this.dav.subscribeSender(this, new SystemObject[]{FS1, FS2, FS3}, 
 				DD_LZD_SEND, SenderRole.source());
 		
-		//TODO: Initialisiere Log Writer
-		this.br = new BufferedWriter(new FileWriter("C:\\pr.log"));
+		Debug.init("PlPruefungLogisch", alLogger);
+		LOGGER = Debug.getLogger();
 	}
 
 	/**
@@ -165,16 +167,22 @@ implements ClientSenderInterface {
 		kzdImport3.setOptionen(OptionenPlausibilitaetsPruefungLogischVerkehr.SETZE_MIN_MAX);
 		kzdImport3.importiereParameter(3);
 		
+		//Pruefungen
+		plPruefungKZDLogisch();
+	}
+	
+	/*
+	 * Pruefeng Logisch
+	 */
+	private void plPruefungKZDLogisch() throws Exception {
 		//Initialisiere Parameter Importer
 		paraImpFS1 = new TestFahrstreifenImporter(this.dav, TEST_DATEN_VERZ + "fahrstreifen1"); //$NON-NLS-1$
-		paraImpFS2 = new TestFahrstreifenImporter(this.dav, TEST_DATEN_VERZ + "fahrstreifen2kon"); //$NON-NLS-1$
+		paraImpFS2 = new TestFahrstreifenImporter(this.dav, TEST_DATEN_VERZ + "fahrstreifen2"); //$NON-NLS-1$
 		paraImpFS3 = new TestFahrstreifenImporter(this.dav, TEST_DATEN_VERZ + "fahrstreifen3"); //$NON-NLS-1$
 		
-		//TODO: Log
-		System.out.println("MT:Init Pruefer");
-		
 		//Initialisiere Daten-Listener (ClientReceiver)
-		PruefKZDLog fsPruefer = new PruefKZDLog(this, new SystemObject[]{FS1, FS2, FS3}, TEST_DATEN_VERZ + "PL-Pruef_LVE_TLS");	
+		LOGGER.info("Initialisiere Prueferobjekt");
+		PruefeKZDLogisch fsPruefer = new PruefeKZDLogisch(this, new SystemObject[]{FS1, FS2, FS3}, TEST_DATEN_VERZ + "PL-Pruef_LVE_TLS");	
 		//PruefKZDLog fsPruefer = new PruefKZDLog(this, new SystemObject[]{FS1, FS2, FS3}, TEST_DATEN_VERZ + "Messwerters.LVE");
 		
 		//Aktueller Index (Zeile) in CSV Datei
@@ -185,10 +193,6 @@ implements ClientSenderInterface {
 		Data zeileFS2;
 		Data zeileFS3;
 		
-		Data zeileFS1LZ;
-		Data zeileFS2LZ;
-		Data zeileFS3LZ;
-		
 		//Gibt an, ob fuer den entsprechenden Fahrstriefen CSV Daten vorhanden sind
 		boolean datenFS1Vorhanden = true;
 		boolean datenFS2Vorhanden = true;
@@ -197,21 +201,18 @@ implements ClientSenderInterface {
 		//Aktueller Zeitstempel
 		long aktZeit;
 		
-		//zeileFS2LZ = paraImpFS2.getNaechstenDatensatz(DD_LZD_SEND.getAttributeGroup());
-		//System.out.println(zeileFS2LZ.toString());
-		//ResultData resultat2LZ = new ResultData(FS2, DD_LZD_SEND, System.currentTimeMillis(), zeileFS2LZ);
-		//this.dav.sendData(resultat2LZ);
-		//paraImpFS2.reset();
-
+		//Prueffall nettoZeitluecke
+		/*
+		paraImpFS1.setT(1L);
 		paraImpFS2.setT(1L);
 		paraImpFS3.setT(1L);
+		*/
 		
 		while(csvDatenVorhanden) {
 			aktZeit = System.currentTimeMillis();  //setze aktuelle Zeit
-			//TODO: Log
-			System.out.println("MT:Setze Offset und Zeitstempel fuer Pruefer");
-			
+
 			//uebergebe CSV Index und Zeitstempel an Listener
+			LOGGER.info("Setze Offset und Zeitstempel fuer Pruefer");
 			fsPruefer.listen(csvIndex,aktZeit);
 			
 			//Lese CSV Parameter und Ergebnisdatensatz erstellen + senden
@@ -219,23 +220,20 @@ implements ClientSenderInterface {
 			//CSV Daten mehr zur Verfuegung stehen 
 			/*
 			if((zeileFS1 = paraImpFS1.getNaechstenDatensatz(DD_KZD_SEND.getAttributeGroup())) != null) {
-				//TODO: Log
-				System.out.println("MT:Sende Daten fuer FS1 -> "+aktZeit);		
+				LOGGER.info("Sende Daten fuer FS1 -> "+aktZeit);		
 				ResultData resultat1 = new ResultData(FS1, DD_KZD_SEND, aktZeit, zeileFS1);
 				this.dav.sendData(resultat1);
 			} else datenFS1Vorhanden = false;
 			*/
 			
 			if((zeileFS2 = paraImpFS2.getNaechstenDatensatz(DD_KZD_SEND.getAttributeGroup())) != null) {
-				//TODO: Log
-				System.out.println("MT:Sende Daten fuer FS2 -> "+aktZeit);
+				LOGGER.info("Sende Daten fuer FS2 -> "+aktZeit);
 				ResultData resultat2 = new ResultData(FS2, DD_KZD_SEND, aktZeit, zeileFS2);
 				this.dav.sendData(resultat2);
 			} else datenFS2Vorhanden = false;
 	
 			if((zeileFS3 = paraImpFS3.getNaechstenDatensatz(DD_KZD_SEND.getAttributeGroup())) != null) {
-				//TODO: Log
-				System.out.println("MT:Sende Daten fuer FS3 -> "+aktZeit);
+				LOGGER.info("Sende Daten fuer FS3 -> "+aktZeit);
 				ResultData resultat3 = new ResultData(FS3, DD_KZD_SEND, aktZeit, zeileFS3);
 				this.dav.sendData(resultat3);
 			} else datenFS3Vorhanden = false;
@@ -247,17 +245,12 @@ implements ClientSenderInterface {
 			//if(!datenFS1Vorhanden && !datenFS2Vorhanden && !datenFS3Vorhanden)
 			if(!datenFS2Vorhanden && !datenFS3Vorhanden) {
 				csvDatenVorhanden = false;
-				System.out.println("MT:Keine Daten");  //Breche Datensendung ab
+				LOGGER.info("Keine Daten mehr vorhanedn. Beende Pruefung");
 			} else {
-				System.out.println("MT:Warte");
+				LOGGER.info("Warte auf Pruefer");
 				doWait();  //Warte auf Ueberpruefung der FS1-FS3
 			}
-		}
-		
-		//TODO: Schlieﬂe Log Writer
-		this.br.write("\n\r");
-		this.br.flush();
-		this.br.close();
+		}		
 	}
 
 	/*
