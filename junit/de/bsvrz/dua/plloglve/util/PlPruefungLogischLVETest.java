@@ -33,8 +33,7 @@ implements ClientSenderInterface {
 	/**
 	 * Verzeichnis, in dem sich die CSV-Dateien mit den Testdaten befinden
 	 */
-	protected static final String TEST_DATEN_VERZ =
-		".\\testDaten\\"; //$NON-NLS-1$
+	protected static final String TEST_DATEN_VERZ = ".\\testDaten\\"; //$NON-NLS-1$
 	
 	/**
 	 * TestFS1
@@ -67,7 +66,8 @@ implements ClientSenderInterface {
 	private ClientDavInterface dav = null;
 	
 	/**
-	 * Logger
+	 * Logger und Loggerattribute
+	 * 
 	 * Pfadangabe mit Argument: -debugFilePath=[Pfad]
 	 */
 	protected Debug LOGGER;
@@ -99,18 +99,24 @@ implements ClientSenderInterface {
 		this.dav.subscribeSender(this, new SystemObject[]{FS1, FS2, FS3}, 
 				DD_LZD_SEND, SenderRole.source());
 		
-		Pause.warte(1000L);
 		Debug.init("PlPruefungLogisch", alLogger);
 		LOGGER = Debug.getLogger();
 	}
 
 	/**
 	 * Gesamter Test nach Prüfspezifikation
+	 * 
+	 * Definition der Grenzwertparameter
 	 */
 	@Test
 	public void testAlles()throws Exception{
 		
-		//Definiert die Parameter Datei
+		/*
+		 * Definiert die verwendete Parameter CSV-Datei
+		 * 
+		 * Prameter.csv: Logische Prüfung mit Grenzwerten
+		 * Prameter_TLS.csv: Logische Prüfung ohne Grenzwerte (TLS)
+		 */
 		String csvParameterDatei = "Parameter_TLS";
 		
 		ParaKZDLogImport kzdImport1 = new ParaKZDLogImport(dav, FS1, TEST_DATEN_VERZ + csvParameterDatei); //$NON-NLS-1$
@@ -162,20 +168,42 @@ implements ClientSenderInterface {
 		kzdImport3.setOptionen(OptionenPlausibilitaetsPruefungLogischVerkehr.SETZE_MIN_MAX);
 		kzdImport3.importiereParameter(3);
 		
-		//Pruefungen
-		plPruefungKZDLogisch();	//Logische Prüfung
-		//plPruefungKZDDiff();		//Pruefung Differentialkontrolle
-		//plPruefungKZDAusfall();	//Pruefung Ausfallhaeufigkeit
+		/*
+		 * Prüffälle
+		 * 
+		 * plPruefungKZDLogisch: Logische Prüfung
+		 * plPruefungKZDDiff: Prüfung Differentialkontrolle
+		 * plPruefungKZDAusfall: Prüfung Ausfallhäufigkeit
+		 * 
+		 * Weitere Einstellungen können in den entsprechenden Funktionen
+		 * vorgenommen werden
+		 */
+		plPruefungKZDLogisch();
+		//plPruefungKZDDiff();
+		//plPruefungKZDAusfall();
 	}
 	
-	/*
-	 * Pruefeng Logisch
+	/**
+	 * Prüfen der logisch Plausibilisierung
+	 * 
+	 * Für Grenzwertprüfung ist Parametrierung (Parameter.csv) entsprechend
+	 * zu ändern
 	 */
 	private void plPruefungKZDLogisch() throws Exception {
 		//Initialisiere Parameter Importer
 		TestFahrstreifenImporter paraImpFS1 = null;
 		TestFahrstreifenImporter paraImpFS2 = null;
 		TestFahrstreifenImporter paraImpFS3 = null;
+		
+		/*
+		 * Definition der Quell CSV-Dateien
+		 * 
+		 * Fahrstreifen 1 wird in korrigierter Form (vLkw < 255)
+		 * verwendet
+		 * 
+		 * Für Grenzwertprüfung ist auf Import der korrekten
+		 * Parameter (Prameter.csv) zu achten 
+		 */
 		paraImpFS1 = new TestFahrstreifenImporter(this.dav, TEST_DATEN_VERZ + "fahrstreifen1_Korr"); //$NON-NLS-1$
 		paraImpFS2 = new TestFahrstreifenImporter(this.dav, TEST_DATEN_VERZ + "fahrstreifen2"); //$NON-NLS-1$
 		paraImpFS3 = new TestFahrstreifenImporter(this.dav, TEST_DATEN_VERZ + "fahrstreifen3"); //$NON-NLS-1$
@@ -183,6 +211,13 @@ implements ClientSenderInterface {
 		//Initialisiere Daten-Listener (ClientReceiver)
 		LOGGER.info("Initialisiere Prueferobjekt");
 
+		/*
+		 * Definition der Soll CSV-Datei
+		 * 
+		 * PL-Pruef_LVE_TLS.csv: Soll-Werte der logischen Prüfung ohne Grenzwerte
+		 * PL-Pruef_LVE_Grenz.csv: Soll-Werte der logischen Prüfung mit Grenzwerten
+		 * PL-Pruefung_LZD.csv: Soll-Werte der logischen Prüfung von LZD 
+		 */
 		String csvPruefDatei = "PL-Pruef_LVE_TLS";		//Pruefdatei KZD TLS
 		//String csvPruefDatei = "PL-Pruef_LVE_Grenz";		//Pruefdatei KZD Grenzwerte
 		//String csvPruefDatei = "PL-Pruefung_LZD";		//Pruefdatei LZD
@@ -203,20 +238,11 @@ implements ClientSenderInterface {
 		boolean datenFS3Vorhanden = true;
 		
 		//Aktueller Zeitstempel
-		long aktZeit;
-		
-		//Definition der Intervalldauer fuer Prueffall Netto-Zeitluecke
-		/*
-		paraImpFS1.setT(1L);
-		paraImpFS2.setT(1L);
-		paraImpFS3.setT(1L);
-		*/
+		long aktZeit = System.currentTimeMillis();  //setze aktuelle Zeit
 		
 		boolean csvDatenVorhanden = true;
 		
 		while(csvDatenVorhanden) {
-			aktZeit = System.currentTimeMillis();  //setze aktuelle Zeit
-
 			//uebergebe CSV Index und Zeitstempel an Listener
 			LOGGER.info("Setze CSV-Offset und Zeitstempel fuer Pruefer -> Offset:"+csvIndex+" Zeit:"+aktZeit);
 			fsPruefer.listen(csvIndex,aktZeit);
@@ -246,6 +272,10 @@ implements ClientSenderInterface {
 			//Erhoehe CSV Index
 			csvIndex++;
 			
+			
+			//Erhöhe Zeitstempel
+			aktZeit = aktZeit + Konstante.MINUTE_IN_MS;
+			
 			//Wenn keine CSV Daten mehr
 			if(!datenFS1Vorhanden && !datenFS2Vorhanden && !datenFS3Vorhanden) {
 				csvDatenVorhanden = false;
@@ -257,12 +287,16 @@ implements ClientSenderInterface {
 		}		
 	}
 
-	/*
-	 * Pruefeng Deifferential
+	/**
+	 * Prüfung der Differentialkontrolle
 	 */
 	private void plPruefungKZDDiff() throws Exception {
 		//Initialisiere Parameter Importer
 		TestFahrstreifenImporter paraImpFSDiff = null;
+		/*
+		 * Definition der Quell CSV-Datei entsprechend der
+		 * Prüfspezifikation (Prüffall 20)
+		 */
 		paraImpFSDiff = new TestFahrstreifenImporter(this.dav, TEST_DATEN_VERZ + "fahrstreifen2_Diff"); //$NON-NLS-1$
 		
 		//Ergibnisdaten der jeweiligen Fahrstreifen
@@ -287,13 +321,27 @@ implements ClientSenderInterface {
 		}
 	}
 	
-	/*
-	 * Pruefeng Ausfall
+	/**
+	 * Prüfung der Ausfallhäufigkeit
+	 * 
+	 * Simuliert werden kann das Senden von fehlerhaften/implausiblen
+	 * Daten oder Datenausfall 
 	 */
 	private void plPruefungKZDAusfall() throws Exception {
 		//Initialisiere Parameter Importer
 		TestFahrstreifenImporter paraImpFSOK = null;
 		TestFahrstreifenImporter paraImpFSFehler = null;
+		
+		/*
+		 * Definition der Quell CSV-Dateien
+		 * 
+		 * paraImpFSOK: Quell-Daten welche durch vorherige Prüfungen
+		 * 				(logisch + differential) nicht Implausibel
+		 * 				und/oder Fehlerhaft markiert wurden
+		 * 
+		 * paraImpFSFehler: Quell-Daten welche durch vorherige Prüfungen
+		 * 					Implausibel und/oder Fehlerhaft markiert werden
+		 */
 		paraImpFSOK = new TestFahrstreifenImporter(this.dav, TEST_DATEN_VERZ + "fahrstreifen1_OK"); //$NON-NLS-1$
 		paraImpFSFehler = new TestFahrstreifenImporter(this.dav, TEST_DATEN_VERZ + "fahrstreifen1_Fehler"); //$NON-NLS-1$
 		
@@ -358,8 +406,14 @@ implements ClientSenderInterface {
 					LOGGER.info("Wechsel zu OK");
 					simAusfall = false;
 				}
-				//Sende TLS-Datum bei dem mind. 1 Attribut
-				//als Fehlerhaft und/oder Implausibel gekennzeichnet wird
+				/*
+				 * Sende Datum bei dem mind. 1 Attribut als Fehlerhaft
+				 * und/oder Implausibel gekennzeichnet wird
+				 *
+				 * Durch nichtversenden dieser Daten kann ein Datenausfall
+				 * simuliert werden 
+				 */
+
 				//LOGGER.info("Ausfall - Interval "+i+" ("+aAusfall+") => Ausfälle gesamt: "+countAusfall);
 				if((zeileFSFehler = paraImpFSFehler.getNaechstenDatensatz(DD_KZD_SEND.getAttributeGroup())) == null) {
 					paraImpFSFehler.reset();
@@ -368,6 +422,7 @@ implements ClientSenderInterface {
 				}
 				ResultData resultat1 = new ResultData(FS1, DD_KZD_SEND, aktZeit, zeileFSFehler);
 				this.dav.sendData(resultat1);
+				
 			}
 			
 			aktZeit = aktZeit + Konstante.MINUTE_IN_MS;
@@ -375,6 +430,12 @@ implements ClientSenderInterface {
 		
 	}
 	
+	/**
+	 * Gibt eine Zufallszahl (1-100) zurück, welche die Anzahl der
+	 * Daten repräsentiert, welche als nicht fehlerhaft und/oder
+	 * implausibel markiert werden
+	 * @return Anzahl der zu sendenden fehlerfreien Daten
+	 */
 	private int getaOK() {
 		int iZufall = 0;
 		while(iZufall == 0) {
@@ -383,6 +444,12 @@ implements ClientSenderInterface {
 		return iZufall*20;
 	}
 	
+	/**
+	 * Gibt eine Zufallszahl (1-5) zurück, welche die Anzahl der
+	 * Daten repräsentiert, welche als fehlerhaft und/oder
+	 * implausibel markiert werden
+	 * @return Anzahl der zu sendenden fehlerhaften Daten
+	 */
 	private int getaAusfall() {
 		int iZufall = 0;
 		while(iZufall == 0) {
@@ -391,12 +458,16 @@ implements ClientSenderInterface {
 		return iZufall;
 	}
 	
+	/**
+	 * Gibt eine Zufallszahl (0-5) zurück
+	 * @return Zufallszahl (0-5)
+	 */
 	private int zufallsZahl() {
 		Double dZufall = Math.random()*5;
 		return dZufall.intValue();
 	}
 	
-	/*
+	/**
 	 * Weckt diesen Thread
 	 */
 	public void doNotify() {
@@ -405,8 +476,8 @@ implements ClientSenderInterface {
 		}
 	}
 	
-	/*
-	 * Laessten diesen Thread warten
+	/**
+	 * Lässten diesen Thread warten
 	 */
 	private void doWait() {
 		synchronized(this) {

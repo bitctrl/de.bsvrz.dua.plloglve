@@ -25,17 +25,17 @@ import sys.funclib.debug.Debug;
 public class PruefeKZDLogisch
 implements ClientReceiverInterface {
 
-	/*
+	/**
 	 * Logger
 	 */
 	protected Debug LOGGER = Debug.getLogger();
 	
-	/*
+	/**
 	 * Datenverteilerverbindung von der aufrufenden Klasse
 	 */
 	private ClientDavInterface dav;
 	
-	/*
+	/**
 	 * Aufrunfende Klasse
 	 */
 	private PlPruefungLogischLVETest caller;
@@ -45,12 +45,12 @@ implements ClientReceiverInterface {
 	 */
 	private CSVImporter csvImp;
 	
-	/*
+	/**
 	 * CSV Index
 	 */
 	private int csvOffset;
 	
-	/*
+	/**
 	 * Speichert die eingelesenen CSV Daten
 	 */
 	private ArrayList<HashMap<String,Integer>> csvZeilenFS1 = new ArrayList<HashMap<String,Integer>>();
@@ -63,12 +63,12 @@ implements ClientReceiverInterface {
 	private ArrayList<Long> alCSVWerttNettoFS2 = new ArrayList<Long>();
 	private ArrayList<Long> alCSVWerttNettoFS3 = new ArrayList<Long>();
 	
-	/*
+	/**
 	 * Zeitstempel der zu pruefenden Daten
 	 */
 	private long pruefZeitstempel;
 	
-	/*
+	/**
 	 * Gibt an, ob die jeweilige Fahrstreifenpruefung erfolgt ist
 	 */
 	private boolean pruefungFS1Fertig = false;
@@ -81,6 +81,14 @@ implements ClientReceiverInterface {
 	public static DataDescription DD_KZD_EMPF = null;
 	public static DataDescription DD_LZD_EMPF = null;
 	
+	/**
+	 * Listener, der auf ein bestimmtes Ergenis wartet und dann eine Prüfung
+	 * der Ergebnisdaten durchführt
+	 * @param caller Die aufrufende Klasse
+	 * @param fs Die zu überwachenden Fahrstreifenobjekte
+	 * @param csvQuelle Die Quell CSV-Datei mit Soll-Werten
+	 * @throws Exception
+	 */
 	public PruefeKZDLogisch(PlPruefungLogischLVETest caller, SystemObject[] fs, String csvQuelle)
 	throws Exception {
 		this.caller = caller;  //aufrufende Klasse uebernehmen
@@ -112,8 +120,11 @@ implements ClientReceiverInterface {
 		csvEinlesen();  //CSV einlesen
 	}
 	
-	/*
-	 * Setze Daten für Empfang
+	/**
+	 * Setzt den zu verwendenden Offset in der CSV-Datei und den
+	 * Zeitstempel des Ergebnisses, auf das gewartet werden soll
+	 * @param csvOffset Zu verwendender Offset in CSV-Datei
+	 * @param pruefZeitstempel Ergebniszeitstempel, auf den gewartet wird
 	 */
 	public void listen(int csvOffset, long pruefZeitstempel) {
 		this.csvOffset = csvOffset;  //CSV-Index uebernehmen
@@ -125,7 +136,7 @@ implements ClientReceiverInterface {
 		pruefungFS3Fertig = false;
 	}
 	
-	/*
+	/**
 	 * CSV-Einlesen
 	 */
 	private void csvEinlesen() {
@@ -144,6 +155,13 @@ implements ClientReceiverInterface {
 		}
 	}
 	
+	/**
+	 * Gibt eine HashMap mit den Soll-Werten eines Fahrstreifens zurück
+	 * @param aktZeile Der Prüf-CSV Offset
+	 * @param fsIndex Der zu verwendende Fahrstreifen
+	 * @return Fahrstreifen-Soll-Daten <AttributPfad,Wert> 
+	 * @throws Exception
+	 */
 	private HashMap<String,Integer> csvLeseZeile(String[] aktZeile, int fsIndex) throws Exception {
 		int verschiebung = (fsIndex-1)*2;
 
@@ -205,8 +223,11 @@ implements ClientReceiverInterface {
 	
 	
 	
-	/*
-	 * CSV-Status einlesen
+	/**
+	 * Liest ein Statusfeld, extrahiert Daten in eine HashMap und gibt diese zurück
+	 * @param status Die Statuszeile. Parameter durch Leerzeichen getrennt
+	 * @param praefix Das Attribut des auszulesenden Status
+	 * @return Statusdaten <Attributpfad,Wert>
 	 */
 	private HashMap<String,Integer> csvLeseStatus(String status, String praefix) {
 		
@@ -282,7 +303,7 @@ implements ClientReceiverInterface {
 		return hmCSVStatus;
 	}
 
-	/*
+	/**
 	 * Uebergebe CSV-Werte (tNetto)
 	 */
 	public long getCSVWerttNettoFS1(int csvOffset) {
@@ -331,7 +352,7 @@ implements ClientReceiverInterface {
 		}
 	}
 	
-	/*
+	/**
 	 * Prueft ob alle 3 FS geprueft worden
 	 */
 	private void pruefungFertig() {
@@ -342,7 +363,7 @@ implements ClientReceiverInterface {
 		}
 	}
 	
-	/*
+	/**
 	 * Warten (Default: 250ms)
 	 */
 	private void doWait() {
@@ -353,7 +374,9 @@ implements ClientReceiverInterface {
 		}
 	}
 	
-	//Diesen Thread wecken
+	/**
+	 * Diesen Thread wecken
+	 */
 	public void doNotify() {
 		synchronized(this) {
 			this.notify();
@@ -362,40 +385,40 @@ implements ClientReceiverInterface {
 	
 }
 
-/*
+/**
  * Vergleicht CSV Daten mit Ergebnisdaten
  */
 class VergleicheKZD extends Thread {
 
-	/*
+	/**
 	 * Logger
 	 */
 	protected Debug LOGGER = Debug.getLogger();
 	private String pruefLog;
 	
-	/*
+	/**
 	 * Aufrufende Klasse
 	 */
 	private PruefeKZDLogisch caller;
 	
-	/*
-	 * Uebergebene Ergebnisdaten
+	/**
+	 * Übergebene Ergebnisdaten
 	 */
 	private Data daten;
 		
-	/*
+	/**
 	 * tNetto werte der Ergebnisdaten
 	 */
 	private long resultWerttNettoFS1;
 	private long resultWerttNettoFS2;
 	private long resultWerttNettoFS3;
 
-	/*
+	/**
 	 * Attribut-Praefixe
 	 */
 	private String[] attributNamenPraefix = null;
 
-	/*
+	/**
 	 * Attributnamen
 	 */
 	private String[] attributNamen = {".Wert",
@@ -408,23 +431,29 @@ class VergleicheKZD extends Thread {
 	  								  ".Status.MessWertErsetzung.Interpoliert",
 	  								  ".Güte.Index"};
 
-	/*
+	/**
 	 * Uebergebene CSV Zeilen des jeweiligen FS
 	 */
 	ArrayList<HashMap<String,Integer>> csvZeilen;
 	
-	/*
+	/**
 	 * Uebergebener Fahrstreifenindex (1-3)
 	 */
 	int fsIndex;
 	
-	/*
+	/**
 	 * Uebergebener CSV Index
 	 */
 	int csvOffset;
 	
-	/*
-	 * Initialisiere Pruefer-Klasse
+	/**
+	 * Erstellt einen Prüfthread welcher Soll-Werte und Ergebniswerte vergleicht und
+	 * das Ergebnis ausgibt
+	 * @param caller Die aufrufende Klasse
+	 * @param result Das zu prüfende Ergebnis
+	 * @param csvZeilen die Soll-CSV-Werte (aller Fahrstreifen)
+	 * @param fsIndex Der zu prüfende Fahrstreifen
+	 * @param csvOffset Der zu verwendende CSV-Offset
 	 */
 	public VergleicheKZD(PruefeKZDLogisch caller, ResultData result, ArrayList<HashMap<String,Integer>> csvZeilen, int fsIndex, int csvOffset) {
 		this.caller = caller;  //uebernehme aufrufende Klasse
@@ -438,6 +467,10 @@ class VergleicheKZD extends Thread {
 		this.start();  //starte Thread
 	}
 
+	/**
+	 * Setze Attributnamen entsprechend der Attributgruppe
+	 * @param atg Zu verwendende Attributgruppe
+	 */
 	private void setzeAttributNamen(String atg) {
 		if(atg.equals(DUAKonstanten.ATG_KZD)) {
 			attributNamenPraefix = new String[]{"qKfz",
@@ -459,13 +492,16 @@ class VergleicheKZD extends Thread {
 		}
 	}
 	
+	/**
+	 * Startet Thread
+	 */
 	public void run() {
 		try {
 			pruefeDaten(csvZeilen, fsIndex, csvOffset);  //Pruefe Daten
 		} catch(Exception e){}
 	}
 	
-	/*
+	/**
 	 * Lese Ergebnisdaten
 	 */
 	private HashMap<String,Integer> ergebnisLesen(int fsIndex) {
@@ -499,15 +535,14 @@ class VergleicheKZD extends Thread {
 		return hmResult;
 	}
 	
-	/*
-	 * pruefe Daten
+	/**
+	 * prüfe Daten
 	 */
 	private void pruefeDaten(ArrayList<HashMap<String,Integer>> csvZeilen, int fsIndex, int csvOffset) throws Exception {
-		String ident = "["+fsIndex+"-"+csvOffset+"] ";  //FS + CSV Index
+		String ident = "[FS:"+fsIndex+"-DS:"+csvOffset+"] ";  //FS + CSV Index
 		LOGGER.info("Pruefe Fahrstreifendatum "+ident);
 		
 		HashMap<String,Integer> hmCSV = csvZeilen.get(csvOffset);
-
 		HashMap<String,Integer> hmResult = ergebnisLesen(fsIndex);
 		
 		long csvWerttNetto = -10;
@@ -532,25 +567,39 @@ class VergleicheKZD extends Thread {
 		}
 		
 		String attribut;
+		String sollWertErl = "";
+		String istWertErl = "";
+		
 		LOGGER.info(ident+"HashMap Groesse: CSV("+hmCSV.size()+") <> Results("+hmResult.size()+")");
 		
 		pruefLog = "";
 		for(int i=0;i<attributNamenPraefix.length;i++) {
 			for(int j=0;j<attributNamen.length;j++) {
 				attribut = attributNamenPraefix[i]+attributNamen[j];
+				
 				if(!attribut.equals("tNetto.Wert")) {
+
+					if(attribut.endsWith(".Wert")) {
+						sollWertErl = wertErl(hmCSV.get(attribut));
+						istWertErl = wertErl(hmResult.get(attribut));
+					}
+					
 					if(!hmCSV.get(attribut).equals(hmResult.get(attribut))) {
-						LOGGER.error(ident+"DIF ("+attribut+"):"+ hmCSV.get(attribut) +" <> "+hmResult.get(attribut));
-						pruefLog += ident+"DIF ("+attribut+"):"+ hmCSV.get(attribut) +" <> "+hmResult.get(attribut)+"\n\r";
+						LOGGER.warning(ident+"DIF ("+attribut+"):"+ hmCSV.get(attribut)+ sollWertErl +" (SOLL)<>(IST) "+hmResult.get(attribut) + istWertErl);
+						pruefLog += ident+"DIF ("+attribut+"):"+ hmCSV.get(attribut) + sollWertErl +" (SOLL)<>(IST) "+hmResult.get(attribut) + istWertErl +"\n\r";
 					} else {
-						pruefLog += ident+"OK ("+attribut+"):"+ hmCSV.get(attribut) +" == "+hmResult.get(attribut)+"\n\r";
+						pruefLog += ident+" OK ("+attribut+"):"+ hmCSV.get(attribut) + sollWertErl +" (SOLL)==(IST) "+hmResult.get(attribut) + istWertErl +"\n\r";
 					}
 				} else {
+					
+					sollWertErl = wertErl((int)csvWerttNetto);
+					istWertErl = wertErl((int)resultWerttNetto);
+					
 					if(csvWerttNetto != resultWerttNetto) {
-						LOGGER.error(ident+"DIF ("+attribut+"):"+ csvWerttNetto +" <> "+resultWerttNetto);
-						pruefLog += ident+"DIF ("+attribut+"):"+ csvWerttNetto +" <> "+resultWerttNetto+"\n\r";
+						LOGGER.error(ident+"DIF ("+attribut+"):"+ csvWerttNetto + sollWertErl +" (SOLL)<>(IST) "+resultWerttNetto + istWertErl);
+						pruefLog += ident+"DIF ("+attribut+"):"+ csvWerttNetto + sollWertErl +" (SOLL)<>(IST) "+resultWerttNetto + istWertErl +"\n\r";
 					} else {
-						pruefLog += ident+"OK ("+attribut+"):"+ csvWerttNetto +" <> "+resultWerttNetto+"\n\r";
+						pruefLog += ident+" OK ("+attribut+"):"+ csvWerttNetto + sollWertErl +" (SOLL)<>(IST) "+resultWerttNetto + istWertErl +"\n\r";
 					}
 				}
 			}
@@ -561,4 +610,15 @@ class VergleicheKZD extends Thread {
 		caller.doNotify();  //Benachrichtige aufrufende Klasse
 	}
 
+	private String wertErl(long wert) {
+		if(wert == -1)
+			return "nicht ermittelbar";
+		else if(wert == -2)
+			return "fehlerhaft";
+		else if(wert == -3)
+			return "nicht ermittelbar + fehlerhaft";
+		else
+			return "";
+	}
+	
 }
