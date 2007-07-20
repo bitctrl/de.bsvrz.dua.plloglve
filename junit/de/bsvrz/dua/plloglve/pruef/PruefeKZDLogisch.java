@@ -567,8 +567,8 @@ class VergleicheKZD extends Thread {
 		}
 		
 		String attribut;
-		String sollWertErl = "";
-		String istWertErl = "";
+		String sollWertErl;
+		String istWertErl;
 		
 		LOGGER.info(ident+"HashMap Groesse: CSV("+hmCSV.size()+") <> Results("+hmResult.size()+")");
 		
@@ -576,6 +576,8 @@ class VergleicheKZD extends Thread {
 		for(int i=0;i<attributNamenPraefix.length;i++) {
 			for(int j=0;j<attributNamen.length;j++) {
 				attribut = attributNamenPraefix[i]+attributNamen[j];
+				sollWertErl = "";
+				istWertErl = "";
 				
 				if(!attribut.equals("tNetto.Wert")) {
 
