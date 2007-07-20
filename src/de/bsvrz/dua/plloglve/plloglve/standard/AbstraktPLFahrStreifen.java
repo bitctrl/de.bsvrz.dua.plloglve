@@ -36,10 +36,10 @@ import stauma.dav.clientside.ResultData;
 import stauma.dav.configuration.interfaces.AttributeGroup;
 import stauma.dav.configuration.interfaces.SystemObject;
 import sys.funclib.debug.Debug;
+import de.bsvrz.dua.guete.GWert;
 import de.bsvrz.dua.guete.GueteException;
-import de.bsvrz.dua.guete.GueteUtil;
 import de.bsvrz.dua.guete.GueteVerfahren;
-import de.bsvrz.dua.guete.IGuete;
+import de.bsvrz.dua.guete.vorschriften.IGuete;
 import de.bsvrz.dua.plloglve.plloglve.typen.OptionenPlausibilitaetsPruefungLogischVerkehr;
 import de.bsvrz.sys.funclib.bitctrl.daf.Konstanten;
 import de.bsvrz.sys.funclib.bitctrl.dua.DUAKonstanten;
@@ -131,16 +131,22 @@ implements ClientReceiverInterface{
 	 * @return das um qPkw und vKfz erweiterte KZD
 	 */
 	protected Data berechneQPkw(Data data){
-		final int qKfz = data.getItem("qKfz").getUnscaledValue("Wert").intValue(); //$NON-NLS-1$ //$NON-NLS-2$
-		final int qLkw = data.getItem("qLkw").getUnscaledValue("Wert").intValue(); //$NON-NLS-1$ //$NON-NLS-2$
-		int qPkw = DUAKonstanten.NICHT_ERMITTELBAR;
+		final long qKfz = data.getItem("qKfz").getUnscaledValue("Wert").intValue(); //$NON-NLS-1$ //$NON-NLS-2$
+		final long qLkw = data.getItem("qLkw").getUnscaledValue("Wert").intValue(); //$NON-NLS-1$ //$NON-NLS-2$
+		
+		if(qLkw == 223){
+			System.out.println();
+		}
+		
+		long qPkw = DUAKonstanten.NICHT_ERMITTELBAR;
 		double qPkwGuete = -1;
 		if(qKfz >= 0 && qLkw >= 0){
 			qPkw = qKfz - qLkw;
 
 			try {
-				qPkwGuete = GueteVerfahren.getDVonData(data.getItem("qKfz").getItem("Güte"),  //$NON-NLS-1$ //$NON-NLS-2$
-											data.getItem("qLkw").getItem("Güte"));  //$NON-NLS-1$ //$NON-NLS-2$
+				GWert qKfzG = new GWert(data.getItem("qKfz").getItem("Güte")); //$NON-NLS-1$ //$NON-NLS-2$
+				GWert qLkwG = new GWert(data.getItem("qLkw").getItem("Güte"));  //$NON-NLS-1$ //$NON-NLS-2$
+				qPkwGuete = GueteVerfahren.differenz(qKfzG, qLkwG).getIndex();
 			} catch (GueteException e) {
 				e.printStackTrace();
 				LOGGER.error("Berechnung der Guete von qPkw fehlgeschlagen", e); //$NON-NLS-1$
@@ -153,31 +159,31 @@ implements ClientReceiverInterface{
 				data.getItem("qPkw").getItem("Güte").getScaledValue("Index").set(qPkwGuete); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 			}
 		}else{
-			data.getItem("qPkw").getUnscaledValue("Wert").set(DUAKonstanten.NICHT_ERMITTELBAR_BZW_FEHLERHAFT);  //$NON-NLS-1$//$NON-NLS-2$
+			data.getItem("qPkw").getUnscaledValue("Wert").set(DUAKonstanten.FEHLERHAFT);  //$NON-NLS-1$//$NON-NLS-2$
+			DUAUtensilien.getAttributDatum("qPkw.Status.MessWertErsetzung.Implausibel", data).asUnscaledValue().set(DUAKonstanten.JA); //$NON-NLS-1$
 		}
 		
-		final int vPkw = data.getItem("vPkw").getUnscaledValue("Wert").intValue(); //$NON-NLS-1$ //$NON-NLS-2$
-		final int vLkw = data.getItem("vLkw").getUnscaledValue("Wert").intValue(); //$NON-NLS-1$ //$NON-NLS-2$
+		final long vPkw = data.getItem("vPkw").getUnscaledValue("Wert").intValue(); //$NON-NLS-1$ //$NON-NLS-2$
+		final long vLkw = data.getItem("vLkw").getUnscaledValue("Wert").intValue(); //$NON-NLS-1$ //$NON-NLS-2$
 		long vKfz = DUAKonstanten.NICHT_ERMITTELBAR;
 		double vKfzGuete = -1;
 		if(qKfz > 0 && qPkw >= 0 && vPkw >= 0 && qLkw >= 0 && vLkw >= 0){
-			vKfz = (long)((qPkw * vPkw + qLkw * vLkw) / qKfz + 0.5);
+			vKfz = (long)(((double)(qPkw * vPkw + qLkw * vLkw) / (double)qKfz) + 0.5);
 
 			try {
-				double qPkwG = GueteUtil.getGueteIndex(data, "qPkw"); //$NON-NLS-1$
-				double vPkwG = GueteUtil.getGueteIndex(data, "vPkw"); //$NON-NLS-1$
-				double qLkwG = GueteUtil.getGueteIndex(data, "qLkw"); //$NON-NLS-1$
-				double vLkwG = GueteUtil.getGueteIndex(data, "vLkw"); //$NON-NLS-1$
-				double qKfzG = GueteUtil.getGueteIndex(data, "qKfz"); //$NON-NLS-1$
+				GWert qPkwG = new GWert(data.getItem("qPkw").getItem("Güte")); //$NON-NLS-1$ //$NON-NLS-2$
+				GWert vPkwG = new GWert(data.getItem("vPkw").getItem("Güte")); //$NON-NLS-1$ //$NON-NLS-2$
+				GWert qLkwG = new GWert(data.getItem("qLkw").getItem("Güte")); //$NON-NLS-1$ //$NON-NLS-2$
+				GWert vLkwG = new GWert(data.getItem("vLkw").getItem("Güte")); //$NON-NLS-1$ //$NON-NLS-2$
+				GWert qKfzG = new GWert(data.getItem("qKfz").getItem("Güte")); //$NON-NLS-1$ //$NON-NLS-2$
 				
-				vKfzGuete = G.q(
-								G.s(
-									G.p(qPkwG, vPkwG),
-									G.p(qLkwG, vLkwG)
+				vKfzGuete = GueteVerfahren.quotient(
+								GueteVerfahren.summe(
+										GueteVerfahren.produkt(qPkwG, vPkwG),
+										GueteVerfahren.produkt(qLkwG, vLkwG)
 								),
 								qKfzG
-							);
-				
+							).getIndex();
 			} catch (GueteException e) {
 				e.printStackTrace();
 				LOGGER.error("Berechnung der Guete von vKfz fehlgeschlagen", e); //$NON-NLS-1$
@@ -190,7 +196,8 @@ implements ClientReceiverInterface{
 				data.getItem("vKfz").getItem("Güte").getScaledValue("Index").set(vKfzGuete); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 			}
 		}else{
-			data.getItem("vKfz").getUnscaledValue("Wert").set(DUAKonstanten.NICHT_ERMITTELBAR_BZW_FEHLERHAFT);  //$NON-NLS-1$//$NON-NLS-2$
+			data.getItem("vKfz").getUnscaledValue("Wert").set(DUAKonstanten.FEHLERHAFT);  //$NON-NLS-1$//$NON-NLS-2$
+			DUAUtensilien.getAttributDatum("vKfz.Status.MessWertErsetzung.Implausibel", data).asUnscaledValue().set(DUAKonstanten.JA); //$NON-NLS-1$
 		}
 		
 		DUAUtensilien.getAttributDatum("qPkw.Status.Erfassung.NichtErfasst", data).asUnscaledValue().set(DUAKonstanten.JA); //$NON-NLS-1$
@@ -209,12 +216,12 @@ implements ClientReceiverInterface{
 	 * @param max obere Grenze des Wertes
 	 * @return das plaubilisierte (markierte) Datum 
 	 */
-	protected Data untersucheWerteBereich(Data davDatum, final String wertName, final int min, final int max){
+	protected Data untersucheWerteBereich(Data davDatum, final String wertName, final long min, final long max){
 		if(this.parameterAtgLog != null){
 			OptionenPlausibilitaetsPruefungLogischVerkehr optionen = this.parameterAtgLog.getOptionen();
 
 			if(!optionen.equals(OptionenPlausibilitaetsPruefungLogischVerkehr.KEINE_PRUEFUNG)){
-				int wert = davDatum.getItem(wertName).getUnscaledValue("Wert").intValue(); //$NON-NLS-1$
+				long wert = davDatum.getItem(wertName).getUnscaledValue("Wert").intValue(); //$NON-NLS-1$
 				
 				/**
 				 * sonst handelt es sich nicht um einen Messwert

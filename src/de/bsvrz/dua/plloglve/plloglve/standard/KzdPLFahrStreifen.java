@@ -106,6 +106,7 @@ extends AbstraktPLFahrStreifen{
 		final long T = data.getTimeValue("T").getMillis(); //$NON-NLS-1$
 		final int b = data.getItem("b").getUnscaledValue("Wert").intValue(); //$NON-NLS-1$ //$NON-NLS-2$
 
+		
 		int vgKfzLetztesIntervall = -4;
 		if(this.letztesKZDatum != null){
 			if(this.letztesKZDatum.getData() != null){
@@ -189,14 +190,14 @@ extends AbstraktPLFahrStreifen{
 
 			data.getItem("qKfz").getItem("Status").getItem("MessWertErsetzung").   //$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$
 			getUnscaledValue("Implausibel").set(DUAKonstanten.JA); //$NON-NLS-1$
-			data.getItem("vLkw").getItem("Status").getItem("MessWertErsetzung").   //$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$
+			data.getItem("qLkw").getItem("Status").getItem("MessWertErsetzung").   //$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$
 			getUnscaledValue("Implausibel").set(DUAKonstanten.JA); //$NON-NLS-1$							
 		}
 
 		/**
 		 * Regel Nr.6 (aus SE-02.00.00.00.00-AFo-4.0, S.94)
 		 */
-		if(qKfz - qLkw > 0 && vPkw <= 0){
+		if(!(qKfz - qLkw > 0 && vPkw < 0)){
 			data.getItem("qKfz").getUnscaledValue("Wert").set(DUAKonstanten.FEHLERHAFT); //$NON-NLS-1$ //$NON-NLS-2$
 			data.getItem("qLkw").getUnscaledValue("Wert").set(DUAKonstanten.FEHLERHAFT); //$NON-NLS-1$ //$NON-NLS-2$
 			data.getItem("vPkw").getUnscaledValue("Wert").set(DUAKonstanten.FEHLERHAFT); //$NON-NLS-1$ //$NON-NLS-2$

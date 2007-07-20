@@ -283,8 +283,8 @@ implements ClientReceiverInterface {
 				hmCSVStatus.put(praefix+".Status.PlFormal.WertMin", DUAKonstanten.NEIN);
 			
 			try {
-				guete = Float.parseFloat(statusGeteilt[i].replace(",", "."))*100;
-				hmCSVStatus.put(praefix+".Güte.Index",guete.intValue());
+				guete = Float.parseFloat(statusGeteilt[i].replace(",", "."))*10000;
+				hmCSVStatus.put(praefix+".Güte.Index", guete.intValue());
 			} catch (Exception e) {
 				//kein float wert
 			}

@@ -166,7 +166,7 @@ extends CSVImporter{
 		DUAUtensilien.getAttributDatum(attributName + ".Status.PlLogisch.WertMinLogisch", data).asUnscaledValue().set(DUAKonstanten.NEIN); //$NON-NLS-1$
 		DUAUtensilien.getAttributDatum(attributName + ".Status.MessWertErsetzung.Implausibel", data).asUnscaledValue().set(DUAKonstanten.NEIN); //$NON-NLS-1$
 		DUAUtensilien.getAttributDatum(attributName + ".Status.MessWertErsetzung.Interpoliert", data).asUnscaledValue().set(DUAKonstanten.NEIN); //$NON-NLS-1$
-		DUAUtensilien.getAttributDatum(attributName + ".Güte.Index", data).asUnscaledValue().set(100); //$NON-NLS-1$
+		DUAUtensilien.getAttributDatum(attributName + ".Güte.Index", data).asScaledValue().set(1.0); //$NON-NLS-1$
 		DUAUtensilien.getAttributDatum(attributName + ".Güte.Verfahren", data).asUnscaledValue().set(0); //$NON-NLS-1$
 				
 		return datensatz;
