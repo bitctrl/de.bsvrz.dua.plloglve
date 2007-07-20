@@ -612,11 +612,11 @@ class VergleicheKZD extends Thread {
 
 	private String wertErl(long wert) {
 		if(wert == -1)
-			return "nicht ermittelbar";
+			return " [nicht ermittelbar]";
 		else if(wert == -2)
-			return "fehlerhaft";
+			return " [fehlerhaft]";
 		else if(wert == -3)
-			return "nicht ermittelbar + fehlerhaft";
+			return " [nicht ermittelbar + fehlerhaft]";
 		else
 			return "";
 	}
