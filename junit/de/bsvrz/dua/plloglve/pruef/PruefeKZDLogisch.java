@@ -200,7 +200,7 @@ implements ClientReceiverInterface {
 		hmCSV.putAll(csvLeseStatus(aktZeile[csvPosition+1],"b"));
 
 		csvPosition = 48+verschiebung;
-		csvWerttNetto = Long.parseLong(aktZeile[csvPosition]);
+		csvWerttNetto = Long.parseLong(aktZeile[csvPosition]) * 1000;
 		hmCSV.putAll(csvLeseStatus(aktZeile[csvPosition+1],"tNetto"));
 		
 		switch(fsIndex) {
