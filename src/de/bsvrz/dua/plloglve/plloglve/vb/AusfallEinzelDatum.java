@@ -84,7 +84,7 @@ extends AbstraktDAVZeitEinzelDatum{
 	 * @param bezugsIntervall das Bezugsintervall in Stunden
 	 * @return ob das Datum noch aktuell ist
 	 */
-	public final boolean isDatumVeraltet(final int bezugsIntervall) {
+	public final boolean isDatumVeraltet(final long bezugsIntervall) {
 		long bezugsIntervallInMillis = bezugsIntervall * Konstante.STUNDE_IN_MS;
 		return this.datenZeit + bezugsIntervallInMillis < System.currentTimeMillis();
 	}

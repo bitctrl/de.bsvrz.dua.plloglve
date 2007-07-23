@@ -42,42 +42,42 @@ extends AtgDatenObjekt{
 	/**
 	 * Maximal zulässige Anzahl von Intervallen mit Ergebniskonstanz für qKfz
 	 */
-	private int maxAnzKonstanzqKfz;
+	private long maxAnzKonstanzqKfz;
 	
 	/**
 	 * Maximal zulässige Anzahl von Intervallen mit Ergebniskonstanz für qLkw
 	 */
-	private int maxAnzKonstanzqLkw;
+	private long maxAnzKonstanzqLkw;
 	
 	/**
 	 * Maximal zulässige Anzahl von Intervallen mit Ergebniskonstanz für qPkw
 	 */
-	private int maxAnzKonstanzqPkw;
+	private long maxAnzKonstanzqPkw;
 	
 	/**
 	 * Maximal zulässige Anzahl von Intervallen mit Ergebniskonstanz für vKfz
 	 */
-	private int maxAnzKonstanzvKfz;
+	private long maxAnzKonstanzvKfz;
 	
 	/**
 	 * Maximal zulässige Anzahl von Intervallen mit Ergebniskonstanz für vLkw
 	 */
-	private int maxAnzKonstanzvLkw;
+	private long maxAnzKonstanzvLkw;
 	
 	/**
 	 * Maximal zulässige Anzahl von Intervallen mit Ergebniskonstanz für vPkw
 	 */
-	private int maxAnzKonstanzvPkw;
+	private long maxAnzKonstanzvPkw;
 	
 	/**
 	 * Maximal zulässige Anzahl von Intervallen mit Ergebniskonstanz für die Streung S
 	 */
-	private int maxAnzKonstanzStreung;
+	private long maxAnzKonstanzStreung;
 	
 	/**
 	 * Maximal zulässige Anzahl von Intervallen mit Ergebniskonstanz für die Belegung b
 	 */
-	private int maxAnzKonstanzBelegung;  
+	private long maxAnzKonstanzBelegung;  
 
 
 	/**
@@ -105,7 +105,7 @@ extends AtgDatenObjekt{
 	 * 
 	 * @return maxAnzKonstanzBelegung
 	 */
-	public final int getMaxAnzKonstanzBelegung() {
+	public final long getMaxAnzKonstanzBelegung() {
 		return maxAnzKonstanzBelegung;
 	}
 
@@ -115,7 +115,7 @@ extends AtgDatenObjekt{
 	 * 
 	 * @return maxAnzKonstanzqKfz
 	 */
-	public final int getMaxAnzKonstanzqKfz() {
+	public final long getMaxAnzKonstanzqKfz() {
 		return maxAnzKonstanzqKfz;
 	}
 
@@ -125,7 +125,7 @@ extends AtgDatenObjekt{
 	 * 
 	 * @return maxAnzKonstanzqLkw
 	 */
-	public final int getMaxAnzKonstanzqLkw() {
+	public final long getMaxAnzKonstanzqLkw() {
 		return maxAnzKonstanzqLkw;
 	}
 
@@ -135,7 +135,7 @@ extends AtgDatenObjekt{
 	 * 
 	 * @return maxAnzKonstanzqPkw
 	 */
-	public final int getMaxAnzKonstanzqPkw() {
+	public final long getMaxAnzKonstanzqPkw() {
 		return maxAnzKonstanzqPkw;
 	}
 
@@ -145,7 +145,7 @@ extends AtgDatenObjekt{
 	 * 
 	 * @return maxAnzKonstanzStreung
 	 */
-	public final int getMaxAnzKonstanzStreung() {
+	public final long getMaxAnzKonstanzStreung() {
 		return maxAnzKonstanzStreung;
 	}
 
@@ -155,7 +155,7 @@ extends AtgDatenObjekt{
 	 * 
 	 * @return maxAnzKonstanzvKfz
 	 */
-	public final int getMaxAnzKonstanzvKfz() {
+	public final long getMaxAnzKonstanzvKfz() {
 		return maxAnzKonstanzvKfz;
 	}
 
@@ -165,7 +165,7 @@ extends AtgDatenObjekt{
 	 * 
 	 * @return maxAnzKonstanzvLkw
 	 */
-	public final int getMaxAnzKonstanzvLkw() {
+	public final long getMaxAnzKonstanzvLkw() {
 		return maxAnzKonstanzvLkw;
 	}
 
@@ -175,7 +175,7 @@ extends AtgDatenObjekt{
 	 * 
 	 * @return maxAnzKonstanzvPkw
 	 */
-	public final int getMaxAnzKonstanzvPkw() {
+	public final long getMaxAnzKonstanzvPkw() {
 		return maxAnzKonstanzvPkw;
 	}
 

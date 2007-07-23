@@ -54,93 +54,93 @@ extends AtgDatenObjekt{
 	/**
 	 * Minimum der erlaubten Verkehrsstärke (Anzahl der Fahrzeuge) als normierter Stundenwert.
 	 */
-	protected int qKfzBereichMin;
+	protected long qKfzBereichMin;
 	
 	/**
 	 * Maximum der erlaubten Verkehrsstärke (Anzahl der Fahrzeuge) als normierter Stundenwert.
 	 */
-	protected int qKfzBereichMax;
+	protected long qKfzBereichMax;
 	
 	/**
 	 * Minimum der erlaubten Verkehrsstärke (Anzahl der Fahrzeuge) als normierter Stundenwert.
 	 */
-	protected int qLkwBereichMin;  
+	protected long qLkwBereichMin;  
 	
 	/**
 	 * Maximum der erlaubten Verkehrsstärke (Anzahl der Fahrzeuge) als normierter Stundenwert.
 	 */
-	protected int qLkwBereichMax;  
+	protected long qLkwBereichMax;  
 
 	/**
 	 * Grenzgeschwindigkeit für PL-Prüfung. Ist dieser Wert überschritten, 
 	 * muss b kleiner bGrenz sein, sonst ist b inplausibel. 
 	 */
-	protected int vKfzGrenz;
+	protected long vKfzGrenz;
 	
 	/**
 	 * Ist vKfz größer als vKfzGrenz, so muss b kleiner bGrenz sein, sonst ist b inplausibel. 
 	 */
-	protected	int bGrenz;
+	protected	long bGrenz;
 		
 	/**
 	 * Minimum der erlaubten Verkehrsstärke (Anzahl der Fahrzeuge) als normierter Stundenwert.
 	 */
-	protected int qPkwBereichMin;
+	protected long qPkwBereichMin;
 	
 	/**
 	 * Maximum der erlaubten Verkehrsstärke (Anzahl der Fahrzeuge) als normierter Stundenwert.
 	 */
-	protected int qPkwBereichMax;  
+	protected long qPkwBereichMax;  
 	
 	/**
 	 * Minimum der erlaubten Geschwindigkeit.
 	 */
-	protected int vKfzBereichMin;  
+	protected long vKfzBereichMin;  
 	
 	/**
 	 * Maximum der erlaubten Geschwindigkeit.
 	 */
-	protected int vKfzBereichMax;  
+	protected long vKfzBereichMax;  
 	
 	/**
 	 * Minimum der erlaubten Geschwindigkeit.
 	 */
-	protected int vLkwBereichMin;  
+	protected long vLkwBereichMin;  
 	
 	/**
 	 * Maximum der erlaubten Geschwindigkeit.
 	 */
-	protected int vLkwBereichMax;  
+	protected long vLkwBereichMax;  
 	
 	/**
 	 * Minimum der erlaubten Geschwindigkeit.
 	 */
-	protected int vPkwBereichMin;  
+	protected long vPkwBereichMin;  
 	
 	/**
 	 * Maximum der erlaubten Geschwindigkeit.
 	 */
-	protected int vPkwBereichMax;
+	protected long vPkwBereichMax;
 	
 	/**
 	 * Minimum der erlaubten Geschwindigkeit.
 	 */
-	protected int vgKfzBereichMin;
+	protected long vgKfzBereichMin;
 	
 	/**
 	 * Maximum der erlaubten Geschwindigkeit.
 	 */
-	protected int vgKfzBereichMax;  
+	protected long vgKfzBereichMax;  
 	
 	/**
 	 * Minimum des erlaubten Prozentwertes.
 	 */
-	protected int belegungBereichMin;
+	protected long belegungBereichMin;
 
 	/**
 	 * Maximum des erlaubten Prozentwertes.
 	 */
-	protected int belegungBereichMax; 
+	protected long belegungBereichMax; 
 
 	
 	/**
@@ -177,7 +177,7 @@ extends AtgDatenObjekt{
 	 * 
 	 * @return qKfzBereichMax
 	 */
-	public final int getQKfzBereichMax(){
+	public final long getQKfzBereichMax(){
 		return this.qKfzBereichMax;
 	}
 
@@ -187,7 +187,7 @@ extends AtgDatenObjekt{
 	 * 
 	 * @return qKfzBereichMin
 	 */
-	public final int getQKfzBereichMin(){
+	public final long getQKfzBereichMin(){
 		return this.qKfzBereichMin;
 	}
 
@@ -197,7 +197,7 @@ extends AtgDatenObjekt{
 	 * 
 	 * @return qLkwBereichMax
 	 */
-	public final int getQLkwBereichMax(){
+	public final long getQLkwBereichMax(){
 		return this.qLkwBereichMax;
 	}
 
@@ -207,7 +207,7 @@ extends AtgDatenObjekt{
 	 * 
 	 * @return qLkwBereichMin
 	 */
-	public final int getQLkwBereichMin(){
+	public final long getQLkwBereichMin(){
 		return this.qLkwBereichMin;
 	}
 	
@@ -227,7 +227,7 @@ extends AtgDatenObjekt{
 	 * 
 	 * @return belegungBereichMax
 	 */
-	public final int getBelegungBereichMax() {
+	public final long getBelegungBereichMax() {
 		return belegungBereichMax;
 	}
 
@@ -237,7 +237,7 @@ extends AtgDatenObjekt{
 	 * 
 	 * @return belegungBereichMin
 	 */
-	public final int getBelegungBereichMin() {
+	public final long getBelegungBereichMin() {
 		return belegungBereichMin;
 	}
 
@@ -247,7 +247,7 @@ extends AtgDatenObjekt{
 	 * 
 	 * @return bGrenz
 	 */
-	public final int getBGrenz() {
+	public final long getBGrenz() {
 		return bGrenz;
 	}
 
@@ -257,7 +257,7 @@ extends AtgDatenObjekt{
 	 * 
 	 * @return qPkwBereichMax
 	 */
-	public final int getQPkwBereichMax() {
+	public final long getQPkwBereichMax() {
 		return qPkwBereichMax;
 	}
 
@@ -267,7 +267,7 @@ extends AtgDatenObjekt{
 	 * 
 	 * @return qPkwBereichMin
 	 */
-	public final int getQPkwBereichMin() {
+	public final long getQPkwBereichMin() {
 		return qPkwBereichMin;
 	}
 
@@ -277,7 +277,7 @@ extends AtgDatenObjekt{
 	 * 
 	 * @return vgKfzBereichMax
 	 */
-	public final int getVgKfzBereichMax() {
+	public final long getVgKfzBereichMax() {
 		return vgKfzBereichMax;
 	}
 
@@ -287,7 +287,7 @@ extends AtgDatenObjekt{
 	 * 
 	 * @return vgKfzBereichMin
 	 */
-	public final int getVgKfzBereichMin() {
+	public final long getVgKfzBereichMin() {
 		return vgKfzBereichMin;
 	}
 
@@ -297,7 +297,7 @@ extends AtgDatenObjekt{
 	 * 
 	 * @return vKfzBereichMax
 	 */
-	public final int getVKfzBereichMax() {
+	public final long getVKfzBereichMax() {
 		return vKfzBereichMax;
 	}
 
@@ -307,7 +307,7 @@ extends AtgDatenObjekt{
 	 * 
 	 * @return vKfzBereichMin
 	 */
-	public final int getVKfzBereichMin() {
+	public final long getVKfzBereichMin() {
 		return vKfzBereichMin;
 	}
 
@@ -317,7 +317,7 @@ extends AtgDatenObjekt{
 	 * 
 	 * @return vKfzGrenz
 	 */
-	public final int getVKfzGrenz() {
+	public final long getVKfzGrenz() {
 		return vKfzGrenz;
 	}
 
@@ -327,7 +327,7 @@ extends AtgDatenObjekt{
 	 * 
 	 * @return vLkwBereichMax
 	 */
-	public final int getVLkwBereichMax() {
+	public final long getVLkwBereichMax() {
 		return vLkwBereichMax;
 	}
 
@@ -337,7 +337,7 @@ extends AtgDatenObjekt{
 	 * 
 	 * @return vLkwBereichMin
 	 */
-	public final int getVLkwBereichMin() {
+	public final long getVLkwBereichMin() {
 		return vLkwBereichMin;
 	}
 
@@ -347,7 +347,7 @@ extends AtgDatenObjekt{
 	 * 
 	 * @return vPkwBereichMax
 	 */
-	public final int getVPkwBereichMax() {
+	public final long getVPkwBereichMax() {
 		return vPkwBereichMax;
 	}
 
@@ -357,7 +357,7 @@ extends AtgDatenObjekt{
 	 * 
 	 * @return vPkwBereichMin
 	 */
-	public final int getVPkwBereichMin() {
+	public final long getVPkwBereichMin() {
 		return vPkwBereichMin;
 	}
 	

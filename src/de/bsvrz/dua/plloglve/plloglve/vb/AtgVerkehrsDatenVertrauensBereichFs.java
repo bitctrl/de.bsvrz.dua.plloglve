@@ -42,19 +42,19 @@ extends AtgDatenObjekt{
 	/**
 	 * Bezugszeitraum für die Vertrauensbereichsüberprüfung
 	 */
-	private int bezugsZeitraum = -1;
+	private long bezugsZeitraum = -1;
 	
 	/**
 	 * Einschaltschwelle für den Vertrauensbereich eines Fahrstreifens im
 	 * Bezugszeitraum. Bei Überschreiten dieses Wertes wird eine entsprechende Fehlermeldung generiert
 	 */
-	private int maxAusfallProBezugsZeitraumEin = -1;
+	private long maxAusfallProBezugsZeitraumEin = -1;
 	
 	/**
 	 * Ausschaltschwelle für den Vertrauensbereich eines Fahrstreifens im Bezugszeitraum.
 	 * Bei Unterschreiten dieses Wertes wird eine entsprechende Fehlermeldung zurückgenommen
 	 */
-	private int maxAusfallProBezugsZeitraumAus = -1;  
+	private long maxAusfallProBezugsZeitraumAus = -1;  
 
 	
 	/**
@@ -90,7 +90,7 @@ extends AtgDatenObjekt{
 	 * 
 	 * @return Bezugszeitraum in Stunden
 	 */
-	public final int getBezugsZeitraum() {
+	public final long getBezugsZeitraum() {
 		return this.bezugsZeitraum;
 	}
 
@@ -101,7 +101,7 @@ extends AtgDatenObjekt{
 	 * 
 	 * @return Ausschaltschwelle für den Vertrauensbereich eines Fahrstreifens
 	 */
-	public final int getMaxAusfallProBezugsZeitraumAus() {
+	public final long getMaxAusfallProBezugsZeitraumAus() {
 		return this.maxAusfallProBezugsZeitraumAus;
 	}
 
@@ -113,7 +113,7 @@ extends AtgDatenObjekt{
 	 * 
 	 * @return Einschaltschwelle für den Vertrauensbereich in %
 	 */
-	public final int getMaxAusfallProBezugsZeitraumEin() {
+	public final long getMaxAusfallProBezugsZeitraumEin() {
 		return this.maxAusfallProBezugsZeitraumEin;
 	}
 	

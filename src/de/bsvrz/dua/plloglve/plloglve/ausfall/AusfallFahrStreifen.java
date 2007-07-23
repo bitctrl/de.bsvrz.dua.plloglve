@@ -84,7 +84,7 @@ implements ClientReceiverInterface{
 	/**
 	 * Maximal zulässige Ausfallhäufigkeit eines Fahrstreifens pro Tag
 	 */
-	private int maxAusfallProTag = -4;
+	private long maxAusfallProTag = -4;
 	
 	/**
 	 * Datensätze mit Ausfallinformationen der letzten 24h
@@ -161,7 +161,7 @@ implements ClientReceiverInterface{
 		if(programmLaeuftSchonLaengerAlsEinTag()){
 			synchronized (this) {
 				if(this.maxAusfallProTag >= 0){
-					int ausfallInProzent = (int)((((double)ausfallZeit / (double)Konstante.TAG_24_IN_MS) * 100.0) + 0.5);
+					long ausfallInProzent = (int)((((double)ausfallZeit / (double)Konstante.TAG_24_IN_MS) * 100.0) + 0.5);
 					if(ausfallInProzent > this.maxAusfallProTag){
 						long stunden = ausfallZeit / Konstante.STUNDE_IN_MS;
 						long minuten = (ausfallZeit - (stunden * Konstante.STUNDE_IN_MS)) / Konstante.MINUTE_IN_MS;

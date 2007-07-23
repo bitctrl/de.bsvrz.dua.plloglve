@@ -88,50 +88,50 @@ implements ClientReceiverInterface{
 	/**
 	 * Variable <code>qKfz</code> mit der Information wie lange diese Variable schon konstant ist
 	 */
-	private VariableMitKonstanzZaehler<Integer> qKfzZaehler = 
-								new VariableMitKonstanzZaehler<Integer>("qKfz");  //$NON-NLS-1$
+	private VariableMitKonstanzZaehler<Long> qKfzZaehler = 
+								new VariableMitKonstanzZaehler<Long>("qKfz");  //$NON-NLS-1$
 
 	/**
 	 * Variable <code>qLkw</code> mit der Information wie lange diese Variable schon konstant ist
 	 */
-	private VariableMitKonstanzZaehler<Integer> qLkwZaehler = 
-								new VariableMitKonstanzZaehler<Integer>("qLkw");  //$NON-NLS-1$
+	private VariableMitKonstanzZaehler<Long> qLkwZaehler = 
+								new VariableMitKonstanzZaehler<Long>("qLkw");  //$NON-NLS-1$
 
 	/**
 	 * Variable <code>qPkw</code> mit der Information wie lange diese Variable schon konstant ist
 	 */
-	private VariableMitKonstanzZaehler<Integer> qPkwZaehler = 
-								new VariableMitKonstanzZaehler<Integer>("qPkw");  //$NON-NLS-1$
+	private VariableMitKonstanzZaehler<Long> qPkwZaehler = 
+								new VariableMitKonstanzZaehler<Long>("qPkw");  //$NON-NLS-1$
 	
 	/**
 	 * Variable <code>vKfz</code> mit der Information wie lange diese Variable schon konstant ist
 	 */
-	private VariableMitKonstanzZaehler<Integer> vKfzZaehler = 
-								new VariableMitKonstanzZaehler<Integer>("vKfz");  //$NON-NLS-1$
+	private VariableMitKonstanzZaehler<Long> vKfzZaehler = 
+								new VariableMitKonstanzZaehler<Long>("vKfz");  //$NON-NLS-1$
 	
 	/**
 	 * Variable <codevLkw</code> mit der Information wie lange diese Variable schon konstant ist
 	 */
-	private VariableMitKonstanzZaehler<Integer> vLkwZaehler = 
-								new VariableMitKonstanzZaehler<Integer>("vLkw");  //$NON-NLS-1$
+	private VariableMitKonstanzZaehler<Long> vLkwZaehler = 
+								new VariableMitKonstanzZaehler<Long>("vLkw");  //$NON-NLS-1$
 
 	/**
 	 * Variable <code>vPkw</code> mit der Information wie lange diese Variable schon konstant ist
 	 */
-	private VariableMitKonstanzZaehler<Integer> vPkwZaehler = 
-								new VariableMitKonstanzZaehler<Integer>("vPkw");  //$NON-NLS-1$
+	private VariableMitKonstanzZaehler<Long> vPkwZaehler = 
+								new VariableMitKonstanzZaehler<Long>("vPkw");  //$NON-NLS-1$
 
 	/**
 	 * Variable <code>sKfz</code> mit der Information wie lange diese Variable schon konstant ist
 	 */
-	private VariableMitKonstanzZaehler<Integer> sKfzZaehler = 
-								new VariableMitKonstanzZaehler<Integer>("sKfz");  //$NON-NLS-1$
+	private VariableMitKonstanzZaehler<Long> sKfzZaehler = 
+								new VariableMitKonstanzZaehler<Long>("sKfz");  //$NON-NLS-1$
 
 	/**
 	 * Variable <code>b</code> mit der Information wie lange diese Variable schon konstant ist
 	 */
-	private VariableMitKonstanzZaehler<Integer> bZaehler = 
-								new VariableMitKonstanzZaehler<Integer>("b");  //$NON-NLS-1$
+	private VariableMitKonstanzZaehler<Long> bZaehler = 
+								new VariableMitKonstanzZaehler<Long>("b");  //$NON-NLS-1$
 
 
 
@@ -179,14 +179,14 @@ implements ClientReceiverInterface{
 				Data data = resultat.getData();
 			
 				if(this.parameter != null){
-					final int qKfz = data.getItem("qKfz").getUnscaledValue("Wert").intValue(); //$NON-NLS-1$ //$NON-NLS-2$
-					final int qLkw = data.getItem("qLkw").getUnscaledValue("Wert").intValue(); //$NON-NLS-1$ //$NON-NLS-2$
-					final int qPkw = data.getItem("qPkw").getUnscaledValue("Wert").intValue(); //$NON-NLS-1$ //$NON-NLS-2$
-					final int vPkw = data.getItem("vPkw").getUnscaledValue("Wert").intValue(); //$NON-NLS-1$ //$NON-NLS-2$
-					final int vLkw = data.getItem("vLkw").getUnscaledValue("Wert").intValue(); //$NON-NLS-1$ //$NON-NLS-2$
-					final int vKfz = data.getItem("vKfz").getUnscaledValue("Wert").intValue(); //$NON-NLS-1$ //$NON-NLS-2$
-					final int b = data.getItem("b").getUnscaledValue("Wert").intValue(); //$NON-NLS-1$ //$NON-NLS-2$
-					final int sKfz = data.getItem("sKfz").getUnscaledValue("Wert").intValue(); //$NON-NLS-1$ //$NON-NLS-2$
+					final long qKfz = data.getItem("qKfz").getUnscaledValue("Wert").intValue(); //$NON-NLS-1$ //$NON-NLS-2$
+					final long qLkw = data.getItem("qLkw").getUnscaledValue("Wert").intValue(); //$NON-NLS-1$ //$NON-NLS-2$
+					final long qPkw = data.getItem("qPkw").getUnscaledValue("Wert").intValue(); //$NON-NLS-1$ //$NON-NLS-2$
+					final long vPkw = data.getItem("vPkw").getUnscaledValue("Wert").intValue(); //$NON-NLS-1$ //$NON-NLS-2$
+					final long vLkw = data.getItem("vLkw").getUnscaledValue("Wert").intValue(); //$NON-NLS-1$ //$NON-NLS-2$
+					final long vKfz = data.getItem("vKfz").getUnscaledValue("Wert").intValue(); //$NON-NLS-1$ //$NON-NLS-2$
+					final long b = data.getItem("b").getUnscaledValue("Wert").intValue(); //$NON-NLS-1$ //$NON-NLS-2$
+					final long sKfz = data.getItem("sKfz").getUnscaledValue("Wert").intValue(); //$NON-NLS-1$ //$NON-NLS-2$
 					
 					this.qKfzZaehler.aktualisiere(qKfz);
 					this.qLkwZaehler.aktualisiere(qLkw);
@@ -197,7 +197,7 @@ implements ClientReceiverInterface{
 					this.sKfzZaehler.aktualisiere(sKfz);
 					this.bZaehler.aktualisiere(b);
 					
-					Collection<VariableMitKonstanzZaehler<Integer>> puffer = new ArrayList<VariableMitKonstanzZaehler<Integer>>();
+					Collection<VariableMitKonstanzZaehler<Long>> puffer = new ArrayList<VariableMitKonstanzZaehler<Long>>();
 					synchronized (this.parameter) {
 						if(this.qKfzZaehler.getWertIstKonstantSeit() > this.parameter.getMaxAnzKonstanzqKfz()){
 							puffer.add(this.qKfzZaehler);
@@ -228,7 +228,7 @@ implements ClientReceiverInterface{
 
 						if(!puffer.isEmpty()){
 							copy = VERWALTUNG.getVerbindung().createData(resultat.getDataDescription().getAttributeGroup());
-							for(VariableMitKonstanzZaehler<Integer> wert:puffer){
+							for(VariableMitKonstanzZaehler<Long> wert:puffer){
 								data.getItem(wert.getName()).getUnscaledValue("Wert").set(DUAKonstanten.FEHLERHAFT); //$NON-NLS-1$			
 								data.getItem(wert.getName()).getItem("Status").getItem("MessWertErsetzung").   //$NON-NLS-1$//$NON-NLS-2$
 								getUnscaledValue("Implausibel").set(DUAKonstanten.JA); //$NON-NLS-1$	

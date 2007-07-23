@@ -133,15 +133,15 @@ implements ClientReceiverInterface{
 	protected Data berechneQPkw(Data data){
 		final long qKfz = data.getItem("qKfz").getUnscaledValue("Wert").intValue(); //$NON-NLS-1$ //$NON-NLS-2$
 		final long qLkw = data.getItem("qLkw").getUnscaledValue("Wert").intValue(); //$NON-NLS-1$ //$NON-NLS-2$
-		
-		if(qLkw == 223){
+				
+		if(qLkw == 367){
 			System.out.println();
 		}
 		
 		long qPkw = DUAKonstanten.NICHT_ERMITTELBAR;
 		double qPkwGuete = -1;
-		if(qKfz >= 0 && qLkw >= 0){
-			qPkw = qKfz - qLkw;
+		if(qKfz >= 0){
+			qPkw = qKfz - (qLkw >= 0?qLkw:0);
 
 			try {
 				GWert qKfzG = new GWert(data.getItem("qKfz").getItem("Güte")); //$NON-NLS-1$ //$NON-NLS-2$
@@ -167,8 +167,12 @@ implements ClientReceiverInterface{
 		final long vLkw = data.getItem("vLkw").getUnscaledValue("Wert").intValue(); //$NON-NLS-1$ //$NON-NLS-2$
 		long vKfz = DUAKonstanten.NICHT_ERMITTELBAR;
 		double vKfzGuete = -1;
-		if(qKfz > 0 && qPkw >= 0 && vPkw >= 0 && qLkw >= 0 && vLkw >= 0){
-			vKfz = (long)(((double)(qPkw * vPkw + qLkw * vLkw) / (double)qKfz) + 0.5);
+		if(qKfz > 0){
+			long qPkwDummy = qPkw >= 0?qPkw:0;
+			long vPkwDummy = vPkw >= 0?vPkw:0;
+			long qLkwDummy = qLkw >= 0?qLkw:0;
+			long vLkwDummy = vLkw >= 0?vLkw:0;
+			vKfz = (long)(((double)(qPkwDummy * vPkwDummy + qLkwDummy * vLkwDummy) / (double)qKfz) + 0.5);
 
 			try {
 				GWert qPkwG = new GWert(data.getItem("qPkw").getItem("Güte")); //$NON-NLS-1$ //$NON-NLS-2$
@@ -184,6 +188,7 @@ implements ClientReceiverInterface{
 								),
 								qKfzG
 							).getIndex();
+				
 			} catch (GueteException e) {
 				e.printStackTrace();
 				LOGGER.error("Berechnung der Guete von vKfz fehlgeschlagen", e); //$NON-NLS-1$
@@ -256,21 +261,22 @@ implements ClientReceiverInterface{
 						if(maxVerletzt){
 							DUAUtensilien.getAttributDatum(wertName + ".Wert", davDatum). //$NON-NLS-1$
 								asUnscaledValue().set(max);
+							gueteNeuBerechnen = true;
 						}else					
 						if(minVerletzt){
 							DUAUtensilien.getAttributDatum(wertName + ".Wert", davDatum). //$NON-NLS-1$
 								asUnscaledValue().set(min);
+							gueteNeuBerechnen = true;
 						}
-						gueteNeuBerechnen = true;
 					}
 					
-//					if(gueteNeuBerechnen){
-//						double guete = DUAUtensilien.getAttributDatum(wertName + "Güte.Index", davDatum). //$NON-NLS-1$
-//												asScaledValue().doubleValue();
-//						guete *= VERWALTUNG.getGueteFaktor();
-//						DUAUtensilien.getAttributDatum(wertName + "Güte.Index", davDatum). //$NON-NLS-1$
-//												asScaledValue().set(guete);
-//					}
+					if(gueteNeuBerechnen){
+						double guete = DUAUtensilien.getAttributDatum(wertName + ".Güte.Index", davDatum). //$NON-NLS-1$
+												asScaledValue().doubleValue();
+						guete *= VERWALTUNG.getGueteFaktor();
+						DUAUtensilien.getAttributDatum(wertName + ".Güte.Index", davDatum). //$NON-NLS-1$
+												asScaledValue().set(guete);
+					}
 				}
 			}
 		}

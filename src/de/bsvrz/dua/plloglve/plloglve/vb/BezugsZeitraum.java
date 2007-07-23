@@ -141,7 +141,7 @@ public class BezugsZeitraum {
 		}
 		
 		final long bezugsZeitraumInMillis = parameter.getBezugsZeitraum() * Konstante.STUNDE_IN_MS;
-		int ausfallInProzent = 0;
+		long ausfallInProzent = 0;
 		if(bezugsZeitraumInMillis > 0){
 			ausfallInProzent = (int)((ausfallZeit / bezugsZeitraumInMillis) * 100.0 + 0.5);
 		}
