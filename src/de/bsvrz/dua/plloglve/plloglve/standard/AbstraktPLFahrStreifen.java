@@ -134,7 +134,7 @@ implements ClientReceiverInterface{
 		final long qKfz = data.getItem("qKfz").getUnscaledValue("Wert").intValue(); //$NON-NLS-1$ //$NON-NLS-2$
 		final long qLkw = data.getItem("qLkw").getUnscaledValue("Wert").intValue(); //$NON-NLS-1$ //$NON-NLS-2$
 				
-		if(qLkw == 367){
+		if(qKfz == 100){
 			System.out.println();
 		}
 		
@@ -201,8 +201,9 @@ implements ClientReceiverInterface{
 				data.getItem("vKfz").getItem("Güte").getScaledValue("Index").set(vKfzGuete); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 			}
 		}else{
-			data.getItem("vKfz").getUnscaledValue("Wert").set(DUAKonstanten.FEHLERHAFT);  //$NON-NLS-1$//$NON-NLS-2$
-			DUAUtensilien.getAttributDatum("vKfz.Status.MessWertErsetzung.Implausibel", data).asUnscaledValue().set(DUAKonstanten.JA); //$NON-NLS-1$
+			data.getItem("vKfz").getUnscaledValue("Wert").set(DUAKonstanten.NICHT_ERMITTELBAR); //$NON-NLS-1$ //$NON-NLS-2$
+			//data.getItem("vKfz").getUnscaledValue("Wert").set(DUAKonstanten.FEHLERHAFT);  //$NON-NLS-1$//$NON-NLS-2$
+			//DUAUtensilien.getAttributDatum("vKfz.Status.MessWertErsetzung.Implausibel", data).asUnscaledValue().set(DUAKonstanten.JA); //$NON-NLS-1$
 		}
 		
 		DUAUtensilien.getAttributDatum("qPkw.Status.Erfassung.NichtErfasst", data).asUnscaledValue().set(DUAKonstanten.JA); //$NON-NLS-1$
