@@ -169,34 +169,42 @@ implements ClientReceiverInterface {
 		int csvPosition = 0+verschiebung;
 
 		hmCSV.put("qKfz.Wert", Integer.parseInt(aktZeile[csvPosition]));
+		hmCSV.put("qKfz.Wert.Kopie", hmCSV.get("qKfz.Wert"));
 		hmCSV.putAll(csvLeseStatus(aktZeile[csvPosition+1],"qKfz"));
 
 		csvPosition = 6+verschiebung;
 		hmCSV.put("qPkw.Wert", Integer.parseInt(aktZeile[csvPosition]));
+		hmCSV.put("qPkw.Wert.Kopie", hmCSV.get("qPkw.Wert"));
 		hmCSV.putAll(csvLeseStatus(aktZeile[csvPosition+1],"qPkw"));
 		
 		csvPosition = 12+verschiebung;
 		hmCSV.put("qLkw.Wert", Integer.parseInt(aktZeile[csvPosition]));
+		hmCSV.put("qLkw.Wert.Kopie", hmCSV.get("qLkw.Wert"));
 		hmCSV.putAll(csvLeseStatus(aktZeile[csvPosition+1],"qLkw"));
 		
 		csvPosition = 18+verschiebung;
 		hmCSV.put("vKfz.Wert", Integer.parseInt(aktZeile[csvPosition]));
+		hmCSV.put("vKfz.Wert.Kopie", hmCSV.get("vKfz.Wert"));
 		hmCSV.putAll(csvLeseStatus(aktZeile[csvPosition+1],"vKfz"));
 		
 		csvPosition = 24+verschiebung;
 		hmCSV.put("vPkw.Wert", Integer.parseInt(aktZeile[csvPosition]));
+		hmCSV.put("vPkw.Wert.Kopie", hmCSV.get("vPkw.Wert"));
 		hmCSV.putAll(csvLeseStatus(aktZeile[csvPosition+1],"vPkw"));
 		
 		csvPosition = 30+verschiebung;
 		hmCSV.put("vLkw.Wert", Integer.parseInt(aktZeile[csvPosition]));
+		hmCSV.put("vLkw.Wert.Kopie", hmCSV.get("vLkw.Wert"));
 		hmCSV.putAll(csvLeseStatus(aktZeile[csvPosition+1],"vLkw"));
 		
 		csvPosition = 36+verschiebung;
 		hmCSV.put("vgKfz.Wert", Integer.parseInt(aktZeile[csvPosition]));
+		hmCSV.put("vgKfz.Wert.Kopie", hmCSV.get("vgKfz.Wert"));
 		hmCSV.putAll(csvLeseStatus(aktZeile[csvPosition+1],"vgKfz"));
 		
 		csvPosition = 42+verschiebung;
 		hmCSV.put("b.Wert", Integer.parseInt(aktZeile[csvPosition]));
+		hmCSV.put("b.Wert.Kopie", hmCSV.get("b.Wert"));
 		hmCSV.putAll(csvLeseStatus(aktZeile[csvPosition+1],"b"));
 
 		csvPosition = 48+verschiebung;
@@ -570,7 +578,7 @@ class VergleicheKZD extends Thread {
 		String sollWertErl;
 		String istWertErl;
 		
-		LOGGER.info(ident+"HashMap Groesse: CSV("+hmCSV.size()+") <> Results("+hmResult.size()+")");
+		LOGGER.info(ident+"HashMap Groesse: CSV("+(hmCSV.size()-8)+") <> Results("+hmResult.size()+")");
 		
 		pruefLog = "";
 		for(int i=0;i<attributNamenPraefix.length;i++) {
@@ -587,10 +595,14 @@ class VergleicheKZD extends Thread {
 					}
 					
 					if(!hmCSV.get(attribut).equals(hmResult.get(attribut))) {
-						LOGGER.warning(ident+"DIF ("+attribut+"):"+ hmCSV.get(attribut)+ sollWertErl +" (SOLL)<>(IST) "+hmResult.get(attribut) + istWertErl);
-						pruefLog += ident+"DIF ("+attribut+"):"+ hmCSV.get(attribut) + sollWertErl +" (SOLL)<>(IST) "+hmResult.get(attribut) + istWertErl +"\n\r";
+						String warnung = ident+"DIFF ("+attribut+"):"+ hmCSV.get(attribut)+ sollWertErl +" (SOLL)<>(IST) "+hmResult.get(attribut) + istWertErl;
+						if(hmCSV.get(attribut.replaceFirst(".Wert", ".Wert.Kopie")).equals(hmResult.get(attribut))) {
+							warnung += "\n\r"+ident+"W-OK ("+attribut.replaceFirst(".Wert", ".Wert.Kopie")+"):"+ hmCSV.get(attribut.replaceFirst(".Wert", ".Wert.Kopie"))+" (SOLL)<>(IST) "+hmResult.get(attribut);
+						}
+						LOGGER.warning(warnung);
+						pruefLog += ident+"DIFF ("+attribut+"):"+ hmCSV.get(attribut) + sollWertErl +" (SOLL)<>(IST) "+hmResult.get(attribut) + istWertErl +"\n\r";
 					} else {
-						pruefLog += ident+" OK ("+attribut+"):"+ hmCSV.get(attribut) + sollWertErl +" (SOLL)==(IST) "+hmResult.get(attribut) + istWertErl +"\n\r";
+						pruefLog += ident+" OK  ("+attribut+"):"+ hmCSV.get(attribut) + sollWertErl +" (SOLL)==(IST) "+hmResult.get(attribut) + istWertErl +"\n\r";
 					}
 				} else {
 					
@@ -598,10 +610,10 @@ class VergleicheKZD extends Thread {
 					istWertErl = wertErl((int)resultWerttNetto);
 					
 					if(csvWerttNetto != resultWerttNetto) {
-						LOGGER.error(ident+"DIF ("+attribut+"):"+ csvWerttNetto + sollWertErl +" (SOLL)<>(IST) "+resultWerttNetto + istWertErl);
-						pruefLog += ident+"DIF ("+attribut+"):"+ csvWerttNetto + sollWertErl +" (SOLL)<>(IST) "+resultWerttNetto + istWertErl +"\n\r";
+						LOGGER.error(ident+"DIFF ("+attribut+"):"+ csvWerttNetto + sollWertErl +" (SOLL)<>(IST) "+resultWerttNetto + istWertErl);
+						pruefLog += ident+"DIFF ("+attribut+"):"+ csvWerttNetto + sollWertErl +" (SOLL)<>(IST) "+resultWerttNetto + istWertErl +"\n\r";
 					} else {
-						pruefLog += ident+" OK ("+attribut+"):"+ csvWerttNetto + sollWertErl +" (SOLL)<>(IST) "+resultWerttNetto + istWertErl +"\n\r";
+						pruefLog += ident+" OK  ("+attribut+"):"+ csvWerttNetto + sollWertErl +" (SOLL)<>(IST) "+resultWerttNetto + istWertErl +"\n\r";
 					}
 				}
 			}
