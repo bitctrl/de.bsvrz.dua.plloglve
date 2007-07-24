@@ -75,6 +75,19 @@ implements ClientSenderInterface {
 	private ArgumentList alLogger = new ArgumentList(argumente);
 	
 	/**
+	 * Definiert die verwendete Parameter CSV-Datei
+	 * 
+	 * Prameter.csv: Logische Prüfung mit Grenzwerten
+	 * Prameter_TLS.csv: Logische Prüfung ohne Grenzwerte (TLS)
+	 */
+	private String csvParameterDatei = "Parameter_TLS";
+	//private String csvParameterDatei = "Parameter";
+	
+	private ParaKZDLogImport kzdImport1;
+	private ParaKZDLogImport kzdImport2;
+	private ParaKZDLogImport kzdImport3;
+	
+	/**
 	 * {@inheritDoc}
 	 */
 	@Before
@@ -110,64 +123,14 @@ implements ClientSenderInterface {
 	 */
 	@Test
 	public void testAlles()throws Exception{
-		
-		/*
-		 * Definiert die verwendete Parameter CSV-Datei
-		 * 
-		 * Prameter.csv: Logische Prüfung mit Grenzwerten
-		 * Prameter_TLS.csv: Logische Prüfung ohne Grenzwerte (TLS)
-		 */
-		String csvParameterDatei = "Parameter_TLS";
-		//String csvParameterDatei = "Parameter";
-		
-		ParaKZDLogImport kzdImport1 = new ParaKZDLogImport(dav, FS1, TEST_DATEN_VERZ + csvParameterDatei); //$NON-NLS-1$
-		ParaKZDLogImport kzdImport2 = new ParaKZDLogImport(dav, FS2, TEST_DATEN_VERZ + csvParameterDatei); //$NON-NLS-1$
-		ParaKZDLogImport kzdImport3 = new ParaKZDLogImport(dav, FS3, TEST_DATEN_VERZ + csvParameterDatei); //$NON-NLS-1$
 
-		kzdImport1.setOptionen(OptionenPlausibilitaetsPruefungLogischVerkehr.KEINE_PRUEFUNG);
-		kzdImport1.importiereParameter(1);
-		
-		kzdImport1.setOptionen(OptionenPlausibilitaetsPruefungLogischVerkehr.NUR_PRUEFUNG);
-		kzdImport1.importiereParameter(1);
-		
-		kzdImport1.setOptionen(OptionenPlausibilitaetsPruefungLogischVerkehr.SETZE_MAX);
-		kzdImport1.importiereParameter(1);
-		
-		kzdImport1.setOptionen(OptionenPlausibilitaetsPruefungLogischVerkehr.SETZE_MIN);
-		kzdImport1.importiereParameter(1);
-		
-		kzdImport1.setOptionen(OptionenPlausibilitaetsPruefungLogischVerkehr.SETZE_MIN_MAX);
-		kzdImport1.importiereParameter(1);
-		
-		kzdImport2.setOptionen(OptionenPlausibilitaetsPruefungLogischVerkehr.KEINE_PRUEFUNG);
-		kzdImport2.importiereParameter(2);
-		
-		kzdImport2.setOptionen(OptionenPlausibilitaetsPruefungLogischVerkehr.NUR_PRUEFUNG);
-		kzdImport2.importiereParameter(2);
-		
-		kzdImport2.setOptionen(OptionenPlausibilitaetsPruefungLogischVerkehr.SETZE_MAX);
-		kzdImport2.importiereParameter(2);
-		
-		kzdImport2.setOptionen(OptionenPlausibilitaetsPruefungLogischVerkehr.SETZE_MIN);
-		kzdImport2.importiereParameter(2);
-		
-		kzdImport2.setOptionen(OptionenPlausibilitaetsPruefungLogischVerkehr.SETZE_MIN_MAX);
-		kzdImport2.importiereParameter(2);
-		
-		kzdImport3.setOptionen(OptionenPlausibilitaetsPruefungLogischVerkehr.KEINE_PRUEFUNG);
-		kzdImport3.importiereParameter(3);
-		
-		kzdImport3.setOptionen(OptionenPlausibilitaetsPruefungLogischVerkehr.NUR_PRUEFUNG);
-		kzdImport3.importiereParameter(3);
-		
-		kzdImport3.setOptionen(OptionenPlausibilitaetsPruefungLogischVerkehr.SETZE_MAX);
-		kzdImport3.importiereParameter(3);
-		
-		kzdImport3.setOptionen(OptionenPlausibilitaetsPruefungLogischVerkehr.SETZE_MIN);
-		kzdImport3.importiereParameter(3);
-		
-		kzdImport3.setOptionen(OptionenPlausibilitaetsPruefungLogischVerkehr.SETZE_MIN_MAX);
-		kzdImport3.importiereParameter(3);
+		kzdImport1 = new ParaKZDLogImport(dav, FS1, TEST_DATEN_VERZ + csvParameterDatei); //$NON-NLS-1$
+		kzdImport2 = new ParaKZDLogImport(dav, FS2, TEST_DATEN_VERZ + csvParameterDatei); //$NON-NLS-1$
+		kzdImport3 = new ParaKZDLogImport(dav, FS3, TEST_DATEN_VERZ + csvParameterDatei); //$NON-NLS-1$
+
+		//importiert Optionen für ersten Teil der Prüfdaten
+		importOptionen(OptionenPlausibilitaetsPruefungLogischVerkehr.SETZE_MAX);
+
 		
 		/*
 		 * Prüffälle
@@ -185,6 +148,20 @@ implements ClientSenderInterface {
 	}
 	
 	/**
+	 * Importiert die Optionen für die Datenprüfung
+	 */
+	private void importOptionen(OptionenPlausibilitaetsPruefungLogischVerkehr option) throws Exception {
+		kzdImport1.setOptionen(option);
+		kzdImport1.importiereParameter(1);
+		
+		kzdImport2.setOptionen(option);
+		kzdImport2.importiereParameter(2);
+		
+		kzdImport3.setOptionen(option);
+		kzdImport3.importiereParameter(3);
+	}
+	
+	/**
 	 * Prüfen der logisch Plausibilisierung
 	 * 
 	 * Für Grenzwertprüfung ist Parametrierung (Parameter.csv) entsprechend
@@ -198,9 +175,6 @@ implements ClientSenderInterface {
 		
 		/*
 		 * Definition der Quell CSV-Dateien
-		 * 
-		 * Fahrstreifen 1 wird in korrigierter Form (vLkw < 255)
-		 * verwendet
 		 * 
 		 * Für Grenzwertprüfung ist auf Import der korrekten
 		 * Parameter (Prameter.csv) zu achten 
@@ -219,7 +193,8 @@ implements ClientSenderInterface {
 		 * PL-Pruef_LVE_Grenz.csv: Soll-Werte der logischen Prüfung mit Grenzwerten
 		 * PL-Pruefung_LZD.csv: Soll-Werte der logischen Prüfung von LZD 
 		 */
-		String csvPruefDatei = "PL-Pruef_LVE_TLS";		//Pruefdatei KZD TLS
+		//String csvPruefDatei = "PL-Pruef_LVE_TLS";		//Pruefdatei KZD TLS
+		String csvPruefDatei = "PL-Pruef_LVE_TLS_Korr";		//Pruefdatei KZD TLS
 		//String csvPruefDatei = "PL-Pruef_LVE_Grenz";		//Pruefdatei KZD Grenzwerte
 		//String csvPruefDatei = "PL-Pruefung_LZD";		//Pruefdatei LZD
 		
@@ -273,6 +248,8 @@ implements ClientSenderInterface {
 			//Erhoehe CSV Index
 			csvIndex++;
 			
+			//wechsel der Reaktionsart auf Grenzwertüberschreitung
+			wechselReaktion(csvIndex);
 			
 			//Erhöhe Zeitstempel
 			aktZeit = aktZeit + Konstante.MINUTE_IN_MS;
@@ -466,6 +443,32 @@ implements ClientSenderInterface {
 	private int zufallsZahl() {
 		Double dZufall = Math.random()*5;
 		return dZufall.intValue();
+	}
+	
+	/**
+	 * Wechselt die Reaktionsart auf Grenzwertüberschreitung
+	 * 
+	 * Ausgegangen wird von 100 Datensätzen -> Wechsel alle 20 Datensätze
+	 */
+	private void wechselReaktion(int csvIndex) throws Exception {
+		switch(csvIndex) {
+			case 20: {
+				importOptionen(OptionenPlausibilitaetsPruefungLogischVerkehr.SETZE_MIN);
+				break;
+			}
+			case 40: {
+				importOptionen(OptionenPlausibilitaetsPruefungLogischVerkehr.SETZE_MAX);
+				break;
+			}
+			case 60: {
+				importOptionen(OptionenPlausibilitaetsPruefungLogischVerkehr.NUR_PRUEFUNG);
+				break;
+			}
+			case 80: {
+				importOptionen(OptionenPlausibilitaetsPruefungLogischVerkehr.KEINE_PRUEFUNG);
+				break;
+			}
+		}
 	}
 	
 	/**
