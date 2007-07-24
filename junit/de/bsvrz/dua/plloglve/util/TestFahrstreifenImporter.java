@@ -155,9 +155,13 @@ extends CSVImporter{
 	 * @param datensatz der Datensatz
 	 * @return der veränderte Datensatz
 	 */
-	private final Data setAttribut(final String attributName, final long wert, Data datensatz){
+	private final Data setAttribut(final String attributName, long wert, Data datensatz){
 		Data data = datensatz;
 
+		if(attributName.startsWith("v") && wert >= 255) {
+			wert = -1;
+		}
+		
 		DUAUtensilien.getAttributDatum(attributName + ".Wert", data).asUnscaledValue().set(wert); //$NON-NLS-1$
 		DUAUtensilien.getAttributDatum(attributName + ".Status.Erfassung.NichtErfasst", data).asUnscaledValue().set(DUAKonstanten.NEIN); //$NON-NLS-1$
 		DUAUtensilien.getAttributDatum(attributName + ".Status.PlFormal.WertMax", data).asUnscaledValue().set(DUAKonstanten.NEIN); //$NON-NLS-1$

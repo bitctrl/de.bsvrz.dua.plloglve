@@ -118,6 +118,7 @@ implements ClientSenderInterface {
 		 * Prameter_TLS.csv: Logische Prüfung ohne Grenzwerte (TLS)
 		 */
 		String csvParameterDatei = "Parameter_TLS";
+		//String csvParameterDatei = "Parameter";
 		
 		ParaKZDLogImport kzdImport1 = new ParaKZDLogImport(dav, FS1, TEST_DATEN_VERZ + csvParameterDatei); //$NON-NLS-1$
 		ParaKZDLogImport kzdImport2 = new ParaKZDLogImport(dav, FS2, TEST_DATEN_VERZ + csvParameterDatei); //$NON-NLS-1$
@@ -204,7 +205,7 @@ implements ClientSenderInterface {
 		 * Für Grenzwertprüfung ist auf Import der korrekten
 		 * Parameter (Prameter.csv) zu achten 
 		 */
-		paraImpFS1 = new TestFahrstreifenImporter(this.dav, TEST_DATEN_VERZ + "fahrstreifen1_Korr"); //$NON-NLS-1$
+		paraImpFS1 = new TestFahrstreifenImporter(this.dav, TEST_DATEN_VERZ + "fahrstreifen1"); //$NON-NLS-1$
 		paraImpFS2 = new TestFahrstreifenImporter(this.dav, TEST_DATEN_VERZ + "fahrstreifen2"); //$NON-NLS-1$
 		paraImpFS3 = new TestFahrstreifenImporter(this.dav, TEST_DATEN_VERZ + "fahrstreifen3"); //$NON-NLS-1$
 		
