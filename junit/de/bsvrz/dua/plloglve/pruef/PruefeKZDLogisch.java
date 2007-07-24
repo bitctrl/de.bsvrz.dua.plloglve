@@ -403,6 +403,7 @@ class VergleicheKZD extends Thread {
 	 */
 	protected Debug LOGGER = Debug.getLogger();
 	private String pruefLog;
+	private String warnung;
 	
 	/**
 	 * Aufrufende Klasse
@@ -547,7 +548,7 @@ class VergleicheKZD extends Thread {
 	 * prüfe Daten
 	 */
 	private void pruefeDaten(ArrayList<HashMap<String,Integer>> csvZeilen, int fsIndex, int csvOffset) throws Exception {
-		String ident = "[FS:"+fsIndex+"-DS:"+csvOffset+"] ";  //FS + CSV Index
+		String ident = "[FS:"+fsIndex+"-DS:"+(csvOffset+2)+"] ";  //FS + CSV Index
 		LOGGER.info("Pruefe Fahrstreifendatum "+ident);
 		
 		HashMap<String,Integer> hmCSV = csvZeilen.get(csvOffset);
@@ -575,6 +576,7 @@ class VergleicheKZD extends Thread {
 		}
 		
 		String attribut;
+		String attribWertKopie;
 		String sollWertErl;
 		String istWertErl;
 		
@@ -584,8 +586,19 @@ class VergleicheKZD extends Thread {
 		for(int i=0;i<attributNamenPraefix.length;i++) {
 			for(int j=0;j<attributNamen.length;j++) {
 				attribut = attributNamenPraefix[i]+attributNamen[j];
+				attribWertKopie = attribut;
+				
+				if(attributNamen[j].length() == 5 && attribWertKopie.contains(".Wert")) {
+					attribWertKopie = attribWertKopie.replace(".Wert", ".Wert.Kopie");
+					if(attribut.startsWith("v") && hmCSV.get(attribut) >= 255) {
+						hmCSV.put(attribut, -2);
+						hmCSV.put(attributNamenPraefix[i]+".Status.MessWertErsetzung.Implausibel", DUAKonstanten.JA);
+					}
+				}
+				
 				sollWertErl = "";
 				istWertErl = "";
+				warnung = "";
 				
 				if(!attribut.equals("tNetto.Wert")) {
 
@@ -595,9 +608,9 @@ class VergleicheKZD extends Thread {
 					}
 					
 					if(!hmCSV.get(attribut).equals(hmResult.get(attribut))) {
-						String warnung = ident+"DIFF ("+attribut+"):"+ hmCSV.get(attribut)+ sollWertErl +" (SOLL)<>(IST) "+hmResult.get(attribut) + istWertErl;
-						if(hmCSV.get(attribut.replaceFirst(".Wert", ".Wert.Kopie")).equals(hmResult.get(attribut))) {
-							warnung += "\n\r"+ident+"W-OK ("+attribut.replaceFirst(".Wert", ".Wert.Kopie")+"):"+ hmCSV.get(attribut.replaceFirst(".Wert", ".Wert.Kopie"))+" (SOLL)<>(IST) "+hmResult.get(attribut);
+						warnung += ident+"DIFF ("+attribut+"):"+ hmCSV.get(attribut)+ sollWertErl +" (SOLL)<>(IST) "+hmResult.get(attribut) + istWertErl;
+						if(attribWertKopie.contains(".Wert.Kopie") && hmCSV.get(attribWertKopie).equals(hmResult.get(attribut))) {
+							warnung += "\n\r"+ident+"W-OK ("+attribWertKopie+"):"+ hmCSV.get(attribWertKopie)+" (SOLL)==(IST) "+hmResult.get(attribut);
 						}
 						LOGGER.warning(warnung);
 						pruefLog += ident+"DIFF ("+attribut+"):"+ hmCSV.get(attribut) + sollWertErl +" (SOLL)<>(IST) "+hmResult.get(attribut) + istWertErl +"\n\r";
