@@ -85,10 +85,10 @@ implements ClientSenderInterface{
 				DAV.getDataModel().getAspect(Konstante.DAV_ASP_PARAMETER_VORGABE),
 				(short)0), SenderRole.sender());
 		
-		System.out.println("Obj: " + objekt + "An: " + new DataDescription(
-				this.getParameterAtg(), 
-				DAV.getDataModel().getAspect(Konstante.DAV_ASP_PARAMETER_VORGABE),
-				(short)0));
+//		System.out.println("Obj: " + objekt + "An: " + new DataDescription(
+//				this.getParameterAtg(), 
+//				DAV.getDataModel().getAspect(Konstante.DAV_ASP_PARAMETER_VORGABE),
+//				(short)0));
 		
 		/**
 		 * Tabellenkopf überspringen
@@ -133,7 +133,7 @@ implements ClientSenderInterface{
 				this.getParameterAtg(), 
 				DAV.getDataModel().getAspect(Konstante.DAV_ASP_PARAMETER_VORGABE),
 				(short)0), System.currentTimeMillis(), this.fuelleRestAttribute(parameter));
-		System.out.println(resultat);
+		//System.out.println(resultat);
 		DAV.sendData(resultat);
 	}
 	
