@@ -35,7 +35,6 @@ import stauma.dav.clientside.SenderRole;
 import stauma.dav.configuration.interfaces.AttributeGroup;
 import stauma.dav.configuration.interfaces.SystemObject;
 import de.bsvrz.dua.plloglve.util.CSVImporter;
-import de.bsvrz.sys.funclib.bitctrl.app.Pause;
 import de.bsvrz.sys.funclib.bitctrl.dua.DUAUtensilien;
 import de.bsvrz.sys.funclib.bitctrl.konstante.Konstante;
 

@@ -26,13 +26,13 @@
 
 package de.bsvrz.dua.plloglve.util.para;
 
-import de.bsvrz.dua.plloglve.plloglve.standard.AtgVerkehrsDatenKZIPlPruefLogisch;
-import de.bsvrz.dua.plloglve.plloglve.typen.OptionenPlausibilitaetsPruefungLogischVerkehr;
-import de.bsvrz.sys.funclib.bitctrl.dua.DUAUtensilien;
 import stauma.dav.clientside.ClientDavInterface;
 import stauma.dav.clientside.Data;
 import stauma.dav.configuration.interfaces.AttributeGroup;
 import stauma.dav.configuration.interfaces.SystemObject;
+import de.bsvrz.dua.plloglve.plloglve.standard.AtgVerkehrsDatenLZIPlPruefLogisch;
+import de.bsvrz.dua.plloglve.plloglve.typen.OptionenPlausibilitaetsPruefungLogischVerkehr;
+import de.bsvrz.sys.funclib.bitctrl.dua.DUAUtensilien;
 
 /**
  * Importiert die Parameter für die Pl-Prüfung logisch LZD
@@ -73,8 +73,6 @@ extends AbstraktParameterImport{
 	 */
 	@Override
 	public Data fuelleRestAttribute(Data datensatz) {
-		DUAUtensilien.getAttributDatum("qKfzBereich.Min", datensatz).asUnscaledValue().set(0); //$NON-NLS-1$
-		DUAUtensilien.getAttributDatum("qKfzBereich.Max", datensatz).asUnscaledValue().set(0); //$NON-NLS-1$
 		DUAUtensilien.getAttributDatum("qPkwÄBereich.Min", datensatz).asUnscaledValue().set(0); //$NON-NLS-1$
 		DUAUtensilien.getAttributDatum("qPkwÄBereich.Max", datensatz).asUnscaledValue().set(0); //$NON-NLS-1$
 		DUAUtensilien.getAttributDatum("qKfzNkBereich.Min", datensatz).asUnscaledValue().set(0); //$NON-NLS-1$
@@ -91,8 +89,6 @@ extends AbstraktParameterImport{
 		DUAUtensilien.getAttributDatum("qLkwÄBereich.Max", datensatz).asUnscaledValue().set(0); //$NON-NLS-1$
 		DUAUtensilien.getAttributDatum("qPkwABereich.Min", datensatz).asUnscaledValue().set(0); //$NON-NLS-1$
 		DUAUtensilien.getAttributDatum("qPkwABereich.Max", datensatz).asUnscaledValue().set(0); //$NON-NLS-1$
-		DUAUtensilien.getAttributDatum("qLkwBereich.Min", datensatz).asUnscaledValue().set(0); //$NON-NLS-1$
-		DUAUtensilien.getAttributDatum("qLkwBereich.Max", datensatz).asUnscaledValue().set(0); //$NON-NLS-1$
 		DUAUtensilien.getAttributDatum("qBusBereich.Min", datensatz).asUnscaledValue().set(0); //$NON-NLS-1$		
 		DUAUtensilien.getAttributDatum("qBusBereich.Max", datensatz).asUnscaledValue().set(0); //$NON-NLS-1$
 		DUAUtensilien.getAttributDatum("qLkwKBereich.Min", datensatz).asUnscaledValue().set(0); //$NON-NLS-1$
@@ -108,6 +104,7 @@ extends AbstraktParameterImport{
 		DUAUtensilien.getAttributDatum("vKfzNkBereich.Min", datensatz).asUnscaledValue().set(0); //$NON-NLS-1$
 		DUAUtensilien.getAttributDatum("vKfzNkBereich.Max", datensatz).asUnscaledValue().set(0); //$NON-NLS-1$		
 		DUAUtensilien.getAttributDatum("vPkwGBereich.Min", datensatz).asUnscaledValue().set(0); //$NON-NLS-1$
+		DUAUtensilien.getAttributDatum("vPkwGBereich.Max", datensatz).asUnscaledValue().set(0); //$NON-NLS-1$
 		DUAUtensilien.getAttributDatum("vPkwBereich.Min", datensatz).asUnscaledValue().set(0); //$NON-NLS-1$
 		DUAUtensilien.getAttributDatum("vPkwBereich.Max", datensatz).asUnscaledValue().set(0); //$NON-NLS-1$
 		DUAUtensilien.getAttributDatum("vKradBereich.Min", datensatz).asUnscaledValue().set(0); //$NON-NLS-1$
@@ -259,7 +256,7 @@ extends AbstraktParameterImport{
 	 */
 	@Override
 	protected AttributeGroup getParameterAtg() {
-		return DAV.getDataModel().getAttributeGroup(AtgVerkehrsDatenKZIPlPruefLogisch.getPid());
+		return DAV.getDataModel().getAttributeGroup(AtgVerkehrsDatenLZIPlPruefLogisch.getPid());
 	}
 
 }

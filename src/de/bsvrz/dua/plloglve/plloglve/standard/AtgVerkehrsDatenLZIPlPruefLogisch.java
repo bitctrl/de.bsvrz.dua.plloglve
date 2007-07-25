@@ -49,10 +49,10 @@ extends AbstraktAtgPLLogischLVEParameter {
 			throw new NullPointerException("Uebergebenes Datum ist <<null>>"); //$NON-NLS-1$
 		}
 		this.optionen = OptionenPlausibilitaetsPruefungLogischVerkehr.getZustand(data.getUnscaledValue("Optionen").intValue()); //$NON-NLS-1$
-		this.qKfzBereichMin = data.getItem("qKfzBereich").getUnscaledValue("Min").intValue();  //$NON-NLS-1$//$NON-NLS-2$
-		this.qKfzBereichMax = data.getItem("qKfzBereich").getUnscaledValue("Max").intValue();  //$NON-NLS-1$//$NON-NLS-2$
-		this.qLkwBereichMin = data.getItem("qLkwBereich").getUnscaledValue("Min").intValue();  //$NON-NLS-1$//$NON-NLS-2$
-		this.qLkwBereichMax = data.getItem("qLkwBereich").getUnscaledValue("Max").intValue();  //$NON-NLS-1$//$NON-NLS-2$
+		this.qKfzBereichMin = data.getItem("qKfzBereich").getUnscaledValue("Min").longValue();  //$NON-NLS-1$//$NON-NLS-2$
+		this.qKfzBereichMax = data.getItem("qKfzBereich").getUnscaledValue("Max").longValue();  //$NON-NLS-1$//$NON-NLS-2$
+		this.qLkwBereichMin = data.getItem("qLkwBereich").getUnscaledValue("Min").longValue();  //$NON-NLS-1$//$NON-NLS-2$
+		this.qLkwBereichMax = data.getItem("qLkwBereich").getUnscaledValue("Max").longValue();  //$NON-NLS-1$//$NON-NLS-2$
 	}
 
 	

@@ -61,9 +61,9 @@ extends AbstraktDAVZeitEinzelDatum{
 		this.intervallLaenge = originalDatum.getData().
 									getUnscaledValue("T").longValue(); //$NON-NLS-1$		
 		this.ausgefallen = 
-			originalDatum.getData().getUnscaledValue(name).intValue() == DUAKonstanten.FEHLERHAFT ||
+			originalDatum.getData().getUnscaledValue(name).longValue() == DUAKonstanten.FEHLERHAFT ||
 			originalDatum.getData().getItem(name).getItem("Status").getItem("MessWertErsetzung").   //$NON-NLS-1$//$NON-NLS-2$
-					getUnscaledValue("Implausibel").intValue() == DUAKonstanten.JA;   //$NON-NLS-1$
+					getUnscaledValue("Implausibel").longValue() == DUAKonstanten.JA;   //$NON-NLS-1$
 	}
 
 	

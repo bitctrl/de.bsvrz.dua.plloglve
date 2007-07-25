@@ -26,6 +26,8 @@
 
 package de.bsvrz.dua.plloglve.plloglve.standard;
 
+import javax.swing.text.html.Option;
+
 import stauma.dav.clientside.ClientDavInterface;
 import stauma.dav.clientside.ClientReceiverInterface;
 import stauma.dav.clientside.Data;
@@ -131,10 +133,10 @@ implements ClientReceiverInterface{
 	 * @return das um qPkw und vKfz erweiterte KZD
 	 */
 	protected Data berechneQPkw(Data data){
-		final long qKfz = data.getItem("qKfz").getUnscaledValue("Wert").intValue(); //$NON-NLS-1$ //$NON-NLS-2$
-		final long qLkw = data.getItem("qLkw").getUnscaledValue("Wert").intValue(); //$NON-NLS-1$ //$NON-NLS-2$
+		final long qKfz = data.getItem("qKfz").getUnscaledValue("Wert").longValue(); //$NON-NLS-1$ //$NON-NLS-2$
+		final long qLkw = data.getItem("qLkw").getUnscaledValue("Wert").longValue(); //$NON-NLS-1$ //$NON-NLS-2$
 				
-		if(qKfz == 100){
+		if(qKfz == 3820){
 			System.out.println();
 		}
 		
@@ -163,8 +165,8 @@ implements ClientReceiverInterface{
 			DUAUtensilien.getAttributDatum("qPkw.Status.MessWertErsetzung.Implausibel", data).asUnscaledValue().set(DUAKonstanten.JA); //$NON-NLS-1$
 		}
 		
-		final long vPkw = data.getItem("vPkw").getUnscaledValue("Wert").intValue(); //$NON-NLS-1$ //$NON-NLS-2$
-		final long vLkw = data.getItem("vLkw").getUnscaledValue("Wert").intValue(); //$NON-NLS-1$ //$NON-NLS-2$
+		final long vPkw = data.getItem("vPkw").getUnscaledValue("Wert").longValue(); //$NON-NLS-1$ //$NON-NLS-2$
+		final long vLkw = data.getItem("vLkw").getUnscaledValue("Wert").longValue(); //$NON-NLS-1$ //$NON-NLS-2$
 		long vKfz = DUAKonstanten.NICHT_ERMITTELBAR;
 		double vKfzGuete = -1;
 		if(qKfz > 0){
@@ -216,18 +218,22 @@ implements ClientReceiverInterface{
 	/**
 	 * Untersucht den Wertebereich eines Verkehrs-Datums und markiert ggf. verletzte Wertebereiche
 	 * 
-	 * @param davDatum ein Verkehrs-Datums (darf nicht <code>null</code> sein)
+	 * @param davDatum ein zu veränderndes Verkehrs-Datums (darf nicht <code>null</code> sein)
+	 * @param resultat das Originaldatum
 	 * @param wertName der Name des final Attributs 
 	 * @param min untere Grenze des Wertes
 	 * @param max obere Grenze des Wertes
 	 * @return das plaubilisierte (markierte) Datum 
 	 */
-	protected Data untersucheWerteBereich(Data davDatum, final String wertName, final long min, final long max){
+	protected Data untersucheWerteBereich(Data davDatum, final ResultData resultat, 
+			final String wertName, final long min, final long max){
+		
 		if(this.parameterAtgLog != null){
+			
 			OptionenPlausibilitaetsPruefungLogischVerkehr optionen = this.parameterAtgLog.getOptionen();
 
 			if(!optionen.equals(OptionenPlausibilitaetsPruefungLogischVerkehr.KEINE_PRUEFUNG)){
-				long wert = davDatum.getItem(wertName).getUnscaledValue("Wert").intValue(); //$NON-NLS-1$
+				long wert = resultat.getData().getItem(wertName).getUnscaledValue("Wert").longValue(); //$NON-NLS-1$
 				
 				/**
 				 * sonst handelt es sich nicht um einen Messwert
@@ -238,38 +244,65 @@ implements ClientReceiverInterface{
 					boolean gueteNeuBerechnen = false;
 		
 					if(minVerletzt){
-						DUAUtensilien.getAttributDatum(wertName + ".Status.PlLogisch.WertMinLogisch", davDatum). //$NON-NLS-1$
-									asUnscaledValue().set(DUAKonstanten.JA);
-					}
-					if(maxVerletzt){
-						DUAUtensilien.getAttributDatum(wertName + ".Status.PlLogisch.WertMaxLogisch", davDatum). //$NON-NLS-1$
-									asUnscaledValue().set(DUAKonstanten.JA);						
-					}
-						
-					if(optionen.equals(OptionenPlausibilitaetsPruefungLogischVerkehr.SETZE_MAX)){
-						if(maxVerletzt){
+						if(optionen.equals(OptionenPlausibilitaetsPruefungLogischVerkehr.SETZE_MIN) || 
+						   optionen.equals(OptionenPlausibilitaetsPruefungLogischVerkehr.SETZE_MIN_MAX)){
 							DUAUtensilien.getAttributDatum(wertName + ".Wert", davDatum). //$NON-NLS-1$
-								asUnscaledValue().set(max);
+										asUnscaledValue().set(min);
+							DUAUtensilien.getAttributDatum(wertName + ".Status.PlLogisch.WertMinLogisch", davDatum). //$NON-NLS-1$
+										asUnscaledValue().set(DUAKonstanten.JA);
 							gueteNeuBerechnen = true;
-						}					
-					}else if(optionen.equals(OptionenPlausibilitaetsPruefungLogischVerkehr.SETZE_MIN)){
-						if(minVerletzt){
-							DUAUtensilien.getAttributDatum(wertName + ".Wert", davDatum). //$NON-NLS-1$
-								asUnscaledValue().set(min);
-							gueteNeuBerechnen = true;
-						}															
-					}else if(optionen.equals(OptionenPlausibilitaetsPruefungLogischVerkehr.SETZE_MIN_MAX)){
-						if(maxVerletzt){
-							DUAUtensilien.getAttributDatum(wertName + ".Wert", davDatum). //$NON-NLS-1$
-								asUnscaledValue().set(max);
-							gueteNeuBerechnen = true;
-						}else					
-						if(minVerletzt){
-							DUAUtensilien.getAttributDatum(wertName + ".Wert", davDatum). //$NON-NLS-1$
-								asUnscaledValue().set(min);
-							gueteNeuBerechnen = true;
+						}else
+						if(optionen.equals(OptionenPlausibilitaetsPruefungLogischVerkehr.NUR_PRUEFUNG)){
+							DUAUtensilien.getAttributDatum(wertName + ".Status.MessWertErsetzung.Implausibel", davDatum). //$NON-NLS-1$
+										asUnscaledValue().set(DUAKonstanten.JA);
 						}
 					}
+					if(maxVerletzt){
+						if(optionen.equals(OptionenPlausibilitaetsPruefungLogischVerkehr.SETZE_MAX) || 
+						   optionen.equals(OptionenPlausibilitaetsPruefungLogischVerkehr.SETZE_MIN_MAX)){
+							DUAUtensilien.getAttributDatum(wertName + ".Status.PlLogisch.WertMaxLogisch", davDatum). //$NON-NLS-1$
+										asUnscaledValue().set(DUAKonstanten.JA);						
+							DUAUtensilien.getAttributDatum(wertName + ".Wert", davDatum). //$NON-NLS-1$
+										asUnscaledValue().set(max);	
+							gueteNeuBerechnen = true;
+						}else
+						if(optionen.equals(OptionenPlausibilitaetsPruefungLogischVerkehr.NUR_PRUEFUNG)){
+							DUAUtensilien.getAttributDatum(wertName + ".Status.MessWertErsetzung.Implausibel", davDatum). //$NON-NLS-1$
+										asUnscaledValue().set(DUAKonstanten.JA);
+						}
+					}
+						
+//					if(optionen.equals(OptionenPlausibilitaetsPruefungLogischVerkehr.SETZE_MAX)){
+//						if(maxVerletzt){
+//							DUAUtensilien.getAttributDatum(wertName + ".Wert", davDatum). //$NON-NLS-1$
+//								asUnscaledValue().set(max);
+//							DUAUtensilien.getAttributDatum(wertName + ".Status.PlLogisch.WertMaxLogisch", davDatum). //$NON-NLS-1$
+//								asUnscaledValue().set(DUAKonstanten.JA);						
+//							gueteNeuBerechnen = true;
+//						}					
+//					}else if(optionen.equals(OptionenPlausibilitaetsPruefungLogischVerkehr.SETZE_MIN)){
+//						if(minVerletzt){
+//							DUAUtensilien.getAttributDatum(wertName + ".Wert", davDatum). //$NON-NLS-1$
+//								asUnscaledValue().set(min);
+//							DUAUtensilien.getAttributDatum(wertName + ".Status.PlLogisch.WertMinLogisch", davDatum). //$NON-NLS-1$
+//								asUnscaledValue().set(DUAKonstanten.JA);						
+//							gueteNeuBerechnen = true;
+//						}															
+//					}else if(optionen.equals(OptionenPlausibilitaetsPruefungLogischVerkehr.SETZE_MIN_MAX)){
+//						if(maxVerletzt){
+//							DUAUtensilien.getAttributDatum(wertName + ".Wert", davDatum). //$NON-NLS-1$
+//								asUnscaledValue().set(max);
+//							gueteNeuBerechnen = true;
+//						}else					
+//						if(minVerletzt){
+//							DUAUtensilien.getAttributDatum(wertName + ".Wert", davDatum). //$NON-NLS-1$
+//								asUnscaledValue().set(min);
+//							gueteNeuBerechnen = true;
+//						}
+//					}else{
+//						DUAUtensilien.getAttributDatum(wertName + ".Wert", davDatum). //$NON-NLS-1$
+//																		asUnscaledValue().set(DUAKonstanten.FEHLERHAFT);						
+//					}
 					
 					if(gueteNeuBerechnen){
 						double guete = DUAUtensilien.getAttributDatum(wertName + ".Güte.Index", davDatum). //$NON-NLS-1$
@@ -330,14 +363,14 @@ implements ClientReceiverInterface{
 	 * @param data
 	 * @param resultat der Original-Datensatz
 	 */
-	protected abstract void ueberpruefeKontextFehler(Data data, final ResultData resultat);
+	protected abstract void ueberpruefe(Data data, final ResultData resultat);
 	
-	
-	/**
-	 * Testet das übergebene Datum darauf, ob es sich im parametrierten Intervall befindet
-	 * 
-	 * @param data ein FG1-Datum (dieses kann verändert werden)
-	 */
-	protected abstract void grenzWertTests(Data data);
+//	
+//	/**
+//	 * Testet das übergebene Datum darauf, ob es sich im parametrierten Intervall befindet
+//	 * 
+//	 * @param data ein FG1-Datum (dieses kann verändert werden)
+//	 */
+//	protected abstract void grenzWertTests(Data data);
 
 }

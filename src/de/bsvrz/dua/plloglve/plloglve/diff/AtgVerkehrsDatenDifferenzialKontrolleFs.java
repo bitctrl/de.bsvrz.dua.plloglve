@@ -26,7 +26,7 @@
 
 package de.bsvrz.dua.plloglve.plloglve.diff;
 
-import de.bsvrz.sys.funclib.bitctrl.dua.AtgDatenObjekt;
+import de.bsvrz.sys.funclib.bitctrl.dua.AllgemeinerDatenContainer;
 import stauma.dav.clientside.Data;
 
 /**
@@ -37,7 +37,7 @@ import stauma.dav.clientside.Data;
  *
  */
 public class AtgVerkehrsDatenDifferenzialKontrolleFs
-extends AtgDatenObjekt{
+extends AllgemeinerDatenContainer{
 
 	/**
 	 * Maximal zulässige Anzahl von Intervallen mit Ergebniskonstanz für qKfz
@@ -89,14 +89,14 @@ extends AtgDatenObjekt{
 		if(data == null){
 			throw new NullPointerException("Uebergebenes Datum ist <<null>>"); //$NON-NLS-1$
 		}
-		this.maxAnzKonstanzqKfz = data.getUnscaledValue("maxAnzKonstanzqKfz").intValue(); //$NON-NLS-1$
-		this.maxAnzKonstanzqLkw = data.getUnscaledValue("maxAnzKonstanzqLkw").intValue(); //$NON-NLS-1$
-		this.maxAnzKonstanzqPkw = data.getUnscaledValue("maxAnzKonstanzqPkw").intValue(); //$NON-NLS-1$
-		this.maxAnzKonstanzvKfz = data.getUnscaledValue("maxAnzKonstanzvKfz").intValue(); //$NON-NLS-1$
-		this.maxAnzKonstanzvLkw = data.getUnscaledValue("maxAnzKonstanzvLkw").intValue(); //$NON-NLS-1$
-		this.maxAnzKonstanzvPkw = data.getUnscaledValue("maxAnzKonstanzvPkw").intValue(); //$NON-NLS-1$
-		this.maxAnzKonstanzStreung = data.getUnscaledValue("maxAnzKonstanzStreung").intValue(); //$NON-NLS-1$
-		this.maxAnzKonstanzBelegung = data.getUnscaledValue("maxAnzKonstanzBelegung").intValue(); //$NON-NLS-1$
+		this.maxAnzKonstanzqKfz = data.getUnscaledValue("maxAnzKonstanzqKfz").longValue(); //$NON-NLS-1$
+		this.maxAnzKonstanzqLkw = data.getUnscaledValue("maxAnzKonstanzqLkw").longValue(); //$NON-NLS-1$
+		this.maxAnzKonstanzqPkw = data.getUnscaledValue("maxAnzKonstanzqPkw").longValue(); //$NON-NLS-1$
+		this.maxAnzKonstanzvKfz = data.getUnscaledValue("maxAnzKonstanzvKfz").longValue(); //$NON-NLS-1$
+		this.maxAnzKonstanzvLkw = data.getUnscaledValue("maxAnzKonstanzvLkw").longValue(); //$NON-NLS-1$
+		this.maxAnzKonstanzvPkw = data.getUnscaledValue("maxAnzKonstanzvPkw").longValue(); //$NON-NLS-1$
+		this.maxAnzKonstanzStreung = data.getUnscaledValue("maxAnzKonstanzStreung").longValue(); //$NON-NLS-1$
+		this.maxAnzKonstanzBelegung = data.getUnscaledValue("maxAnzKonstanzBelegung").longValue(); //$NON-NLS-1$
 	}
 
 

@@ -64,31 +64,31 @@ extends AbstraktDAVZeitEinzelDatum{
 		
 		this.intervallLaenge = data.getTimeValue("T").getMillis(); //$NON-NLS-1$
 		
-		final long qKfzWert = data.getItem("qKfz").getUnscaledValue("Wert").intValue(); //$NON-NLS-1$ //$NON-NLS-2$
-		final long qLkwWert = data.getItem("qLkw").getUnscaledValue("Wert").intValue(); //$NON-NLS-1$ //$NON-NLS-2$
-		final long qPkwWert = data.getItem("qPkw").getUnscaledValue("Wert").intValue(); //$NON-NLS-1$ //$NON-NLS-2$
-		final long vPkwWert = data.getItem("vPkw").getUnscaledValue("Wert").intValue(); //$NON-NLS-1$ //$NON-NLS-2$
-		final long vLkwWert = data.getItem("vLkw").getUnscaledValue("Wert").intValue(); //$NON-NLS-1$ //$NON-NLS-2$
-		final long vKfzWert = data.getItem("vKfz").getUnscaledValue("Wert").intValue(); //$NON-NLS-1$ //$NON-NLS-2$
-		final long bWert = data.getItem("b").getUnscaledValue("Wert").intValue(); //$NON-NLS-1$ //$NON-NLS-2$
-		final long sKfzWert = data.getItem("sKfz").getUnscaledValue("Wert").intValue(); //$NON-NLS-1$ //$NON-NLS-2$
+		final long qKfzWert = data.getItem("qKfz").getUnscaledValue("Wert").longValue(); //$NON-NLS-1$ //$NON-NLS-2$
+		final long qLkwWert = data.getItem("qLkw").getUnscaledValue("Wert").longValue(); //$NON-NLS-1$ //$NON-NLS-2$
+		final long qPkwWert = data.getItem("qPkw").getUnscaledValue("Wert").longValue(); //$NON-NLS-1$ //$NON-NLS-2$
+		final long vPkwWert = data.getItem("vPkw").getUnscaledValue("Wert").longValue(); //$NON-NLS-1$ //$NON-NLS-2$
+		final long vLkwWert = data.getItem("vLkw").getUnscaledValue("Wert").longValue(); //$NON-NLS-1$ //$NON-NLS-2$
+		final long vKfzWert = data.getItem("vKfz").getUnscaledValue("Wert").longValue(); //$NON-NLS-1$ //$NON-NLS-2$
+		final long bWert = data.getItem("b").getUnscaledValue("Wert").longValue(); //$NON-NLS-1$ //$NON-NLS-2$
+		final long sKfzWert = data.getItem("sKfz").getUnscaledValue("Wert").longValue(); //$NON-NLS-1$ //$NON-NLS-2$
 
 		final long qKfzImpl = data.getItem("qKfz").getItem("Status").getItem("MessWertErsetzung").   //$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$
-								getUnscaledValue("Implausibel").intValue(); //$NON-NLS-1$	
+								getUnscaledValue("Implausibel").longValue(); //$NON-NLS-1$	
 		final long qLkwImpl = data.getItem("qLkw").getItem("Status").getItem("MessWertErsetzung").   //$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$
-								getUnscaledValue("Implausibel").intValue(); //$NON-NLS-1$	
+								getUnscaledValue("Implausibel").longValue(); //$NON-NLS-1$	
 		final long qPkwImpl = data.getItem("qPkw").getItem("Status").getItem("MessWertErsetzung").   //$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$
-								getUnscaledValue("Implausibel").intValue(); //$NON-NLS-1$	
+								getUnscaledValue("Implausibel").longValue(); //$NON-NLS-1$	
 		final long vKfzImpl = data.getItem("vKfz").getItem("Status").getItem("MessWertErsetzung").   //$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$
-								getUnscaledValue("Implausibel").intValue(); //$NON-NLS-1$	
+								getUnscaledValue("Implausibel").longValue(); //$NON-NLS-1$	
 		final long vLkwImpl = data.getItem("vLkw").getItem("Status").getItem("MessWertErsetzung").   //$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$
-								getUnscaledValue("Implausibel").intValue(); //$NON-NLS-1$	
+								getUnscaledValue("Implausibel").longValue(); //$NON-NLS-1$	
 		final long vPkwImpl = data.getItem("vPkw").getItem("Status").getItem("MessWertErsetzung").   //$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$
-								getUnscaledValue("Implausibel").intValue(); //$NON-NLS-1$	
+								getUnscaledValue("Implausibel").longValue(); //$NON-NLS-1$	
 		final long sKfzImpl = data.getItem("sKfz").getItem("Status").getItem("MessWertErsetzung").   //$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$
-								getUnscaledValue("Implausibel").intValue(); //$NON-NLS-1$	
+								getUnscaledValue("Implausibel").longValue(); //$NON-NLS-1$	
 		final long bImpl = data.getItem("b").getItem("Status").getItem("MessWertErsetzung").   //$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$
-								getUnscaledValue("Implausibel").intValue(); //$NON-NLS-1$
+								getUnscaledValue("Implausibel").longValue(); //$NON-NLS-1$
 		
 		this.ausfallStr = Konstante.LEERSTRING;
 		if(qKfzWert == DUAKonstanten.FEHLERHAFT || qKfzImpl == DUAKonstanten.JA){

@@ -49,25 +49,25 @@ extends AbstraktAtgPLLogischLVEParameter{
 		if(data == null){
 			throw new NullPointerException("Uebergebenes Datum ist <<null>>"); //$NON-NLS-1$
 		}
-		this.vKfzGrenz = data.getUnscaledValue("vKfzGrenz").intValue(); //$NON-NLS-1$
-		this.bGrenz = data.getUnscaledValue("bGrenz").intValue(); //$NON-NLS-1$
+		this.vKfzGrenz = data.getUnscaledValue("vKfzGrenz").longValue(); //$NON-NLS-1$
+		this.bGrenz = data.getUnscaledValue("bGrenz").longValue(); //$NON-NLS-1$
 		this.optionen = OptionenPlausibilitaetsPruefungLogischVerkehr.getZustand(data.getUnscaledValue("Optionen").intValue()); //$NON-NLS-1$
-		this.qKfzBereichMin = data.getItem("qKfzBereich").getUnscaledValue("Min").intValue();  //$NON-NLS-1$//$NON-NLS-2$
-		this.qKfzBereichMax = data.getItem("qKfzBereich").getUnscaledValue("Max").intValue();  //$NON-NLS-1$//$NON-NLS-2$
-		this.qLkwBereichMin = data.getItem("qLkwBereich").getUnscaledValue("Min").intValue();  //$NON-NLS-1$//$NON-NLS-2$
-		this.qLkwBereichMax = data.getItem("qLkwBereich").getUnscaledValue("Max").intValue();  //$NON-NLS-1$//$NON-NLS-2$
-		this.qPkwBereichMin = data.getItem("qPkwBereich").getUnscaledValue("Min").intValue();  //$NON-NLS-1$//$NON-NLS-2$
-		this.qPkwBereichMax = data.getItem("qPkwBereich").getUnscaledValue("Max").intValue();  //$NON-NLS-1$//$NON-NLS-2$
-		this.vKfzBereichMin = data.getItem("vKfzBereich").getUnscaledValue("Min").intValue();  //$NON-NLS-1$//$NON-NLS-2$
-		this.vKfzBereichMax = data.getItem("vKfzBereich").getUnscaledValue("Max").intValue();  //$NON-NLS-1$//$NON-NLS-2$
-		this.vLkwBereichMin = data.getItem("vLkwBereich").getUnscaledValue("Min").intValue();  //$NON-NLS-1$//$NON-NLS-2$
-		this.vLkwBereichMax = data.getItem("vLkwBereich").getUnscaledValue("Max").intValue();  //$NON-NLS-1$//$NON-NLS-2$
-		this.vPkwBereichMin = data.getItem("vPkwBereich").getUnscaledValue("Min").intValue();  //$NON-NLS-1$//$NON-NLS-2$
-		this.vPkwBereichMax = data.getItem("vPkwBereich").getUnscaledValue("Max").intValue();  //$NON-NLS-1$//$NON-NLS-2$
-		this.vgKfzBereichMin = data.getItem("vgKfzBereich").getUnscaledValue("Min").intValue();  //$NON-NLS-1$//$NON-NLS-2$
-		this.vgKfzBereichMax = data.getItem("vgKfzBereich").getUnscaledValue("Max").intValue(); //$NON-NLS-1$//$NON-NLS-2$
-		this.belegungBereichMin = data.getItem("BelegungBereich").getUnscaledValue("Min").intValue();  //$NON-NLS-1$//$NON-NLS-2$
-		this.belegungBereichMax = data.getItem("BelegungBereich").getUnscaledValue("Max").intValue();  //$NON-NLS-1$//$NON-NLS-2$
+		this.qKfzBereichMin = data.getItem("qKfzBereich").getUnscaledValue("Min").longValue();  //$NON-NLS-1$//$NON-NLS-2$
+		this.qKfzBereichMax = data.getItem("qKfzBereich").getUnscaledValue("Max").longValue();  //$NON-NLS-1$//$NON-NLS-2$
+		this.qLkwBereichMin = data.getItem("qLkwBereich").getUnscaledValue("Min").longValue();  //$NON-NLS-1$//$NON-NLS-2$
+		this.qLkwBereichMax = data.getItem("qLkwBereich").getUnscaledValue("Max").longValue();  //$NON-NLS-1$//$NON-NLS-2$
+		this.qPkwBereichMin = data.getItem("qPkwBereich").getUnscaledValue("Min").longValue();  //$NON-NLS-1$//$NON-NLS-2$
+		this.qPkwBereichMax = data.getItem("qPkwBereich").getUnscaledValue("Max").longValue();  //$NON-NLS-1$//$NON-NLS-2$
+		this.vKfzBereichMin = data.getItem("vKfzBereich").getUnscaledValue("Min").longValue();  //$NON-NLS-1$//$NON-NLS-2$
+		this.vKfzBereichMax = data.getItem("vKfzBereich").getUnscaledValue("Max").longValue();  //$NON-NLS-1$//$NON-NLS-2$
+		this.vLkwBereichMin = data.getItem("vLkwBereich").getUnscaledValue("Min").longValue();  //$NON-NLS-1$//$NON-NLS-2$
+		this.vLkwBereichMax = data.getItem("vLkwBereich").getUnscaledValue("Max").longValue();  //$NON-NLS-1$//$NON-NLS-2$
+		this.vPkwBereichMin = data.getItem("vPkwBereich").getUnscaledValue("Min").longValue();  //$NON-NLS-1$//$NON-NLS-2$
+		this.vPkwBereichMax = data.getItem("vPkwBereich").getUnscaledValue("Max").longValue();  //$NON-NLS-1$//$NON-NLS-2$
+		this.vgKfzBereichMin = data.getItem("vgKfzBereich").getUnscaledValue("Min").longValue();  //$NON-NLS-1$//$NON-NLS-2$
+		this.vgKfzBereichMax = data.getItem("vgKfzBereich").getUnscaledValue("Max").longValue(); //$NON-NLS-1$//$NON-NLS-2$
+		this.belegungBereichMin = data.getItem("BelegungBereich").getUnscaledValue("Min").longValue();  //$NON-NLS-1$//$NON-NLS-2$
+		this.belegungBereichMax = data.getItem("BelegungBereich").getUnscaledValue("Max").longValue();  //$NON-NLS-1$//$NON-NLS-2$
 	}
 
 	

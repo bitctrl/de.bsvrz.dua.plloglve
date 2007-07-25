@@ -190,7 +190,7 @@ implements ClientReceiverInterface{
 				if(davParameter != null && davParameter.getData() != null){
 					synchronized (this) {
 						this.maxAusfallProTag = davParameter.getData().getUnscaledValue(
-												"maxAusfallProTag").intValue(); //$NON-NLS-1$
+												"maxAusfallProTag").longValue(); //$NON-NLS-1$
 					}
 				}
 			}

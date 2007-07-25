@@ -31,6 +31,11 @@ import stauma.dav.clientside.Data;
 import stauma.dav.clientside.ResultData;
 import stauma.dav.configuration.interfaces.AttributeGroup;
 import stauma.dav.configuration.interfaces.SystemObject;
+import de.bsvrz.dua.guete.GWert;
+import de.bsvrz.dua.guete.GueteException;
+import de.bsvrz.dua.guete.GueteVerfahren;
+import de.bsvrz.sys.funclib.bitctrl.dua.DUAKonstanten;
+import de.bsvrz.sys.funclib.bitctrl.dua.DUAUtensilien;
 import de.bsvrz.sys.funclib.bitctrl.dua.schnittstellen.IVerwaltungMitGuete;
 import de.bsvrz.sys.funclib.bitctrl.konstante.Konstante;
 
@@ -40,7 +45,7 @@ import de.bsvrz.sys.funclib.bitctrl.konstante.Konstante;
  *
  */
 public class LzdPLFahrStreifen 
-extends AbstraktPLFahrStreifen{
+extends KzdPLFahrStreifen{
 	
 	
 	/**
@@ -55,56 +60,121 @@ extends AbstraktPLFahrStreifen{
 	 * {@inheritDoc}
 	 */
 	@Override
-	protected Data plausibilisiere(final ResultData resultat){
-		Data copy = null;
+	protected Data berechneQPkw(Data data){
+		final long qKfz = data.getItem("qKfz").getUnscaledValue("Wert").longValue(); //$NON-NLS-1$ //$NON-NLS-2$
+		final long qLkw = data.getItem("qLkw").getUnscaledValue("Wert").longValue(); //$NON-NLS-1$ //$NON-NLS-2$
+				
+		if(qLkw == 57023){
+			System.out.println();
+		}
 		
-		if(resultat.getData() != null){
-			try{
-				copy = resultat.getData().createModifiableCopy();
-			}catch(IllegalStateException ex){
-				LOGGER.info(Konstante.LEERSTRING, ex);
+		long qPkw = 0;
+		double qPkwGuete = -1;
+		if(qKfz >= 0){
+			long qPkwDummy = qKfz - (qLkw >= 0?qLkw:0);
+			if(qPkwDummy >= 0){
+				qPkw = qPkwDummy;	
+			}else{
+				qPkw = 0;
+				DUAUtensilien.getAttributDatum("qPkw.Status.MessWertErsetzung.Implausibel", data).asUnscaledValue().set(DUAKonstanten.JA); //$NON-NLS-1$
 			}
 			
-			if(copy != null){
-				this.grenzWertTests(copy);
-			}else{
-				LOGGER.warning("Es konnte keine Kopie von Datensatz erzeugt werden:\n" //$NON-NLS-1$
-						+ resultat);
+
+			try {
+				GWert qKfzG = new GWert(data.getItem("qKfz").getItem("Güte")); //$NON-NLS-1$ //$NON-NLS-2$
+				GWert qLkwG = new GWert(data.getItem("qLkw").getItem("Güte"));  //$NON-NLS-1$ //$NON-NLS-2$
+				qPkwGuete = GueteVerfahren.differenz(qKfzG, qLkwG).getIndex();
+			} catch (GueteException e) {
+				e.printStackTrace();
+				LOGGER.error("Berechnung der Guete von qPkw fehlgeschlagen", e); //$NON-NLS-1$
 			}
 		}
 		
-		return copy;
+		if(DUAUtensilien.isWertInWerteBereich(data.getItem("qPkw").getItem("Wert"), qPkw)){ //$NON-NLS-1$ //$NON-NLS-2$
+			data.getItem("qPkw").getUnscaledValue("Wert").set(qPkw); //$NON-NLS-1$ //$NON-NLS-2$	
+			if(qPkwGuete >= 0.0){
+				data.getItem("qPkw").getItem("Güte").getScaledValue("Index").set(qPkwGuete); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+			}
+		}else{
+			DUAUtensilien.getAttributDatum("qPkw.Status.MessWertErsetzung.Implausibel", data).asUnscaledValue().set(DUAKonstanten.JA); //$NON-NLS-1$
+		}
+		
+		final long vPkw = data.getItem("vPkw").getUnscaledValue("Wert").longValue(); //$NON-NLS-1$ //$NON-NLS-2$
+		final long vLkw = data.getItem("vLkw").getUnscaledValue("Wert").longValue(); //$NON-NLS-1$ //$NON-NLS-2$
+		long vKfz = DUAKonstanten.NICHT_ERMITTELBAR;
+		double vKfzGuete = -1;
+		if(qKfz > 0){
+			long qPkwDummy = qPkw >= 0?qPkw:0;
+			long vPkwDummy = vPkw >= 0?vPkw:0;
+			long qLkwDummy = qLkw >= 0?qLkw:0;
+			long vLkwDummy = vLkw >= 0?vLkw:0;
+			vKfz = (long)(((double)(qPkwDummy * vPkwDummy + qLkwDummy * vLkwDummy) / (double)qKfz) + 0.5);
+
+			try {
+				GWert qPkwG = new GWert(data.getItem("qPkw").getItem("Güte")); //$NON-NLS-1$ //$NON-NLS-2$
+				GWert vPkwG = new GWert(data.getItem("vPkw").getItem("Güte")); //$NON-NLS-1$ //$NON-NLS-2$
+				GWert qLkwG = new GWert(data.getItem("qLkw").getItem("Güte")); //$NON-NLS-1$ //$NON-NLS-2$
+				GWert vLkwG = new GWert(data.getItem("vLkw").getItem("Güte")); //$NON-NLS-1$ //$NON-NLS-2$
+				GWert qKfzG = new GWert(data.getItem("qKfz").getItem("Güte")); //$NON-NLS-1$ //$NON-NLS-2$
+				
+				vKfzGuete = GueteVerfahren.quotient(
+								GueteVerfahren.summe(
+										GueteVerfahren.produkt(qPkwG, vPkwG),
+										GueteVerfahren.produkt(qLkwG, vLkwG)
+								),
+								qKfzG
+							).getIndex();
+				
+			} catch (GueteException e) {
+				e.printStackTrace();
+				LOGGER.error("Berechnung der Guete von vKfz fehlgeschlagen", e); //$NON-NLS-1$
+			}
+		}
+		
+		if(DUAUtensilien.isWertInWerteBereich(data.getItem("vKfz").getItem("Wert"), vKfz)){ //$NON-NLS-1$ //$NON-NLS-2$
+			data.getItem("vKfz").getUnscaledValue("Wert").set(vKfz); //$NON-NLS-1$ //$NON-NLS-2$
+			if(vKfzGuete >= 0.0){
+				data.getItem("vKfz").getItem("Güte").getScaledValue("Index").set(vKfzGuete); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+			}
+		}else{
+			data.getItem("vKfz").getUnscaledValue("Wert").set(DUAKonstanten.NICHT_ERMITTELBAR); //$NON-NLS-1$ //$NON-NLS-2$
+			//data.getItem("vKfz").getUnscaledValue("Wert").set(DUAKonstanten.FEHLERHAFT);  //$NON-NLS-1$//$NON-NLS-2$
+			//DUAUtensilien.getAttributDatum("vKfz.Status.MessWertErsetzung.Implausibel", data).asUnscaledValue().set(DUAKonstanten.JA); //$NON-NLS-1$
+		}
+		
+		DUAUtensilien.getAttributDatum("qPkw.Status.Erfassung.NichtErfasst", data).asUnscaledValue().set(DUAKonstanten.JA); //$NON-NLS-1$
+		DUAUtensilien.getAttributDatum("vKfz.Status.Erfassung.NichtErfasst", data).asUnscaledValue().set(DUAKonstanten.JA); //$NON-NLS-1$
+		
+		return data;
 	}
 
-	/**
-	 * {@inheritDoc}
+	
+
+
+	/* (Kein Javadoc)
+	 * @see de.bsvrz.dua.plloglve.plloglve.standard.KzdPLFahrStreifen#ueberpruefe(stauma.dav.clientside.Data, stauma.dav.clientside.ResultData)
 	 */
 	@Override
-	protected void grenzWertTests(Data data) {
-		if(this.parameterAtgLog != null){
+	protected void ueberpruefe(Data data, ResultData resultat) {
+		if(this.parameterAtgLog != null){	
 			synchronized (this.parameterAtgLog) {				
 				/**
 				 * Regel Nr.12 (aus SE-02.00.00.00.00-AFo-4.0, S.95)
 				 */
-				this.untersucheWerteBereich(data, "qKfz", this.parameterAtgLog.getQKfzBereichMin(),  //$NON-NLS-1$
+				this.untersucheWerteBereich(data, resultat, "qKfz", this.parameterAtgLog.getQKfzBereichMin(),  //$NON-NLS-1$
 														  this.parameterAtgLog.getQKfzBereichMax());
 
 				/**
 				 * Regel Nr.14 (aus SE-02.00.00.00.00-AFo-4.0, S.95)
 				 */
-				this.untersucheWerteBereich(data, "qLkw", this.parameterAtgLog.getQLkwBereichMin(),  //$NON-NLS-1$
+				this.untersucheWerteBereich(data, resultat, "qLkw", this.parameterAtgLog.getQLkwBereichMin(),  //$NON-NLS-1$
 														  this.parameterAtgLog.getQLkwBereichMax());
 			}
 		}
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	protected void ueberpruefeKontextFehler(Data data, ResultData resultat) {
-		// mach hier nichts
-	}
+
+
 
 	/**
 	 * {@inheritDoc}

@@ -46,17 +46,17 @@ extends CSVImporter{
 	/**
 	 * Verbindung zum Datenverteiler
 	 */
-	private static ClientDavInterface DAV = null;
+	protected static ClientDavInterface DAV = null;
 	
 	/**
 	 * An dieser Spalte beginnen die wirklichen Daten
 	 */
-	private static final int OFFSET = 8;
+	protected static final int OFFSET = 8;
 	
 	/**
 	 * T
 	 */
-	private static long INTERVALL = Konstante.MINUTE_IN_MS; 
+	protected static long INTERVALL = Konstante.MINUTE_IN_MS; 
 
 	/**
 	 * Standardkonstruktor

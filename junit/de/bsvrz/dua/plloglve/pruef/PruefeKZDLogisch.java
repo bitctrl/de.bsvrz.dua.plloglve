@@ -108,7 +108,7 @@ implements ClientReceiverInterface {
 				DD_KZD_EMPF, ReceiveOptions.normal(), ReceiverRole.receiver());
 		
 		this.dav.subscribeReceiver(this, fs, 
-				DD_LZD_EMPF, ReceiveOptions.normal(), ReceiverRole.receiver());
+				DD_LZD_EMPF, ReceiveOptions.delayed(), ReceiverRole.receiver());
 		
 		try {
 			//CSV Importer initialisieren

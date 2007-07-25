@@ -27,7 +27,7 @@
 package de.bsvrz.dua.plloglve.plloglve.vb;
 
 import stauma.dav.clientside.Data;
-import de.bsvrz.sys.funclib.bitctrl.dua.AtgDatenObjekt;
+import de.bsvrz.sys.funclib.bitctrl.dua.AllgemeinerDatenContainer;
 
 /**
  * Repräsentiert die DAV-ATG
@@ -37,7 +37,7 @@ import de.bsvrz.sys.funclib.bitctrl.dua.AtgDatenObjekt;
  *
  */
 public class AtgVerkehrsDatenVertrauensBereichFs 
-extends AtgDatenObjekt{
+extends AllgemeinerDatenContainer{
 
 	/**
 	 * Bezugszeitraum für die Vertrauensbereichsüberprüfung
@@ -66,9 +66,9 @@ extends AtgDatenObjekt{
 		if(data == null){
 			throw new NullPointerException("Uebergebenes Datum ist <<null>>"); //$NON-NLS-1$
 		}
-		this.bezugsZeitraum = data.getUnscaledValue("BezugsZeitraum").intValue(); //$NON-NLS-1$
-		this.maxAusfallProBezugsZeitraumEin = data.getUnscaledValue("maxAusfallProBezugsZeitraumEin").intValue(); //$NON-NLS-1$
-		this.maxAusfallProBezugsZeitraumAus = data.getUnscaledValue("maxAusfallProBezugsZeitraumAus").intValue(); //$NON-NLS-1$
+		this.bezugsZeitraum = data.getUnscaledValue("BezugsZeitraum").longValue(); //$NON-NLS-1$
+		this.maxAusfallProBezugsZeitraumEin = data.getUnscaledValue("maxAusfallProBezugsZeitraumEin").longValue(); //$NON-NLS-1$
+		this.maxAusfallProBezugsZeitraumAus = data.getUnscaledValue("maxAusfallProBezugsZeitraumAus").longValue(); //$NON-NLS-1$
 	}
 
 	

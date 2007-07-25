@@ -29,7 +29,7 @@ package de.bsvrz.dua.plloglve.plloglve.standard;
 import stauma.dav.clientside.ResultData;
 import sys.funclib.debug.Debug;
 import de.bsvrz.dua.plloglve.plloglve.typen.OptionenPlausibilitaetsPruefungLogischVerkehr;
-import de.bsvrz.sys.funclib.bitctrl.dua.AtgDatenObjekt;
+import de.bsvrz.sys.funclib.bitctrl.dua.AllgemeinerDatenContainer;
 
 /**
  * Abstrakte Klasse die alle Parameter halten kann, die innerhalb der 
@@ -39,7 +39,7 @@ import de.bsvrz.sys.funclib.bitctrl.dua.AtgDatenObjekt;
  *
  */
 public class AbstraktAtgPLLogischLVEParameter 
-extends AtgDatenObjekt{
+extends AllgemeinerDatenContainer{
 	
 	/**
 	 * Debug-Logger
