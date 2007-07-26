@@ -50,6 +50,11 @@ public class Ausfallhaeufigkeit
 extends AbstraktBearbeitungsKnotenAdapter{
 
 	/**
+	 * Läuft die Applikation im Testbetrieb, dann ist ein Tag genau 144s lang!
+	 */
+	protected static final boolean TEST = true;
+	
+	/**
 	 * Mapt FS-Systemobjekte auf Fahrstreifenobjekte mit den für dieses
 	 * Submodul notwendigen Informationen
 	 */

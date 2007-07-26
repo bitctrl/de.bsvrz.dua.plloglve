@@ -161,7 +161,8 @@ implements ClientReceiverInterface{
 		if(programmLaeuftSchonLaengerAlsEinTag()){
 			synchronized (this) {
 				if(this.maxAusfallProTag >= 0){
-					long ausfallInProzent = (int)((((double)ausfallZeit / (double)Konstante.TAG_24_IN_MS) * 100.0) + 0.5);
+					//long ausfallInProzent = (int)((((double)ausfallZeit / (double)Konstante.TAG_24_IN_MS) * 100.0) + 0.5);
+					long ausfallInProzent = (int)(((double)ausfallZeit / (double)Konstante.TAG_24_IN_MS) * 100.0);
 					if(ausfallInProzent > this.maxAusfallProTag){
 						long stunden = ausfallZeit / Konstante.STUNDE_IN_MS;
 						long minuten = (ausfallZeit - (stunden * Konstante.STUNDE_IN_MS)) / Konstante.MINUTE_IN_MS;
@@ -224,6 +225,9 @@ implements ClientReceiverInterface{
 	 * @return ob diese Applikation schon länger als einen Tag läuft
 	 */
 	private static final boolean programmLaeuftSchonLaengerAlsEinTag(){
+		if(Ausfallhaeufigkeit.TEST){
+			return PlPruefungLogischLVE.START_ZEIT + 144000l < System.currentTimeMillis();
+		}
 		return PlPruefungLogischLVE.START_ZEIT + Konstante.TAG_24_IN_MS < System.currentTimeMillis(); 
 	}	
 

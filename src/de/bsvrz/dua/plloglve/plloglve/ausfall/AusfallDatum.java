@@ -61,7 +61,8 @@ extends AbstraktDAVZeitEinzelDatum{
 	 */
 	private AusfallDatum(ResultData resultat){
 		Data data = resultat.getData();
-		
+
+		this.datenZeit = resultat.getDataTime();
 		this.intervallLaenge = data.getTimeValue("T").getMillis(); //$NON-NLS-1$
 		
 		final long qKfzWert = data.getItem("qKfz").getUnscaledValue("Wert").longValue(); //$NON-NLS-1$ //$NON-NLS-2$
@@ -155,6 +156,9 @@ extends AbstraktDAVZeitEinzelDatum{
 	 * @return ob dieses Datum im Sinne des gleitenden Tages veraltet ist
 	 */
 	public boolean isDatumVeraltet(){
+		if(Ausfallhaeufigkeit.TEST){
+			return this.datenZeit + 144000l < System.currentTimeMillis();
+		}
 		return this.datenZeit + Konstante.TAG_24_IN_MS < System.currentTimeMillis();
 	}
 	
@@ -173,7 +177,7 @@ extends AbstraktDAVZeitEinzelDatum{
 	 */
 	@Override
 	public String toString() {
-		String s = "Datenzeit: " + FORMAT.format(new Date(this.datenZeit)) +  //$NON-NLS-1$
+		String s = "Datenzeit: " + DUAKonstanten.ZEIT_FORMAT_GENAU.format(new Date(this.datenZeit)) +  //$NON-NLS-1$
 								" (" + this.datenZeit + "ms)\n"; //$NON-NLS-1$ //$NON-NLS-2$
 		
 		if(this.ausgefallen){
