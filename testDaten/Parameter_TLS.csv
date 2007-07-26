@@ -42,9 +42,9 @@ vPkwMax(3);254;km/h;DUA-13
 vLkwMin(1);0;km/h;DUA-13
 vLkwMin(2);0;km/h;DUA-13
 vLkwMin(3);0;km/h;DUA-13
-vLkwMax(1);250;km/h;DUA-13
-vLkwMax(2);250;km/h;DUA-13
-vLkwMax(3);250;km/h;DUA-13
+vLkwMax(1);254;km/h;DUA-13
+vLkwMax(2);254;km/h;DUA-13
+vLkwMax(3);254;km/h;DUA-13
 vgKfzMin(1);0;km/h;DUA-13
 vgKfzMin(2);0;km/h;DUA-13
 vgKfzMin(3);0;km/h;DUA-13
