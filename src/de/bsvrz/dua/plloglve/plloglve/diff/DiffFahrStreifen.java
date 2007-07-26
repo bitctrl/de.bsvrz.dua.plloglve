@@ -226,11 +226,11 @@ implements ClientReceiverInterface{
 							puffer.add(this.bZaehler);
 						}
 
+						copy = data.createModifiableCopy();
 						if(!puffer.isEmpty()){
-							copy = VERWALTUNG.getVerbindung().createData(resultat.getDataDescription().getAttributeGroup());
 							for(VariableMitKonstanzZaehler<Long> wert:puffer){
-								data.getItem(wert.getName()).getUnscaledValue("Wert").set(DUAKonstanten.FEHLERHAFT); //$NON-NLS-1$			
-								data.getItem(wert.getName()).getItem("Status").getItem("MessWertErsetzung").   //$NON-NLS-1$//$NON-NLS-2$
+								copy.getItem(wert.getName()).getUnscaledValue("Wert").set(DUAKonstanten.FEHLERHAFT); //$NON-NLS-1$			
+								copy.getItem(wert.getName()).getItem("Status").getItem("MessWertErsetzung").   //$NON-NLS-1$//$NON-NLS-2$
 								getUnscaledValue("Implausibel").set(DUAKonstanten.JA); //$NON-NLS-1$	
 								VERWALTUNG.sendeBetriebsMeldung(MELDUNGS_ID, MessageType.APPLICATION_DOMAIN, Konstante.LEERSTRING,
 										MessageGrade.WARNING, MessageState.MESSAGE, "Fahrstreifen " +  //$NON-NLS-1$
