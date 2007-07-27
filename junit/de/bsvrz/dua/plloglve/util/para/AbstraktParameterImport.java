@@ -59,7 +59,17 @@ implements ClientSenderInterface{
 	 * Systemobjekt, für das die Parameter gesetzt werden sollen
 	 */
 	protected SystemObject objekt = null;
-		
+	
+	/**
+	 * Attributgruppe VerkehrsDatenDifferenzialKontrolleFs
+	 */
+	AttributeGroup diffFs;
+
+	/**
+	 * Attributgruppe VerkehrsDatenAusfallHäufigkeitFs
+	 */
+	AttributeGroup ausfallHFs;
+	
 
 	/**
 	 * Standardkonstruktor
@@ -78,16 +88,27 @@ implements ClientSenderInterface{
 			DAV = dav;
 		}
 		
+		diffFs = DAV.getDataModel().getAttributeGroup("atg.verkehrsDatenDifferenzialKontrolleFs");
+
+		ausfallHFs = DAV.getDataModel().getAttributeGroup("atg.verkehrsDatenAusfallHäufigkeitFs");
+		
+		this.objekt = objekt;
+		DAV.subscribeSender(this, objekt, new DataDescription(
+				diffFs, 
+				DAV.getDataModel().getAspect(Konstante.DAV_ASP_PARAMETER_VORGABE),
+				(short)0), SenderRole.sender());
+		
 		this.objekt = objekt;
 		DAV.subscribeSender(this, objekt, new DataDescription(
 				this.getParameterAtg(), 
 				DAV.getDataModel().getAspect(Konstante.DAV_ASP_PARAMETER_VORGABE),
 				(short)0), SenderRole.sender());
 		
-//		System.out.println("Obj: " + objekt + "An: " + new DataDescription(
-//				this.getParameterAtg(), 
-//				DAV.getDataModel().getAspect(Konstante.DAV_ASP_PARAMETER_VORGABE),
-//				(short)0));
+		this.objekt = objekt;
+		DAV.subscribeSender(this, objekt, new DataDescription(
+				ausfallHFs, 
+				DAV.getDataModel().getAspect(Konstante.DAV_ASP_PARAMETER_VORGABE),
+				(short)0), SenderRole.sender());
 		
 		/**
 		 * Tabellenkopf überspringen
@@ -132,11 +153,46 @@ implements ClientSenderInterface{
 				this.getParameterAtg(), 
 				DAV.getDataModel().getAspect(Konstante.DAV_ASP_PARAMETER_VORGABE),
 				(short)0), System.currentTimeMillis(), this.fuelleRestAttribute(parameter));
-		//System.out.println(resultat);
+		DAV.sendData(resultat);
+	}
+
+	/**
+	 * Setzt Attribute der Differentialkontrolle entsprechend den Afo (5.1.3.10.2)
+	 * @throws Exception
+	 */
+	public final void importParaDiff() throws Exception {
+		Data parameter = DAV.createData(diffFs);
+		DUAUtensilien.getAttributDatum("maxAnzKonstanzqKfz", parameter).asUnscaledValue().set(3);
+		DUAUtensilien.getAttributDatum("maxAnzKonstanzqLkw", parameter).asUnscaledValue().set(3);
+		DUAUtensilien.getAttributDatum("maxAnzKonstanzqPkw", parameter).asUnscaledValue().set(3);
+		DUAUtensilien.getAttributDatum("maxAnzKonstanzvKfz", parameter).asUnscaledValue().set(3);
+		DUAUtensilien.getAttributDatum("maxAnzKonstanzvLkw", parameter).asUnscaledValue().set(5);
+		DUAUtensilien.getAttributDatum("maxAnzKonstanzvPkw", parameter).asUnscaledValue().set(2);
+		DUAUtensilien.getAttributDatum("maxAnzKonstanzStreung", parameter).asUnscaledValue().set(10);
+		DUAUtensilien.getAttributDatum("maxAnzKonstanzBelegung", parameter).asUnscaledValue().set(3);
+		
+		ResultData resultat = new ResultData(this.objekt, new DataDescription(
+				diffFs, 
+				DAV.getDataModel().getAspect(Konstante.DAV_ASP_PARAMETER_VORGABE),
+				(short)0), System.currentTimeMillis(), parameter);
+		DAV.sendData(resultat);
+	}
+
+	/**
+	 * Setzt Attribute der Ausfallkontrolle entsprechend den Afo (5.1.3.10.2)
+	 * @throws Exception
+	 */
+	public final void importParaAusfall() throws Exception {
+		Data parameter = DAV.createData(ausfallHFs);
+		DUAUtensilien.getAttributDatum("maxAusfallProTag", parameter).asUnscaledValue().set(3);
+		
+		ResultData resultat = new ResultData(this.objekt, new DataDescription(
+				ausfallHFs, 
+				DAV.getDataModel().getAspect(Konstante.DAV_ASP_PARAMETER_VORGABE),
+				(short)0), System.currentTimeMillis(), parameter);
 		DAV.sendData(resultat);
 	}
 	
-
 	/**
 	 * Setzt alle restlichen Attribute innerhalb von diesem Datensatz
 	 * abhängig von der tatsächlichen Attributgruppe
