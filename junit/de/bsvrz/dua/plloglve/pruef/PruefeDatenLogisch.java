@@ -14,7 +14,7 @@ import stauma.dav.clientside.Data;
 import de.bsvrz.sys.funclib.bitctrl.dua.DUAKonstanten;
 import stauma.dav.clientside.ClientReceiverInterface;
 import de.bsvrz.sys.funclib.bitctrl.dua.DUAUtensilien;
-import de.bsvrz.dua.plloglve.util.PlPruefungLogischLVETest;
+import de.bsvrz.dua.plloglve.util.PlPruefungLogisch;
 import sys.funclib.debug.Debug;
 
 /*
@@ -22,7 +22,7 @@ import sys.funclib.debug.Debug;
  * Liest Ergebnis-CSV-Datei
  * Wartet auf gesendete und gepruefte Daten und gibt diese an Vergleicher-Klasse weiter
  */
-public class PruefeKZDLogisch
+public class PruefeDatenLogisch
 implements ClientReceiverInterface {
 
 	/**
@@ -38,7 +38,7 @@ implements ClientReceiverInterface {
 	/**
 	 * Aufrunfende Klasse
 	 */
-	private PlPruefungLogischLVETest caller;
+	private PlPruefungLogisch caller;
 	
 	/*
 	 * CSV-Importer
@@ -89,10 +89,10 @@ implements ClientReceiverInterface {
 	 * @param csvQuelle Die Quell CSV-Datei mit Soll-Werten
 	 * @throws Exception
 	 */
-	public PruefeKZDLogisch(PlPruefungLogischLVETest caller, SystemObject[] fs, String csvQuelle)
+	public PruefeDatenLogisch(PlPruefungLogisch caller, ClientDavInterface dav, SystemObject[] fs, String csvQuelle)
 	throws Exception {
 		this.caller = caller;  //aufrufende Klasse uebernehmen
-		this.dav = caller.uebergebeDAV();  //DAV uebernehmen
+		this.dav = dav;
 		
 		//Empfangs-Datenbeschreibung
 		DD_KZD_EMPF = new DataDescription(this.dav.getDataModel().getAttributeGroup(DUAKonstanten.ATG_KZD),
@@ -114,7 +114,7 @@ implements ClientReceiverInterface {
 			//CSV Importer initialisieren
 			this.csvImp = new CSVImporter(csvQuelle);
 		} catch(Exception e) {
-			LOGGER.error("Fehler beim importieren der CSV Datei: "+e);
+			LOGGER.error("Fehler beim öffnen der CSV Datei ("+csvQuelle+"): "+e);
 		}
 		csvImp.getNaechsteZeile();  //Tabellenkopf in CSV ueberspringen
 		csvEinlesen();  //CSV einlesen
@@ -312,16 +312,28 @@ implements ClientReceiverInterface {
 	}
 
 	/**
-	 * Uebergebe CSV-Werte (tNetto)
+	 * Übergebe CSV-Werte (tNetto) für FS1
+	 * @param csvOffset DS-Index des zu übergebende DS
+	 * @return Der CSV-Wert tNetto für FS1
 	 */
 	public long getCSVWerttNettoFS1(int csvOffset) {
 		return alCSVWerttNettoFS1.get(csvOffset);
 	}
 	
+	/**
+	 * Übergebe CSV-Werte (tNetto) für FS2
+	 * @param csvOffset DS-Index des zu übergebende DS
+	 * @return Der CSV-Wert tNetto für FS2
+	 */
 	public long getCSVWerttNettoFS2(int csvOffset) {
 		return alCSVWerttNettoFS2.get(csvOffset);
 	}
 	
+	/**
+	 * Übergebe CSV-Werte (tNetto) für FS3
+	 * @param csvOffset DS-Index des zu übergebende DS
+	 * @return Der CSV-Wert tNetto für FS3
+	 */
 	public long getCSVWerttNettoFS3(int csvOffset) {
 		return alCSVWerttNettoFS3.get(csvOffset);
 	}
@@ -353,8 +365,8 @@ implements ClientReceiverInterface {
 					}
 				} catch(Exception e) {}
 
-				LOGGER.info("Warte auf Pruefung des Fahrstreifendatums");
-				doWait();  //Warte auf pruefung eines FS
+				LOGGER.info("Zu prüfendes Datum empfangen. Warte auf Prüfung...");
+				doWait();
 				this.pruefungFertig();  //pruefe ob alle 3 FS geprueft worden
 			}
 		}
@@ -365,7 +377,7 @@ implements ClientReceiverInterface {
 	 */
 	private void pruefungFertig() {
 		if(pruefungFS1Fertig && pruefungFS2Fertig && pruefungFS3Fertig) {
-			LOGGER.info("Pruefung der Fahrstreifen abgeschlossen. Benachrichtige Hauptthread...");
+			LOGGER.info("Pruefung der Fahrstreifen abgeschlossen");
 			doWait();  //Warte 250ms
 			caller.doNotify();  //Benachrichtige aufrufende Klasse
 		}
@@ -408,7 +420,7 @@ class VergleicheKZD extends Thread {
 	/**
 	 * Aufrufende Klasse
 	 */
-	private PruefeKZDLogisch caller;
+	private PruefeDatenLogisch caller;
 	
 	/**
 	 * Übergebene Ergebnisdaten
@@ -464,7 +476,7 @@ class VergleicheKZD extends Thread {
 	 * @param fsIndex Der zu prüfende Fahrstreifen
 	 * @param csvOffset Der zu verwendende CSV-Offset
 	 */
-	public VergleicheKZD(PruefeKZDLogisch caller, ResultData result, ArrayList<HashMap<String,Integer>> csvZeilen, int fsIndex, int csvOffset) {
+	public VergleicheKZD(PruefeDatenLogisch caller, ResultData result, ArrayList<HashMap<String,Integer>> csvZeilen, int fsIndex, int csvOffset) {
 		this.caller = caller;  //uebernehme aufrufende Klasse
 		this.daten = result.getData();  //uebernehme Ergebnisdaten
 		this.csvZeilen = csvZeilen;  //uebernehme CSV Daten
@@ -637,6 +649,11 @@ class VergleicheKZD extends Thread {
 		caller.doNotify();  //Benachrichtige aufrufende Klasse
 	}
 
+	/**
+	 * Übersetzt negative Werte in entsprechenden String
+	 * @param wert Der zu übersetzende wert
+	 * @return Wertbedeutung als String
+	 */
 	private String wertErl(long wert) {
 		if(wert == -1)
 			return " [nicht ermittelbar]";
