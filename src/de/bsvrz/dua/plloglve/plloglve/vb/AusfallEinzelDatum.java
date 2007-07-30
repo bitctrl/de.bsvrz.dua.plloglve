@@ -85,7 +85,7 @@ extends AbstraktDAVZeitEinzelDatum{
 	 * @return ob das Datum noch aktuell ist
 	 */
 	public final boolean isDatumVeraltet(final long bezugsIntervall) {
-		long bezugsIntervallInMillis = bezugsIntervall * Konstante.STUNDE_IN_MS;
+		long bezugsIntervallInMillis = Vertrauensbereich.TEST?bezugsIntervall*6000:bezugsIntervall * Konstante.STUNDE_IN_MS;
 		return this.datenZeit + bezugsIntervallInMillis < System.currentTimeMillis();
 	}
 	

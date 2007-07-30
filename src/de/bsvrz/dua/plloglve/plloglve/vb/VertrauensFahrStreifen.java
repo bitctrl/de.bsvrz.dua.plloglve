@@ -227,7 +227,9 @@ implements ClientReceiverInterface{
 						}
 					}else{
 						if(verletztAlt){
-							Date start = new Date(originalDatum.getDataTime() - parameter.getBezugsZeitraum() * Konstante.STUNDE_IN_MS);
+							long vertrauensBereich = Vertrauensbereich.TEST?parameter.getBezugsZeitraum()*6000:parameter.getBezugsZeitraum() * Konstante.STUNDE_IN_MS;
+							
+							Date start = new Date(originalDatum.getDataTime() - vertrauensBereich);
 							Date ende = new Date(originalDatum.getDataTime());
 
 							String nachricht = "Daten wieder innerhalb des Vertrauensbereichs. Im Zeitraum von " +  //$NON-NLS-1$

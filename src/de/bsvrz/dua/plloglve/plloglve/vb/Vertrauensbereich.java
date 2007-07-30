@@ -53,6 +53,11 @@ import de.bsvrz.sys.funclib.bitctrl.dua.schnittstellen.IVerwaltung;
  */
 public class Vertrauensbereich
 extends AbstraktBearbeitungsKnotenAdapter{
+
+	/**
+	 * Läuft die Applikation im Testbetrieb, dann ist ein Tag genau 144s lang!
+	 */
+	protected static final boolean TEST = true;
 	
 	/**
 	 * Debug-Logger
