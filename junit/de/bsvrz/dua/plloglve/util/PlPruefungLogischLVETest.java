@@ -17,14 +17,22 @@ import sys.funclib.debug.Debug;
  */
 public class PlPruefungLogischLVETest {
 	
+//	/**
+//	 * Verbindungsdaten
+//	 */
+//	public static final String[] CON_DATA = new String[] {
+//			"-datenverteiler=192.168.1.191:8083", //$NON-NLS-1$ 
+//			"-benutzer=Tester", //$NON-NLS-1$
+//			"-authentifizierung=c:\\passwd1" }; //$NON-NLS-1$
+
 	/**
 	 * Verbindungsdaten
 	 */
 	public static final String[] CON_DATA = new String[] {
-			"-datenverteiler=192.168.1.191:8083", //$NON-NLS-1$ 
+			"-datenverteiler=localhost:8083", //$NON-NLS-1$ 
 			"-benutzer=Tester", //$NON-NLS-1$
-			"-authentifizierung=c:\\passwd1" }; //$NON-NLS-1$
-
+			"-authentifizierung=c:\\passwd" }; //$NON-NLS-1$
+	
 	/**
 	 * Verzeichnis, in dem sich die CSV-Dateien mit den Testdaten befinden
 	 */
@@ -73,13 +81,19 @@ public class PlPruefungLogischLVETest {
 		/*
 		 * Differenzialprüfung: KZD
 		 */
-//		PlPruefungDiff plPruefDiff = new PlPruefungDiff(dav,TEST_DATEN_VERZ); 
-//		plPruefDiff.pruefe();
+		PlPruefungDiff plPruefDiff = new PlPruefungDiff(dav,TEST_DATEN_VERZ); 
+		plPruefDiff.pruefe();
 
 		/*
 		 * Prüfung: Ausfallhäufigkeit KZD
 		 */
-		PlPruefungAusfall pruefAusfall = new PlPruefungAusfall(dav,TEST_DATEN_VERZ);
-		pruefAusfall.pruefe();
+//		PlPruefungAusfall pruefAusfall = new PlPruefungAusfall(dav,TEST_DATEN_VERZ);
+//		pruefAusfall.pruefe();
+		
+		/*
+		 * Prüfung: Vertrauensbereich KZD
+		 */
+//		PlPruefungVertrauensbereich pruefVertrB = new PlPruefungVertrauensbereich(dav,TEST_DATEN_VERZ);
+//		pruefVertrB.pruefe();
 	}
 }
