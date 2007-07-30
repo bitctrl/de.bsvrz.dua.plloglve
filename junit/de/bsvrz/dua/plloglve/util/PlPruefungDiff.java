@@ -110,7 +110,7 @@ implements ClientSenderInterface, PlPruefungInterface {
 			while((zeileFSDiff = fsImpFSDiff.getNaechstenDatensatz(DD_KZD_SEND.getAttributeGroup())) != null) {
 				dsCount++;
 				dsKumm = dsCount-(480 * i);
-				LOGGER.info("Durchlauf:"+i+" - Datensatz:"+dsCount+" - Zeit:"+aktZeit);
+				LOGGER.info("Durchlauf:"+(i+1)+" - Datensatz:"+dsCount+" - Zeit:"+aktZeit);
 				
 				/*
 				 * Setzt Konfiguration des Markierungs-Prüfers
