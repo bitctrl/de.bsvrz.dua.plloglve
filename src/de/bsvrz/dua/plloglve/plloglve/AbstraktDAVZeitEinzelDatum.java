@@ -26,25 +26,20 @@
 
 package de.bsvrz.dua.plloglve.plloglve;
 
-import java.text.SimpleDateFormat;
-
 import de.bsvrz.dua.plloglve.plloglve.ausfall.AusfallDatum;
 
 /**
+ * Abstrakter Container für Daten mit den Attributen Zeitstempel und
+ * Intervalllänge. Die Objekte sind nach ihrer Datenzeit sortierbar. 
  * 
  * @author BitCtrl Systems GmbH, Thierfelder
  *
  */
 public class AbstraktDAVZeitEinzelDatum 
 implements Comparable<AbstraktDAVZeitEinzelDatum>{
-	
+		
 	/**
-	 * 
-	 */
-	protected static final SimpleDateFormat FORMAT = new SimpleDateFormat("dd.MM.yyyy HH:mm:ss.SSS");  //$NON-NLS-1$
-	
-	/**
-	 * 
+	 * die Datenzeit des Datums
 	 */
 	protected long datenZeit = -1;
 		
@@ -53,15 +48,22 @@ implements Comparable<AbstraktDAVZeitEinzelDatum>{
 	 */
 	protected long intervallLaenge = -1;
 
-	
+		
 	/**
+	 * Erfragt die Intervalllänge des Datums
 	 * 
-	 * @return
+	 * @return die Intervalllänge des Datums
 	 */
 	public final long getIntervallLaenge(){
 		return this.intervallLaenge;
 	}
 
+	
+	/**
+	 * Erfragt die Datenzeit des Datums
+	 * 
+	 * @return die Datenzeit des Datums
+	 */
 	public long getDatenZeit(){
 		return this.datenZeit;
 	}
