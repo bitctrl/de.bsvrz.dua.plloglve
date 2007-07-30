@@ -77,6 +77,16 @@ extends AbstraktBearbeitungsKnotenAdapter{
 	private Map<SystemObject, AbstraktPLFahrStreifen> kzdFahrStreifen =
 								new HashMap<SystemObject, AbstraktPLFahrStreifen>();
 	
+	/**
+	 * Datenverteiler-ID der KZD-Attributgruppe
+	 */
+	private static long ATG_KZD_ID = -1;
+
+	/**
+	 * Datenverteiler-ID der LZD-Attributgruppe
+	 */
+	private static long ATG_LZD_ID = -1;
+
 
 	/**
 	 * {@inheritDoc}
@@ -85,6 +95,9 @@ extends AbstraktBearbeitungsKnotenAdapter{
 	public void initialisiere(IVerwaltung dieVerwaltung)
 	throws DUAInitialisierungsException {
 		super.initialisiere(dieVerwaltung);
+		
+		ATG_KZD_ID = dieVerwaltung.getVerbindung().getDataModel().getAttributeGroup(DUAKonstanten.ATG_KZD).getId();
+		ATG_LZD_ID = dieVerwaltung.getVerbindung().getDataModel().getAttributeGroup(DUAKonstanten.ATG_LZD).getId();
 		
 		IVerwaltungMitGuete verwaltungMitGuete = null;
 		if(dieVerwaltung instanceof IVerwaltungMitGuete){
@@ -99,7 +112,7 @@ extends AbstraktBearbeitungsKnotenAdapter{
 				lzdFahrStreifen.put(obj, new LzdPLFahrStreifen(verwaltungMitGuete, obj));
 			}
 			kzdFahrStreifen.put(obj, new KzdPLFahrStreifen(verwaltungMitGuete, obj));
-		}
+		}		
 	}
 
 	
@@ -112,16 +125,12 @@ extends AbstraktBearbeitungsKnotenAdapter{
 			for(ResultData resultat:resultate){
 				if(resultat != null){
 					
-					System.out.println("Datum: " + resultat);
-					
 					AbstraktPLFahrStreifen fahrStreifen = null;
 					
-					if(resultat.getDataDescription().getAttributeGroup().getPid().equals(
-							DUAKonstanten.ATG_KZD)){
+					if(resultat.getDataDescription().getAttributeGroup().getId() == ATG_KZD_ID){
 						fahrStreifen = this.kzdFahrStreifen.get(resultat.getObject());	
 					}else
-					if(resultat.getDataDescription().getAttributeGroup().getPid().equals(
-							DUAKonstanten.ATG_LZD)){
+					if(resultat.getDataDescription().getAttributeGroup().getId() == ATG_LZD_ID){
 						fahrStreifen = this.lzdFahrStreifen.get(resultat.getObject());	
 					}
 					

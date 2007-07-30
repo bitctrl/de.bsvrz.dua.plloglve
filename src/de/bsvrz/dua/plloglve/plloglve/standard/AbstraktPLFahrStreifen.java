@@ -26,8 +26,6 @@
 
 package de.bsvrz.dua.plloglve.plloglve.standard;
 
-import javax.swing.text.html.Option;
-
 import stauma.dav.clientside.ClientDavInterface;
 import stauma.dav.clientside.ClientReceiverInterface;
 import stauma.dav.clientside.Data;
