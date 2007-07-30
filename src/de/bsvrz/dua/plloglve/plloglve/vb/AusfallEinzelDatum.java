@@ -96,7 +96,7 @@ extends AbstraktDAVZeitEinzelDatum{
 	@Override
 	public String toString() {
 		return (this.ausgefallen?"Ausgefallen":"OK") + //$NON-NLS-1$ //$NON-NLS-2$
-				"\nDatenzeit: " + FORMAT.format(new Date(this.datenZeit)) +  //$NON-NLS-1$
+				"\nDatenzeit: " + DUAKonstanten.ZEIT_FORMAT_GENAU.format(new Date(this.datenZeit)) +  //$NON-NLS-1$
 					" (" + this.datenZeit + "ms)"; //$NON-NLS-1$ //$NON-NLS-2$
 	}
 
