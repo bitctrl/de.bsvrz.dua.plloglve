@@ -49,6 +49,12 @@ implements ClientSenderInterface, PlPruefungInterface {
 	private ClientDavInterface dav = null;
 	
 	/**
+	 * Intervalllänge in Millisekunden
+	 */
+	//static long INTERVALL = Konstante.MINUTE_IN_MS;
+	static long INTERVALL = 100L;
+	
+	/**
 	 * Filter-Timout
 	 */
 	private boolean filterTimeout = true;
@@ -103,10 +109,10 @@ implements ClientSenderInterface, PlPruefungInterface {
 		paraImpFSFehler = new TestFahrstreifenImporter(this.dav, TEST_DATEN_VERZ + "fahrstreifen1_Fehler"); //$NON-NLS-1$
 		
 		/*
-		 * Setze Intervall auf 100MS
+		 * Setze Intervallparameter
 		 */
-		paraImpFSOK.setT(100L);
-		paraImpFSFehler.setT(100L);
+		paraImpFSOK.setT(INTERVALL);
+		paraImpFSFehler.setT(INTERVALL);
 		
 		/*
 		 * Aktuelle fehlerfreie und fehlerhafte Fahrstreifen-DS
@@ -120,33 +126,47 @@ implements ClientSenderInterface, PlPruefungInterface {
 		/*
 		 * Sendet fehlerfreie DS für einen Tag
 		 */
-//		LOGGER.info("Sende fehlerfreie DS für 1 Tag (1440");
-//		for(int i=1;i<=1440;i++) {
-//			
-//			if((zeileFSOK = paraImpFSOK.getNaechstenDatensatz(DD_KZD_SEND.getAttributeGroup())) == null) {
-//				paraImpFSOK.reset();
-//				paraImpFSOK.getNaechsteZeile();
-//				zeileFSOK = paraImpFSOK.getNaechstenDatensatz(DD_KZD_SEND.getAttributeGroup());
-//			}
-//			
-//			ResultData resultat1 = new ResultData(FS, DD_KZD_SEND, pruefZeit, zeileFSOK);
-//			this.dav.sendData(resultat1);
-//			
-//			aktZeit = pruefZeit + Konstante.MINUTE_IN_MS;
-//		}
+		LOGGER.info("Sende fehlerfreie DS für 1 Tag (1440)");
+		for(int i=1;i<=1440;i++) {
+			
+			if((zeileFSOK = paraImpFSOK.getNaechstenDatensatz(DD_KZD_SEND.getAttributeGroup())) == null) {
+				paraImpFSOK.reset();
+				paraImpFSOK.getNaechsteZeile();
+				zeileFSOK = paraImpFSOK.getNaechstenDatensatz(DD_KZD_SEND.getAttributeGroup());
+			}
+			
+			ResultData resultat1 = new ResultData(FS, DD_KZD_SEND, pruefZeit, zeileFSOK);
+			this.dav.sendData(resultat1);
+			
+			//System.out.println("["+i+"]O");
+			
+			//Erhöht Prüfzeitstempel entsprechend der Intervalllänge
+			pruefZeit = pruefZeit + INTERVALL;
+			
+			//Warte bis Intervallende
+			if((aktZeit = System.currentTimeMillis()) < pruefZeit) {
+				Pause.warte(pruefZeit - aktZeit);
+			}
+		}
 
 		/*
 		 * Prüfung
 		 */
-		//FilterMeldung filterM = new FilterMeldung(this, dav,"Ausfallhäufigkeit", 1457);
-		//TODO:DEBUG
-		FilterMeldung filterM = new FilterMeldung(this, dav,"Ausfallhäufigkeit", 1600);
+		LOGGER.info("Beginne Prüfung");
+		
+		int okGesendet = 0;
+		int fehlerGesendet = 0;
+		
+		/*
+		 * Initialisiert Meldungsfilter
+		 */
+		new FilterMeldung(this, dav,"Ausfallhäufigkeit", 1457);
 
-		//TODO:DEBUG
-		//for(int i=1;i<=2429;i++) {
+		/*
+		 * Sende 2500 Datensätze
+		 */
 		for(int i=1;i<=2500;i++) {
-			if((i > 928 && i <= 972) || (i > 989 && i <= 1032)) {
-				//LOGGER.info("["+i+"] Sende fehlerhaftes Datum...");
+			if(i >= 929 && i <= 1032) {
 				if((zeileFSFehler = paraImpFSFehler.getNaechstenDatensatz(DD_KZD_SEND.getAttributeGroup())) == null) {
 					paraImpFSFehler.reset();
 					paraImpFSFehler.getNaechsteZeile();
@@ -154,9 +174,9 @@ implements ClientSenderInterface, PlPruefungInterface {
 				}
 				ResultData resultat1 = new ResultData(FS, DD_KZD_SEND, pruefZeit, zeileFSFehler);
 				this.dav.sendData(resultat1);
-				System.out.println("["+i+"]A");
+				//System.out.println("["+i+"]A");
+				fehlerGesendet++;
 			} else {
-				//LOGGER.info("["+i+"] Sende fehlerfreies Datum...");
 				if((zeileFSOK = paraImpFSOK.getNaechstenDatensatz(DD_KZD_SEND.getAttributeGroup())) == null) {
 					paraImpFSOK.reset();
 					paraImpFSOK.getNaechsteZeile();
@@ -164,19 +184,28 @@ implements ClientSenderInterface, PlPruefungInterface {
 				}
 				ResultData resultat1 = new ResultData(FS, DD_KZD_SEND, pruefZeit, zeileFSOK);
 				this.dav.sendData(resultat1);
-				System.out.println("["+i+"]O");
+				//System.out.println("["+i+"]O");
+				okGesendet++;
 			}
-			//pruefZeit = pruefZeit + Konstante.MINUTE_IN_MS;
-			pruefZeit = pruefZeit + 100L;
+			//Erhöht Prüfzeitstempel entsprechend der Intervalllänge
+			pruefZeit = pruefZeit + INTERVALL;
+			
+			//Warte bis Intervallende
 			if((aktZeit = System.currentTimeMillis()) < pruefZeit) {
 				Pause.warte(pruefZeit - aktZeit);
 			}
 		}
+
+		LOGGER.info(okGesendet+" fehlerfreie und "+fehlerGesendet+" fehlerhafte Daten gesendet");
+		LOGGER.info("Warte auf Benachrichtigung vom Betriebsmeldungsfilter");
 		
+		//Warte 1 Minute auf Filterung der Betriebsmeldungen
 		doWait();
-		
 		if(filterTimeout) {
+			//Timeout wenn keine Benachrichtigung vom Betriebsmeldungsfilter
 			LOGGER.warning("Filter-Timeout");
+		} else {
+			LOGGER.info("Prüfung erfolgreich abgeschlossen");
 		}
 	}
 	
@@ -194,10 +223,12 @@ implements ClientSenderInterface, PlPruefungInterface {
 	 * Lässten diesen Thread warten
 	 */
 	private void doWait() {
-		synchronized(this) {
-			try {
-				this.wait(60000);
-			}catch(Exception e){};
+		if(filterTimeout) {
+			synchronized(this) {
+				try {
+					this.wait(60000);
+				}catch(Exception e){};
+			}
 		}
 	}
 	
