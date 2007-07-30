@@ -274,7 +274,7 @@ implements ClientSenderInterface {
 			/*
 			 * Prüft, ob noch Testdaten für die Fahrstreifen vorliegen
 			 */
-			if(!datenFS1Vorhanden && !datenFS2Vorhanden && !datenFS3Vorhanden) {
+			if(!datenFS1Vorhanden || !datenFS2Vorhanden || !datenFS3Vorhanden) {
 				csvDatenVorhanden = false;
 				LOGGER.info("Keine Daten mehr vorhanedn. Beende Prüfung...");
 			} else {
