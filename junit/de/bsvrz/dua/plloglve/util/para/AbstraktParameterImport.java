@@ -70,6 +70,11 @@ implements ClientSenderInterface{
 	 */
 	AttributeGroup ausfallHFs;
 	
+	/**
+	 * Attributgruppe VerkehrsDatenVertrauensBereichFs
+	 */
+	AttributeGroup vertrauensbereichFs;
+	
 
 	/**
 	 * Standardkonstruktor
@@ -92,21 +97,27 @@ implements ClientSenderInterface{
 
 		ausfallHFs = DAV.getDataModel().getAttributeGroup("atg.verkehrsDatenAusfallHäufigkeitFs");
 		
+		vertrauensbereichFs = DAV.getDataModel().getAttributeGroup("atg.verkehrsDatenVertrauensBereichFs");
+		
 		this.objekt = objekt;
+		
 		DAV.subscribeSender(this, objekt, new DataDescription(
 				diffFs, 
 				DAV.getDataModel().getAspect(Konstante.DAV_ASP_PARAMETER_VORGABE),
 				(short)0), SenderRole.sender());
 		
-		this.objekt = objekt;
 		DAV.subscribeSender(this, objekt, new DataDescription(
 				this.getParameterAtg(), 
 				DAV.getDataModel().getAspect(Konstante.DAV_ASP_PARAMETER_VORGABE),
 				(short)0), SenderRole.sender());
 		
-		this.objekt = objekt;
 		DAV.subscribeSender(this, objekt, new DataDescription(
 				ausfallHFs, 
+				DAV.getDataModel().getAspect(Konstante.DAV_ASP_PARAMETER_VORGABE),
+				(short)0), SenderRole.sender());
+		
+		DAV.subscribeSender(this, objekt, new DataDescription(
+				vertrauensbereichFs, 
 				DAV.getDataModel().getAspect(Konstante.DAV_ASP_PARAMETER_VORGABE),
 				(short)0), SenderRole.sender());
 		
@@ -188,6 +199,23 @@ implements ClientSenderInterface{
 		
 		ResultData resultat = new ResultData(this.objekt, new DataDescription(
 				ausfallHFs, 
+				DAV.getDataModel().getAspect(Konstante.DAV_ASP_PARAMETER_VORGABE),
+				(short)0), System.currentTimeMillis(), parameter);
+		DAV.sendData(resultat);
+	}
+	
+	/**
+	 * Setzt Attribute des Vertrauensbereich entsprechend den Afo (5.1.3.10.2)
+	 * @throws Exception
+	 */
+	public final void importParaVertrauensbereich() throws Exception {
+		Data parameter = DAV.createData(vertrauensbereichFs);
+		
+		DUAUtensilien.getAttributDatum("BezugsZeitraum", parameter).asUnscaledValue().set(1);
+		DUAUtensilien.getAttributDatum("maxAusfallProBezugsZeitraumEin", parameter).asUnscaledValue().set(20);
+		DUAUtensilien.getAttributDatum("maxAusfallProBezugsZeitraumAus", parameter).asUnscaledValue().set(20);
+		ResultData resultat = new ResultData(this.objekt, new DataDescription(
+				vertrauensbereichFs, 
 				DAV.getDataModel().getAspect(Konstante.DAV_ASP_PARAMETER_VORGABE),
 				(short)0), System.currentTimeMillis(), parameter);
 		DAV.sendData(resultat);
