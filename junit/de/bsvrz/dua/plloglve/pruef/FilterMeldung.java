@@ -72,7 +72,7 @@ implements ClientReceiverInterface {
 		this.erfAnz = erfAnz;
 		this.caller = caller;
 		
-		MELD = this.dav.getDataModel().getObject("kv.bitctrl.thierfelder");
+		MELD = this.dav.getDataModel().getObject("kv.aoe.bitctrl.tester");
 		
 		LOGGER.info("Filtere Betriebsmeldungen nach \""+filter+"\"");
 		LOGGER.info("Erwarte "+erfAnz+" gefilterte Meldungen");

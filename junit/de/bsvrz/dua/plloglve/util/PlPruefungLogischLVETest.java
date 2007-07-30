@@ -3,6 +3,8 @@ package de.bsvrz.dua.plloglve.util;
 import org.junit.Before;
 import org.junit.Test;
 
+import de.bsvrz.sys.funclib.bitctrl.dua.test.DAVTest;
+
 import stauma.dav.clientside.ClientDavInterface;
 import sys.funclib.ArgumentList;
 import sys.funclib.debug.Debug;
@@ -14,6 +16,14 @@ import sys.funclib.debug.Debug;
  *
  */
 public class PlPruefungLogischLVETest {
+	
+	/**
+	 * Verbindungsdaten
+	 */
+	public static final String[] CON_DATA = new String[] {
+			"-datenverteiler=192.168.1.191:8083", //$NON-NLS-1$ 
+			"-benutzer=Tester", //$NON-NLS-1$
+			"-authentifizierung=c:\\passwd1" }; //$NON-NLS-1$
 
 	/**
 	 * Verzeichnis, in dem sich die CSV-Dateien mit den Testdaten befinden
@@ -39,7 +49,7 @@ public class PlPruefungLogischLVETest {
 	 */
 	@Before
 	public void setUp() throws Exception {
-		this.dav = DAVTest.getDav();	
+		this.dav = DAVTest.getDav(CON_DATA);	
 		Debug.init("PlPruefungLogisch", alLogger); //$NON-NLS-1$
 		LOGGER = Debug.getLogger();
 	}
