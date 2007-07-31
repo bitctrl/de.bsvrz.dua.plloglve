@@ -63,37 +63,56 @@ public class PlPruefungLogischLVETest {
 	}
 
 	/**
-	 * Gesamter Test nach Prüfspezifikation
-	 * 
-	 * Definition der Grenzwertparameter
+	 * KZD TLS Test nach Prüfspezifikation
 	 */
 	@Test
-	public void testAlles()throws Exception{
-
-		/*
-		 * Prüfung: KZD TLS und KZD sowie LZD auf Grenzwertüberschreitung
-		 */
+	public void testKZDTLS()throws Exception{
 //		PlPruefungLogisch pruefLogisch = new PlPruefungLogisch(dav,TEST_DATEN_VERZ);
 //		pruefLogisch.pruefeKZDTLS();
+	}
+	
+	/**
+	 * KZD Grenz Test nach Prüfspezifikation
+	 */
+	@Test
+	public void testKZDGrenz()throws Exception{
+//		PlPruefungLogisch pruefLogisch = new PlPruefungLogisch(dav,TEST_DATEN_VERZ);
 //		pruefLogisch.pruefeKZDGrenz();
+	}
+	
+	/**
+	 * LZD Grenz Test nach Prüfspezifikation
+	 */
+	@Test
+	public void testLZDTLS()throws Exception{
+//		PlPruefungLogisch pruefLogisch = new PlPruefungLogisch(dav,TEST_DATEN_VERZ);
 //		pruefLogisch.pruefeLZDGrenz();
-
-		/*
-		 * Differenzialprüfung: KZD
-		 */
-		PlPruefungDiff plPruefDiff = new PlPruefungDiff(dav,TEST_DATEN_VERZ); 
-		plPruefDiff.pruefe();
-
-		/*
-		 * Prüfung: Ausfallhäufigkeit KZD
-		 */
+	}
+	
+	/**
+	 * Differentialkontrolle nach Prüfspezifikation
+	 */
+	@Test
+	public void testDiff()throws Exception{
+//		PlPruefungDiff plPruefDiff = new PlPruefungDiff(dav,TEST_DATEN_VERZ); 
+//		plPruefDiff.pruefe();
+	}
+	
+	/**
+	 * Ausfallhäufigkeitstest nach Prüfspezifikation
+	 */
+	@Test
+	public void testAusfall()throws Exception{
 //		PlPruefungAusfall pruefAusfall = new PlPruefungAusfall(dav,TEST_DATEN_VERZ);
 //		pruefAusfall.pruefe();
-		
-		/*
-		 * Prüfung: Vertrauensbereich KZD
-		 */
-//		PlPruefungVertrauensbereich pruefVertrB = new PlPruefungVertrauensbereich(dav,TEST_DATEN_VERZ);
-//		pruefVertrB.pruefe();
+	}
+	
+	/**
+	 * Vertrauensbereichstest nach Prüfspezifikation
+	 */
+	@Test
+	public void testVB()throws Exception{
+		PlPruefungVertrauensbereich pruefVertrB = new PlPruefungVertrauensbereich(dav,TEST_DATEN_VERZ);
+		pruefVertrB.pruefe();
 	}
 }
