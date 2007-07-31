@@ -125,6 +125,14 @@ implements ClientSenderInterface{
 		 * Tabellenkopf überspringen
 		 */
 		this.getNaechsteZeile();
+		
+		/**
+		 * Parameter für Differentialkontrolle, Ausfallhäufigkeit und
+		 * Vertrauensbereich deaktivieren bzw. zurücksetzen
+		 */
+		deaktiviereParaDiff();
+		deaktiviereParaAusfall();
+		deaktiviereParaVertrauensbereich();
 	}
 	
 		
@@ -188,6 +196,28 @@ implements ClientSenderInterface{
 				(short)0), System.currentTimeMillis(), parameter);
 		DAV.sendData(resultat);
 	}
+	
+	/**
+	 * Setzt Attribute der Differentialkontrolle zurück
+	 * @throws Exception
+	 */
+	private final void deaktiviereParaDiff() throws Exception {
+		Data parameter = DAV.createData(diffFs);
+		DUAUtensilien.getAttributDatum("maxAnzKonstanzqKfz", parameter).asUnscaledValue().set(99999999);
+		DUAUtensilien.getAttributDatum("maxAnzKonstanzqLkw", parameter).asUnscaledValue().set(99999999);
+		DUAUtensilien.getAttributDatum("maxAnzKonstanzqPkw", parameter).asUnscaledValue().set(99999999);
+		DUAUtensilien.getAttributDatum("maxAnzKonstanzvKfz", parameter).asUnscaledValue().set(99999999);
+		DUAUtensilien.getAttributDatum("maxAnzKonstanzvLkw", parameter).asUnscaledValue().set(99999999);
+		DUAUtensilien.getAttributDatum("maxAnzKonstanzvPkw", parameter).asUnscaledValue().set(99999999);
+		DUAUtensilien.getAttributDatum("maxAnzKonstanzStreung", parameter).asUnscaledValue().set(99999999);
+		DUAUtensilien.getAttributDatum("maxAnzKonstanzBelegung", parameter).asUnscaledValue().set(99999999);
+		
+		ResultData resultat = new ResultData(this.objekt, new DataDescription(
+				diffFs, 
+				DAV.getDataModel().getAspect(Konstante.DAV_ASP_PARAMETER_VORGABE),
+				(short)0), System.currentTimeMillis(), parameter);
+		DAV.sendData(resultat);
+	}
 
 	/**
 	 * Setzt Attribute der Ausfallkontrolle entsprechend den Afo (5.1.3.10.2)
@@ -196,6 +226,21 @@ implements ClientSenderInterface{
 	public final void importParaAusfall() throws Exception {
 		Data parameter = DAV.createData(ausfallHFs);
 		DUAUtensilien.getAttributDatum("maxAusfallProTag", parameter).asUnscaledValue().set(3);
+		
+		ResultData resultat = new ResultData(this.objekt, new DataDescription(
+				ausfallHFs, 
+				DAV.getDataModel().getAspect(Konstante.DAV_ASP_PARAMETER_VORGABE),
+				(short)0), System.currentTimeMillis(), parameter);
+		DAV.sendData(resultat);
+	}
+	
+	/**
+	 * Setzt Attribute der Ausfallkontrolle zurück
+	 * @throws Exception
+	 */
+	private final void deaktiviereParaAusfall() throws Exception {
+		Data parameter = DAV.createData(ausfallHFs);
+		DUAUtensilien.getAttributDatum("maxAusfallProTag", parameter).asUnscaledValue().set(99);
 		
 		ResultData resultat = new ResultData(this.objekt, new DataDescription(
 				ausfallHFs, 
@@ -214,6 +259,23 @@ implements ClientSenderInterface{
 		DUAUtensilien.getAttributDatum("BezugsZeitraum", parameter).asUnscaledValue().set(1);
 		DUAUtensilien.getAttributDatum("maxAusfallProBezugsZeitraumEin", parameter).asUnscaledValue().set(20);
 		DUAUtensilien.getAttributDatum("maxAusfallProBezugsZeitraumAus", parameter).asUnscaledValue().set(20);
+		ResultData resultat = new ResultData(this.objekt, new DataDescription(
+				vertrauensbereichFs, 
+				DAV.getDataModel().getAspect(Konstante.DAV_ASP_PARAMETER_VORGABE),
+				(short)0), System.currentTimeMillis(), parameter);
+		DAV.sendData(resultat);
+	}
+	
+	/**
+	 * Setzt Attribute des Vertrauensbereich zurück
+	 * @throws Exception
+	 */
+	private final void deaktiviereParaVertrauensbereich() throws Exception {
+		Data parameter = DAV.createData(vertrauensbereichFs);
+		
+		DUAUtensilien.getAttributDatum("BezugsZeitraum", parameter).asUnscaledValue().set(24);
+		DUAUtensilien.getAttributDatum("maxAusfallProBezugsZeitraumEin", parameter).asUnscaledValue().set(99);
+		DUAUtensilien.getAttributDatum("maxAusfallProBezugsZeitraumAus", parameter).asUnscaledValue().set(99);
 		ResultData resultat = new ResultData(this.objekt, new DataDescription(
 				vertrauensbereichFs, 
 				DAV.getDataModel().getAspect(Konstante.DAV_ASP_PARAMETER_VORGABE),
