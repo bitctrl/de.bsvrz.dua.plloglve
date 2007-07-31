@@ -560,7 +560,7 @@ class VergleicheKZD extends Thread {
 	 * prüfe Daten
 	 */
 	private void pruefeDaten(ArrayList<HashMap<String,Integer>> csvZeilen, int fsIndex, int csvOffset) throws Exception {
-		String ident = "[FS:"+fsIndex+"-DS:"+(csvOffset+2)+"] ";  //FS + CSV Index
+		String ident = "[FS:"+fsIndex+"-Z:"+(csvOffset+2)+"] ";  //FS + CSV Index
 		LOGGER.info("Pruefe Fahrstreifendatum "+ident);
 		
 		HashMap<String,Integer> hmCSV = csvZeilen.get(csvOffset);
@@ -592,7 +592,7 @@ class VergleicheKZD extends Thread {
 		String sollWertErl;
 		String istWertErl;
 		
-		LOGGER.info(ident+"HashMap Groesse: CSV("+(hmCSV.size()-8)+") <> Results("+hmResult.size()+")");
+		//LOGGER.info(ident+"HashMap Groesse: CSV("+(hmCSV.size()-8)+") <> Results("+hmResult.size()+")");
 		
 		pruefLog = "";
 		for(int i=0;i<attributNamenPraefix.length;i++) {
