@@ -6,7 +6,9 @@ import stauma.dav.clientside.DataDescription;
 import stauma.dav.clientside.ReceiveOptions;
 import stauma.dav.clientside.ReceiverRole;
 import stauma.dav.clientside.ResultData;
+import stauma.dav.clientside.Data;
 import de.bsvrz.sys.funclib.bitctrl.dua.DUAKonstanten;
+import de.bsvrz.sys.funclib.bitctrl.dua.DUAUtensilien;
 import stauma.dav.clientside.ClientReceiverInterface;
 import de.bsvrz.dua.plloglve.util.PlPruefungInterface;
 import sys.funclib.debug.Debug;
@@ -40,9 +42,16 @@ implements ClientReceiverInterface {
 	private long pruefZeitstempel;
 	
 	/**
-	 * Gibt an, ob Ergebnisdatensätze auf Fehlerfreiheit geprüft werden
+	 * Gibt an, welches Attribut getestet werden soll
+	 * "alle" = prüfe alle Attribute
 	 */
-	private boolean pruefeOK = false;
+	private String pruefeAttr;
+	
+	/**
+	 * Gibt an, auf was für Markierungen getestet werden soll
+	 */
+	private long sollWert;
+	private int sollImplausibel;
 	
 	/**
 	 * Empfange-Datenbeschreibung für KZD und LZD
@@ -83,22 +92,127 @@ implements ClientReceiverInterface {
 	
 	/**
 	 * Konfiguriert dieses Objekt auf die Prüfung von fehlerfreien Daten
+	 * @param pruefeAttr Zu prüfende Attribut(e)
 	 * @param pruefZeitstempel Der zu prüfende Zeitstempel
 	 */
-	public void listenOK(long pruefZeitstempel) {
+	public void listenOK(String pruefeAttr, long pruefZeitstempel) {
 		this.pruefZeitstempel = pruefZeitstempel;
-		this.pruefeOK = true;
-		LOGGER.info("Prüfe auf fehlerfreien DS...");
+		this.pruefeAttr = pruefeAttr;
+		this.sollWert = 0;
+		this.sollImplausibel = DUAKonstanten.NEIN;
+		LOGGER.info("Prüfe DS auf fehlerfreien Attribut: "+pruefeAttr);
+	}
+	
+	public void listenOK(long pruefZeitstempel) {
+		listenOK("alle", pruefZeitstempel);
 	}
 	
 	/**
-	 * Konfiguriert dieses Objekt auf die Prüfung von fehlerhafte Daten
+	 * Konfiguriert dieses Objekt auf die Prüfung von fehlerhaften Daten
+	 * @param pruefeAttr Zu prüfende Attribut(e)
 	 * @param pruefZeitstempel Der zu prüfende Zeitstempel
 	 */
-	public void listenFehlerhaft(long pruefZeitstempel) {
+	public void listenFehl(String pruefeAttr, long pruefZeitstempel) {
 		this.pruefZeitstempel = pruefZeitstempel;
-		this.pruefeOK = false;
-		LOGGER.info("Prüfe auf fehlerhaften DS...");
+		this.pruefeAttr = pruefeAttr;
+		this.sollWert = DUAKonstanten.FEHLERHAFT;
+		this.sollImplausibel = DUAKonstanten.NEIN;
+		LOGGER.info("Prüfe DS auf fehlerhaftes Attribut: "+pruefeAttr);
+	}
+	
+	public void listenFehl(long pruefZeitstempel) {
+		listenFehl("alle", pruefZeitstempel);
+	}
+	
+	/**
+	 * Konfiguriert dieses Objekt auf die Prüfung von implausiblen Daten
+	 * @param pruefeAttr Zu prüfende Attribut(e)
+	 * @param pruefZeitstempel Der zu prüfende Zeitstempel
+	 */
+	public void listenImpl(String pruefeAttr, long pruefZeitstempel) {
+		this.pruefZeitstempel = pruefZeitstempel;
+		this.pruefeAttr = pruefeAttr;
+		this.sollWert = 0;
+		this.sollImplausibel = DUAKonstanten.JA;
+		LOGGER.info("Prüfe DS auf implausibles Attribut: "+pruefeAttr);
+	}
+	
+	public void listenImpl(long pruefZeitstempel) {
+		listenImpl("alle", pruefZeitstempel);
+	}
+	
+	/**
+	 * Konfiguriert dieses Objekt auf die Prüfung von fehlerhaften und implausiblen Daten
+	 * @param pruefeAttr Zu prüfende Attribut(e)
+	 * @param pruefZeitstempel Der zu prüfende Zeitstempel
+	 */
+	public void listenFehlImpl(String pruefeAttr, long pruefZeitstempel) {
+		this.pruefZeitstempel = pruefZeitstempel;
+		this.pruefeAttr = pruefeAttr;
+		this.sollWert = DUAKonstanten.FEHLERHAFT;
+		this.sollImplausibel = DUAKonstanten.JA;
+		LOGGER.info("Prüfe DS auf fehlerhaftes und implausibles Attribut: "+pruefeAttr);
+	}
+	
+	public void listenFehlImpl(long pruefZeitstempel) {
+		listenFehlImpl("alle", pruefZeitstempel);
+	}
+	
+	private void pruefeDS(Data data) {
+		if(pruefeAttr.equals("alle")) {
+			final long qKfz = data.getItem("qKfz").getUnscaledValue("Wert").longValue();
+			final int qKfzImpl = data.getItem("qKfz").getItem("Status").getItem("MessWertErsetzung").getUnscaledValue("Implausibel").intValue();
+			final long qLkw = data.getItem("qLkw").getUnscaledValue("Wert").longValue();
+			final int qLkwImpl = data.getItem("qLkw").getItem("Status").getItem("MessWertErsetzung").getUnscaledValue("Implausibel").intValue();
+			final long qPkw = data.getItem("qPkw").getUnscaledValue("Wert").longValue();
+			final int qPkwImpl = data.getItem("qPkw").getItem("Status").getItem("MessWertErsetzung").getUnscaledValue("Implausibel").intValue();
+			final long vPkw = data.getItem("vPkw").getUnscaledValue("Wert").longValue();
+			final int vPkwImpl = data.getItem("vPkw").getItem("Status").getItem("MessWertErsetzung").getUnscaledValue("Implausibel").intValue();
+			final long vLkw = data.getItem("vLkw").getUnscaledValue("Wert").longValue();
+			final int vLkwImpl = data.getItem("vLkw").getItem("Status").getItem("MessWertErsetzung").getUnscaledValue("Implausibel").intValue();
+			final long vKfz = data.getItem("vKfz").getUnscaledValue("Wert").longValue();
+			final int vKfzImpl = data.getItem("vKfz").getItem("Status").getItem("MessWertErsetzung").getUnscaledValue("Implausibel").intValue();
+			final long b = data.getItem("b").getUnscaledValue("Wert").longValue();
+			final int bImpl = data.getItem("b").getItem("Status").getItem("MessWertErsetzung").getUnscaledValue("Implausibel").intValue();
+			final long sKfz = data.getItem("sKfz").getUnscaledValue("Wert").longValue();
+			final int sKfzImpl = data.getItem("sKfz").getItem("Status").getItem("MessWertErsetzung").getUnscaledValue("Implausibel").intValue();
+			
+			pruefeAttr(qKfz, qKfzImpl);
+			pruefeAttr(qLkw, qLkwImpl);
+			pruefeAttr(qPkw, qPkwImpl);
+			pruefeAttr(vPkw, vPkwImpl);
+			pruefeAttr(vLkw, vLkwImpl);
+			pruefeAttr(vKfz, vKfzImpl);
+			pruefeAttr(b, bImpl);
+			pruefeAttr(sKfz, sKfzImpl);
+		} else {
+			final long pruefWert = data.getItem(pruefeAttr).getUnscaledValue("Wert").longValue();
+			final int pruefImpl = data.getItem(pruefeAttr).getItem("Status").getItem("MessWertErsetzung").getUnscaledValue("Implausibel").intValue();
+			pruefeAttr(pruefWert, pruefImpl);
+		}
+
+	}
+	
+	private void pruefeAttr(long wert, int impl) {
+		if(sollWert < 0) {
+			if(wert != sollWert) {
+				LOGGER.warning("Fehlerhafter Attributwert ("+pruefeAttr+"): "+sollWert+" (SOLL)<>(IST) "+wert);
+			} else {
+				LOGGER.info("Attributwert OK ("+pruefeAttr+"): "+sollWert+" (SOLL)==(IST) "+wert);
+			}
+		} else {
+			if(wert < 0) {
+				LOGGER.warning("Fehlerhafter Attributwert ("+pruefeAttr+"): Wert >= 0 (SOLL)<>(IST) "+wert);
+			} else {
+				LOGGER.info("Attributwert OK ("+pruefeAttr+"): Wert >= 0 (SOLL)==(IST) "+wert);
+			}
+		}
+		
+		if(sollImplausibel != impl) {
+			LOGGER.warning("Fehlerhafte Implausibel-Markierung ("+pruefeAttr+"): "+sollImplausibel+" (SOLL)<>(IST) "+impl);
+		} else {
+			LOGGER.info("Implausibel-Markierung OK ("+pruefeAttr+"): "+sollImplausibel+" (SOLL)==(IST) "+impl);
+		}
 	}
 	
 	/** {@inheritDoc}
@@ -113,20 +227,7 @@ implements ClientReceiverInterface {
 				result.getDataDescription().equals(DD_LZD_EMPF)) &&
 				result.getData() != null &&
 				result.getDataTime() == pruefZeitstempel) {
-
-				if(pruefeOK) {
-					if(!result.toString().contains("fehlerhaft")) {
-						LOGGER.info("OK: fehlerfrei (SOLL) == (IST) fehlerfrei");
-					} else {
-						LOGGER.warning("Fehlerfreien DS erwartet aber fehlerhaften DS erhalten:\n\r"+result.toString());
-					}
-				} else {
-					if(result.toString().contains("fehlerhaft")) {
-						LOGGER.info("OK: fehlerhaft (SOLL) == (IST) fehlerhaft");
-					} else {
-						LOGGER.warning("Fehlerhaften DS erwartet aber fehlerfreien DS erhalten:\n\r"+result.toString());
-					}
-				}
+				pruefeDS(result.getData());
 				caller.doNotify();
 			}
 		}
