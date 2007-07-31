@@ -161,8 +161,14 @@ implements ClientReceiverInterface{
 		if(programmLaeuftSchonLaengerAlsEinTag()){
 			synchronized (this) {
 				if(this.maxAusfallProTag >= 0){
-					//long ausfallInProzent = (int)((((double)ausfallZeit / (double)Konstante.TAG_24_IN_MS) * 100.0) + 0.5);
-					long ausfallInProzent = (int)(((double)ausfallZeit / (double)Konstante.TAG_24_IN_MS) * 100.0);
+					
+					double ausfallInProzent;
+					if(Ausfallhaeufigkeit.TEST) {
+						ausfallInProzent = (double)(((double)ausfallZeit / (double)144000) * 100.0);
+					} else {
+						ausfallInProzent = (double)(((double)ausfallZeit / (double)Konstante.TAG_24_IN_MS) * 100.0);
+					}
+					
 					if(ausfallInProzent > this.maxAusfallProTag){
 						long stunden = ausfallZeit / Konstante.STUNDE_IN_MS;
 						long minuten = (ausfallZeit - (stunden * Konstante.STUNDE_IN_MS)) / Konstante.MINUTE_IN_MS;
