@@ -105,8 +105,8 @@ implements ClientSenderInterface, PlPruefungInterface {
 		TestFahrstreifenImporter paraImpFSOK = null;
 		TestFahrstreifenImporter paraImpFSFehler = null;
 		
-		paraImpFSOK = new TestFahrstreifenImporter(this.dav, TEST_DATEN_VERZ + "fahrstreifen1_OK"); //$NON-NLS-1$
-		paraImpFSFehler = new TestFahrstreifenImporter(this.dav, TEST_DATEN_VERZ + "fahrstreifen1_Fehler"); //$NON-NLS-1$
+		paraImpFSOK = new TestFahrstreifenImporter(this.dav, TEST_DATEN_VERZ + "fahrstreifen_OK"); //$NON-NLS-1$
+		paraImpFSFehler = new TestFahrstreifenImporter(this.dav, TEST_DATEN_VERZ + "fahrstreifen_Fehler"); //$NON-NLS-1$
 		
 		/*
 		 * Setze Intervallparameter
