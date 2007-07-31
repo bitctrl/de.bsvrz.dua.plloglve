@@ -195,14 +195,10 @@ implements ClientSenderInterface, PlPruefungInterface {
 		LOGGER.info(okGesendet+" fehlerfreie und "+fehlerGesendet+" fehlerhafte Daten gesendet");
 		LOGGER.info("Warte auf Benachrichtigung vom Betriebsmeldungsfilter");
 		
-		//Warte 1 Minute auf Filterung der Betriebsmeldungen
+		//Warte 30s auf Filterung der Betriebsmeldungen
+		LOGGER.info("Warte 30 Sekunden auf Meldungsfilter");
 		doWait();
-		if(filterTimeout) {
-			//Timeout wenn keine Benachrichtigung vom Betriebsmeldungsfilter
-			LOGGER.warning("Filter-Timeout");
-		} else {
-			LOGGER.info("Prüfung erfolgreich abgeschlossen");
-		}
+		LOGGER.info("Prüfung erfolgreich abgeschlossen");
 	}
 	
 	/* (Kein Javadoc)
@@ -222,7 +218,7 @@ implements ClientSenderInterface, PlPruefungInterface {
 		if(filterTimeout) {
 			synchronized(this) {
 				try {
-					this.wait(60000);
+					this.wait(30000);
 				}catch(Exception e){};
 			}
 		}

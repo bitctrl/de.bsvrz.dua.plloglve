@@ -14,7 +14,6 @@ import de.bsvrz.dua.plloglve.pruef.FilterMeldung;
 import de.bsvrz.dua.plloglve.pruef.PruefeMarkierung;
 import de.bsvrz.sys.funclib.bitctrl.dua.DUAKonstanten;
 import de.bsvrz.sys.funclib.bitctrl.app.Pause;
-import de.bsvrz.sys.funclib.bitctrl.konstante.Konstante;
 
 public class PlPruefungVertrauensbereich
 implements ClientSenderInterface, PlPruefungInterface {
@@ -56,11 +55,6 @@ implements ClientSenderInterface, PlPruefungInterface {
 	static long INTERVALL = 100L;
 	
 	/**
-	 * Filter-Timout
-	 */
-	private boolean filterTimeout = true;
-	
-	/**
 	 * Fehlerdatensätze
 	 */
 	private Data zFSFehlQKfzQPkwQLkwVPkw1;
@@ -73,11 +67,6 @@ implements ClientSenderInterface, PlPruefungInterface {
 	 */
 	private boolean sendeFehler1_2 = false;
 	private boolean sendeFehler2_2 = false;
-	
-	/**
-	 * Gibt an, ob auf Meldungsprüfer gewartet wird
-	 */
-	private boolean warteAufMeldung = false;
 	
 	/**
 	 * Sendet Testdaten und prüft Ausfallkontrolle
@@ -266,16 +255,11 @@ implements ClientSenderInterface, PlPruefungInterface {
 		LOGGER.info(okGesendet+" fehlerfreie und "+fehlerGesendet+" fehlerhafte Daten gesendet");
 		LOGGER.info("Warte auf Benachrichtigung vom Betriebsmeldungsfilter");
 		
-		//Warte 1 Minute auf Filterung der Betriebsmeldungen
-		warteAufMeldung = true;
-		doWait(60000);
+		//Warte 30s auf Filterung der Betriebsmeldungen
+		LOGGER.info("Warte 30 Sekunden auf Meldungsfilter...");
+		doWait(30000);
 		
-		if(filterTimeout) {
-			//Timeout wenn keine Benachrichtigung vom Betriebsmeldungsfilter
-			LOGGER.warning("Filter-Timeout");
-		} else {
-			LOGGER.info("Prüfung erfolgreich abgeschlossen");
-		}
+		LOGGER.info("Prüfung erfolgreich abgeschlossen");
 	}
 	
 	/**
@@ -320,7 +304,6 @@ implements ClientSenderInterface, PlPruefungInterface {
 	 * @see de.bsvrz.dua.plloglve.util.PlPruefungInterface#doNotify()
 	 */
 	public void doNotify() {
-		if(warteAufMeldung) filterTimeout = false;
 		synchronized(this) {
 			this.notify();
 		}
