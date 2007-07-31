@@ -138,8 +138,6 @@ implements ClientSenderInterface, PlPruefungInterface {
 			ResultData resultat1 = new ResultData(FS, DD_KZD_SEND, pruefZeit, zeileFSOK);
 			this.dav.sendData(resultat1);
 			
-			//System.out.println("["+i+"]O");
-			
 			//Erhöht Prüfzeitstempel entsprechend der Intervalllänge
 			pruefZeit = pruefZeit + INTERVALL;
 			
@@ -174,7 +172,6 @@ implements ClientSenderInterface, PlPruefungInterface {
 				}
 				ResultData resultat1 = new ResultData(FS, DD_KZD_SEND, pruefZeit, zeileFSFehler);
 				this.dav.sendData(resultat1);
-				//System.out.println("["+i+"]A");
 				fehlerGesendet++;
 			} else {
 				if((zeileFSOK = paraImpFSOK.getNaechstenDatensatz(DD_KZD_SEND.getAttributeGroup())) == null) {
@@ -184,7 +181,6 @@ implements ClientSenderInterface, PlPruefungInterface {
 				}
 				ResultData resultat1 = new ResultData(FS, DD_KZD_SEND, pruefZeit, zeileFSOK);
 				this.dav.sendData(resultat1);
-				//System.out.println("["+i+"]O");
 				okGesendet++;
 			}
 			//Erhöht Prüfzeitstempel entsprechend der Intervalllänge
