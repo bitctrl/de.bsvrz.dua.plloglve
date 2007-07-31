@@ -11,6 +11,7 @@ import sys.funclib.debug.Debug;
 import de.bsvrz.dua.plloglve.plloglve.typen.OptionenPlausibilitaetsPruefungLogischVerkehr;
 import de.bsvrz.dua.plloglve.util.para.ParaKZDLogImport;
 import de.bsvrz.dua.plloglve.pruef.FilterMeldung;
+import de.bsvrz.dua.plloglve.pruef.PruefeMarkierung;
 import de.bsvrz.sys.funclib.bitctrl.dua.DUAKonstanten;
 import de.bsvrz.sys.funclib.bitctrl.app.Pause;
 import de.bsvrz.sys.funclib.bitctrl.konstante.Konstante;
@@ -49,9 +50,34 @@ implements ClientSenderInterface, PlPruefungInterface {
 	private ClientDavInterface dav = null;
 	
 	/**
+	 * Intervalllänge in Millisekunden
+	 */
+	//static long INTERVALL = Konstante.MINUTE_IN_MS;
+	static long INTERVALL = 100L;
+	
+	/**
 	 * Filter-Timout
 	 */
 	private boolean filterTimeout = true;
+	
+	/**
+	 * Fehlerdatensätze
+	 */
+	private Data zFSFehlQKfzQPkwQLkwVPkw1;
+	private Data zFSFehlQKfzQPkwQLkwVPkw2;
+	private Data zFSFehlB1;
+	private Data zFSFehlB2;
+	
+	/**
+	 * Gibt an, welcher fehlerhafte DS jeweils gesendet werden soll
+	 */
+	private boolean sendeFehler1_2 = false;
+	private boolean sendeFehler2_2 = false;
+	
+	/**
+	 * Gibt an, ob auf Meldungsprüfer gewartet wird
+	 */
+	private boolean warteAufMeldung = false;
 	
 	/**
 	 * Sendet Testdaten und prüft Ausfallkontrolle
@@ -85,6 +111,19 @@ implements ClientSenderInterface, PlPruefungInterface {
 		}catch(Exception e) {
 			LOGGER.error("Kann Test nicht konfigurieren: "+e);
 		}
+		
+		try {
+			TestFahrstreifenImporter paraImpFSFehler = null;
+			paraImpFSFehler = new TestFahrstreifenImporter(this.dav, TEST_DATEN_VERZ + "fahrstreifen_Fehler"); //$NON-NLS-1$
+			paraImpFSFehler.setT(100L);
+			zFSFehlQKfzQPkwQLkwVPkw1 = paraImpFSFehler.getNaechstenDatensatz(DD_KZD_SEND.getAttributeGroup());
+			zFSFehlQKfzQPkwQLkwVPkw2 = paraImpFSFehler.getNaechstenDatensatz(DD_KZD_SEND.getAttributeGroup());
+			zFSFehlB1 = paraImpFSFehler.getNaechstenDatensatz(DD_KZD_SEND.getAttributeGroup());
+			zFSFehlB2 = paraImpFSFehler.getNaechstenDatensatz(DD_KZD_SEND.getAttributeGroup());
+		}catch(Exception e) {
+			LOGGER.error("Kann Fehlerdatensätze nicht importieren: "+e);
+		}
+
 	}
 	
 	/**
@@ -93,59 +132,47 @@ implements ClientSenderInterface, PlPruefungInterface {
 	 */
 	public void pruefe() throws Exception {
 		/*
-		 * Initialisiere Parameter Importer für fehlerfreie und
-		 * fehlerhafte DS
+		 * Initialisiere Parameter Importer für fehlerfreie DS
 		 */
 		TestFahrstreifenImporter paraImpFSOK = null;
-		TestFahrstreifenImporter paraImpFSFehler = null;
-		
 		paraImpFSOK = new TestFahrstreifenImporter(this.dav, TEST_DATEN_VERZ + "fahrstreifen_OK"); //$NON-NLS-1$
-		paraImpFSFehler = new TestFahrstreifenImporter(this.dav, TEST_DATEN_VERZ + "fahrstreifen_Fehler"); //$NON-NLS-1$
 		
 		/*
 		 * Setze Intervall auf 100MS
 		 */
 		paraImpFSOK.setT(100L);
-		paraImpFSFehler.setT(100L);
 		
 		/*
-		 * Aktuelle fehlerfreie und fehlerhafte Fahrstreifen-DS
+		 * Aktueller fehlerfreie Fahrstreifen-DS
 		 */
 		Data zeileFSOK;
-		Data zeileFSFehler;
-		
+
 		Long pruefZeit = System.currentTimeMillis();
 		Long aktZeit;
 			
 		/*
 		 * Sendet fehlerfreie DS für eine Stunde
 		 */
-//		LOGGER.info("Sende fehlerfreie DS für 1 Stunde (60)");
-//		for(int i=1;i<=60;i++) {
-//			
-//			if((zeileFSOK = paraImpFSOK.getNaechstenDatensatz(DD_KZD_SEND.getAttributeGroup())) == null) {
-//				paraImpFSOK.reset();
-//				paraImpFSOK.getNaechsteZeile();
-//				zeileFSOK = paraImpFSOK.getNaechstenDatensatz(DD_KZD_SEND.getAttributeGroup());
-//			}
-//			
-//			ResultData resultat1 = new ResultData(FS, DD_KZD_SEND, pruefZeit, zeileFSOK);
-//			this.dav.sendData(resultat1);
-//			
-//			System.out.println("["+i+"]O");
-//			
-//			//Sende Datensatz alle 60000MS
-//			//pruefZeit = pruefZeit + Konstante.MINUTE_IN_MS;
-//			
-//			//TODO:DEBUG
-//			//Sende Datensatz alle 100MS
-//			pruefZeit = pruefZeit + 100L;
-//			
-//			//Warte bis Intervallende
-//			if((aktZeit = System.currentTimeMillis()) < pruefZeit) {
-//				Pause.warte(pruefZeit - aktZeit);
-//			}
-//		}
+		LOGGER.info("Sende fehlerfreie DS für 1 Stunde (60)");
+		for(int i=1;i<=60;i++) {
+			
+			if((zeileFSOK = paraImpFSOK.getNaechstenDatensatz(DD_KZD_SEND.getAttributeGroup())) == null) {
+				paraImpFSOK.reset();
+				paraImpFSOK.getNaechsteZeile();
+				zeileFSOK = paraImpFSOK.getNaechstenDatensatz(DD_KZD_SEND.getAttributeGroup());
+			}
+			
+			ResultData resultat1 = new ResultData(FS, DD_KZD_SEND, pruefZeit, zeileFSOK);
+			this.dav.sendData(resultat1);
+			
+			//Sende Datensatz entsprechend Intervall
+			pruefZeit = pruefZeit + INTERVALL;
+			
+			//Warte bis Intervallende
+			if((aktZeit = System.currentTimeMillis()) < pruefZeit) {
+				Pause.warte(pruefZeit - aktZeit);
+			}
+		}
 
 		/*
 		 * Prüfung
@@ -155,22 +182,63 @@ implements ClientSenderInterface, PlPruefungInterface {
 		int okGesendet = 0;
 		int fehlerGesendet = 0;
 		
-		//FilterMeldung filterM = new FilterMeldung(this, dav,"Ausfallhäufigkeit", 86);
-		//TODO:DEBUG
-		FilterMeldung filterM = new FilterMeldung(this, dav,"Vertrauensbereich", 100);
+		/*
+		 * Warte auf 371 Meldungen
+		 * 36 x 4 (qKfz, qPkw, qLkw, vPkw)
+		 * 37 (b)
+		 * 39 x 4 (qKfz, qPkw, qLkw, vPkw)
+		 * 32 (b)
+		 * 2 (Gutmeldung)
+		 */
+		new FilterMeldung(this, dav,"Vertrauensbereichs", 371);
 
-		//TODO:DEBUG
-		//for(int i=1;i<=552;i++) {
+		/*
+		 * Testerobjekt
+		 */
+		PruefeMarkierung markPruefer = new PruefeMarkierung(this, dav, FS);
+		
 		for(int i=1;i<=600;i++) {
-			if(i == 12 || i == 492 || (i >= 18 && i <= 29) || (i >= 500 && i <= 511)) {
-				if((zeileFSFehler = paraImpFSFehler.getNaechstenDatensatz(DD_KZD_SEND.getAttributeGroup())) == null) {
-					paraImpFSFehler.reset();
-					paraImpFSFehler.getNaechsteZeile();
-					zeileFSFehler = paraImpFSFehler.getNaechstenDatensatz(DD_KZD_SEND.getAttributeGroup());
-				}
-				ResultData resultat1 = new ResultData(FS, DD_KZD_SEND, pruefZeit, zeileFSFehler);
-				this.dav.sendData(resultat1);
-				System.out.println("["+i+"]A");
+			
+			/*
+			 * Konfiguriert Testerobjekt
+			 */
+			if ((i >= 29 && i < 72) || (i >= 511 && i < 552)) {
+				markPruefer.listenImpl(pruefZeit);
+			}
+			
+			/*
+			 * Verlassen des VB vom 29. - 71. DS und vom 511. - 551. DS
+			 * Innerhalb dieser Bereiche werden alle Werte des FS als Implausibel erwartet
+			 */
+			if((i >= 4 && i <= 9) || (i >= 23 && i <= 29) || (i >= 490 && i <= 494) || (i >= 501 && i <= 506) || (i >= 512 && i <= 514)) {
+				/*
+				 * Es wird ein fehlerhafter DS (qKfz, qPkw, qLkw, vPkw) gesendet
+				 * Dabei wird der VB entsprechend Afo beim 29. DS verlassen
+				 * 
+				 * Der prozentuale Ausfall der Attribute liegt ab dem 65. DS unter 20% wobei der VB jedoch
+				 * aufgrund der anderen Fehlerdaten weiterhin verlassen bleibt
+				 * 
+				 * Für den zweiten Testbereich liegt der prozentuale Ausfall ab dem 513. DS über 20% wobei
+				 * der VB bereits früher durch die anderen Fehlerdaten verlassen wird
+				 * 
+				 * Ab dem 552. DS liegt der prozentuale Ausfall entsprechend Afo wieder im VB 
+				 */
+				sendeFehler1(pruefZeit);
+				fehlerGesendet++;
+			} else if ((i >= 10 && i <= 16) || (i >= 30 && i <= 36) || (i >= 482 && i <= 489) || (i >= 507 && i <= 511)) {
+				/*
+				 * Es wird ein fehlerhafter DS (b) gesendet
+				 * Der prozentuale Ausfall der Attribute liegt ab dem 35. DS über 20% wobei der VB jedoch
+				 * aufgrund der anderen Fehlerdaten bereits früher verlassen wird
+				 * 
+				 * Ab dem 72. DS liegt der prozentuale Ausfall entsprechend Afo wieder im VB 
+				 * 
+				 * Für den zweiten Testbereich wird der VB ab dem 511. DS entsprechend Afo verlassen
+				 * 
+				 * Der prozentuale Ausfall der Attribute liegt ab dem 543. DS unter 20% wobei der VB jedoch
+				 * aufgrund der anderen Fehlerdaten weiterhin verlassen bleibt
+				 */
+				sendeFehler2(pruefZeit);
 				fehlerGesendet++;
 			} else {
 				if((zeileFSOK = paraImpFSOK.getNaechstenDatensatz(DD_KZD_SEND.getAttributeGroup())) == null) {
@@ -180,15 +248,14 @@ implements ClientSenderInterface, PlPruefungInterface {
 				}
 				ResultData resultat1 = new ResultData(FS, DD_KZD_SEND, pruefZeit, zeileFSOK);
 				this.dav.sendData(resultat1);
-				System.out.println("["+i+"]O");
 				okGesendet++;
 			}
-			//Sende Datensatz alle 60000MS
-			//pruefZeit = pruefZeit + Konstante.MINUTE_IN_MS;
 			
-			//TODO:DEBUG
-			//Sende Datensatz alle 100MS
-			pruefZeit = pruefZeit + 100L;
+			//Warte auf Markierungsprüfung
+			doWait(75);
+			
+			//Sende Datensatz entsprechend Intervall
+			pruefZeit = pruefZeit + INTERVALL;
 			
 			//Warte bis Intervallende
 			if((aktZeit = System.currentTimeMillis()) < pruefZeit) {
@@ -200,10 +267,52 @@ implements ClientSenderInterface, PlPruefungInterface {
 		LOGGER.info("Warte auf Benachrichtigung vom Betriebsmeldungsfilter");
 		
 		//Warte 1 Minute auf Filterung der Betriebsmeldungen
-		doWait();
+		warteAufMeldung = true;
+		doWait(60000);
+		
 		if(filterTimeout) {
 			//Timeout wenn keine Benachrichtigung vom Betriebsmeldungsfilter
 			LOGGER.warning("Filter-Timeout");
+		} else {
+			LOGGER.info("Prüfung erfolgreich abgeschlossen");
+		}
+	}
+	
+	/**
+	 * Sendet einen fehlerhaften DS
+	 * Fehlerhafte Attribute: qKfz, qPkw, pLkw, vPkw
+	 * @param pruefZeit Zeitstempel des DS
+	 * @throws Exception
+	 */
+	private void sendeFehler1(long pruefZeit) throws Exception {
+		ResultData resultat1;
+		if(!sendeFehler1_2) {
+			resultat1 = new ResultData(FS, DD_KZD_SEND, pruefZeit, zFSFehlQKfzQPkwQLkwVPkw1);
+			this.dav.sendData(resultat1);
+			sendeFehler1_2 = true;
+		} else {
+			resultat1 = new ResultData(FS, DD_KZD_SEND, pruefZeit, zFSFehlQKfzQPkwQLkwVPkw2);
+			this.dav.sendData(resultat1);
+			sendeFehler1_2 = false;
+		}
+	}
+	
+	/**
+	 * Sendet einen fehlerhaften DS
+	 * Fehlerhaftes Attribut: b
+	 * @param pruefZeit Zeitstempel des DS
+	 * @throws Exception
+	 */
+	private void sendeFehler2(long pruefZeit) throws Exception {
+		ResultData resultat2;
+		if(!sendeFehler2_2) {
+			resultat2 = new ResultData(FS, DD_KZD_SEND, pruefZeit, zFSFehlB1);
+			this.dav.sendData(resultat2);
+			sendeFehler2_2 = true;
+		} else {
+			resultat2 = new ResultData(FS, DD_KZD_SEND, pruefZeit, zFSFehlB2);
+			this.dav.sendData(resultat2);
+			sendeFehler2_2 = false;
 		}
 	}
 	
@@ -211,7 +320,7 @@ implements ClientSenderInterface, PlPruefungInterface {
 	 * @see de.bsvrz.dua.plloglve.util.PlPruefungInterface#doNotify()
 	 */
 	public void doNotify() {
-		filterTimeout = false;
+		if(warteAufMeldung) filterTimeout = false;
 		synchronized(this) {
 			this.notify();
 		}
@@ -220,10 +329,10 @@ implements ClientSenderInterface, PlPruefungInterface {
 	/**
 	 * Lässten diesen Thread warten
 	 */
-	private void doWait() {
+	private void doWait(int zeit) {
 		synchronized(this) {
 			try {
-				this.wait(60000);
+				this.wait(zeit);
 			}catch(Exception e){};
 		}
 	}
