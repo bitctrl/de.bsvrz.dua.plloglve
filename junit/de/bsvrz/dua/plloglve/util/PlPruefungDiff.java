@@ -118,31 +118,31 @@ implements ClientSenderInterface, PlPruefungInterface {
 				markPruefer.listenOK(aktZeit);
 				
 				if(dsKumm == 4 || dsKumm == 13) {
-					markPruefer.listenFehlerhaft(aktZeit);
+					markPruefer.listenFehlImpl("qKfz", aktZeit);
 				}
 				
 				if((dsKumm == 6) || (dsKumm >= 13 && dsKumm <= 17)) {
-					markPruefer.listenFehlerhaft(aktZeit);
+					markPruefer.listenFehlImpl("qLkw", aktZeit);
 				}
 				
 				if(dsKumm >= 9 && dsKumm <= 13) {
-					markPruefer.listenFehlerhaft(aktZeit);
+					markPruefer.listenFehlImpl("qPkw", aktZeit);
 				}
 				
 				if(dsKumm >= 30 && dsKumm <= 31) {
-					markPruefer.listenFehlerhaft(aktZeit);
+					markPruefer.listenFehlImpl("vKfz", aktZeit);
 				}
 				
 				if(dsKumm >= 36 && dsKumm <= 38) {
-					markPruefer.listenFehlerhaft(aktZeit);
+					markPruefer.listenFehlImpl("vLkw", aktZeit);
 				}
 				
 				if(dsKumm == 32) {
-					markPruefer.listenFehlerhaft(aktZeit);
+					markPruefer.listenFehlImpl("vPkw", aktZeit);
 				}
 				
 				if(dsKumm == 31 || dsKumm == 35) {
-					markPruefer.listenFehlerhaft(aktZeit);
+					markPruefer.listenFehlImpl("b", aktZeit);
 				}
 				
 				ResultData resultat1 = new ResultData(FS, DD_KZD_SEND, aktZeit, zeileFSDiff);
