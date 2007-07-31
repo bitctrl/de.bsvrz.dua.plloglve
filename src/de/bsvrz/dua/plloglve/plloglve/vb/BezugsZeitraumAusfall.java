@@ -44,7 +44,7 @@ implements Comparable<BezugsZeitraumAusfall>{
 	/**
 	 * der prozentuale Ausfall
 	 */
-	private long ausfallInProzent = -1;
+	private double ausfallInProzent = -1;
 	
 	/**
 	 * Ausfall in Minuten
@@ -67,7 +67,7 @@ implements Comparable<BezugsZeitraumAusfall>{
 	 * @param ausfallInMinuten Ausfall in Stunden  
 	 */
 	public BezugsZeitraumAusfall(final long grenze,
-								 final long ausfallInProzent,
+								 final double ausfallInProzent,
 								 final long ausfallInStunden,
 								 final long ausfallInMinuten){
 		this.grenze = grenze;
@@ -97,7 +97,7 @@ implements Comparable<BezugsZeitraumAusfall>{
 	 * {@inheritDoc}
 	 */
 	public int compareTo(BezugsZeitraumAusfall that) {
-		return new Long(this.ausfallInProzent).compareTo(that.ausfallInProzent);
+		return new Double(this.ausfallInProzent).compareTo(that.ausfallInProzent);
 	}
 
 	

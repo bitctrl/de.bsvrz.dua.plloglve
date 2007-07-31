@@ -36,6 +36,7 @@ import stauma.dav.clientside.DataDescription;
 import stauma.dav.clientside.ReceiveOptions;
 import stauma.dav.clientside.ReceiverRole;
 import stauma.dav.clientside.ResultData;
+import stauma.dav.configuration.interfaces.AttributeGroup;
 import stauma.dav.configuration.interfaces.SystemObject;
 import sys.funclib.debug.Debug;
 import sys.funclib.operatingMessage.MessageGrade;
@@ -72,6 +73,11 @@ implements ClientReceiverInterface{
 	 * Debug-Logger
 	 */
 	private static final Debug LOGGER = Debug.getLogger();
+	
+	/**
+	 * ID von SystemObjekt ATG KZD
+	 */
+	private static long ATG_KZD_ID = -1;
 
 	/**
 	 * Verbindung zum Verwaltungsmodul
@@ -161,6 +167,7 @@ implements ClientReceiverInterface{
 					VERWALTUNG.getVerbindung().getDataModel().getAttributeGroup("atg.verkehrsDatenVertrauensBereichFs"), //$NON-NLS-1$
 					VERWALTUNG.getVerbindung().getDataModel().getAspect(Konstante.DAV_ASP_PARAMETER_SOLL),
 					(short)0);
+			ATG_KZD_ID = VERWALTUNG.getVerbindung().getDataModel().getAttributeGroup(DUAKonstanten.ATG_KZD).getId();
 		}
 		
 		datenBezugsZeitraumQKfz = new BezugsZeitraum(VERWALTUNG, "qKfz");  //$NON-NLS-1$
@@ -188,7 +195,7 @@ implements ClientReceiverInterface{
 	protected final Data plausibilisiere(final ResultData originalDatum){
 		Data copy = originalDatum.getData();
 
-		if(originalDatum.getDataDescription().getAttributeGroup().getPid().equals(DUAKonstanten.ATG_KZD)){
+		if(originalDatum.getDataDescription().getAttributeGroup().getId() == ATG_KZD_ID){
 			synchronized (this) {
 				if(this.parameter != null && this.parameter.isAuswertbar()){
 
@@ -214,7 +221,7 @@ implements ClientReceiverInterface{
 											  this.datenBezugsZeitraumB.isVertrauensBereichVerletzt();
 
 					if(verletztAktuell){
-						copy = VERWALTUNG.getVerbindung().createData(originalDatum.getDataDescription().getAttributeGroup());
+						copy = copy.createModifiableCopy();
 
 						/**
 						 * Hier nur die Markierungs aller Attribute des Datensatzes. Eine

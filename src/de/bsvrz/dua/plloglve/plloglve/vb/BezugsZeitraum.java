@@ -139,11 +139,12 @@ public class BezugsZeitraum {
 			
 			this.ausgefalleneDaten.removeAll(veralteteDaten);
 		}
-		
-		final long bezugsZeitraumInMillis = parameter.getBezugsZeitraum() * Konstante.STUNDE_IN_MS;
-		long ausfallInProzent = 0;
+
+		final long bezugsZeitraumInMillis = Vertrauensbereich.TEST?parameter.getBezugsZeitraum()*6000:parameter.getBezugsZeitraum() * Konstante.STUNDE_IN_MS;
+		double ausfallInProzent = 0;
 		if(bezugsZeitraumInMillis > 0){
-			ausfallInProzent = (int)((ausfallZeit / bezugsZeitraumInMillis) * 100.0 + 0.5);
+			//ausfallInProzent = (int)((ausfallZeit / bezugsZeitraumInMillis) * 100.0 + 0.5);
+			ausfallInProzent = (double)(((double)ausfallZeit / (double)bezugsZeitraumInMillis) * 100.0);
 		}
 				
 		/**
@@ -164,21 +165,6 @@ public class BezugsZeitraum {
 				
 				if(einschaltSchwelleUEBERschritten){
 					if(!this.vertrauensBereichVerletzt){
-						Date start = new Date(originalDatum.getDataTime() - parameter.getBezugsZeitraum() * Konstante.STUNDE_IN_MS);
-						Date ende = new Date(originalDatum.getDataTime());
-						long stunden = ausfallZeit / Konstante.STUNDE_IN_MS;
-						long minuten = (ausfallZeit - (stunden * Konstante.STUNDE_IN_MS)) / Konstante.MINUTE_IN_MS;
-						
-						String nachricht = "Daten außerhalb des Vertrauensbereichs. Im Zeitraum von " +  //$NON-NLS-1$
-								DUAKonstanten.BM_ZEIT_FORMAT.format(start) + " Uhr bis " + DUAKonstanten.BM_ZEIT_FORMAT.format(ende) + //$NON-NLS-1$ 
-								" (" + parameter.getBezugsZeitraum() + " Stunde(n)) implausible Fahrstreifenwerte für den Wert " + //$NON-NLS-1$ //$NON-NLS-2$
-								this.name + " am Fahrstreifen " + originalDatum.getObject() + " von " + ausfallInProzent + "% (> " +  //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-								parameter.getMaxAusfallProBezugsZeitraumEin() + "%) entspricht Ausfall von " + stunden + " Stunde(n) " + //$NON-NLS-1$ //$NON-NLS-2$
-								minuten + " Minute(n). Fahrstreifenwerte werden auf Implausibel gesetzt."; //$NON-NLS-1$
-						
-						VERWALTUNG.sendeBetriebsMeldung("Vertrauensbereichsprüfung", //$NON-NLS-1$
-								MessageType.APPLICATION_DOMAIN, Konstante.LEERSTRING,
-								MessageGrade.WARNING, MessageState.NEW_MESSAGE, nachricht);
 						this.vertrauensBereichVerletzt = true;
 					}
 				}
@@ -190,6 +176,24 @@ public class BezugsZeitraum {
 						long minuten = (ausfallZeit - (stunden * Konstante.STUNDE_IN_MS)) / Konstante.MINUTE_IN_MS;
 						ausfall = new BezugsZeitraumAusfall(parameter.getMaxAusfallProBezugsZeitraumAus(), ausfallInProzent, stunden, minuten);
 					}
+				}
+				
+				if(this.vertrauensBereichVerletzt){
+					Date start = new Date(originalDatum.getDataTime() - bezugsZeitraumInMillis);
+					Date ende = new Date(originalDatum.getDataTime());
+					long stunden = ausfallZeit / Konstante.STUNDE_IN_MS;
+					long minuten = (ausfallZeit - (stunden * Konstante.STUNDE_IN_MS)) / Konstante.MINUTE_IN_MS;
+					
+					String nachricht = "Daten außerhalb des Vertrauensbereichs. Im Zeitraum von " +  //$NON-NLS-1$
+							DUAKonstanten.BM_ZEIT_FORMAT.format(start) + " Uhr bis " + DUAKonstanten.BM_ZEIT_FORMAT.format(ende) + //$NON-NLS-1$ 
+							" (" + parameter.getBezugsZeitraum() + " Stunde(n)) implausible Fahrstreifenwerte für den Wert " + //$NON-NLS-1$ //$NON-NLS-2$
+							this.name + " am Fahrstreifen " + originalDatum.getObject() + " von " + ausfallInProzent + "% (> " +  //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+							parameter.getMaxAusfallProBezugsZeitraumEin() + "%) entspricht Ausfall von " + stunden + " Stunde(n) " + //$NON-NLS-1$ //$NON-NLS-2$
+							minuten + " Minute(n). Fahrstreifenwerte werden auf Implausibel gesetzt."; //$NON-NLS-1$
+					
+					VERWALTUNG.sendeBetriebsMeldung("Vertrauensbereichsprüfung", //$NON-NLS-1$
+							MessageType.APPLICATION_DOMAIN, Konstante.LEERSTRING,
+							MessageGrade.WARNING, MessageState.NEW_MESSAGE, nachricht);
 				}
 			}
 		}
