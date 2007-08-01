@@ -7,7 +7,6 @@ import de.bsvrz.sys.funclib.bitctrl.dua.test.DAVTest;
 
 import stauma.dav.clientside.ClientDavInterface;
 import sys.funclib.ArgumentList;
-import sys.funclib.debug.Debug;
 
 /**
  * Automatisierter Test nach Prüfspezifikation für SWE Pl-Prüfung logisch LVE
@@ -44,11 +43,10 @@ public class PlPruefungLogischLVETest {
 	private ClientDavInterface dav = null;
 	
 	/**
-	 * Logger und Loggerattribute
+	 * Loggerargument
 	 * 
 	 * Pfadangabe mit Argument: -debugFilePath=[Pfad]
 	 */
-	protected Debug LOGGER;
 	private String[] argumente = new String[] {"-debugLevelFileText=ALL"};
 	private ArgumentList alLogger = new ArgumentList(argumente);
 	
@@ -58,8 +56,6 @@ public class PlPruefungLogischLVETest {
 	@Before
 	public void setUp() throws Exception {
 		this.dav = DAVTest.getDav(CON_DATA);	
-		Debug.init("PlPruefungLogisch", alLogger); //$NON-NLS-1$
-		LOGGER = Debug.getLogger();
 	}
 
 	/**
@@ -67,8 +63,8 @@ public class PlPruefungLogischLVETest {
 	 */
 	@Test
 	public void testKZDTLS()throws Exception{
-//		PlPruefungLogisch pruefLogisch = new PlPruefungLogisch(dav,TEST_DATEN_VERZ);
-//		pruefLogisch.pruefeKZDTLS();
+		PlPruefungLogisch pruefLogisch = new PlPruefungLogisch(dav,TEST_DATEN_VERZ, alLogger);
+		pruefLogisch.pruefeKZDTLS();
 	}
 	
 	/**
@@ -94,7 +90,7 @@ public class PlPruefungLogischLVETest {
 	 */
 	@Test
 	public void testDiff()throws Exception{
-//		PlPruefungDiff plPruefDiff = new PlPruefungDiff(dav,TEST_DATEN_VERZ); 
+//		PlPruefungDiff plPruefDiff = new PlPruefungDiff(dav,TEST_DATEN_VERZ, alLogger); 
 //		plPruefDiff.pruefe();
 	}
 	
@@ -103,7 +99,7 @@ public class PlPruefungLogischLVETest {
 	 */
 	@Test
 	public void testAusfall()throws Exception{
-//		PlPruefungAusfall pruefAusfall = new PlPruefungAusfall(dav,TEST_DATEN_VERZ);
+//		PlPruefungAusfall pruefAusfall = new PlPruefungAusfall(dav,TEST_DATEN_VERZ, alLogger);
 //		pruefAusfall.pruefe();
 	}
 	
@@ -112,7 +108,7 @@ public class PlPruefungLogischLVETest {
 	 */
 	@Test
 	public void testVB()throws Exception{
-		PlPruefungVertrauensbereich pruefVertrB = new PlPruefungVertrauensbereich(dav,TEST_DATEN_VERZ);
-		pruefVertrB.pruefe();
+//		PlPruefungVertrauensbereich pruefVertrB = new PlPruefungVertrauensbereich(dav,TEST_DATEN_VERZ, alLogger);
+//		pruefVertrB.pruefe();
 	}
 }
