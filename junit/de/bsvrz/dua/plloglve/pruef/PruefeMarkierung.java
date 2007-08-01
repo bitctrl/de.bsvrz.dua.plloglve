@@ -101,7 +101,7 @@ implements ClientReceiverInterface {
 	public void listenOK(String pruefeAttr, long pruefZeitstempel) {
 		pruefeAlleAttr = false;
 		paramOK(pruefeAttr, pruefZeitstempel);
-		LOGGER.info("Prüfe DS auf fehlerfreies Attribut: "+pruefeAttr);
+		LOGGER.info("Prüfe Datum auf fehlerfreies Attribut: "+pruefeAttr);
 	}
 	
 	/**
@@ -111,7 +111,7 @@ implements ClientReceiverInterface {
 	public void listenOK(long pruefZeitstempel) {
 		pruefeAlleAttr = true;
 		paramOK("alle", pruefZeitstempel);
-		LOGGER.info("Prüfe alle Attribute des DS auf fehlerfreiheit");
+		LOGGER.info("Prüfe alle Attribute des Datums auf fehlerfreiheit");
 	}
 	
 	/**
@@ -134,7 +134,7 @@ implements ClientReceiverInterface {
 	public void listenFehl(String pruefeAttr, long pruefZeitstempel) {
 		pruefeAlleAttr = false;
 		paramFehl(pruefeAttr, pruefZeitstempel);
-		LOGGER.info("Prüfe DS auf Fehlerhaft-Markierung des Attributes: "+pruefeAttr);
+		LOGGER.info("Prüfe Datum auf Fehlerhaft-Markierung des Attributes: "+pruefeAttr);
 	}
 	
 	/**
@@ -144,7 +144,7 @@ implements ClientReceiverInterface {
 	public void listenFehl(long pruefZeitstempel) {
 		pruefeAlleAttr = true;
 		paramFehl("alle", pruefZeitstempel);
-		LOGGER.info("Prüfe DS auf Fehlerhaft-Markierung aller Attribute");
+		LOGGER.info("Prüfe Datum auf Fehlerhaft-Markierung aller Attribute");
 	}
 	
 	/**
@@ -167,7 +167,7 @@ implements ClientReceiverInterface {
 	public void listenImpl(String pruefeAttr, long pruefZeitstempel) {
 		pruefeAlleAttr = false;
 		paramImpl(pruefeAttr, pruefZeitstempel);
-		LOGGER.info("Prüfe DS auf Implausibel-Markierung des Attributes: "+pruefeAttr);
+		LOGGER.info("Prüfe Datum auf Implausibel-Markierung des Attributes: "+pruefeAttr);
 	}
 	
 	/**
@@ -177,7 +177,7 @@ implements ClientReceiverInterface {
 	public void listenImpl(long pruefZeitstempel) {
 		pruefeAlleAttr = true;
 		paramImpl("alle", pruefZeitstempel);
-		LOGGER.info("Prüfe DS auf Implausibel-Markierung aller Attribute");
+		LOGGER.info("Prüfe Datum auf Implausibel-Markierung aller Attribute");
 	}
 	
 	/**
@@ -200,7 +200,7 @@ implements ClientReceiverInterface {
 	public void listenFehlImpl(String pruefeAttr, long pruefZeitstempel) {
 		pruefeAlleAttr = false;
 		paramFehlImpl(pruefeAttr, pruefZeitstempel);
-		LOGGER.info("Prüfe DS auf Fehlerhaft- und Implausibel-Markierung des Attributes: "+pruefeAttr);
+		LOGGER.info("Prüfe Datum auf Fehlerhaft- und Implausibel-Markierung des Attributes: "+pruefeAttr);
 	}
 	
 	/**
@@ -210,7 +210,7 @@ implements ClientReceiverInterface {
 	public void listenFehlImpl(long pruefZeitstempel) {
 		pruefeAlleAttr = true;
 		paramFehlImpl("alle", pruefZeitstempel);
-		LOGGER.info("Prüfe DS auf Fehlerhaft- und Implausibel-Markierung aller Attribute");
+		LOGGER.info("Prüfe Datum auf Fehlerhaft- und Implausibel-Markierung aller Attribute");
 	}
 	
 	/**

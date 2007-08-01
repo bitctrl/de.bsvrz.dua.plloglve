@@ -75,8 +75,7 @@ implements ClientReceiverInterface {
 		//MELD = this.dav.getDataModel().getObject("kv.aoe.bitctrl.tester");
 		MELD = this.dav.getDataModel().getObject("kv.bitctrl.thierfelder");
 		
-		LOGGER.info("Filtere Betriebsmeldungen nach \""+filter+"\"");
-		LOGGER.info("Erwarte "+erfAnz+" gefilterte Meldungen");
+		LOGGER.info("Filtere Betriebsmeldungen nach \""+filter+"\" - Erwarte "+erfAnz+" gefilterte Meldungen");
 		
 		/*
 		 * Melde Empfänger für Betriebsmeldungen an
@@ -101,11 +100,11 @@ implements ClientReceiverInterface {
 				result.toString().contains(filter)) {
 				String meldung = result.getData().getItem("MeldungsText").asTextValue().toString();
 				meldAnzahl++;
-				LOGGER.info("Meldung ["+meldAnzahl+"] empfangen\n\r"+meldung);
+				LOGGER.info(meldAnzahl+". Meldung empfangen\n\r"+meldung);
 			}
 		}
 		if(meldAnzahl == erfAnz) {
-			LOGGER.info("Erforderliche Anzahl an Meldungen erhalten. Benachrichtige aufrufende Klasse...");
+			LOGGER.info("Erforderliche Anzahl an Meldungen erhalten");
 			caller.doNotify();
 		} else if (meldAnzahl > erfAnz) {
 			LOGGER.warning("Mehr Meldungen gefiltert als erwartet");

@@ -158,19 +158,25 @@ implements ClientSenderInterface, PlPruefungInterface {
 		 */
 		LOGGER.info("Beginne Prüfung");
 		
-		int okGesendet = 0;
-		int fehlerGesendet = 0;
-		
 		/*
 		 * Initialisiert Meldungsfilter
 		 */
 		new FilterMeldung(this, dav,"Ausfallhäufigkeit", 1457);
+		LOGGER.info("Meldungsfilter initialisiert: Erwarte 1457 Meldungen mit \"Ausfallhäufigkeit\"");
 
 		/*
 		 * Sende 2500 Datensätze
 		 */
 		for(int i=1;i<=2500;i++) {
+			/*
+			 * Sende im Intervall von 929 - 1032 fehlerhafte Daten
+			 * Dabei wird zum Intervall 972 der Maximalwert der Ausfallhäufigkeit (3% = 43,2 Intervalle)
+			 * überschritten und zum Intervall 2429 wieder unterschritten
+			 * 
+			 * Für die restlichen Intervalle werden fehlerfreie Daten gesendet
+			 */
 			if(i >= 929 && i <= 1032) {
+				LOGGER.info("Intervall "+i+": Sende fehlerhaftes Datum");
 				if((zeileFSFehler = paraImpFSFehler.getNaechstenDatensatz(DD_KZD_SEND.getAttributeGroup())) == null) {
 					paraImpFSFehler.reset();
 					paraImpFSFehler.getNaechsteZeile();
@@ -178,8 +184,8 @@ implements ClientSenderInterface, PlPruefungInterface {
 				}
 				ResultData resultat1 = new ResultData(FS, DD_KZD_SEND, pruefZeit, zeileFSFehler);
 				this.dav.sendData(resultat1);
-				fehlerGesendet++;
 			} else {
+				LOGGER.info("Intervall "+i+": Sende fehlerfreies Datum");
 				if((zeileFSOK = paraImpFSOK.getNaechstenDatensatz(DD_KZD_SEND.getAttributeGroup())) == null) {
 					paraImpFSOK.reset();
 					paraImpFSOK.getNaechsteZeile();
@@ -187,7 +193,6 @@ implements ClientSenderInterface, PlPruefungInterface {
 				}
 				ResultData resultat1 = new ResultData(FS, DD_KZD_SEND, pruefZeit, zeileFSOK);
 				this.dav.sendData(resultat1);
-				okGesendet++;
 			}
 			//Erhöht Prüfzeitstempel entsprechend der Intervalllänge
 			pruefZeit = pruefZeit + INTERVALL;
@@ -198,10 +203,7 @@ implements ClientSenderInterface, PlPruefungInterface {
 			}
 		}
 
-		LOGGER.info(okGesendet+" fehlerfreie und "+fehlerGesendet+" fehlerhafte Daten gesendet");
-		LOGGER.info("Warte auf Benachrichtigung vom Betriebsmeldungsfilter");
-		
-		//Warte 30s auf Filterung der Betriebsmeldungen
+		LOGGER.info("Warte auf Meldungsfilter");
 		doWait(30000);
 
 		LOGGER.info("Prüfung erfolgreich abgeschlossen");

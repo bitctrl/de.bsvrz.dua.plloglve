@@ -107,6 +107,7 @@ implements ClientSenderInterface, PlPruefungInterface {
 		 * Initialisiert Meldungsfilter
 		 */
 		new FilterMeldung(this, dav, "konstant", 63);
+		LOGGER.info("Meldungsfilter initialisiert: Erwarte 63 Meldungen mit \"konstant\"");
 		
 		/*
 		 * Testerobjekt
@@ -122,7 +123,7 @@ implements ClientSenderInterface, PlPruefungInterface {
 			while((zeileFSDiff = fsImpFSDiff.getNaechstenDatensatz(DD_KZD_SEND.getAttributeGroup())) != null) {
 				dsCount++;
 				dsKumm = dsCount-(480 * i);
-				LOGGER.info("Durchlauf:"+(i+1)+" - Datensatz:"+dsCount+" - Zeit:"+aktZeit);
+				LOGGER.info("Durchlauf:"+(i+1)+" - CSV-Zeile:"+(dsKumm+1)+" - Zeit:"+aktZeit);
 				
 				/*
 				 * Setzt Konfiguration des Markierungs-Prüfers
@@ -130,30 +131,37 @@ implements ClientSenderInterface, PlPruefungInterface {
 				markPruefer.listenOK(aktZeit);
 				
 				if(dsKumm == 4 || dsKumm == 13) {
+					LOGGER.info("CSV-Zeile:"+(dsKumm+1)+" - Zeit:"+aktZeit+" -> Konfiguriere Prüfer: Erwarte qKfz als fehlerhaft und implausibel");
 					markPruefer.listenFehlImpl("qKfz", aktZeit);
 				}
 				
 				if((dsKumm == 6) || (dsKumm >= 13 && dsKumm <= 17)) {
+					LOGGER.info("CSV-Zeile:"+(dsKumm+1)+" - Zeit:"+aktZeit+" -> Konfiguriere Prüfer: Erwarte qLkw als fehlerhaft und implausibel");
 					markPruefer.listenFehlImpl("qLkw", aktZeit);
 				}
 				
 				if(dsKumm >= 9 && dsKumm <= 13) {
+					LOGGER.info("CSV-Zeile:"+(dsKumm+1)+" - Zeit:"+aktZeit+" -> Konfiguriere Prüfer: Erwarte qPkw als fehlerhaft und implausibel");
 					markPruefer.listenFehlImpl("qPkw", aktZeit);
 				}
 				
 				if(dsKumm >= 30 && dsKumm <= 31) {
+					LOGGER.info("CSV-Zeile:"+(dsKumm+1)+" - Zeit:"+aktZeit+" -> Konfiguriere Prüfer: Erwarte vKfz als fehlerhaft und implausibel");
 					markPruefer.listenFehlImpl("vKfz", aktZeit);
 				}
 				
 				if(dsKumm >= 36 && dsKumm <= 38) {
+					LOGGER.info("CSV-Zeile:"+(dsKumm+1)+" - Zeit:"+aktZeit+" -> Konfiguriere Prüfer: Erwarte vLkw als fehlerhaft und implausibel");
 					markPruefer.listenFehlImpl("vLkw", aktZeit);
 				}
 				
 				if(dsKumm == 32) {
+					LOGGER.info("CSV-Zeile:"+(dsKumm+1)+" - Zeit:"+aktZeit+" -> Konfiguriere Prüfer: Erwarte vPkw als fehlerhaft und implausibel");
 					markPruefer.listenFehlImpl("vPkw", aktZeit);
 				}
 				
 				if(dsKumm == 31 || dsKumm == 35) {
+					LOGGER.info("CSV-Zeile:"+(dsKumm+1)+" - Zeit:"+aktZeit+" -> Konfiguriere Prüfer: Erwarte b als fehlerhaft und implausibel");
 					markPruefer.listenFehlImpl("b", aktZeit);
 				}
 				
@@ -168,6 +176,7 @@ implements ClientSenderInterface, PlPruefungInterface {
 			fsImpFSDiff.getNaechsteZeile();
 		}
 		
+		LOGGER.info("Warte 30 Sekunden auf Meldungsfilter");
 		doWait(30000);
 		
 		LOGGER.info("Prüfung erfolgreich abgeschlossen");

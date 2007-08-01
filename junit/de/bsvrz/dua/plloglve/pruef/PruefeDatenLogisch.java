@@ -377,7 +377,7 @@ implements ClientReceiverInterface {
 	 */
 	private void pruefungFertig() {
 		if(pruefungFS1Fertig && pruefungFS2Fertig && pruefungFS3Fertig) {
-			LOGGER.info("Pruefung der Fahrstreifen abgeschlossen");
+			LOGGER.info("Prüfung aller Fahrstreifen für diesen Intervall abgeschlossen");
 			doWait();  //Warte 250ms
 			caller.doNotify();  //Benachrichtige aufrufende Klasse
 		}
@@ -566,8 +566,10 @@ class VergleicheKZD extends Thread {
 		HashMap<String,Integer> hmCSV = csvZeilen.get(csvOffset);
 		HashMap<String,Integer> hmResult = ergebnisLesen(fsIndex);
 		
-		long csvWerttNetto = -10;
-		long resultWerttNetto = -20;
+		boolean fehler = false;
+		
+		long csvWerttNetto = -4;
+		long resultWerttNetto = -4;
 		
 		switch(fsIndex) {
 			case 1: {
@@ -624,6 +626,7 @@ class VergleicheKZD extends Thread {
 						if(attribWertKopie.contains(".Wert.Kopie") && hmCSV.get(attribWertKopie).equals(hmResult.get(attribut))) {
 							warnung += "\n\r"+ident+"W-OK ("+attribWertKopie+"):"+ hmCSV.get(attribWertKopie)+" (SOLL)==(IST) "+hmResult.get(attribut);
 						}
+						fehler = true;
 						LOGGER.warning(warnung);
 						pruefLog += ident+"DIFF ("+attribut+"):"+ hmCSV.get(attribut) + sollWertErl +" (SOLL)<>(IST) "+hmResult.get(attribut) + istWertErl +"\n\r";
 					} else {
@@ -635,6 +638,7 @@ class VergleicheKZD extends Thread {
 					istWertErl = wertErl((int)resultWerttNetto);
 					
 					if(csvWerttNetto != resultWerttNetto) {
+						fehler = true;
 						LOGGER.error(ident+"DIFF ("+attribut+"):"+ csvWerttNetto + sollWertErl +" (SOLL)<>(IST) "+resultWerttNetto + istWertErl);
 						pruefLog += ident+"DIFF ("+attribut+"):"+ csvWerttNetto + sollWertErl +" (SOLL)<>(IST) "+resultWerttNetto + istWertErl +"\n\r";
 					} else {
@@ -645,7 +649,7 @@ class VergleicheKZD extends Thread {
 		}
 		
 		LOGGER.info(pruefLog);
-		LOGGER.info("Benachrichtige Listener");
+		LOGGER.info("Prüfung der Fahrstreifendaten für diesen Intervall abgeschlossen");
 		caller.doNotify();  //Benachrichtige aufrufende Klasse
 	}
 

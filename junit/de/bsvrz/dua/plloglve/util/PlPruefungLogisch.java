@@ -255,26 +255,26 @@ implements ClientSenderInterface {
 			/*
 			 * Übergebe CSV-Offset und zu prüfenden Zeitstempel an Testerobjekt
 			 */
-			LOGGER.info("Setze CSV-Offset und Zeitstempel fuer Prüfer -> Offset:"+csvIndex+" Zeit:"+aktZeit);
+			LOGGER.info("Setze CSV-Zeile und Zeitstempel fuer Prüfer -> Zeile:"+(csvIndex+2)+" Zeit:"+aktZeit);
 			fsPruefer.listen(csvIndex,aktZeit);
 			
 			/*
 			 * Sende Testdaten für FS1, FS2, FS3
 			 */
 			if((zeileFS1 = fsImpFS1.getNaechstenDatensatz(DD_KZD_SEND.getAttributeGroup())) != null) {
-				LOGGER.info("Sende Daten fuer FS1");		
+				LOGGER.info("Sende Daten fuer FS1 (CSV-Zeile "+(csvIndex+2)+")");		
 				ResultData resultat1 = new ResultData(FS1, DD_KZD_SEND, aktZeit, zeileFS1);
 				this.dav.sendData(resultat1);
 			} else datenFS1Vorhanden = false;
 
 			if((zeileFS2 = fsImpFS2.getNaechstenDatensatz(DD_KZD_SEND.getAttributeGroup())) != null) {
-				LOGGER.info("Sende Daten fuer FS2");
+				LOGGER.info("Sende Daten fuer FS2 (CSV-Zeile "+(csvIndex+2)+")");
 				ResultData resultat2 = new ResultData(FS2, DD_KZD_SEND, aktZeit, zeileFS2);
 				this.dav.sendData(resultat2);
 			} else datenFS2Vorhanden = false;
 	
 			if((zeileFS3 = fsImpFS3.getNaechstenDatensatz(DD_KZD_SEND.getAttributeGroup())) != null) {
-				LOGGER.info("Sende Daten fuer FS3");
+				LOGGER.info("Sende Daten fuer FS3 (CSV-Zeile "+(csvIndex+2)+")");
 				ResultData resultat3 = new ResultData(FS3, DD_KZD_SEND, aktZeit, zeileFS3);
 				this.dav.sendData(resultat3);
 			} else datenFS3Vorhanden = false;
@@ -295,7 +295,7 @@ implements ClientSenderInterface {
 				csvDatenVorhanden = false;
 				LOGGER.info("Keine Daten mehr vorhanedn. Beende Prüfung...");
 			} else {
-				LOGGER.info("Warte auf SOLL-IST-Vergleich...");
+				LOGGER.info("Warte auf SOLL-IST-Vergleich (CSV-Zeile "+(csvIndex+2)+")...");
 				doWait();  //Warte auf Ueberpruefung der FS1-FS3
 			}
 		}		
@@ -361,26 +361,26 @@ implements ClientSenderInterface {
 			/*
 			 * Übergebe CSV-Offset und zu prüfenden Zeitstempel an Testerobjekt
 			 */
-			LOGGER.info("Setze CSV-Offset und Zeitstempel für Pruefer -> Offset:"+csvIndex+" Zeit:"+aktZeit);
+			LOGGER.info("Setze CSV-Zeile und Zeitstempel für Pruefer -> Zeile:"+(csvIndex+2)+" Zeit:"+aktZeit);
 			fsPruefer.listen(csvIndex,aktZeit);
 			
 			/*
 			 * Sende Testdaten für FS1, FS2, FS3
 			 */
 			if((zeileFS1 = fsImpFS1.getNaechstenDatensatz(DD_LZD_SEND.getAttributeGroup())) != null) {
-				LOGGER.info("Sende Daten fuer FS1");		
+				LOGGER.info("Sende Daten fuer FS1 (CSV-Zeile "+(csvIndex+2)+")");		
 				ResultData resultat1 = new ResultData(FS1_LZ, DD_LZD_SEND, aktZeit, zeileFS1);
 				this.dav.sendData(resultat1);
 			} else datenFS1Vorhanden = false;
 
 			if((zeileFS2 = fsImpFS2.getNaechstenDatensatz(DD_LZD_SEND.getAttributeGroup())) != null) {
-				LOGGER.info("Sende Daten fuer FS2");
+				LOGGER.info("Sende Daten fuer FS2 (CSV-Zeile "+(csvIndex+2)+")");
 				ResultData resultat2 = new ResultData(FS2_LZ, DD_LZD_SEND, aktZeit, zeileFS2);
 				this.dav.sendData(resultat2);
 			} else datenFS2Vorhanden = false;
 	
 			if((zeileFS3 = fsImpFS3.getNaechstenDatensatz(DD_LZD_SEND.getAttributeGroup())) != null) {
-				LOGGER.info("Sende Daten fuer FS3");
+				LOGGER.info("Sende Daten fuer FS3 (CSV-Zeile "+(csvIndex+2)+")");
 				ResultData resultat3 = new ResultData(FS3_LZ, DD_LZD_SEND, aktZeit, zeileFS3);
 				this.dav.sendData(resultat3);
 			} else datenFS3Vorhanden = false;
@@ -401,7 +401,7 @@ implements ClientSenderInterface {
 				csvDatenVorhanden = false;
 				LOGGER.info("Keine Daten mehr vorhanedn. Beende Prüfung...");
 			} else {
-				LOGGER.info("Warte auf SOLL-IST-Vergleich...");
+				LOGGER.info("Warte auf SOLL-IST-Vergleich (CSV-Zeile "+(csvIndex+2)+")...");
 				doWait();  //Warte auf Ueberpruefung der FS1-FS3
 			}
 		}

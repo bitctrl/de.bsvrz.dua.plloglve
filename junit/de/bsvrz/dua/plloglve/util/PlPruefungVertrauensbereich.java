@@ -174,9 +174,6 @@ implements ClientSenderInterface, PlPruefungInterface {
 		 */
 		LOGGER.info("Beginne Prüfung");
 		
-		int okGesendet = 0;
-		int fehlerGesendet = 0;
-		
 		/*
 		 * Warte auf 371 Meldungen
 		 * 36 x 4 (qKfz, qPkw, qLkw, vPkw)
@@ -186,7 +183,8 @@ implements ClientSenderInterface, PlPruefungInterface {
 		 * 2 (Gutmeldung)
 		 */
 		new FilterMeldung(this, dav,"Vertrauensbereichs", 371);
-
+		LOGGER.info("Meldungsfilter initialisiert: Erwarte 371 Meldungen mit \"Vertrauensbereichs\"");
+		
 		/*
 		 * Testerobjekt
 		 */
@@ -200,6 +198,7 @@ implements ClientSenderInterface, PlPruefungInterface {
 			 */
 			if ((i >= 29 && i < 72) || (i >= 511 && i < 552)) {
 				markPruefer.listenImpl(pruefZeit);
+				LOGGER.info("Intervall "+i+": Erwarte alle Attribute als Implausiebel");
 			}
 			
 			/*
@@ -219,9 +218,8 @@ implements ClientSenderInterface, PlPruefungInterface {
 				 * 
 				 * Ab dem 552. DS liegt der prozentuale Ausfall entsprechend Afo wieder im VB 
 				 */
-				LOGGER.info("["+i+"] Sende fehlerhaften DS (qKfz, qPkw, qLkw, vPkw)");
+				LOGGER.info("Intervall "+i+": Sende fehlerhaftes Datum (qKfz, qPkw, qLkw, vPkw)");
 				sendeFehler1(pruefZeit);
-				fehlerGesendet++;
 			} else if ((i >= 10 && i <= 16) || (i >= 30 && i <= 36) || (i >= 482 && i <= 489) || (i >= 507 && i <= 511)) {
 				/*
 				 * Es wird ein fehlerhafter DS (b) gesendet
@@ -235,9 +233,8 @@ implements ClientSenderInterface, PlPruefungInterface {
 				 * Der prozentuale Ausfall der Attribute liegt ab dem 543. DS unter 20% wobei der VB jedoch
 				 * aufgrund der anderen Fehlerdaten weiterhin verlassen bleibt
 				 */
-				LOGGER.info("["+i+"] Sende fehlerhaften DS (b)");
+				LOGGER.info("Intervall "+i+": Sende fehlerhaftes Datum (b)");
 				sendeFehler2(pruefZeit);
-				fehlerGesendet++;
 			} else {
 				if((zeileFSOK = paraImpFSOK.getNaechstenDatensatz(DD_KZD_SEND.getAttributeGroup())) == null) {
 					paraImpFSOK.reset();
@@ -245,9 +242,8 @@ implements ClientSenderInterface, PlPruefungInterface {
 					zeileFSOK = paraImpFSOK.getNaechstenDatensatz(DD_KZD_SEND.getAttributeGroup());
 				}
 				ResultData resultat1 = new ResultData(FS, DD_KZD_SEND, pruefZeit, zeileFSOK);
-				LOGGER.info("["+i+"] Sende fehlerfreien DS");
+				LOGGER.info("Intervall "+i+": Sende fehlerfreies Datum");
 				this.dav.sendData(resultat1);
-				okGesendet++;
 			}
 			
 			//Warte auf Markierungsprüfung
@@ -262,8 +258,7 @@ implements ClientSenderInterface, PlPruefungInterface {
 			}
 		}
 
-		LOGGER.info(okGesendet+" fehlerfreie und "+fehlerGesendet+" fehlerhafte Daten gesendet");
-		LOGGER.info("Warte auf Benachrichtigung vom Betriebsmeldungsfilter");
+		LOGGER.info("Warte auf Meldungsfilter");
 		
 		//Warte 30s auf Filterung der Betriebsmeldungen
 		doWait(30000);
