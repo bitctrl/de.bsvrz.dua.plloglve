@@ -7,6 +7,7 @@ import stauma.dav.clientside.DataDescription;
 import stauma.dav.clientside.ResultData;
 import stauma.dav.clientside.SenderRole;
 import stauma.dav.configuration.interfaces.SystemObject;
+import sys.funclib.ArgumentList;
 import sys.funclib.debug.Debug;
 import de.bsvrz.dua.plloglve.plloglve.typen.OptionenPlausibilitaetsPruefungLogischVerkehr;
 import de.bsvrz.dua.plloglve.util.para.ParaKZDLogImport;
@@ -21,7 +22,7 @@ implements ClientSenderInterface, PlPruefungInterface {
 	/**
 	 * Logger
 	 */
-	protected Debug LOGGER = Debug.getLogger();
+	protected Debug LOGGER;
 	
 	/**
 	 * Verzeichnis, in dem sich die CSV-Dateien mit den Testdaten befinden
@@ -64,10 +65,16 @@ implements ClientSenderInterface, PlPruefungInterface {
 	 * @param dav Datenverteilerverbindung
 	 * @param TEST_DATEN_VERZ Testdatenverzeichnis
 	 */
-	public PlPruefungAusfall(ClientDavInterface dav, String TEST_DATEN_VERZ) {
+	public PlPruefungAusfall(ClientDavInterface dav, String TEST_DATEN_VERZ, ArgumentList alLogger) {
 		this.dav = dav;
 		this.TEST_DATEN_VERZ = TEST_DATEN_VERZ;
 
+		/*
+		 * Initialisiere Logger
+		 */
+		Debug.init("PlPruefungAusfall", alLogger); //$NON-NLS-1$
+		LOGGER = Debug.getLogger();
+		
 		/*
 		 * Melde Sender für FS an
 		 */
