@@ -7,8 +7,10 @@ import stauma.dav.clientside.DataDescription;
 import stauma.dav.clientside.ResultData;
 import stauma.dav.clientside.SenderRole;
 import stauma.dav.configuration.interfaces.SystemObject;
+import sys.funclib.ArgumentList;
 import sys.funclib.debug.Debug;
 import de.bsvrz.dua.plloglve.plloglve.typen.OptionenPlausibilitaetsPruefungLogischVerkehr;
+import de.bsvrz.dua.plloglve.pruef.FilterMeldung;
 import de.bsvrz.dua.plloglve.pruef.PruefeMarkierung;
 import de.bsvrz.dua.plloglve.util.para.ParaKZDLogImport;
 import de.bsvrz.sys.funclib.bitctrl.dua.DUAKonstanten;
@@ -20,7 +22,7 @@ implements ClientSenderInterface, PlPruefungInterface {
 	/**
 	 * Logger
 	 */
-	protected Debug LOGGER = Debug.getLogger();
+	protected Debug LOGGER;
 	
 	/**
 	 * Verzeichnis, in dem sich die CSV-Dateien mit den Testdaten befinden
@@ -52,10 +54,16 @@ implements ClientSenderInterface, PlPruefungInterface {
 	 * @param dav Datenteilerverbindung
 	 * @param TEST_DATEN_VERZ Verzeichnis mit Testdaten
 	 */
-	public PlPruefungDiff(ClientDavInterface dav, String TEST_DATEN_VERZ) {
+	public PlPruefungDiff(ClientDavInterface dav, String TEST_DATEN_VERZ, ArgumentList alLogger) {
 		this.dav = dav;
 		this.TEST_DATEN_VERZ = TEST_DATEN_VERZ;
 
+		/*
+		 * Initialisiere Logger
+		 */
+		Debug.init("PlPruefungDiff", alLogger); //$NON-NLS-1$
+		LOGGER = Debug.getLogger();
+		
 		/*
 		 * Melde Sender für FS an
 		 */
@@ -95,6 +103,11 @@ implements ClientSenderInterface, PlPruefungInterface {
 		Data zeileFSDiff;
 		
 		Long aktZeit = System.currentTimeMillis();
+		
+		/*
+		 * Initialisiert Meldungsfilter
+		 */
+		new FilterMeldung(this, dav, "konstant", 63);
 		
 		/*
 		 * Testerobjekt
@@ -148,13 +161,15 @@ implements ClientSenderInterface, PlPruefungInterface {
 				ResultData resultat1 = new ResultData(FS, DD_KZD_SEND, aktZeit, zeileFSDiff);
 				this.dav.sendData(resultat1);	
 
-				doWait();
+				doWait(75);
 				
 				aktZeit = aktZeit + Konstante.MINUTE_IN_MS;
 			}
 			fsImpFSDiff.reset();
 			fsImpFSDiff.getNaechsteZeile();
 		}
+		
+		doWait(30000);
 	}
 	
 	/**
@@ -169,10 +184,10 @@ implements ClientSenderInterface, PlPruefungInterface {
 	/**
 	 * Lässten diesen Thread warten
 	 */
-	private void doWait() {
+	private void doWait(int zeit) {
 		synchronized(this) {
 			try {
-				this.wait(250);
+				this.wait(zeit);
 			}catch(Exception e){};
 		}
 	}
