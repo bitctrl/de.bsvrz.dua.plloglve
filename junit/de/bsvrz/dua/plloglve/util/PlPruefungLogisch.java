@@ -14,14 +14,16 @@ import de.bsvrz.dua.plloglve.util.para.ParaKZDLogImport;
 import de.bsvrz.dua.plloglve.util.para.ParaLZDLogImport;
 import de.bsvrz.sys.funclib.bitctrl.dua.DUAKonstanten;
 import de.bsvrz.sys.funclib.bitctrl.konstante.Konstante;
+import sys.funclib.ArgumentList;
 
 public class PlPruefungLogisch
 implements ClientSenderInterface {
 
 	/**
-	 * Logger
+	 * Logger und Loggerargument
 	 */
-	protected Debug LOGGER = Debug.getLogger();
+	private ArgumentList alLogger;
+	protected Debug LOGGER;
 	
 	/**
 	 * Verzeichnis, in dem sich die CSV-Dateien mit den Testdaten befinden
@@ -86,9 +88,10 @@ implements ClientSenderInterface {
 	 * @param dav Datenteilerverbindung
 	 * @param TEST_DATEN_VERZ Verzeichnis mit Testdaten
 	 */
-	public PlPruefungLogisch(ClientDavInterface dav, String TEST_DATEN_VERZ) {
+	public PlPruefungLogisch(ClientDavInterface dav, String TEST_DATEN_VERZ, ArgumentList alLogger) {
 		this.dav = dav;
 		this.TEST_DATEN_VERZ = TEST_DATEN_VERZ;
+		this.alLogger = alLogger;
 
 		/*
 		 * Meldet Sender für KZD und LZD unter dem Aspekt Externe Erfassung an
@@ -117,7 +120,7 @@ implements ClientSenderInterface {
 			this.dav.subscribeSender(this, new SystemObject[]{FS1_LZ, FS2_LZ, FS3_LZ}, 
 					DD_LZD_SEND, SenderRole.source());
 		} catch (Exception e) {
-			LOGGER.error("Empfänger konnte nicht angemeldet werden: "+e);
+			System.out.println("Error: Empfänger konnte nicht angemeldet werden: "+e);
 		}
 	}
 	
@@ -130,6 +133,12 @@ implements ClientSenderInterface {
 		this.csvPruefDatei = "PL-Pruef_LVE_TLS_Korr";
 		this.tlsPruefung = true;
 
+		/*
+		 * Initialisiere Logger
+		 */
+		Debug.init("PlPruefeKZDTLS", alLogger); //$NON-NLS-1$
+		LOGGER = Debug.getLogger();
+		
 		LOGGER.info("Prüfe KZD TLS...");
 		
 		/*
@@ -156,6 +165,12 @@ implements ClientSenderInterface {
 	public void pruefeKZDGrenz() throws Exception {
 		this.csvPruefDatei = "PL-Pruef_LVE_Grenz";
 
+		/*
+		 * Initialisiere Logger
+		 */
+		Debug.init("PlPruefeKZDGrenz", alLogger); //$NON-NLS-1$
+		LOGGER = Debug.getLogger();
+		
 		LOGGER.info("Prüfe KZD Grenzwerte...");
 		
 		/*
@@ -176,6 +191,12 @@ implements ClientSenderInterface {
 	 */
 	public void pruefeLZDGrenz() throws Exception {
 		this.csvPruefDatei = "PL-Pruefung_LZD";
+		
+		/*
+		 * Initialisiere Logger
+		 */
+		Debug.init("PlPruefeLZDGrenz", alLogger); //$NON-NLS-1$
+		LOGGER = Debug.getLogger();
 		
 		LOGGER.info("Prüfe LZD Grenzwerte...");
 		
