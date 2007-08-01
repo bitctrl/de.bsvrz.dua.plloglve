@@ -72,13 +72,14 @@ implements ClientReceiverInterface {
 		this.erfAnz = erfAnz;
 		this.caller = caller;
 		
-		MELD = this.dav.getDataModel().getObject("kv.aoe.bitctrl.tester");
+		//MELD = this.dav.getDataModel().getObject("kv.aoe.bitctrl.tester");
+		MELD = this.dav.getDataModel().getObject("kv.bitctrl.thierfelder");
 		
 		LOGGER.info("Filtere Betriebsmeldungen nach \""+filter+"\"");
 		LOGGER.info("Erwarte "+erfAnz+" gefilterte Meldungen");
 		
 		/*
-		 * Melde Empfänger für KZD und LZD unter dem Aspekt PlPrüfung Logisch an
+		 * Melde Empfänger für Betriebsmeldungen an
 		 */
 		DD_MELD_EMPF = new DataDescription(this.dav.getDataModel().getAttributeGroup("atg.betriebsMeldung"),
 			      this.dav.getDataModel().getAspect("asp.information"),
@@ -103,8 +104,11 @@ implements ClientReceiverInterface {
 				LOGGER.info("Meldung ["+meldAnzahl+"] empfangen\n\r"+meldung);
 			}
 		}
-		if(meldAnzahl >= erfAnz) {
+		if(meldAnzahl == erfAnz) {
+			LOGGER.info("Erforderliche Anzahl an Meldungen erhalten. Benachrichtige aufrufende Klasse...");
 			caller.doNotify();
+		} else if (meldAnzahl > erfAnz) {
+			LOGGER.warning("Mehr Meldungen gefiltert als erwartet");
 		}
 	}
 }
