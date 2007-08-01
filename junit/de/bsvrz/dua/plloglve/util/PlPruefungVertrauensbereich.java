@@ -94,12 +94,6 @@ implements ClientSenderInterface, PlPruefungInterface {
 				  	  (short)0);
 
 		try{
-			this.dav.subscribeSender(this, FS, DD_KZD_SEND, SenderRole.source());
-		}catch(Exception e) {
-			LOGGER.error("Prüfung kann nicht konfiguriert werden: "+e);
-		}
-		
-		try{
 			kzdImport = new ParaKZDLogImport(dav, FS, TEST_DATEN_VERZ + "Parameter_TLS");
 			kzdImport.setOptionen(OptionenPlausibilitaetsPruefungLogischVerkehr.KEINE_PRUEFUNG);
 			kzdImport.importiereParameter(1);
@@ -127,6 +121,11 @@ implements ClientSenderInterface, PlPruefungInterface {
 	 * @throws Exception
 	 */
 	public void pruefe() throws Exception {
+		/*
+		 * Sender anmelden
+		 */
+		this.dav.subscribeSender(this, FS, DD_KZD_SEND, SenderRole.source());
+		
 		/*
 		 * Initialisiere Parameter Importer für fehlerfreie DS
 		 */
@@ -270,6 +269,11 @@ implements ClientSenderInterface, PlPruefungInterface {
 		doWait(30000);
 		
 		LOGGER.info("Prüfung erfolgreich abgeschlossen");
+		
+		/*
+		 * Sender abmelden
+		 */
+		this.dav.unsubscribeSender(this, FS, DD_KZD_SEND);
 	}
 	
 	/**

@@ -112,16 +112,6 @@ implements ClientSenderInterface {
 		DD_LZD_SEND = new DataDescription(this.dav.getDataModel().getAttributeGroup(DUAKonstanten.ATG_LZD),
 				  						  this.dav.getDataModel().getAspect(DUAKonstanten.ASP_EXTERNE_ERFASSUNG),
 				  						  (short)0);	
-		
-		try{
-			this.dav.subscribeSender(this, new SystemObject[]{FS1, FS2, FS3}, 
-					DD_KZD_SEND, SenderRole.source());
-		
-			this.dav.subscribeSender(this, new SystemObject[]{FS1_LZ, FS2_LZ, FS3_LZ}, 
-					DD_LZD_SEND, SenderRole.source());
-		} catch (Exception e) {
-			System.out.println("Error: Empfänger konnte nicht angemeldet werden: "+e);
-		}
 	}
 	
 	/**
@@ -217,6 +207,12 @@ implements ClientSenderInterface {
 	 */
 	private void doPruefeKZD() throws Exception {
 		/*
+		 * Sender anmelden
+		 */
+		this.dav.subscribeSender(this, new SystemObject[]{FS1, FS2, FS3}, 
+				DD_KZD_SEND, SenderRole.source());
+	
+		/*
 		 * Initialisiere Testfahrstreifen-Datenimporter
 		 */
 		TestFahrstreifenImporter fsImpFS1 = null;
@@ -303,6 +299,11 @@ implements ClientSenderInterface {
 				doWait();  //Warte auf Ueberpruefung der FS1-FS3
 			}
 		}		
+		
+		/*
+		 * Sender abmelden
+		 */
+		this.dav.unsubscribeSender(this, new SystemObject[]{FS1, FS2, FS3},	DD_KZD_SEND);
 	}
 	
 	/**
@@ -310,6 +311,12 @@ implements ClientSenderInterface {
 	 * @throws Exception
 	 */
 	private void doPruefeLZD() throws Exception {
+		/*
+		 * Sender anmelden
+		 */
+		this.dav.subscribeSender(this, new SystemObject[]{FS1_LZ, FS2_LZ, FS3_LZ}, 
+				DD_LZD_SEND, SenderRole.source());
+		
 		/*
 		 * Initialisiere Testfahrstreifen-Datenimporter
 		 */
@@ -397,7 +404,12 @@ implements ClientSenderInterface {
 				LOGGER.info("Warte auf SOLL-IST-Vergleich...");
 				doWait();  //Warte auf Ueberpruefung der FS1-FS3
 			}
-		}		
+		}
+		
+		/*
+		 * Sender abmelden
+		 */
+		this.dav.unsubscribeSender(this, new SystemObject[]{FS1_LZ, FS2_LZ, FS3_LZ}, DD_LZD_SEND);
 	}
 	
 	/**
