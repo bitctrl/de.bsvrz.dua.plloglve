@@ -196,8 +196,7 @@ implements ClientSenderInterface, PlPruefungInterface {
 		LOGGER.info("Warte auf Benachrichtigung vom Betriebsmeldungsfilter");
 		
 		//Warte 30s auf Filterung der Betriebsmeldungen
-		LOGGER.info("Warte 30 Sekunden auf Meldungsfilter");
-		doWait();
+		doWait(30000);
 		LOGGER.info("Prüfung erfolgreich abgeschlossen");
 	}
 	
@@ -214,11 +213,11 @@ implements ClientSenderInterface, PlPruefungInterface {
 	/**
 	 * Lässten diesen Thread warten
 	 */
-	private void doWait() {
+	private void doWait(int zeit) {
 		if(filterTimeout) {
 			synchronized(this) {
 				try {
-					this.wait(30000);
+					this.wait(zeit);
 				}catch(Exception e){};
 			}
 		}
