@@ -190,6 +190,7 @@ implements ClientSenderInterface, PlPruefungInterface {
 			
 			/*
 			 * Konfiguriert Testerobjekt
+			 * Prüfe Markierung der DS als Implausibel
 			 */
 			if ((i >= 29 && i < 72) || (i >= 511 && i < 552)) {
 				markPruefer.listenImpl(pruefZeit);
@@ -212,6 +213,7 @@ implements ClientSenderInterface, PlPruefungInterface {
 				 * 
 				 * Ab dem 552. DS liegt der prozentuale Ausfall entsprechend Afo wieder im VB 
 				 */
+				LOGGER.info("["+i+"] Sende fehlerhaften DS (qKfz, qPkw, qLkw, vPkw)");
 				sendeFehler1(pruefZeit);
 				fehlerGesendet++;
 			} else if ((i >= 10 && i <= 16) || (i >= 30 && i <= 36) || (i >= 482 && i <= 489) || (i >= 507 && i <= 511)) {
@@ -227,6 +229,7 @@ implements ClientSenderInterface, PlPruefungInterface {
 				 * Der prozentuale Ausfall der Attribute liegt ab dem 543. DS unter 20% wobei der VB jedoch
 				 * aufgrund der anderen Fehlerdaten weiterhin verlassen bleibt
 				 */
+				LOGGER.info("["+i+"] Sende fehlerhaften DS (b)");
 				sendeFehler2(pruefZeit);
 				fehlerGesendet++;
 			} else {
@@ -236,6 +239,7 @@ implements ClientSenderInterface, PlPruefungInterface {
 					zeileFSOK = paraImpFSOK.getNaechstenDatensatz(DD_KZD_SEND.getAttributeGroup());
 				}
 				ResultData resultat1 = new ResultData(FS, DD_KZD_SEND, pruefZeit, zeileFSOK);
+				LOGGER.info("["+i+"] Sende fehlerfreien DS");
 				this.dav.sendData(resultat1);
 				okGesendet++;
 			}
@@ -256,7 +260,6 @@ implements ClientSenderInterface, PlPruefungInterface {
 		LOGGER.info("Warte auf Benachrichtigung vom Betriebsmeldungsfilter");
 		
 		//Warte 30s auf Filterung der Betriebsmeldungen
-		LOGGER.info("Warte 30 Sekunden auf Meldungsfilter...");
 		doWait(30000);
 		
 		LOGGER.info("Prüfung erfolgreich abgeschlossen");
