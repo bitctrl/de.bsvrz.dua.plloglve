@@ -63,19 +63,38 @@ implements ClientSenderInterface{
 	/**
 	 * Attributgruppe VerkehrsDatenDifferenzialKontrolleFs
 	 */
-	AttributeGroup diffFs;
+	private AttributeGroup diffFs;
 
 	/**
 	 * Attributgruppe VerkehrsDatenAusfallHäufigkeitFs
 	 */
-	AttributeGroup ausfallHFs;
+	private AttributeGroup ausfallHFs;
 	
 	/**
 	 * Attributgruppe VerkehrsDatenVertrauensBereichFs
 	 */
-	AttributeGroup vertrauensbereichFs;
+	private AttributeGroup vertrauensbereichFs;
 	
+	/**
+	 * Datenbeschreibung Logisch
+	 */
+	private DataDescription DD_LOGISCH;
+	
+	/**
+	 * Datenbeschreibung Differentialkontrolle
+	 */
+	private DataDescription DD_DIFF;
 
+	/**
+	 * Datenbeschreibung Ausfallhäufigkeit
+	 */
+	private DataDescription DD_AUSFALL;
+	
+	/**
+	 * Datenbeschreibung Vertrauensbereich
+	 */
+	private DataDescription DD_VERTRAUENSBEREICH;
+	
 	/**
 	 * Standardkonstruktor
 	 * 
@@ -94,32 +113,30 @@ implements ClientSenderInterface{
 		}
 		
 		diffFs = DAV.getDataModel().getAttributeGroup("atg.verkehrsDatenDifferenzialKontrolleFs");
-
 		ausfallHFs = DAV.getDataModel().getAttributeGroup("atg.verkehrsDatenAusfallHäufigkeitFs");
-		
 		vertrauensbereichFs = DAV.getDataModel().getAttributeGroup("atg.verkehrsDatenVertrauensBereichFs");
-		
-		this.objekt = objekt;
-		
-		DAV.subscribeSender(this, objekt, new DataDescription(
-				diffFs, 
-				DAV.getDataModel().getAspect(Konstante.DAV_ASP_PARAMETER_VORGABE),
-				(short)0), SenderRole.sender());
-		
-		DAV.subscribeSender(this, objekt, new DataDescription(
+
+		DD_LOGISCH = new DataDescription(
 				this.getParameterAtg(), 
 				DAV.getDataModel().getAspect(Konstante.DAV_ASP_PARAMETER_VORGABE),
-				(short)0), SenderRole.sender());
+				(short)0);
 		
-		DAV.subscribeSender(this, objekt, new DataDescription(
+		DD_DIFF = new DataDescription(
+				diffFs, 
+				DAV.getDataModel().getAspect(Konstante.DAV_ASP_PARAMETER_VORGABE),
+				(short)0);
+		
+		DD_AUSFALL = new DataDescription(
 				ausfallHFs, 
 				DAV.getDataModel().getAspect(Konstante.DAV_ASP_PARAMETER_VORGABE),
-				(short)0), SenderRole.sender());
+				(short)0);
 		
-		DAV.subscribeSender(this, objekt, new DataDescription(
+		DD_VERTRAUENSBEREICH = new DataDescription(
 				vertrauensbereichFs, 
 				DAV.getDataModel().getAspect(Konstante.DAV_ASP_PARAMETER_VORGABE),
-				(short)0), SenderRole.sender());
+				(short)0);
+		
+		this.objekt = objekt;
 		
 		/**
 		 * Tabellenkopf überspringen
@@ -130,9 +147,17 @@ implements ClientSenderInterface{
 		 * Parameter für Differentialkontrolle, Ausfallhäufigkeit und
 		 * Vertrauensbereich deaktivieren bzw. zurücksetzen
 		 */
+		DAV.subscribeSender(this, objekt, DD_DIFF, SenderRole.sender());
+		DAV.subscribeSender(this, objekt, DD_AUSFALL, SenderRole.sender());
+		DAV.subscribeSender(this, objekt, DD_VERTRAUENSBEREICH, SenderRole.sender());
+		
 		deaktiviereParaDiff();
 		deaktiviereParaAusfall();
 		deaktiviereParaVertrauensbereich();
+		
+		DAV.unsubscribeSender(this, objekt, DD_DIFF);
+		DAV.unsubscribeSender(this, objekt, DD_AUSFALL);
+		DAV.unsubscribeSender(this, objekt, DD_VERTRAUENSBEREICH);
 	}
 	
 		
@@ -145,6 +170,8 @@ implements ClientSenderInterface{
 	 */
 	public final void importiereParameter(int index)
 	throws Exception{
+		DAV.subscribeSender(this, objekt,DD_LOGISCH, SenderRole.sender());
+		
 		this.reset();
 		this.getNaechsteZeile();
 		String[] zeile = null;
@@ -173,6 +200,8 @@ implements ClientSenderInterface{
 				DAV.getDataModel().getAspect(Konstante.DAV_ASP_PARAMETER_VORGABE),
 				(short)0), System.currentTimeMillis(), this.fuelleRestAttribute(parameter));
 		DAV.sendData(resultat);
+		
+		DAV.unsubscribeSender(this, objekt, DD_LOGISCH);
 	}
 
 	/**
@@ -180,6 +209,8 @@ implements ClientSenderInterface{
 	 * @throws Exception
 	 */
 	public final void importParaDiff() throws Exception {
+		DAV.subscribeSender(this, objekt, DD_DIFF, SenderRole.sender());
+		
 		Data parameter = DAV.createData(diffFs);
 		DUAUtensilien.getAttributDatum("maxAnzKonstanzqKfz", parameter).asUnscaledValue().set(3);
 		DUAUtensilien.getAttributDatum("maxAnzKonstanzqLkw", parameter).asUnscaledValue().set(3);
@@ -195,6 +226,8 @@ implements ClientSenderInterface{
 				DAV.getDataModel().getAspect(Konstante.DAV_ASP_PARAMETER_VORGABE),
 				(short)0), System.currentTimeMillis(), parameter);
 		DAV.sendData(resultat);
+		
+		DAV.unsubscribeSender(this, objekt, DD_DIFF);
 	}
 	
 	/**
@@ -224,6 +257,8 @@ implements ClientSenderInterface{
 	 * @throws Exception
 	 */
 	public final void importParaAusfall() throws Exception {
+		DAV.subscribeSender(this, objekt, DD_AUSFALL, SenderRole.sender());
+		
 		Data parameter = DAV.createData(ausfallHFs);
 		DUAUtensilien.getAttributDatum("maxAusfallProTag", parameter).asUnscaledValue().set(3);
 		
@@ -232,6 +267,8 @@ implements ClientSenderInterface{
 				DAV.getDataModel().getAspect(Konstante.DAV_ASP_PARAMETER_VORGABE),
 				(short)0), System.currentTimeMillis(), parameter);
 		DAV.sendData(resultat);
+		
+		DAV.unsubscribeSender(this, objekt, DD_AUSFALL);
 	}
 	
 	/**
@@ -254,6 +291,8 @@ implements ClientSenderInterface{
 	 * @throws Exception
 	 */
 	public final void importParaVertrauensbereich() throws Exception {
+		DAV.subscribeSender(this, objekt, DD_VERTRAUENSBEREICH, SenderRole.sender());
+		
 		Data parameter = DAV.createData(vertrauensbereichFs);
 		
 		DUAUtensilien.getAttributDatum("BezugsZeitraum", parameter).asUnscaledValue().set(1);
@@ -264,6 +303,8 @@ implements ClientSenderInterface{
 				DAV.getDataModel().getAspect(Konstante.DAV_ASP_PARAMETER_VORGABE),
 				(short)0), System.currentTimeMillis(), parameter);
 		DAV.sendData(resultat);
+		
+		DAV.unsubscribeSender(this, objekt, DD_VERTRAUENSBEREICH);
 	}
 	
 	/**
