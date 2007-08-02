@@ -74,9 +74,7 @@ implements ClientSenderInterface, PlPruefungInterface {
 				  	  (short)0);
 
 		try{
-			kzdImport = new ParaKZDLogImport(dav, FS, TEST_DATEN_VERZ + "Parameter_TLS");
-			kzdImport.setOptionen(OptionenPlausibilitaetsPruefungLogischVerkehr.KEINE_PRUEFUNG);
-			kzdImport.importiereParameter(1);
+			kzdImport = new ParaKZDLogImport(dav, FS, TEST_DATEN_VERZ + "Parameter");
 			kzdImport.importParaDiff();
 		}catch(Exception e) {
 			LOGGER.error("Kann Test nicht konfigurieren: "+e);
@@ -123,7 +121,7 @@ implements ClientSenderInterface, PlPruefungInterface {
 			while((zeileFSDiff = fsImpFSDiff.getNaechstenDatensatz(DD_KZD_SEND.getAttributeGroup())) != null) {
 				dsCount++;
 				dsKumm = dsCount-(480 * i);
-				LOGGER.info("Durchlauf:"+(i+1)+" - CSV-Zeile:"+(dsKumm+1)+" - Zeit:"+aktZeit);
+				LOGGER.info("Durchlauf:"+(i+1)+" - CSV-Zeile:"+(dsKumm+1)+" - Zeit:"+aktZeit+" -> Konfiguriere Prüfer: Erwarte alle Attribute als fehlerfrei");
 				
 				/*
 				 * Setzt Konfiguration des Markierungs-Prüfers

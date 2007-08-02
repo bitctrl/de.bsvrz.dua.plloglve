@@ -94,7 +94,7 @@ implements ClientSenderInterface, PlPruefungInterface {
 				  	  (short)0);
 
 		try{
-			kzdImport = new ParaKZDLogImport(dav, FS, TEST_DATEN_VERZ + "Parameter_TLS");
+			kzdImport = new ParaKZDLogImport(dav, FS, TEST_DATEN_VERZ + "Parameter");
 			kzdImport.setOptionen(OptionenPlausibilitaetsPruefungLogischVerkehr.KEINE_PRUEFUNG);
 			kzdImport.importiereParameter(1);
 			kzdImport.importParaVertrauensbereich();

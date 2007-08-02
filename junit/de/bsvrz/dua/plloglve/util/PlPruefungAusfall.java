@@ -85,9 +85,7 @@ implements ClientSenderInterface, PlPruefungInterface {
 				  	  (short)0);
 
 		try{
-			kzdImport = new ParaKZDLogImport(dav, FS, TEST_DATEN_VERZ + "Parameter_TLS");
-			kzdImport.setOptionen(OptionenPlausibilitaetsPruefungLogischVerkehr.KEINE_PRUEFUNG);
-			kzdImport.importiereParameter(1);
+			kzdImport = new ParaKZDLogImport(dav, FS, TEST_DATEN_VERZ + "Parameter");
 			kzdImport.importParaAusfall();
 		}catch(Exception e) {
 			LOGGER.error("Kann Test nicht konfigurieren: "+e);

@@ -134,15 +134,9 @@ implements ClientSenderInterface {
 		/*
 		 * Importiere KZD TLS Parameter
 		 */
-		kzdImport1 = new ParaKZDLogImport(dav, FS1, TEST_DATEN_VERZ + "Parameter_TLS");
-		kzdImport2 = new ParaKZDLogImport(dav, FS2, TEST_DATEN_VERZ + "Parameter_TLS");
-		kzdImport3 = new ParaKZDLogImport(dav, FS3, TEST_DATEN_VERZ + "Parameter_TLS");
-		
-		importOptionenKZD(OptionenPlausibilitaetsPruefungLogischVerkehr.SETZE_MAX);
-		importOptionenKZD(OptionenPlausibilitaetsPruefungLogischVerkehr.SETZE_MIN);
-		importOptionenKZD(OptionenPlausibilitaetsPruefungLogischVerkehr.SETZE_MAX);
-		importOptionenKZD(OptionenPlausibilitaetsPruefungLogischVerkehr.NUR_PRUEFUNG);
-		importOptionenKZD(OptionenPlausibilitaetsPruefungLogischVerkehr.KEINE_PRUEFUNG);
+		kzdImport1 = new ParaKZDLogImport(dav, FS1, TEST_DATEN_VERZ + "Parameter");
+		kzdImport2 = new ParaKZDLogImport(dav, FS2, TEST_DATEN_VERZ + "Parameter");
+		kzdImport3 = new ParaKZDLogImport(dav, FS3, TEST_DATEN_VERZ + "Parameter");
 		
 		doPruefeKZD();
 	}
