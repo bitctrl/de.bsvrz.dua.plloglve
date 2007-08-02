@@ -34,6 +34,7 @@ import stauma.dav.clientside.ResultData;
 import stauma.dav.clientside.SenderRole;
 import stauma.dav.configuration.interfaces.AttributeGroup;
 import stauma.dav.configuration.interfaces.SystemObject;
+import de.bsvrz.dua.plloglve.plloglve.typen.OptionenPlausibilitaetsPruefungLogischVerkehr;
 import de.bsvrz.dua.plloglve.util.CSVImporter;
 import de.bsvrz.sys.funclib.bitctrl.dua.DUAUtensilien;
 import de.bsvrz.sys.funclib.bitctrl.konstante.Konstante;
@@ -147,14 +148,22 @@ implements ClientSenderInterface{
 		 * Parameter für Differentialkontrolle, Ausfallhäufigkeit und
 		 * Vertrauensbereich deaktivieren bzw. zurücksetzen
 		 */
+		DAV.subscribeSender(this, objekt,DD_LOGISCH, SenderRole.sender());
 		DAV.subscribeSender(this, objekt, DD_DIFF, SenderRole.sender());
 		DAV.subscribeSender(this, objekt, DD_AUSFALL, SenderRole.sender());
 		DAV.subscribeSender(this, objekt, DD_VERTRAUENSBEREICH, SenderRole.sender());
+		
+		deaktiviereParaStandard(OptionenPlausibilitaetsPruefungLogischVerkehr.SETZE_MAX);
+		deaktiviereParaStandard(OptionenPlausibilitaetsPruefungLogischVerkehr.SETZE_MIN);
+		deaktiviereParaStandard(OptionenPlausibilitaetsPruefungLogischVerkehr.SETZE_MIN_MAX);
+		deaktiviereParaStandard(OptionenPlausibilitaetsPruefungLogischVerkehr.NUR_PRUEFUNG);
+		deaktiviereParaStandard(OptionenPlausibilitaetsPruefungLogischVerkehr.KEINE_PRUEFUNG);
 		
 		deaktiviereParaDiff();
 		deaktiviereParaAusfall();
 		deaktiviereParaVertrauensbereich();
 		
+		DAV.unsubscribeSender(this, objekt, DD_LOGISCH);
 		DAV.unsubscribeSender(this, objekt, DD_DIFF);
 		DAV.unsubscribeSender(this, objekt, DD_AUSFALL);
 		DAV.unsubscribeSender(this, objekt, DD_VERTRAUENSBEREICH);
@@ -205,7 +214,40 @@ implements ClientSenderInterface{
 	}
 
 	/**
-	 * Setzt Attribute der Differentialkontrolle entsprechend den Afo (5.1.3.10.2)
+	 * Setzt Standard-Attribute zurück
+	 * @throws Exception
+	 */
+	private final void deaktiviereParaStandard(final OptionenPlausibilitaetsPruefungLogischVerkehr optionen) throws Exception {
+		Data parameter = DAV.createData(this.getParameterAtg());
+		DUAUtensilien.getAttributDatum("Optionen", parameter).asUnscaledValue().set(optionen.getCode());
+		DUAUtensilien.getAttributDatum("qKfzBereich.Min", parameter).asUnscaledValue().set(0);
+		DUAUtensilien.getAttributDatum("qKfzBereich.Max", parameter).asUnscaledValue().set(999999);
+		DUAUtensilien.getAttributDatum("qLkwBereich.Min", parameter).asUnscaledValue().set(0);
+		DUAUtensilien.getAttributDatum("qLkwBereich.Max", parameter).asUnscaledValue().set(999999);
+		DUAUtensilien.getAttributDatum("qPkwBereich.Min", parameter).asUnscaledValue().set(0);
+		DUAUtensilien.getAttributDatum("qPkwBereich.Max", parameter).asUnscaledValue().set(999999);
+		DUAUtensilien.getAttributDatum("vKfzBereich.Min", parameter).asUnscaledValue().set(0);
+		DUAUtensilien.getAttributDatum("vKfzBereich.Max", parameter).asUnscaledValue().set(254);
+		DUAUtensilien.getAttributDatum("vLkwBereich.Min", parameter).asUnscaledValue().set(0);
+		DUAUtensilien.getAttributDatum("vLkwBereich.Max", parameter).asUnscaledValue().set(254);
+		DUAUtensilien.getAttributDatum("vPkwBereich.Min", parameter).asUnscaledValue().set(0);
+		DUAUtensilien.getAttributDatum("vPkwBereich.Max", parameter).asUnscaledValue().set(254);
+		DUAUtensilien.getAttributDatum("vgKfzBereich.Min", parameter).asUnscaledValue().set(0);
+		DUAUtensilien.getAttributDatum("vgKfzBereich.Max", parameter).asUnscaledValue().set(254);
+		DUAUtensilien.getAttributDatum("BelegungBereich.Min", parameter).asUnscaledValue().set(0);
+		DUAUtensilien.getAttributDatum("BelegungBereich.Max", parameter).asUnscaledValue().set(100);
+		DUAUtensilien.getAttributDatum("vKfzGrenz", parameter).asUnscaledValue().set(101);
+		DUAUtensilien.getAttributDatum("bGrenz", parameter).asUnscaledValue().set(53);
+		
+		ResultData resultat = new ResultData(this.objekt, new DataDescription(
+				this.getParameterAtg(), 
+				DAV.getDataModel().getAspect(Konstante.DAV_ASP_PARAMETER_VORGABE),
+				(short)0), System.currentTimeMillis(), parameter);
+		DAV.sendData(resultat);
+	}
+	
+	/**
+	 * Setzt Attribute der Differentialkontrolle entsprechend den PrSpez (5.1.3.10.2)
 	 * @throws Exception
 	 */
 	public final void importParaDiff() throws Exception {
@@ -253,7 +295,7 @@ implements ClientSenderInterface{
 	}
 
 	/**
-	 * Setzt Attribute der Ausfallkontrolle entsprechend den Afo (5.1.3.10.2)
+	 * Setzt Attribute der Ausfallkontrolle entsprechend den PrSpez (5.1.3.10.2)
 	 * @throws Exception
 	 */
 	public final void importParaAusfall() throws Exception {
@@ -287,7 +329,7 @@ implements ClientSenderInterface{
 	}
 	
 	/**
-	 * Setzt Attribute des Vertrauensbereich entsprechend den Afo (5.1.3.10.2)
+	 * Setzt Attribute des Vertrauensbereich entsprechend den PrSpez (5.1.3.10.2)
 	 * @throws Exception
 	 */
 	public final void importParaVertrauensbereich() throws Exception {
