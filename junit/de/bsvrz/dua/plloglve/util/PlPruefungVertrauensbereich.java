@@ -11,8 +11,8 @@ import sys.funclib.ArgumentList;
 import sys.funclib.debug.Debug;
 import de.bsvrz.dua.plloglve.plloglve.typen.OptionenPlausibilitaetsPruefungLogischVerkehr;
 import de.bsvrz.dua.plloglve.util.para.ParaKZDLogImport;
-import de.bsvrz.dua.plloglve.pruef.FilterMeldung;
-import de.bsvrz.dua.plloglve.pruef.PruefeMarkierung;
+import de.bsvrz.dua.plloglve.util.pruef.FilterMeldung;
+import de.bsvrz.dua.plloglve.util.pruef.PruefeMarkierung;
 import de.bsvrz.sys.funclib.bitctrl.dua.DUAKonstanten;
 import de.bsvrz.sys.funclib.bitctrl.app.Pause;
 
