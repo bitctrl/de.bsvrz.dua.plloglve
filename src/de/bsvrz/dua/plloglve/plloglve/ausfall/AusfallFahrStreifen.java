@@ -66,6 +66,11 @@ implements ClientReceiverInterface{
 	private static final SimpleDateFormat FORMAT = new SimpleDateFormat("dd.MM.yyyy HH:mm"); //$NON-NLS-1$
 	
 	/**
+	 * IP der ATG KZD
+	 */
+	private static long ATG_KZD_ID = -1;
+	
+	/**
 	 * Standard-Betriebsmeldungs-ID dieses Submoduls
 	 */
 	private static final String MELDUNGS_ID = "Ausfallhaeufigkeit"; //$NON-NLS-1$
@@ -108,6 +113,7 @@ implements ClientReceiverInterface{
 					VERWALTUNG.getVerbindung().getDataModel().getAttributeGroup("atg.verkehrsDatenAusfallHäufigkeitFs"), //$NON-NLS-1$
 					VERWALTUNG.getVerbindung().getDataModel().getAspect(Konstanten.ASP_PARAMETER_SOLL),
 					(short)0);
+			ATG_KZD_ID = VERWALTUNG.getVerbindung().getDataModel().getAttributeGroup(DUAKonstanten.ATG_KZD).getId();
 		}
 		
 		VERWALTUNG.getVerbindung().subscribeReceiver(this, obj, AUSFALL_BESCHREIBUNG,
@@ -122,7 +128,7 @@ implements ClientReceiverInterface{
 	 */
 	protected final void plausibilisiere(final ResultData resultat){		
 		if(resultat != null && resultat.getData() != null && 
-				resultat.getDataDescription().getAttributeGroup().getPid().equals(DUAKonstanten.ATG_KZD)){
+				resultat.getDataDescription().getAttributeGroup().getId() == ATG_KZD_ID){
 
 			AusfallDatum ausfallDatum = AusfallDatum.getAusfallDatumVon(resultat);
 			if(ausfallDatum != null){
@@ -164,9 +170,9 @@ implements ClientReceiverInterface{
 					
 					double ausfallInProzent;
 					if(Ausfallhaeufigkeit.TEST) {
-						ausfallInProzent = (double)(((double)ausfallZeit / (double)144000) * 100.0);
+						ausfallInProzent = (((double)ausfallZeit / (double)144000) * 100.0);
 					} else {
-						ausfallInProzent = (double)(((double)ausfallZeit / (double)Konstante.TAG_24_IN_MS) * 100.0);
+						ausfallInProzent = (((double)ausfallZeit / (double)Konstante.TAG_24_IN_MS) * 100.0);
 					}
 					
 					if(ausfallInProzent > this.maxAusfallProTag){

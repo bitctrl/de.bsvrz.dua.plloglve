@@ -226,8 +226,8 @@ implements ClientReceiverInterface{
 							puffer.add(this.bZaehler);
 						}
 
-						copy = data.createModifiableCopy();
 						if(!puffer.isEmpty()){
+							copy = data.createModifiableCopy();
 							for(VariableMitKonstanzZaehler<Long> wert:puffer){
 								copy.getItem(wert.getName()).getUnscaledValue("Wert").set(DUAKonstanten.FEHLERHAFT); //$NON-NLS-1$			
 								copy.getItem(wert.getName()).getItem("Status").getItem("MessWertErsetzung").   //$NON-NLS-1$//$NON-NLS-2$
