@@ -36,14 +36,12 @@ import stauma.dav.clientside.DataDescription;
 import stauma.dav.clientside.ReceiveOptions;
 import stauma.dav.clientside.ReceiverRole;
 import stauma.dav.clientside.ResultData;
-import stauma.dav.configuration.interfaces.AttributeGroup;
 import stauma.dav.configuration.interfaces.SystemObject;
 import sys.funclib.debug.Debug;
 import sys.funclib.operatingMessage.MessageGrade;
 import sys.funclib.operatingMessage.MessageState;
 import sys.funclib.operatingMessage.MessageType;
 import de.bsvrz.sys.funclib.bitctrl.dua.DUAKonstanten;
-import de.bsvrz.sys.funclib.bitctrl.dua.DUAUtensilien;
 import de.bsvrz.sys.funclib.bitctrl.dua.schnittstellen.IVerwaltung;
 import de.bsvrz.sys.funclib.bitctrl.konstante.Konstante;
 import de.bsvrz.sys.funclib.bitctrl.modell.AbstractSystemObjekt;
@@ -229,8 +227,8 @@ implements ClientReceiverInterface{
 						 * einzelnen Wert getan wird
 						 */
 						for(String attribut:ATTRIBUTE){
-							DUAUtensilien.getAttributDatum(attribut + ".Status.MessWertErsetzung.Implausibel", copy). //$NON-NLS-1$
-									asUnscaledValue().set(DUAKonstanten.JA);
+							copy.getItem(attribut).getItem("Status").getItem("MessWertErsetzung"). //$NON-NLS-1$ //$NON-NLS-2$
+									getUnscaledValue("Implausibel").set(DUAKonstanten.JA); //$NON-NLS-1$
 						}
 					}else{
 						if(verletztAlt){

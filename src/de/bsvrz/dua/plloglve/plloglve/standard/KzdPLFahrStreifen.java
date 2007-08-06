@@ -75,7 +75,7 @@ extends AbstraktPLFahrStreifen{
 			}
 			
 			if(copy != null){
-				this.berechneQPkw(copy);
+				this.berechneQPkwUndVKfz(copy);
 				this.ueberpruefe(copy, resultat);
 			}else{
 				LOGGER.warning("Es konnte keine Kopie von Datensatz erzeugt werden:\n" //$NON-NLS-1$
