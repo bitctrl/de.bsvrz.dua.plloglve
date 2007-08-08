@@ -289,7 +289,7 @@ implements ClientSenderInterface {
 				csvDatenVorhanden = false;
 				LOGGER.info("Keine Daten mehr vorhanedn. Beende Prüfung...");
 			} else {
-				LOGGER.info("Warte auf SOLL-IST-Vergleich (CSV-Zeile "+(csvIndex+2)+")...");
+				LOGGER.info("Warte auf SOLL-IST-Vergleich (CSV-Zeile "+(csvIndex+1)+")...");
 				doWait();  //Warte auf Ueberpruefung der FS1-FS3
 			}
 		}		
@@ -395,7 +395,7 @@ implements ClientSenderInterface {
 				csvDatenVorhanden = false;
 				LOGGER.info("Keine Daten mehr vorhanedn. Beende Prüfung...");
 			} else {
-				LOGGER.info("Warte auf SOLL-IST-Vergleich (CSV-Zeile "+(csvIndex+2)+")...");
+				LOGGER.info("Warte auf SOLL-IST-Vergleich (CSV-Zeile "+(csvIndex+1)+")...");
 				doWait();  //Warte auf Ueberpruefung der FS1-FS3
 			}
 		}
