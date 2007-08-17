@@ -76,6 +76,13 @@ implements ClientReceiverInterface {
 	private boolean pruefungFS3Fertig = false;
 	
 	/**
+	 * Vergleicherthreads für FS 1-3
+	 */
+	private VergleicheKZD vergleicheFS1;
+	private VergleicheKZD vergleicheFS2;
+	private VergleicheKZD vergleicheFS3;
+	
+	/**
 	 * Empfange-Datenbeschreibung für KZD und LZD
 	 */
 	public static DataDescription DD_KZD_EMPF = null;
@@ -118,6 +125,13 @@ implements ClientReceiverInterface {
 		}
 		csvImp.getNaechsteZeile();  //Tabellenkopf in CSV ueberspringen
 		csvEinlesen();  //CSV einlesen
+		
+		/*
+		 * Initialisiere Vergleicherthreads
+		 */
+		vergleicheFS1 = new VergleicheKZD(this,1);
+		vergleicheFS2 = new VergleicheKZD(this,2);
+		vergleicheFS3 = new VergleicheKZD(this,3);
 	}
 	
 	/**
@@ -354,20 +368,15 @@ implements ClientReceiverInterface {
 				try {
 					//Ermittle FS und pruefe Daten
 					if(result.getObject().getName().endsWith(".1")) {
-						new VergleicheKZD(this,result,csvZeilenFS1,1,csvOffset);
-						pruefungFS1Fertig = true;
+						vergleicheFS1.vergleiche(result, csvZeilenFS1, csvOffset);
 					} else if(result.getObject().getName().endsWith(".2")) {
-						new VergleicheKZD(this,result,csvZeilenFS2,2,csvOffset);
-						pruefungFS2Fertig = true;
+						vergleicheFS2.vergleiche(result, csvZeilenFS2, csvOffset);
 					} else if(result.getObject().getName().endsWith(".3")) {
-						new VergleicheKZD(this,result,csvZeilenFS3,3,csvOffset);
-						pruefungFS3Fertig = true;
+						vergleicheFS3.vergleiche(result, csvZeilenFS3, csvOffset);
 					}
 				} catch(Exception e) {}
 
 				LOGGER.info("Zu prüfendes Datum empfangen. Warte auf Prüfung...");
-				doWait();
-				this.pruefungFertig();  //pruefe ob alle 3 FS geprueft worden
 			}
 		}
 	}
@@ -378,29 +387,29 @@ implements ClientReceiverInterface {
 	private void pruefungFertig() {
 		if(pruefungFS1Fertig && pruefungFS2Fertig && pruefungFS3Fertig) {
 			LOGGER.info("Prüfung aller Fahrstreifen für diesen Intervall abgeschlossen");
-			doWait();  //Warte 250ms
 			caller.doNotify();  //Benachrichtige aufrufende Klasse
-		}
-	}
-	
-	/**
-	 * Warten (Default: 250ms)
-	 */
-	private void doWait() {
-		synchronized(this) {
-			try {
-				this.wait(250);
-			}catch(Exception e) {}
 		}
 	}
 	
 	/**
 	 * Diesen Thread wecken
 	 */
-	public void doNotify() {
-		synchronized(this) {
-			this.notify();
+	public void doNotify(int FS) {
+		switch(FS) {
+			case 1: {
+				pruefungFS1Fertig = true;
+				break;
+			}
+			case 2: {
+				pruefungFS2Fertig = true;
+				break;
+			}
+			case 3: {
+				pruefungFS3Fertig = true;
+				break;
+			}
 		}
+		pruefungFertig();
 	}
 	
 }
@@ -471,20 +480,11 @@ class VergleicheKZD extends Thread {
 	 * Erstellt einen Prüfthread welcher Soll-Werte und Ergebniswerte vergleicht und
 	 * das Ergebnis ausgibt
 	 * @param caller Die aufrufende Klasse
-	 * @param result Das zu prüfende Ergebnis
-	 * @param csvZeilen die Soll-CSV-Werte (aller Fahrstreifen)
 	 * @param fsIndex Der zu prüfende Fahrstreifen
-	 * @param csvOffset Der zu verwendende CSV-Offset
 	 */
-	public VergleicheKZD(PruefeDatenLogisch caller, ResultData result, ArrayList<HashMap<String,Integer>> csvZeilen, int fsIndex, int csvOffset) {
+	public VergleicheKZD(PruefeDatenLogisch caller, int fsIndex) {
 		this.caller = caller;  //uebernehme aufrufende Klasse
-		this.daten = result.getData();  //uebernehme Ergebnisdaten
-		this.csvZeilen = csvZeilen;  //uebernehme CSV Daten
 		this.fsIndex = fsIndex;  //uebernehme FS-Index
-		this.csvOffset = csvOffset;  //uebernehme CSV Index
-
-		setzeAttributNamen(result.getDataDescription().getAttributeGroup().getPid());
-		
 		this.start();  //starte Thread
 	}
 
@@ -517,9 +517,41 @@ class VergleicheKZD extends Thread {
 	 * Startet Thread
 	 */
 	public void run() {
-		try {
-			pruefeDaten(csvZeilen, fsIndex, csvOffset);  //Pruefe Daten
-		} catch(Exception e){}
+		while(true) {  //Thread läuft immer
+			doWait();  //warte auf trigger
+			try {
+				doVergleiche();  //Pruefe Daten
+			} catch(Exception e){}
+		}
+	}
+	
+	/**
+	 * Vergleicht IST- und SOLL-Ergebnisse
+	 * @param result Das zu prüfende Ergebnis
+	 * @param csvZeilen die Soll-CSV-Werte (aller Fahrstreifen)
+	 * @param csvOffset Aktuelle Position in der CSV-Datei
+	 */
+	public void vergleiche(ResultData result, ArrayList<HashMap<String,Integer>> csvZeilen, int csvOffset) {
+		this.csvOffset = csvOffset;  //uebernehme CSV Index
+		this.csvZeilen = csvZeilen;  //uebernehme CSV Daten
+		this.daten = result.getData();  //uebernehme Ergebnisdaten
+		setzeAttributNamen(result.getDataDescription().getAttributeGroup().getPid());
+		synchronized(this) {
+			this.notify();	//trigger thread
+		}
+	}
+	
+	/**
+	 * Lässt Vergleicherthread warten
+	 *
+	 */
+	private void doWait() {
+		synchronized(this) {
+			try {
+				this.wait();
+			} catch (Exception e) {}
+		}
+		
 	}
 	
 	/**
@@ -559,7 +591,7 @@ class VergleicheKZD extends Thread {
 	/**
 	 * prüfe Daten
 	 */
-	private void pruefeDaten(ArrayList<HashMap<String,Integer>> csvZeilen, int fsIndex, int csvOffset) throws Exception {
+	private void doVergleiche() throws Exception {
 		String ident = "[FS:"+fsIndex+"-Z:"+(csvOffset+2)+"] ";  //FS + CSV Index
 		LOGGER.info("Pruefe Fahrstreifendatum "+ident);
 		
@@ -646,7 +678,7 @@ class VergleicheKZD extends Thread {
 		
 		LOGGER.info(pruefLog);
 		LOGGER.info("Prüfung der Fahrstreifendaten für diesen Intervall abgeschlossen");
-		caller.doNotify();  //Benachrichtige aufrufende Klasse
+		caller.doNotify(fsIndex);  //Benachrichtige aufrufende Klasse
 	}
 
 	/**
