@@ -106,9 +106,9 @@ extends AbstraktBearbeitungsKnotenAdapter{
 		this.ausfall.initialisiere(dieVerwaltung);
 		this.ausfall.setNaechstenBearbeitungsKnoten(this.vb);
 		
+		this.vb.setPublikation(this.publizieren);
 		this.vb.initialisiere(dieVerwaltung);
 		this.vb.setNaechstenBearbeitungsKnoten(this.knoten);
-		this.vb.setPublikation(this.publizieren);		
 	}
 	
 	

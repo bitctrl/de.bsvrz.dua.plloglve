@@ -26,7 +26,9 @@
 
 package de.bsvrz.dua.plloglve.plloglve.vb;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import stauma.dav.clientside.Data;
@@ -71,6 +73,11 @@ extends AbstraktBearbeitungsKnotenAdapter{
 	private Map<SystemObject, VertrauensFahrStreifen> fahrStreifenMap = 
 				new HashMap<SystemObject, VertrauensFahrStreifen>();
 	
+	/**
+	 * speichert ob das letzte Ergebnis (pro Fahrstreifen) auf keine Daten stand
+	 */
+	private Map<SystemObject, Boolean> keineDaten = new HashMap<SystemObject, Boolean>();
+	
 	
 	/**
 	 * Standardkonstruktor
@@ -91,8 +98,10 @@ extends AbstraktBearbeitungsKnotenAdapter{
 	throws DUAInitialisierungsException {
 		super.initialisiere(dieVerwaltung);
 		
-		this.publikationsAnmeldungen.modifiziereObjektAnmeldung(this.standardAspekte.
-				getStandardAnmeldungen(this.verwaltung.getSystemObjekte()));
+		if(this.publizieren){
+			this.publikationsAnmeldungen.modifiziereObjektAnmeldung(this.standardAspekte.
+					getStandardAnmeldungen(this.verwaltung.getSystemObjekte()));
+		}
 				
 		for(SystemObject fsObj:dieVerwaltung.getSystemObjekte()){
 			this.fahrStreifenMap.put(fsObj, new VertrauensFahrStreifen(dieVerwaltung, fsObj));
@@ -105,31 +114,53 @@ extends AbstraktBearbeitungsKnotenAdapter{
 	 */
 	public void aktualisiereDaten(ResultData[] resultate) {
 		if(resultate != null){
-			for(ResultData resultat: resultate){
-				if(resultat != null && resultat.getData() != null){
-					VertrauensFahrStreifen fs = this.fahrStreifenMap.get(resultat.getObject());
-					
-					if(fs != null){
-						Data data = fs.plausibilisiere(resultat);
+			
+			List<ResultData> weiterzuleitendeResultate = new ArrayList<ResultData>();
+			
+			for(ResultData resultat:resultate){
+				if(resultat != null){
+					Data datum = null;
 
-						if(this.publizieren){							
-							ResultData publikationsDatum = new ResultData(resultat.getObject(),
-									new DataDescription(resultat.getDataDescription().getAttributeGroup(), 
-											standardAspekte.getStandardAspekt(resultat), (short)0),
-											resultat.getDataTime(), data);
-							
-							this.publikationsAnmeldungen.sende(publikationsDatum);
-						}
-					}else{
-						LOGGER.warning("Datum für nicht identifizierbaren Fahrstreifen empfangen: " +  //$NON-NLS-1$
-								resultat.getObject());
+					if(resultat.getData() != null){
+						VertrauensFahrStreifen fs = this.fahrStreifenMap.get(resultat.getObject());
+						
+						if(fs != null){
+							datum = fs.plausibilisiere(resultat);
+						}else{
+							LOGGER.warning("Datum für nicht identifizierbaren Fahrstreifen empfangen: " +  //$NON-NLS-1$
+									resultat.getObject());
+						}						
 					}
 					
-					/**
-					 * Datum wird hier nicht mehr Applikationsintern 
-					 * weitergereicht
-					 */
+					ResultData publikationsDatum = new ResultData(resultat.getObject(),
+																	new DataDescription(resultat.getDataDescription().getAttributeGroup(), 
+																	standardAspekte.getStandardAspekt(resultat), (short)0),
+																	resultat.getDataTime(), datum);
+					ResultData weiterzuleitendesDatum = new ResultData(resultat.getObject(),
+																	resultat.getDataDescription(),
+																	resultat.getDataTime(), datum);
+
+					if(this.publizieren){
+						boolean sende = true;
+						if(publikationsDatum.getData() == null){
+							Boolean letztesDatumKeineDaten = this.keineDaten.get(publikationsDatum.getObject());
+							if(letztesDatumKeineDaten == null || letztesDatumKeineDaten){
+								sende = false;
+							}
+						}	
+						
+						if(sende){
+							this.publikationsAnmeldungen.sende(publikationsDatum);
+							this.keineDaten.put(publikationsDatum.getObject(), publikationsDatum.getData() == null);
+						}
+					}
+					
+					weiterzuleitendeResultate.add(weiterzuleitendesDatum);
 				}
+			}
+			
+			if(this.knoten != null && !weiterzuleitendeResultate.isEmpty()){
+				this.knoten.aktualisiereDaten(weiterzuleitendeResultate.toArray(new ResultData[0]));
 			}
 		}
 	}

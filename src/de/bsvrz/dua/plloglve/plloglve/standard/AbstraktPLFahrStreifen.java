@@ -44,6 +44,7 @@ import de.bsvrz.dua.plloglve.plloglve.typen.OptionenPlausibilitaetsPruefungLogis
 import de.bsvrz.sys.funclib.bitctrl.daf.Konstanten;
 import de.bsvrz.sys.funclib.bitctrl.dua.DUAKonstanten;
 import de.bsvrz.sys.funclib.bitctrl.dua.DUAUtensilien;
+import de.bsvrz.sys.funclib.bitctrl.dua.GanzZahl;
 import de.bsvrz.sys.funclib.bitctrl.dua.schnittstellen.IVerwaltungMitGuete;
 import de.bsvrz.sys.funclib.bitctrl.modell.AbstractSystemObjekt;
 import de.bsvrz.sys.funclib.bitctrl.modell.SystemObjekt;
@@ -153,7 +154,7 @@ implements ClientReceiverInterface{
 				getUnscaledValue("Implausibel").longValue() == DUAKonstanten.JA; //$NON-NLS-1$
 		
 		long qPkw = DUAKonstanten.NICHT_ERMITTELBAR;
-		double qPkwGuete = -1;
+		GWert qPkwGuete = GueteVerfahren.STD_FEHLERHAFT_BZW_NICHT_ERMITTELBAR;
 		
 		if(qKfz >= 0 && !qKfzImplausibel){
 			if(qLkw >= 0 && !qLkwImplausibel){
@@ -165,7 +166,7 @@ implements ClientReceiverInterface{
 					try {
 						GWert qKfzG = new GWert(data.getItem("qKfz").getItem("Güte")); //$NON-NLS-1$ //$NON-NLS-2$
 						GWert qLkwG = new GWert(data.getItem("qLkw").getItem("Güte"));  //$NON-NLS-1$ //$NON-NLS-2$
-						qPkwGuete = GueteVerfahren.differenz(qKfzG, qLkwG).getIndex();
+						qPkwGuete = GueteVerfahren.differenz(qKfzG, qLkwG);
 					} catch (GueteException e) {
 						e.printStackTrace();
 						LOGGER.error("Berechnung der Guete von qPkw fehlgeschlagen", e); //$NON-NLS-1$
@@ -173,26 +174,25 @@ implements ClientReceiverInterface{
 				}
 			}else{
 				qPkw = qKfz;
-				qPkwGuete = data.getItem("qPkw").getItem("Güte").getScaledValue("Index").doubleValue(); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+				qPkwGuete = new GWert(data, "qPkw"); //$NON-NLS-1$
 			}
 		}
 		
 		
 		if(DUAUtensilien.isWertInWerteBereich(data.getItem("qPkw").getItem("Wert"), qPkw)){ //$NON-NLS-1$ //$NON-NLS-2$
-			data.getItem("qPkw").getUnscaledValue("Wert").set(qPkw); //$NON-NLS-1$ //$NON-NLS-2$	
-			if(qPkwGuete >= 0.0){
-				data.getItem("qPkw").getItem("Güte").getScaledValue("Index").set(qPkwGuete); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-			}
+			data.getItem("qPkw").getUnscaledValue("Wert").set(qPkw); //$NON-NLS-1$ //$NON-NLS-2$
+			qPkwGuete.exportiere(data, "qPkw"); //$NON-NLS-1$
 		}else{
 			data.getItem("qPkw").getUnscaledValue("Wert").set(DUAKonstanten.FEHLERHAFT);  //$NON-NLS-1$//$NON-NLS-2$
 			data.getItem("qPkw").getItem("Status"). //$NON-NLS-1$ //$NON-NLS-2$
-				getItem("MessWertErsetzung").getUnscaledValue("Implausibelt").set(DUAKonstanten.JA);  //$NON-NLS-1$ //$NON-NLS-2$//$NON-NLS-2%
+				getItem("MessWertErsetzung").getUnscaledValue("Implausibel").set(DUAKonstanten.JA);  //$NON-NLS-1$ //$NON-NLS-2$//$NON-NLS-2%
 		}
 		
 		final long vPkw = data.getItem("vPkw").getUnscaledValue("Wert").longValue(); //$NON-NLS-1$ //$NON-NLS-2$
 		final long vLkw = data.getItem("vLkw").getUnscaledValue("Wert").longValue(); //$NON-NLS-1$ //$NON-NLS-2$
 		long vKfz = DUAKonstanten.NICHT_ERMITTELBAR;
-		double vKfzGuete = -1;
+		GWert vKfzGuete = GueteVerfahren.STD_FEHLERHAFT_BZW_NICHT_ERMITTELBAR;
+		
 		if(qKfz > 0){
 			long qPkwDummy = qPkw >= 0?qPkw:0;
 			long vPkwDummy = vPkw >= 0?vPkw:0;
@@ -213,7 +213,7 @@ implements ClientReceiverInterface{
 										GueteVerfahren.produkt(qLkwG, vLkwG)
 								),
 								qKfzG
-							).getIndex();
+							);
 				
 			} catch (GueteException e) {
 				e.printStackTrace();
@@ -223,13 +223,11 @@ implements ClientReceiverInterface{
 		
 		if(DUAUtensilien.isWertInWerteBereich(data.getItem("vKfz").getItem("Wert"), vKfz)){ //$NON-NLS-1$ //$NON-NLS-2$
 			data.getItem("vKfz").getUnscaledValue("Wert").set(vKfz); //$NON-NLS-1$ //$NON-NLS-2$
-			if(vKfzGuete >= 0.0){
-				data.getItem("vKfz").getItem("Güte").getScaledValue("Index").set(vKfzGuete); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-			}
+			vKfzGuete.exportiere(data, "vKfz"); //$NON-NLS-1$
 		}else{
 			data.getItem("vKfz").getUnscaledValue("Wert").set(DUAKonstanten.FEHLERHAFT);  //$NON-NLS-1$//$NON-NLS-2$
 			data.getItem("vKfz").getItem("Status"). //$NON-NLS-1$ //$NON-NLS-2$
-				getItem("MessWertErsetzung").getUnscaledValue("Implausibelt").set(DUAKonstanten.JA);  //$NON-NLS-1$ //$NON-NLS-2$//$NON-NLS-2%
+				getItem("MessWertErsetzung").getUnscaledValue("Implausibel").set(DUAKonstanten.JA);  //$NON-NLS-1$ //$NON-NLS-2$//$NON-NLS-2%
 		}
 		
 		data.getItem("qPkw").getItem("Status").  //$NON-NLS-1$//$NON-NLS-2$
@@ -306,11 +304,15 @@ implements ClientReceiverInterface{
 					}
 					
 					if(gueteNeuBerechnen){
-						double guete = davDatum.getItem(wertName).getItem("Güte").//$NON-NLS-1$
-							getScaledValue("Index").doubleValue();  //$NON-NLS-1$
-						guete *= VERWALTUNG.getGueteFaktor();
-						davDatum.getItem(wertName).getItem("Güte").//$NON-NLS-1$
-							getScaledValue("Index").set(guete);  //$NON-NLS-1$
+						GanzZahl guete = GanzZahl.getGueteIndex();
+						guete.setWert(davDatum.getItem(wertName).getItem("Güte").//$NON-NLS-1$
+							getUnscaledValue("Index").longValue());  //$NON-NLS-1$
+						if(!guete.isZustand()){
+							double gueteIndex = guete.getSkaliertenWert();
+							gueteIndex *= VERWALTUNG.getGueteFaktor();
+							davDatum.getItem(wertName).getItem("Güte").//$NON-NLS-1$
+								getScaledValue("Index").set(gueteIndex);  //$NON-NLS-1$
+						}
 					}
 				}
 			}
