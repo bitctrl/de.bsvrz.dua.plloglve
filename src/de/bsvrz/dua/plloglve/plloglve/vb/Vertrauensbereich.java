@@ -23,7 +23,6 @@
  * Phone: +49 341-490670<br>
  * mailto: info@bitctrl.de
  */
-
 package de.bsvrz.dua.plloglve.plloglve.vb;
 
 import java.util.ArrayList;
@@ -56,10 +55,10 @@ import de.bsvrz.sys.funclib.bitctrl.dua.schnittstellen.IVerwaltung;
 public class Vertrauensbereich
 extends AbstraktBearbeitungsKnotenAdapter{
 
-	/**
-	 * Läuft die Applikation im Testbetrieb, dann ist ein Tag genau 144s lang!
-	 */
-	protected static final boolean TEST = true;
+//	/**
+//	 * Läuft die Applikation im Testbetrieb, dann ist ein Tag genau 144s lang!
+//	 */
+//	protected static final boolean TEST = false;
 	
 	/**
 	 * Debug-Logger

@@ -41,6 +41,7 @@ import sys.funclib.debug.Debug;
 import sys.funclib.operatingMessage.MessageGrade;
 import sys.funclib.operatingMessage.MessageState;
 import sys.funclib.operatingMessage.MessageType;
+import de.bsvrz.dua.plloglve.plloglve.TestParameter;
 import de.bsvrz.sys.funclib.bitctrl.dua.DUAKonstanten;
 import de.bsvrz.sys.funclib.bitctrl.dua.schnittstellen.IVerwaltung;
 import de.bsvrz.sys.funclib.bitctrl.konstante.Konstante;
@@ -232,7 +233,7 @@ implements ClientReceiverInterface{
 						}
 					}else{
 						if(verletztAlt){
-							long vertrauensBereich = Vertrauensbereich.TEST?parameter.getBezugsZeitraum()*6000:parameter.getBezugsZeitraum() * Konstante.STUNDE_IN_MS;
+							long vertrauensBereich = TestParameter.TEST_VERTRAUEN?parameter.getBezugsZeitraum()*6000:parameter.getBezugsZeitraum() * Konstante.STUNDE_IN_MS;
 							
 							Date start = new Date(originalDatum.getDataTime() - vertrauensBereich);
 							Date ende = new Date(originalDatum.getDataTime());

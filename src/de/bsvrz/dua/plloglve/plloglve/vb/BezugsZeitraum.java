@@ -36,6 +36,7 @@ import sys.funclib.operatingMessage.MessageGrade;
 import sys.funclib.operatingMessage.MessageState;
 import sys.funclib.operatingMessage.MessageType;
 import de.bsvrz.dua.plloglve.plloglve.PlPruefungLogischLVE;
+import de.bsvrz.dua.plloglve.plloglve.TestParameter;
 import de.bsvrz.sys.funclib.bitctrl.dua.DUAKonstanten;
 import de.bsvrz.sys.funclib.bitctrl.dua.schnittstellen.IVerwaltung;
 import de.bsvrz.sys.funclib.bitctrl.konstante.Konstante;
@@ -140,7 +141,7 @@ public class BezugsZeitraum {
 			this.ausgefalleneDaten.removeAll(veralteteDaten);
 		}
 
-		final long bezugsZeitraumInMillis = Vertrauensbereich.TEST?parameter.getBezugsZeitraum()*6000:parameter.getBezugsZeitraum() * Konstante.STUNDE_IN_MS;
+		final long bezugsZeitraumInMillis = TestParameter.TEST_VERTRAUEN?parameter.getBezugsZeitraum()*6000:parameter.getBezugsZeitraum() * Konstante.STUNDE_IN_MS;
 		double ausfallInProzent = 0;
 		if(bezugsZeitraumInMillis > 0){
 			//ausfallInProzent = (int)((ausfallZeit / bezugsZeitraumInMillis) * 100.0 + 0.5);

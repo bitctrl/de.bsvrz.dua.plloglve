@@ -30,6 +30,7 @@ import java.util.Date;
 
 import stauma.dav.clientside.ResultData;
 import de.bsvrz.dua.plloglve.plloglve.AbstraktDAVZeitEinzelDatum;
+import de.bsvrz.dua.plloglve.plloglve.TestParameter;
 import de.bsvrz.sys.funclib.bitctrl.dua.DUAKonstanten;
 import de.bsvrz.sys.funclib.bitctrl.konstante.Konstante;
 
@@ -84,7 +85,7 @@ extends AbstraktDAVZeitEinzelDatum{
 	 * @return ob das Datum noch aktuell ist
 	 */
 	public final boolean isDatumVeraltet(final long bezugsIntervall) {
-		long bezugsIntervallInMillis = Vertrauensbereich.TEST?bezugsIntervall*6000:bezugsIntervall * Konstante.STUNDE_IN_MS;
+		long bezugsIntervallInMillis = TestParameter.TEST_VERTRAUEN?bezugsIntervall*6000:bezugsIntervall * Konstante.STUNDE_IN_MS;
 		return this.datenZeit + bezugsIntervallInMillis < System.currentTimeMillis();
 	}
 	
