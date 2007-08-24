@@ -31,6 +31,7 @@ import java.util.Date;
 import stauma.dav.clientside.Data;
 import stauma.dav.clientside.ResultData;
 import de.bsvrz.dua.plloglve.plloglve.AbstraktDAVZeitEinzelDatum;
+import de.bsvrz.dua.plloglve.plloglve.TestParameter;
 import de.bsvrz.sys.funclib.bitctrl.dua.DUAKonstanten;
 import de.bsvrz.sys.funclib.bitctrl.konstante.Konstante;
 
@@ -156,7 +157,7 @@ extends AbstraktDAVZeitEinzelDatum{
 	 * @return ob dieses Datum im Sinne des gleitenden Tages veraltet ist
 	 */
 	public boolean isDatumVeraltet(){
-		if(Ausfallhaeufigkeit.TEST){
+		if(TestParameter.TEST_AUSFALL){
 			return this.datenZeit + 144000l < System.currentTimeMillis();
 		}
 		return this.datenZeit + Konstante.TAG_24_IN_MS < System.currentTimeMillis();

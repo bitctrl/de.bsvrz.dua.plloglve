@@ -42,6 +42,7 @@ import sys.funclib.operatingMessage.MessageGrade;
 import sys.funclib.operatingMessage.MessageState;
 import sys.funclib.operatingMessage.MessageType;
 import de.bsvrz.dua.plloglve.plloglve.PlPruefungLogischLVE;
+import de.bsvrz.dua.plloglve.plloglve.TestParameter;
 import de.bsvrz.sys.funclib.bitctrl.daf.Konstanten;
 import de.bsvrz.sys.funclib.bitctrl.dua.DUAKonstanten;
 import de.bsvrz.sys.funclib.bitctrl.dua.schnittstellen.IVerwaltung;
@@ -169,7 +170,7 @@ implements ClientReceiverInterface{
 				if(this.maxAusfallProTag >= 0){
 					
 					double ausfallInProzent;
-					if(Ausfallhaeufigkeit.TEST) {
+					if(TestParameter.TEST_AUSFALL) {
 						ausfallInProzent = (((double)ausfallZeit / (double)144000) * 100.0);
 					} else {
 						ausfallInProzent = (((double)ausfallZeit / (double)Konstante.TAG_24_IN_MS) * 100.0);
@@ -237,7 +238,7 @@ implements ClientReceiverInterface{
 	 * @return ob diese Applikation schon länger als einen Tag läuft
 	 */
 	private static final boolean programmLaeuftSchonLaengerAlsEinTag(){
-		if(Ausfallhaeufigkeit.TEST){
+		if(TestParameter.TEST_AUSFALL){
 			return PlPruefungLogischLVE.START_ZEIT + 144000l < System.currentTimeMillis();
 		}
 		return PlPruefungLogischLVE.START_ZEIT + Konstante.TAG_24_IN_MS < System.currentTimeMillis(); 
