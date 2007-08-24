@@ -31,6 +31,7 @@ import stauma.dav.clientside.Data;
 import stauma.dav.configuration.interfaces.AttributeGroup;
 import de.bsvrz.sys.funclib.bitctrl.dua.DUAKonstanten;
 import de.bsvrz.sys.funclib.bitctrl.dua.DUAUtensilien;
+import de.bsvrz.sys.funclib.bitctrl.dua.test.CSVImporter;
 import de.bsvrz.sys.funclib.bitctrl.konstante.Konstante;
 
 
@@ -158,7 +159,7 @@ extends CSVImporter{
 	private final Data setAttribut(final String attributName, long wert, Data datensatz){
 		Data data = datensatz;
 
-		if(attributName.startsWith("v") && wert >= 255) {
+		if(attributName.startsWith("v") && wert >= 255) { //$NON-NLS-1$
 			wert = -1;
 		}
 		
@@ -176,10 +177,16 @@ extends CSVImporter{
 		return datensatz;
 	}
 	
-	private final  Data setLZDleer(Data datensatz) {
-		String[] praefix = new String[] {"q","v","s","v85"};
-		String[] aName = new String[] {"Kfz","PkwÄ","KfzNk","PkwG","Pkw","Krad","Lfw","LkwÄ",
-									   "PkwA","Lkw","Bus","LkwK","LkwA","SattelKfz"};
+	
+	/**
+	 * 
+	 * @param datensatz
+	 * @return
+	 */
+	private final Data setLZDleer(Data datensatz) {
+		String[] praefix = new String[] {"q","v","s","v85"}; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
+		String[] aName = new String[] {"Kfz","PkwÄ","KfzNk","PkwG","Pkw","Krad","Lfw","LkwÄ", //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$ //$NON-NLS-6$ //$NON-NLS-7$ //$NON-NLS-8$
+									   "PkwA","Lkw","Bus","LkwK","LkwA","SattelKfz"}; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$ //$NON-NLS-6$
 
 		for(int i=0;i<praefix.length;i++) {
 			for(int j=0;j<aName.length;j++) {

@@ -12,6 +12,7 @@ import de.bsvrz.dua.plloglve.plloglve.typen.OptionenPlausibilitaetsPruefungLogis
 import de.bsvrz.dua.plloglve.util.para.ParaKZDLogImport;
 import de.bsvrz.dua.plloglve.util.para.ParaLZDLogImport;
 import de.bsvrz.dua.plloglve.util.pruef.PruefeDatenLogisch;
+import de.bsvrz.sys.funclib.bitctrl.app.Pause;
 import de.bsvrz.sys.funclib.bitctrl.dua.DUAKonstanten;
 import de.bsvrz.sys.funclib.bitctrl.konstante.Konstante;
 import sys.funclib.ArgumentList;
@@ -245,6 +246,7 @@ implements ClientSenderInterface {
 				
 		long aktZeit = System.currentTimeMillis();
 				
+		int i = 0;
 		while(csvDatenVorhanden) {
 			/*
 			 * Übergebe CSV-Offset und zu prüfenden Zeitstempel an Testerobjekt
@@ -274,6 +276,19 @@ implements ClientSenderInterface {
 			} else datenFS3Vorhanden = false;
 			
 			csvIndex++;
+			
+			
+			
+			/**
+			 * Test
+			 */
+			if(++i == 7){
+				Pause.warte(1000000000);
+			}
+			/**
+			 * Test
+			 */
+			
 			
 			/*
 			 * Wechselt die Reaktionsart bei Grenzwertüberschreitung des nächsten DS
