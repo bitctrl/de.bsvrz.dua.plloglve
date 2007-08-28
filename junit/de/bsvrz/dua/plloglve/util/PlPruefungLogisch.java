@@ -331,7 +331,7 @@ implements ClientSenderInterface {
 		/*
 		 * Initialisiert Testerobjekt für den SOLL-IST-Vergleich
 		 */
-		PruefeDatenLogisch fsPruefer = new PruefeDatenLogisch(this, dav, new SystemObject[]{FS1, FS2, FS3}, TEST_DATEN_VERZ + csvPruefDatei);
+		PruefeDatenLogisch fsPruefer = new PruefeDatenLogisch(this, dav, new SystemObject[]{FS1_LZ, FS2_LZ, FS3_LZ}, TEST_DATEN_VERZ + csvPruefDatei);
 		
 		//Aktueller Index (Zeile) in CSV Datei
 		int csvIndex = 0;
