@@ -12,7 +12,6 @@ import de.bsvrz.dua.plloglve.plloglve.typen.OptionenPlausibilitaetsPruefungLogis
 import de.bsvrz.dua.plloglve.util.para.ParaKZDLogImport;
 import de.bsvrz.dua.plloglve.util.para.ParaLZDLogImport;
 import de.bsvrz.dua.plloglve.util.pruef.PruefeDatenLogisch;
-import de.bsvrz.sys.funclib.bitctrl.app.Pause;
 import de.bsvrz.sys.funclib.bitctrl.dua.DUAKonstanten;
 import de.bsvrz.sys.funclib.bitctrl.konstante.Konstante;
 import sys.funclib.ArgumentList;
@@ -121,7 +120,7 @@ implements ClientSenderInterface {
 	 * @throws Exception
 	 */
 	public void pruefeKZDTLS() throws Exception {
-		this.csvPruefDatei = "PL-Pruef_LVE_TLS_Korr";
+		this.csvPruefDatei = "PL-Pruef_LVE_TLS";
 		this.tlsPruefung = true;
 
 		/*
@@ -233,6 +232,14 @@ implements ClientSenderInterface {
 		Data zeileFS3;
 		
 		/*
+		 * Ergbnisdatensätze
+		 */
+		ResultData resultat1 = null;
+		ResultData resultat2 = null;
+		ResultData resultat3 = null;
+		
+		
+		/*
 		 * Gibt an, ob fuer den entsprechenden Fahrstriefen Testdaten vorhanden sind
 		 */
 		boolean datenFS1Vorhanden = true;
@@ -246,7 +253,6 @@ implements ClientSenderInterface {
 				
 		long aktZeit = System.currentTimeMillis();
 				
-		int i = 0;
 		while(csvDatenVorhanden) {
 			/*
 			 * Übergebe CSV-Offset und zu prüfenden Zeitstempel an Testerobjekt
@@ -259,44 +265,19 @@ implements ClientSenderInterface {
 			 */
 			if((zeileFS1 = fsImpFS1.getNaechstenDatensatz(DD_KZD_SEND.getAttributeGroup())) != null) {
 				LOGGER.info("Sende Daten fuer FS1 (CSV-Zeile "+(csvIndex+2)+")");		
-				ResultData resultat1 = new ResultData(FS1, DD_KZD_SEND, aktZeit, zeileFS1);
-				this.dav.sendData(resultat1);
+				resultat1 = new ResultData(FS1, DD_KZD_SEND, aktZeit, zeileFS1);
 			} else datenFS1Vorhanden = false;
 
 			if((zeileFS2 = fsImpFS2.getNaechstenDatensatz(DD_KZD_SEND.getAttributeGroup())) != null) {
 				LOGGER.info("Sende Daten fuer FS2 (CSV-Zeile "+(csvIndex+2)+")");
-				ResultData resultat2 = new ResultData(FS2, DD_KZD_SEND, aktZeit, zeileFS2);
-				this.dav.sendData(resultat2);
+				resultat2 = new ResultData(FS2, DD_KZD_SEND, aktZeit, zeileFS2);
 			} else datenFS2Vorhanden = false;
 	
 			if((zeileFS3 = fsImpFS3.getNaechstenDatensatz(DD_KZD_SEND.getAttributeGroup())) != null) {
 				LOGGER.info("Sende Daten fuer FS3 (CSV-Zeile "+(csvIndex+2)+")");
-				ResultData resultat3 = new ResultData(FS3, DD_KZD_SEND, aktZeit, zeileFS3);
-				this.dav.sendData(resultat3);
+				resultat3 = new ResultData(FS3, DD_KZD_SEND, aktZeit, zeileFS3);
 			} else datenFS3Vorhanden = false;
-			
-			csvIndex++;
-			
-			
-			
-			/**
-			 * Test
-			 */
-			if(++i == 7){
-				Pause.warte(1000000000);
-			}
-			/**
-			 * Test
-			 */
-			
-			
-			/*
-			 * Wechselt die Reaktionsart bei Grenzwertüberschreitung des nächsten DS
-			 */
-			if(!tlsPruefung) wechselReaktionKZD(csvIndex);
-			
-			aktZeit = aktZeit + Konstante.MINUTE_IN_MS;
-			
+
 			/*
 			 * Prüft, ob noch Testdaten für die Fahrstreifen vorliegen
 			 */
@@ -305,8 +286,18 @@ implements ClientSenderInterface {
 				LOGGER.info("Keine Daten mehr vorhanedn. Beende Prüfung...");
 			} else {
 				LOGGER.info("Warte auf SOLL-IST-Vergleich (CSV-Zeile "+(csvIndex+1)+")...");
+				this.dav.sendData(new ResultData[]{resultat1,resultat2,resultat3});
 				doWait();  //Warte auf Ueberpruefung der FS1-FS3
 			}
+			
+			csvIndex++;
+			
+			/*
+			 * Wechselt die Reaktionsart bei Grenzwertüberschreitung des nächsten DS
+			 */
+			if(!tlsPruefung) wechselReaktionKZD(csvIndex);
+			
+			aktZeit = aktZeit + Konstante.MINUTE_IN_MS;
 		}		
 		
 		/*
@@ -353,6 +344,13 @@ implements ClientSenderInterface {
 		Data zeileFS3;
 		
 		/*
+		 * Ergbnisdatensätze
+		 */
+		ResultData resultat1 = null;
+		ResultData resultat2 = null;
+		ResultData resultat3 = null;
+		
+		/*
 		 * Gibt an, ob fuer den entsprechenden Fahrstriefen Testdaten vorhanden sind
 		 */
 		boolean datenFS1Vorhanden = true;
@@ -378,30 +376,18 @@ implements ClientSenderInterface {
 			 */
 			if((zeileFS1 = fsImpFS1.getNaechstenDatensatz(DD_LZD_SEND.getAttributeGroup())) != null) {
 				LOGGER.info("Sende Daten fuer FS1 (CSV-Zeile "+(csvIndex+2)+")");		
-				ResultData resultat1 = new ResultData(FS1_LZ, DD_LZD_SEND, aktZeit, zeileFS1);
-				this.dav.sendData(resultat1);
+				resultat1 = new ResultData(FS1_LZ, DD_LZD_SEND, aktZeit, zeileFS1);
 			} else datenFS1Vorhanden = false;
 
 			if((zeileFS2 = fsImpFS2.getNaechstenDatensatz(DD_LZD_SEND.getAttributeGroup())) != null) {
 				LOGGER.info("Sende Daten fuer FS2 (CSV-Zeile "+(csvIndex+2)+")");
-				ResultData resultat2 = new ResultData(FS2_LZ, DD_LZD_SEND, aktZeit, zeileFS2);
-				this.dav.sendData(resultat2);
+				 resultat2 = new ResultData(FS2_LZ, DD_LZD_SEND, aktZeit, zeileFS2);
 			} else datenFS2Vorhanden = false;
 	
 			if((zeileFS3 = fsImpFS3.getNaechstenDatensatz(DD_LZD_SEND.getAttributeGroup())) != null) {
 				LOGGER.info("Sende Daten fuer FS3 (CSV-Zeile "+(csvIndex+2)+")");
-				ResultData resultat3 = new ResultData(FS3_LZ, DD_LZD_SEND, aktZeit, zeileFS3);
-				this.dav.sendData(resultat3);
+				resultat3 = new ResultData(FS3_LZ, DD_LZD_SEND, aktZeit, zeileFS3);
 			} else datenFS3Vorhanden = false;
-			
-			csvIndex++;
-			
-			/*
-			 * Wechselt die Reaktionsart bei Grenzwertüberschreitung des nächsten DS
-			 */
-			wechselReaktionLZD(csvIndex);
-			
-			aktZeit = aktZeit + Konstante.MINUTE_IN_MS;
 			
 			/*
 			 * Prüft, ob noch Testdaten für die Fahrstreifen vorliegen
@@ -411,8 +397,18 @@ implements ClientSenderInterface {
 				LOGGER.info("Keine Daten mehr vorhanedn. Beende Prüfung...");
 			} else {
 				LOGGER.info("Warte auf SOLL-IST-Vergleich (CSV-Zeile "+(csvIndex+1)+")...");
+				this.dav.sendData(new ResultData[]{resultat1,resultat2,resultat3});
 				doWait();  //Warte auf Ueberpruefung der FS1-FS3
 			}
+			
+			csvIndex++;
+			
+			/*
+			 * Wechselt die Reaktionsart bei Grenzwertüberschreitung des nächsten DS
+			 */
+			wechselReaktionLZD(csvIndex);
+			
+			aktZeit = aktZeit + Konstante.MINUTE_IN_MS;
 		}
 		
 		/*
