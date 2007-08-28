@@ -34,9 +34,10 @@ import stauma.dav.clientside.ResultData;
 import stauma.dav.clientside.SenderRole;
 import stauma.dav.configuration.interfaces.AttributeGroup;
 import stauma.dav.configuration.interfaces.SystemObject;
+import de.bsvrz.dua.plloglve.plloglve.standard.AtgVerkehrsDatenLZIPlPruefLogisch;
 import de.bsvrz.dua.plloglve.plloglve.typen.OptionenPlausibilitaetsPruefungLogischVerkehr;
+import de.bsvrz.dua.plloglve.util.CSVImporter;
 import de.bsvrz.sys.funclib.bitctrl.dua.DUAUtensilien;
-import de.bsvrz.sys.funclib.bitctrl.dua.test.CSVImporter;
 import de.bsvrz.sys.funclib.bitctrl.konstante.Konstante;
 
 
@@ -148,25 +149,27 @@ implements ClientSenderInterface{
 		 * Parameter für Differentialkontrolle, Ausfallhäufigkeit und
 		 * Vertrauensbereich deaktivieren bzw. zurücksetzen
 		 */
-		DAV.subscribeSender(this, objekt,DD_LOGISCH, SenderRole.sender());
-		DAV.subscribeSender(this, objekt, DD_DIFF, SenderRole.sender());
-		DAV.subscribeSender(this, objekt, DD_AUSFALL, SenderRole.sender());
-		DAV.subscribeSender(this, objekt, DD_VERTRAUENSBEREICH, SenderRole.sender());
-		
-		deaktiviereParaStandard(OptionenPlausibilitaetsPruefungLogischVerkehr.SETZE_MAX);
-		deaktiviereParaStandard(OptionenPlausibilitaetsPruefungLogischVerkehr.SETZE_MIN);
-		deaktiviereParaStandard(OptionenPlausibilitaetsPruefungLogischVerkehr.SETZE_MIN_MAX);
-		deaktiviereParaStandard(OptionenPlausibilitaetsPruefungLogischVerkehr.NUR_PRUEFUNG);
-		deaktiviereParaStandard(OptionenPlausibilitaetsPruefungLogischVerkehr.KEINE_PRUEFUNG);
-		
-		deaktiviereParaDiff();
-		deaktiviereParaAusfall();
-		deaktiviereParaVertrauensbereich();
-		
-		DAV.unsubscribeSender(this, objekt, DD_LOGISCH);
-		DAV.unsubscribeSender(this, objekt, DD_DIFF);
-		DAV.unsubscribeSender(this, objekt, DD_AUSFALL);
-		DAV.unsubscribeSender(this, objekt, DD_VERTRAUENSBEREICH);
+		if(!DAV.getDataModel().getAttributeGroup(AtgVerkehrsDatenLZIPlPruefLogisch.getPid()).equals(this.getParameterAtg())) {
+			DAV.subscribeSender(this, objekt,DD_LOGISCH, SenderRole.sender());
+			DAV.subscribeSender(this, objekt, DD_DIFF, SenderRole.sender());
+			DAV.subscribeSender(this, objekt, DD_AUSFALL, SenderRole.sender());
+			DAV.subscribeSender(this, objekt, DD_VERTRAUENSBEREICH, SenderRole.sender());
+
+			deaktiviereParaStandard(OptionenPlausibilitaetsPruefungLogischVerkehr.SETZE_MAX);
+			deaktiviereParaStandard(OptionenPlausibilitaetsPruefungLogischVerkehr.SETZE_MIN);
+			deaktiviereParaStandard(OptionenPlausibilitaetsPruefungLogischVerkehr.SETZE_MIN_MAX);
+			deaktiviereParaStandard(OptionenPlausibilitaetsPruefungLogischVerkehr.NUR_PRUEFUNG);
+			deaktiviereParaStandard(OptionenPlausibilitaetsPruefungLogischVerkehr.KEINE_PRUEFUNG);
+
+			deaktiviereParaDiff();
+			deaktiviereParaAusfall();
+			deaktiviereParaVertrauensbereich();
+
+			DAV.unsubscribeSender(this, objekt, DD_LOGISCH);
+			DAV.unsubscribeSender(this, objekt, DD_DIFF);
+			DAV.unsubscribeSender(this, objekt, DD_AUSFALL);
+			DAV.unsubscribeSender(this, objekt, DD_VERTRAUENSBEREICH);
+		}
 	}
 	
 		
