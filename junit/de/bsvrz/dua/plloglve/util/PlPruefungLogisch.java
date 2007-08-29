@@ -462,7 +462,7 @@ implements ClientSenderInterface {
 				break;
 			}
 			case 40: {
-				importOptionenKZD(OptionenPlausibilitaetsPruefungLogischVerkehr.SETZE_MAX);
+				importOptionenKZD(OptionenPlausibilitaetsPruefungLogischVerkehr.SETZE_MIN_MAX);
 				break;
 			}
 			case 60: {
@@ -489,7 +489,7 @@ implements ClientSenderInterface {
 				break;
 			}
 			case 40: {
-				importOptionenLZD(OptionenPlausibilitaetsPruefungLogischVerkehr.SETZE_MAX);
+				importOptionenLZD(OptionenPlausibilitaetsPruefungLogischVerkehr.SETZE_MIN_MAX);
 				break;
 			}
 			case 60: {
