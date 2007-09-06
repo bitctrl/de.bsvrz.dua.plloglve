@@ -3,11 +3,10 @@ package de.bsvrz.dua.plloglve.test;
 import org.junit.Before;
 import org.junit.Test;
 
+import de.bsvrz.dav.daf.main.ClientDavInterface;
 import de.bsvrz.dua.plloglve.util.PlPruefungAusfall;
 import de.bsvrz.sys.funclib.bitctrl.dua.test.DAVTest;
-
-import stauma.dav.clientside.ClientDavInterface;
-import sys.funclib.ArgumentList;
+import de.bsvrz.sys.funclib.commandLineArgs.ArgumentList;
 
 /**
  * Automatisierter Test nach Prüfspezifikation für SWE Pl-Prüfung logisch LVE
