@@ -26,7 +26,7 @@
 
 package de.bsvrz.dua.plloglve.plloglve.vb;
 
-import stauma.dav.clientside.Data;
+import de.bsvrz.dav.daf.main.Data;
 import de.bsvrz.sys.funclib.bitctrl.dua.AllgemeinerDatenContainer;
 
 /**

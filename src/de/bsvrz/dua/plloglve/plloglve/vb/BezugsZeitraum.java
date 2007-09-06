@@ -31,15 +31,15 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.TreeSet;
 
-import stauma.dav.clientside.ResultData;
-import sys.funclib.operatingMessage.MessageGrade;
-import sys.funclib.operatingMessage.MessageState;
-import sys.funclib.operatingMessage.MessageType;
+import de.bsvrz.dav.daf.main.ResultData;
 import de.bsvrz.dua.plloglve.plloglve.PlPruefungLogischLVE;
 import de.bsvrz.dua.plloglve.plloglve.TestParameter;
 import de.bsvrz.sys.funclib.bitctrl.dua.DUAKonstanten;
 import de.bsvrz.sys.funclib.bitctrl.dua.schnittstellen.IVerwaltung;
 import de.bsvrz.sys.funclib.bitctrl.konstante.Konstante;
+import de.bsvrz.sys.funclib.operatingMessage.MessageGrade;
+import de.bsvrz.sys.funclib.operatingMessage.MessageState;
+import de.bsvrz.sys.funclib.operatingMessage.MessageType;
 
 /**
  * Speichert für einen Bezugszeitraum und ein finales

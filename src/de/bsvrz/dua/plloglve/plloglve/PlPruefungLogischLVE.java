@@ -26,7 +26,7 @@
 
 package de.bsvrz.dua.plloglve.plloglve;
 
-import stauma.dav.clientside.ResultData;
+import de.bsvrz.dav.daf.main.ResultData;
 import de.bsvrz.dua.plloglve.plloglve.ausfall.Ausfallhaeufigkeit;
 import de.bsvrz.dua.plloglve.plloglve.diff.DifferenzialKontrolle;
 import de.bsvrz.dua.plloglve.plloglve.standard.PlLogischLVEStandard;

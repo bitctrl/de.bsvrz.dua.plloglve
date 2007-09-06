@@ -26,7 +26,7 @@
 
 package de.bsvrz.dua.plloglve.plloglve.standard;
 
-import stauma.dav.clientside.Data;
+import de.bsvrz.dav.daf.main.Data;
 import de.bsvrz.dua.plloglve.plloglve.typen.OptionenPlausibilitaetsPruefungLogischVerkehr;
 
 /**

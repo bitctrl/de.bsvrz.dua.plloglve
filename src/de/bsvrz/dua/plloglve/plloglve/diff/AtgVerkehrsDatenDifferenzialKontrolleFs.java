@@ -26,8 +26,8 @@
 
 package de.bsvrz.dua.plloglve.plloglve.diff;
 
+import de.bsvrz.dav.daf.main.Data;
 import de.bsvrz.sys.funclib.bitctrl.dua.AllgemeinerDatenContainer;
-import stauma.dav.clientside.Data;
 
 /**
  * Repräsentiert aktuelle Daten der DAV-ATG

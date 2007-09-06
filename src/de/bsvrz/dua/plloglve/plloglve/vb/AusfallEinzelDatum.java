@@ -28,7 +28,7 @@ package de.bsvrz.dua.plloglve.plloglve.vb;
 
 import java.util.Date;
 
-import stauma.dav.clientside.ResultData;
+import de.bsvrz.dav.daf.main.ResultData;
 import de.bsvrz.dua.plloglve.plloglve.AbstraktDAVZeitEinzelDatum;
 import de.bsvrz.dua.plloglve.plloglve.TestParameter;
 import de.bsvrz.sys.funclib.bitctrl.dua.DUAKonstanten;

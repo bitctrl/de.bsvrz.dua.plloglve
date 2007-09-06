@@ -26,16 +26,15 @@
 
 package de.bsvrz.dua.plloglve.plloglve.standard;
 
-import stauma.dav.clientside.ClientDavInterface;
-import stauma.dav.clientside.ClientReceiverInterface;
-import stauma.dav.clientside.Data;
-import stauma.dav.clientside.DataDescription;
-import stauma.dav.clientside.ReceiveOptions;
-import stauma.dav.clientside.ReceiverRole;
-import stauma.dav.clientside.ResultData;
-import stauma.dav.configuration.interfaces.AttributeGroup;
-import stauma.dav.configuration.interfaces.SystemObject;
-import sys.funclib.debug.Debug;
+import de.bsvrz.dav.daf.main.ClientDavInterface;
+import de.bsvrz.dav.daf.main.ClientReceiverInterface;
+import de.bsvrz.dav.daf.main.Data;
+import de.bsvrz.dav.daf.main.DataDescription;
+import de.bsvrz.dav.daf.main.ReceiveOptions;
+import de.bsvrz.dav.daf.main.ReceiverRole;
+import de.bsvrz.dav.daf.main.ResultData;
+import de.bsvrz.dav.daf.main.config.AttributeGroup;
+import de.bsvrz.dav.daf.main.config.SystemObject;
 import de.bsvrz.dua.guete.GWert;
 import de.bsvrz.dua.guete.GueteException;
 import de.bsvrz.dua.guete.GueteVerfahren;
@@ -49,6 +48,7 @@ import de.bsvrz.sys.funclib.bitctrl.dua.schnittstellen.IVerwaltungMitGuete;
 import de.bsvrz.sys.funclib.bitctrl.modell.AbstractSystemObjekt;
 import de.bsvrz.sys.funclib.bitctrl.modell.SystemObjekt;
 import de.bsvrz.sys.funclib.bitctrl.modell.SystemObjektTyp;
+import de.bsvrz.sys.funclib.debug.Debug;
 
 /**
  * Abstrakte Klasse zum Ablegen von Informationen der Standardplausibilisierung LVE
@@ -164,8 +164,8 @@ implements ClientReceiverInterface{
 					qPkw = qKfz - qLkw;
 
 					try {
-						GWert qKfzG = new GWert(data.getItem("qKfz").getItem("Güte")); //$NON-NLS-1$ //$NON-NLS-2$
-						GWert qLkwG = new GWert(data.getItem("qLkw").getItem("Güte"));  //$NON-NLS-1$ //$NON-NLS-2$
+						GWert qKfzG = new GWert(data, "qKfz"); //$NON-NLS-1$
+						GWert qLkwG = new GWert(data, "qLkw");  //$NON-NLS-1$
 						qPkwGuete = GueteVerfahren.differenz(qKfzG, qLkwG);
 					} catch (GueteException e) {
 						e.printStackTrace();
@@ -201,11 +201,11 @@ implements ClientReceiverInterface{
 			vKfz = (long)(((double)(qPkwDummy * vPkwDummy + qLkwDummy * vLkwDummy) / (double)qKfz) + 0.5);
 
 			try {
-				GWert qPkwG = new GWert(data.getItem("qPkw").getItem("Güte")); //$NON-NLS-1$ //$NON-NLS-2$
-				GWert vPkwG = new GWert(data.getItem("vPkw").getItem("Güte")); //$NON-NLS-1$ //$NON-NLS-2$
-				GWert qLkwG = new GWert(data.getItem("qLkw").getItem("Güte")); //$NON-NLS-1$ //$NON-NLS-2$
-				GWert vLkwG = new GWert(data.getItem("vLkw").getItem("Güte")); //$NON-NLS-1$ //$NON-NLS-2$
-				GWert qKfzG = new GWert(data.getItem("qKfz").getItem("Güte")); //$NON-NLS-1$ //$NON-NLS-2$
+				GWert qPkwG = new GWert(data, "qPkw"); //$NON-NLS-1$
+				GWert vPkwG = new GWert(data, "vPkw"); //$NON-NLS-1$
+				GWert qLkwG = new GWert(data, "qLkw"); //$NON-NLS-1$
+				GWert vLkwG = new GWert(data, "vLkw"); //$NON-NLS-1$
+				GWert qKfzG = new GWert(data, "qKfz"); //$NON-NLS-1$
 				
 				vKfzGuete = GueteVerfahren.quotient(
 								GueteVerfahren.summe(

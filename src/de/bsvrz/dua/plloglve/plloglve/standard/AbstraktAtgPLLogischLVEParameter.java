@@ -26,10 +26,10 @@
 
 package de.bsvrz.dua.plloglve.plloglve.standard;
 
-import stauma.dav.clientside.ResultData;
-import sys.funclib.debug.Debug;
+import de.bsvrz.dav.daf.main.ResultData;
 import de.bsvrz.dua.plloglve.plloglve.typen.OptionenPlausibilitaetsPruefungLogischVerkehr;
 import de.bsvrz.sys.funclib.bitctrl.dua.AllgemeinerDatenContainer;
+import de.bsvrz.sys.funclib.debug.Debug;
 
 /**
  * Abstrakte Klasse die alle Parameter halten kann, die innerhalb der 
