@@ -1,20 +1,20 @@
 package de.bsvrz.dua.plloglve.util;
 
-import stauma.dav.clientside.ClientDavInterface;
-import stauma.dav.clientside.ClientSenderInterface;
-import stauma.dav.clientside.Data;
-import stauma.dav.clientside.DataDescription;
-import stauma.dav.clientside.ResultData;
-import stauma.dav.clientside.SenderRole;
-import stauma.dav.configuration.interfaces.SystemObject;
-import sys.funclib.debug.Debug;
+import de.bsvrz.dav.daf.main.ClientDavInterface;
+import de.bsvrz.dav.daf.main.ClientSenderInterface;
+import de.bsvrz.dav.daf.main.Data;
+import de.bsvrz.dav.daf.main.DataDescription;
+import de.bsvrz.dav.daf.main.ResultData;
+import de.bsvrz.dav.daf.main.SenderRole;
+import de.bsvrz.dav.daf.main.config.SystemObject;
 import de.bsvrz.dua.plloglve.plloglve.typen.OptionenPlausibilitaetsPruefungLogischVerkehr;
 import de.bsvrz.dua.plloglve.util.para.ParaKZDLogImport;
 import de.bsvrz.dua.plloglve.util.para.ParaLZDLogImport;
 import de.bsvrz.dua.plloglve.util.pruef.PruefeDatenLogisch;
 import de.bsvrz.sys.funclib.bitctrl.dua.DUAKonstanten;
 import de.bsvrz.sys.funclib.bitctrl.konstante.Konstante;
-import sys.funclib.ArgumentList;
+import de.bsvrz.sys.funclib.commandLineArgs.ArgumentList;
+import de.bsvrz.sys.funclib.debug.Debug;
 
 public class PlPruefungLogisch
 implements ClientSenderInterface {
