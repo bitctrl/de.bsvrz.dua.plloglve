@@ -50,7 +50,12 @@ extends AbstraktParameterImport{
 	
 	
 	/**
-	 * {@inheritDoc}
+	 * Standardkonstruktor
+	 * 
+	 * @param dav Datenverteier-Verbindung
+	 * @param objekt das Systemobjekt, für das die Parameter gesetzt werden sollen
+	 * @param csvQuelle Quelle der Daten (CSV-Datei)
+	 * @throws Exception falls dieses Objekt nicht vollständig initialisiert werden konnte
 	 */
 	public ParaLZDLogImport(ClientDavInterface dav, SystemObject objekt, String csvQuelle)
 	throws Exception {

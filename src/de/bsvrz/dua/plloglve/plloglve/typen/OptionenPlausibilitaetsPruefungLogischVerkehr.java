@@ -87,18 +87,25 @@ extends AbstractDavZustand{
 		
 	
 	/**
-	 * {@inheritDoc}
+	 * Standardkonstruktor
+	 * 
+	 * @param code
+	 *            der Code
+	 * @param name
+	 *            die Bezeichnung
 	 */
 	private OptionenPlausibilitaetsPruefungLogischVerkehr(String name, int code){
 		super(code, name);
 		WERTE_BEREICH.put(code, this);
 	}
 	
+	
 	/**
 	 * Erfragt den Wert dieses DAV-Enumerationstypen 
 	 * mit dem übergebenen Code
 	 *
-	 * @param der Code des Enumerations-Wertes
+	 * @param code der Kode des Zustands
+	 * @return der Code des Enumerations-Wertes
 	 */
 	public static final OptionenPlausibilitaetsPruefungLogischVerkehr getZustand(int code){
 		return WERTE_BEREICH.get(code);

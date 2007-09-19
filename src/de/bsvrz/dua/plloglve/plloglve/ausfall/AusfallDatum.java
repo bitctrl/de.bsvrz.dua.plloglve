@@ -58,7 +58,7 @@ extends AbstraktDAVZeitEinzelDatum{
 	/**
 	 * Standardkonstruktor
 	 * 
-	 * @param datum ein KZD-Datum
+	 * @param resultat ein KZD-Datum
 	 */
 	private AusfallDatum(ResultData resultat){
 		Data data = resultat.getData();

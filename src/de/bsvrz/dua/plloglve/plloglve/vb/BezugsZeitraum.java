@@ -77,7 +77,7 @@ public class BezugsZeitraum {
 	/**
 	 * Standardkonstruktor
 	 * 
-	 * @param Verbindung zum Verwaltungsmodul
+	 * @param verwaltung Verbindung zum Verwaltungsmodul
 	 * @param name name Name des finalen DAV-Attributs, für den Werte in diesem
 	 * Bezugszeitraum gespeichert werden sollen (z.B. <code>qKfz</code>)
 	 */

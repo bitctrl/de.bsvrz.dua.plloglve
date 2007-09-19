@@ -43,7 +43,10 @@ extends KzdPLFahrStreifen{
 	
 	
 	/**
-	 * {@inheritDoc}
+	 * Standartdkonstruktor 
+	 * 
+	 * @param verwaltung Verbindung zum Verwaltungsmodul
+	 * @param obj das mit dem Fahrstreifen assoziierte Systemobjekt
 	 */
 	protected LzdPLFahrStreifen(final IVerwaltungMitGuete verwaltung, final SystemObject obj){
 		super(verwaltung, obj);
@@ -142,8 +145,8 @@ extends KzdPLFahrStreifen{
 	
 
 
-	/* (Kein Javadoc)
-	 * @see de.bsvrz.dua.plloglve.plloglve.standard.KzdPLFahrStreifen#ueberpruefe(stauma.dav.clientside.Data, stauma.dav.clientside.ResultData)
+	/**
+	 * {@inheritDoc}
 	 */
 	@Override
 	protected void ueberpruefe(Data data, ResultData resultat) {

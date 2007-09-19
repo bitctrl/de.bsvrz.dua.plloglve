@@ -11,7 +11,7 @@ import de.bsvrz.dav.daf.main.impl.InvalidArgumentException;
 import de.bsvrz.dua.plloglve.util.PlPruefungInterface;
 import de.bsvrz.sys.funclib.debug.Debug;
 
-/*
+/**
  * KZD Listener
  * Liest Ergebnis-CSV-Datei
  * Wartet auf gesendete und gepruefte Daten und gibt diese an Vergleicher-Klasse weiter
@@ -59,11 +59,13 @@ implements ClientReceiverInterface {
 	 */
 	public static DataDescription DD_MELD_EMPF = null;
 	
+	
 	/**
-	 * Filtert Betriebsmeldungen nach einem bestimmten Kriterium 
-	 * @param caller Die aufrufende Klasse
-	 * @param dav Datenverteilerverbindung
-	 * @param fs Das zu prüfende Fahrstreifenobjekt
+	 * Standardkonstruktor
+	 * @param caller
+	 * @param dav
+	 * @param filter
+	 * @param erfAnz
 	 * @throws Exception
 	 */
 	public FilterMeldung(PlPruefungInterface caller, ClientDavInterface dav, String filter, int erfAnz)
@@ -89,7 +91,8 @@ implements ClientReceiverInterface {
 				DD_MELD_EMPF, ReceiveOptions.normal(), ReceiverRole.receiver());
 	}
 	
-	/** {@inheritDoc}
+	/**
+	 * {@inheritDoc}
 	 * 
 	 * @param results Ergebnisdatensätze vom DaV
 	 * @throws InvalidArgumentException 

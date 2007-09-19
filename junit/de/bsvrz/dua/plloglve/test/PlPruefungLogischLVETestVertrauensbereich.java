@@ -51,7 +51,7 @@ public class PlPruefungLogischLVETestVertrauensbereich {
 	private ArgumentList alLogger = new ArgumentList(argumente);
 	
 	/**
-	 * {@inheritDoc}
+	 * Vorbereitungen (DAV-Anmeldung)
 	 */
 	@Before
 	public void setUp() throws Exception {

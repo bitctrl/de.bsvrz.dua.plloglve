@@ -82,6 +82,7 @@ extends AbstraktVerwaltungsAdapterMitGuete{
 	@Override
 	protected void initialisiere()
 	throws DUAInitialisierungsException {
+		super.initialisiere();
 		
 		String infoStr = Konstante.LEERSTRING;
 		Collection<SystemObject> plLogLveObjekte = DUAUtensilien.getBasisInstanzen(
@@ -131,7 +132,7 @@ extends AbstraktVerwaltungsAdapterMitGuete{
 	/**
 	 * Startet diese Applikation
 	 * 
-	 * @param args Argumente der Kommandozeile
+	 * @param argumente Argumente der Kommandozeile
 	 */
 	public static void main(String argumente[]){
         Thread.setDefaultUncaughtExceptionHandler(new Thread.

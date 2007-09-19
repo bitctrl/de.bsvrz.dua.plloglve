@@ -49,7 +49,12 @@ extends AbstraktParameterImport{
 	
 	
 	/**
-	 * {@inheritDoc}
+	 * Standardkonstruktor 
+	 * 
+	 * @param dav Verbindung zum Datenverteiler
+	 * @param objekt das Objekt, dessen Parameter importiert werden sollen
+	 * @param csvQuelle die CSV-Datei in der die Parameter stehen
+	 * @throws Exception wenn die Datei nicht geöffnet werden konnte
 	 */
 	public ParaKZDLogImport(ClientDavInterface dav, SystemObject objekt, String csvQuelle)
 	throws Exception {

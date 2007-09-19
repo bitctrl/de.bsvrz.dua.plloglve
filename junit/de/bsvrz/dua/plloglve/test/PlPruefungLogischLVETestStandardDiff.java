@@ -52,8 +52,8 @@ public class PlPruefungLogischLVETestStandardDiff {
 	private ArgumentList alLogger = new ArgumentList(argumente);
 	
 	/**
-	 * {@inheritDoc}
-	 */
+	 * Vorbereitungen (DAV-Anmeldung)
+	 **/
 	@Before
 	public void setUp() throws Exception {
 		this.dav = DAVTest.getDav(CON_DATA);	
