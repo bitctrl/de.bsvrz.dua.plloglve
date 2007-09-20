@@ -118,8 +118,12 @@ extends AbstraktVerwaltungsAdapterMitGuete{
 			
 		this.verbindung.subscribeReceiver(this, this.objekte, anmeldungsBeschreibungKZD,
 					ReceiveOptions.normal(), ReceiverRole.receiver());
-		this.verbindung.subscribeReceiver(this, this.objekte, anmeldungsBeschreibungLZD,
-					ReceiveOptions.delayed(), ReceiverRole.receiver());
+		for(SystemObject fsObj:this.objekte){
+			if(fsObj.isOfType(DUAKonstanten.TYP_FAHRSTREIFEN_LZ)){
+				this.verbindung.subscribeReceiver(this, fsObj, anmeldungsBeschreibungLZD,
+					ReceiveOptions.delayed(), ReceiverRole.receiver());			
+			}
+		}
 	}
 	
 	/**

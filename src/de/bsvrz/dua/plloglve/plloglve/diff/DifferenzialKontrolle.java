@@ -93,7 +93,7 @@ extends AbstraktBearbeitungsKnotenAdapter{
 						
 						if(data != null){
 							resultatNeu = new ResultData(resultat.getObject(), resultat.getDataDescription(),
-									resultat.getDataTime(), data);							
+									resultat.getDataTime(), data, resultat.isDelayedData());							
 						}
 						
 						weiterzuleitendeResultate.add(resultatNeu);

@@ -89,7 +89,15 @@ extends AbstraktBearbeitungsKnotenAdapter{
 
 
 	/**
-	 * {@inheritDoc}
+	 * {@inheritDoc}<br>
+	 * 
+	 * Es wird fuer alle Fahrstreifen (Systemobjekte vom Typ <code>typ.fahrStreifen</code>, also
+	 * insbesondere auch Objekte vom Typ <code>typ.fahrStreifenLangZeit</code>) eine Instanz der Klasse
+	 * <code>KzdPLFahrStreifen</code> und fuer alle Langzeitfahrstreifen (nur Systemobjekte vom Typ
+	 * <code>typ.fahrStreifenLangZeit</code>) eine Instanz der Klasse <code>LzdPLFahrStreifen</code>
+	 * <br><br>
+	 * Objekte der Klasse <code>LzdPLFahrStreifen</code> plausibilisieren Langzeitdaten
+	 * Objekte der Klasse <code>KzdPLFahrStreifen</code> plausibilisieren Kurzzeitdaten
 	 */
 	@Override
 	public void initialisiere(IVerwaltung dieVerwaltung)
@@ -106,7 +114,7 @@ extends AbstraktBearbeitungsKnotenAdapter{
 			throw new RuntimeException("Dieses Modul benötigt Informationen" + //$NON-NLS-1$
 					" zum Guetefaktor der angeschlossenen SWE"); //$NON-NLS-1$
 		}
-			
+		
 		for(SystemObject obj:dieVerwaltung.getSystemObjekte()){
 			if(obj.getType().getPid().equals(DUAKonstanten.TYP_FAHRSTREIFEN_LZ)){
 				lzdFahrStreifen.put(obj, new LzdPLFahrStreifen(verwaltungMitGuete, obj));
@@ -128,9 +136,15 @@ extends AbstraktBearbeitungsKnotenAdapter{
 					AbstraktPLFahrStreifen fahrStreifen = null;
 					
 					if(resultat.getDataDescription().getAttributeGroup().getId() == ATG_KZD_ID){
+						/**
+						 * Es wurden KZD empfangen
+						 */
 						fahrStreifen = this.kzdFahrStreifen.get(resultat.getObject());	
 					}else
 					if(resultat.getDataDescription().getAttributeGroup().getId() == ATG_LZD_ID){
+						/**
+						 * Es wurden LZD empfangen
+						 */
 						fahrStreifen = this.lzdFahrStreifen.get(resultat.getObject());	
 					}
 					
@@ -147,7 +161,7 @@ extends AbstraktBearbeitungsKnotenAdapter{
 								resultat.getObject(),
 								resultat.getDataDescription(),
 								resultat.getDataTime(),
-								pData);
+								pData, resultat.isDelayedData());
 						weiterzuleitendeResultate.add(ersetztesResultat);
 					}else{
 						weiterzuleitendeResultate.add(resultat);						

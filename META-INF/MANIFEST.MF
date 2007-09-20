@@ -15,6 +15,8 @@ Export-Package: de.bsvrz.dua.plloglve.plloglve,
  de.bsvrz.dua.plloglve.plloglve.standard,
  de.bsvrz.dua.plloglve.plloglve.typen,
  de.bsvrz.dua.plloglve.plloglve.vb,
+ de.bsvrz.dua.plloglve.test,
  de.bsvrz.dua.plloglve.util,
  de.bsvrz.dua.plloglve.util.para,
+ de.bsvrz.dua.plloglve.util.pruef,
  de.bsvrz.dua.plloglve.vew

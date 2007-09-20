@@ -54,11 +54,6 @@ import de.bsvrz.sys.funclib.debug.Debug;
  */
 public class Vertrauensbereich
 extends AbstraktBearbeitungsKnotenAdapter{
-
-//	/**
-//	 * Läuft die Applikation im Testbetrieb, dann ist ein Tag genau 144s lang!
-//	 */
-//	protected static final boolean TEST = false;
 	
 	/**
 	 * Debug-Logger
@@ -134,10 +129,10 @@ extends AbstraktBearbeitungsKnotenAdapter{
 					ResultData publikationsDatum = new ResultData(resultat.getObject(),
 																	new DataDescription(resultat.getDataDescription().getAttributeGroup(), 
 																	standardAspekte.getStandardAspekt(resultat), (short)0),
-																	resultat.getDataTime(), datum);
+																	resultat.getDataTime(), datum, resultat.isDelayedData());
 					ResultData weiterzuleitendesDatum = new ResultData(resultat.getObject(),
 																	resultat.getDataDescription(),
-																	resultat.getDataTime(), datum);
+																	resultat.getDataTime(), datum, resultat.isDelayedData());
 
 					if(this.publizieren){
 						boolean sende = true;

@@ -52,8 +52,8 @@ import de.bsvrz.sys.funclib.debug.Debug;
 
 /**
  * Abstrakte Klasse zum Ablegen von Informationen der Standardplausibilisierung LVE
- * für LZD und KZD. Macht nichts weiter, als sich auf die Grenzwertparameter anzumeldnen
- * und einige Funktionen zur Plausibilisierung zur Verfügung zu stellen
+ * für LZD und KZD. Diese Klasse macht nichts weiter, als sich auf die Grenzwertparameter
+ * anzumelden und einige Funktionen zur Plausibilisierung zur Verfügung zu stellen
  * 
  * @author BitCtrl Systems GmbH, Thierfelder
  *
@@ -96,12 +96,11 @@ implements ClientReceiverInterface{
 			VERWALTUNG = verwaltung;
 		}
 		
-		DataDescription logParaDesc = new DataDescription(
-				this.getPlausibilisierungsParameterAtg(VERWALTUNG.getVerbindung()),
-				VERWALTUNG.getVerbindung().getDataModel().getAspect(Konstanten.ASP_PARAMETER_SOLL),
-				(short)0);
-
-		VERWALTUNG.getVerbindung().subscribeReceiver(this, obj, logParaDesc,
+		VERWALTUNG.getVerbindung().subscribeReceiver(this, obj,
+				new DataDescription(
+						this.getPlausibilisierungsParameterAtg(VERWALTUNG.getVerbindung()),
+						VERWALTUNG.getVerbindung().getDataModel().getAspect(Konstanten.ASP_PARAMETER_SOLL),
+						(short)0),
 				ReceiveOptions.normal(), ReceiverRole.receiver());
 	}
 	
@@ -367,13 +366,5 @@ implements ClientReceiverInterface{
 	 * @param resultat der Original-Datensatz
 	 */
 	protected abstract void ueberpruefe(Data data, final ResultData resultat);
-	
-//	
-//	/**
-//	 * Testet das übergebene Datum darauf, ob es sich im parametrierten Intervall befindet
-//	 * 
-//	 * @param data ein FG1-Datum (dieses kann verändert werden)
-//	 */
-//	protected abstract void grenzWertTests(Data data);
 
 }
