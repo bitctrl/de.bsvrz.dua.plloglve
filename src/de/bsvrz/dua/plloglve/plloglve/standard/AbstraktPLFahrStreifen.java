@@ -45,6 +45,7 @@ import de.bsvrz.sys.funclib.bitctrl.dua.DUAKonstanten;
 import de.bsvrz.sys.funclib.bitctrl.dua.DUAUtensilien;
 import de.bsvrz.sys.funclib.bitctrl.dua.GanzZahl;
 import de.bsvrz.sys.funclib.bitctrl.dua.schnittstellen.IVerwaltungMitGuete;
+import de.bsvrz.sys.funclib.bitctrl.konstante.Konstante;
 import de.bsvrz.sys.funclib.bitctrl.modell.AbstractSystemObjekt;
 import de.bsvrz.sys.funclib.bitctrl.modell.SystemObjekt;
 import de.bsvrz.sys.funclib.bitctrl.modell.SystemObjektTyp;
@@ -77,6 +78,11 @@ implements ClientReceiverInterface{
 	 */
 	protected static IVerwaltungMitGuete VERWALTUNG = null;
 
+	/**
+	 * letztes zur Plausibilisierung übergebenes Datum
+	 */
+	protected ResultData letztesKZDatum = null;
+	
 	/**
 	 * Schnittstelle zu den Parametern der Grenzwertprüfung 
 	 */
@@ -319,6 +325,37 @@ implements ClientReceiverInterface{
 		
 		return davDatum;
 	}
+	
+	
+	/**
+	 * Plausibilisiert ein übergebenes Datum
+	 * 
+	 * @param resultat ein Originaldatum
+	 * @return das veränderte Datum oder <code>null</code>, wenn keine Veränderungen
+	 * vorgenommen werden mussten
+	 */
+	protected Data plausibilisiere(final ResultData resultat){
+		Data copy = null;
+		
+		if(resultat.getData() != null){
+			try{
+				copy = resultat.getData().createModifiableCopy();
+			}catch(IllegalStateException e){
+				LOGGER.error(Konstante.LEERSTRING, e);
+			}
+			
+			if(copy != null){
+				this.berechneQPkwUndVKfz(copy);
+				this.ueberpruefe(copy, resultat);
+			}else{
+				LOGGER.warning("Es konnte keine Kopie von Datensatz erzeugt werden:\n" //$NON-NLS-1$
+						+ resultat);
+			}
+		}
+		this.letztesKZDatum = resultat;
+
+		return copy;
+	}
 
 	
 	/**
@@ -347,17 +384,7 @@ implements ClientReceiverInterface{
 	 * @return die Parameter-Attributgruppe
 	 */
 	protected abstract AttributeGroup getPlausibilisierungsParameterAtg(final ClientDavInterface dav);
-
-
-	/**
-	 * Plausibilisiert ein übergebenes Datum
-	 * 
-	 * @param resultat ein Originaldatum
-	 * @return das veränderte Datum oder <code>null</code>, wenn keine Veränderungen
-	 * vorgenommen werden mussten
-	 */
-	protected abstract Data plausibilisiere(final ResultData resultat);
-
+	
 	
 	/**
 	 * Führt eine

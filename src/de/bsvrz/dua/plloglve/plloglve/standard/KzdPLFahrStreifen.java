@@ -33,20 +33,17 @@ import de.bsvrz.dav.daf.main.config.AttributeGroup;
 import de.bsvrz.dav.daf.main.config.SystemObject;
 import de.bsvrz.sys.funclib.bitctrl.dua.DUAKonstanten;
 import de.bsvrz.sys.funclib.bitctrl.dua.schnittstellen.IVerwaltungMitGuete;
-import de.bsvrz.sys.funclib.bitctrl.konstante.Konstante;
 
 /**
+ * Klasse zum Durchführen der speziellen Standardplausibilisierung LVE
+ * für LZD. Diese Klasse macht nichts weiter, als sich auf die Grenzwertparameter
+ * anzumelden und einige Funktionen zur Plausibilisierung von LZD zur Verfügung zu stellen
  * 
  * @author BitCtrl Systems GmbH, Thierfelder
  *
  */
 public class KzdPLFahrStreifen
 extends AbstraktPLFahrStreifen{
-		
-	/**
-	 * letztes zur Plausibilisierung übergebenes Datum
-	 */
-	private ResultData letztesKZDatum = null;
 	
 
 	/**
@@ -57,34 +54,6 @@ extends AbstraktPLFahrStreifen{
 	 */
 	public KzdPLFahrStreifen(final IVerwaltungMitGuete verwaltung, final SystemObject obj){
 		super(verwaltung, obj);				
-	}
-	
-
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	protected Data plausibilisiere(final ResultData resultat){
-		Data copy = null;
-		
-		if(resultat.getData() != null){
-			try{
-				copy = resultat.getData().createModifiableCopy();
-			}catch(IllegalStateException e){
-				LOGGER.error(Konstante.LEERSTRING, e);
-			}
-			
-			if(copy != null){
-				this.berechneQPkwUndVKfz(copy);
-				this.ueberpruefe(copy, resultat);
-			}else{
-				LOGGER.warning("Es konnte keine Kopie von Datensatz erzeugt werden:\n" //$NON-NLS-1$
-						+ resultat);
-			}
-		}
-		this.letztesKZDatum = resultat;
-
-		return copy;
 	}
 	
 
