@@ -74,186 +74,148 @@ extends AbstraktPLFahrStreifen{
 		long T = data.getTimeValue("T").getMillis(); //$NON-NLS-1$
 		long b = data.getItem("b").getUnscaledValue("Wert").longValue(); //$NON-NLS-1$ //$NON-NLS-2$
 
-		if(qLkw == 31584){
-			System.out.println();
-		}
-		
 		long vgKfzLetztesIntervall = -4;
 		if(this.letztesKZDatum != null){
 			if(this.letztesKZDatum.getData() != null){
 				if(T == resultat.getDataTime() - this.letztesKZDatum.getDataTime()){
 					vgKfzLetztesIntervall = this.letztesKZDatum.getData().getItem("vgKfz"). //$NON-NLS-1$
-					getUnscaledValue("Wert").longValue(); //$NON-NLS-1$
+												getUnscaledValue("Wert").longValue(); //$NON-NLS-1$
 				}
 			}
 		}
 
 		/**
-		 * Regel Nr.1 (aus SE-02.00.00.00.00-AFo-4.0, S.94)
+		 * Regel Nr.1 (aus SE-02.00.00.00.00-AFo-5.2, S.95)
 		 */
 		if(qKfz == 0){
 			if(!(qLkw == 0 && qPkw == 0)){
-				data.getItem("qKfz").getUnscaledValue("Wert").set(DUAKonstanten.FEHLERHAFT); //$NON-NLS-1$ //$NON-NLS-2$
-				data.getItem("qLkw").getUnscaledValue("Wert").set(DUAKonstanten.FEHLERHAFT); //$NON-NLS-1$ //$NON-NLS-2$
-				data.getItem("qPkw").getUnscaledValue("Wert").set(DUAKonstanten.FEHLERHAFT); //$NON-NLS-1$ //$NON-NLS-2$
-	
-				data.getItem("qKfz").getItem("Status").getItem("MessWertErsetzung").   //$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$
-				getUnscaledValue("Implausibel").set(DUAKonstanten.JA); //$NON-NLS-1$
-				data.getItem("qLkw").getItem("Status").getItem("MessWertErsetzung").   //$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$
-				getUnscaledValue("Implausibel").set(DUAKonstanten.JA); //$NON-NLS-1$
-				data.getItem("qPkw").getItem("Status").getItem("MessWertErsetzung").   //$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$
-				getUnscaledValue("Implausibel").set(DUAKonstanten.JA); //$NON-NLS-1$
+				this.setQUndVImplausibel(data);
+				return;
 			}
 		}
 
-		if(data.getUnscaledValue("ArtMittelwertbildung").longValue() == 1){ //$NON-NLS-1$
+		if(data.getUnscaledValue("ArtMittelwertbildung").longValue() == DUAKonstanten.MWB_ARITHMETISCH){ //$NON-NLS-1$
 
 			/**
-			 * Regel Nr.2 (aus SE-02.00.00.00.00-AFo-4.0, S.94)
+			 * Regel Nr.2 (aus SE-02.00.00.00.00-AFo-5.2, S.95)
 			 */
-			if(qKfz - qLkw == 0){
-				if(!(qPkw == 0 && vPkw == DUAKonstanten.NICHT_ERMITTELBAR)){
-					data.getItem("qKfz").getUnscaledValue("Wert").set(DUAKonstanten.FEHLERHAFT); //$NON-NLS-1$ //$NON-NLS-2$
-					data.getItem("qLkw").getUnscaledValue("Wert").set(DUAKonstanten.FEHLERHAFT); //$NON-NLS-1$ //$NON-NLS-2$
-					data.getItem("qPkw").getUnscaledValue("Wert").set(DUAKonstanten.FEHLERHAFT); //$NON-NLS-1$ //$NON-NLS-2$
-					data.getItem("vPkw").getUnscaledValue("Wert").set(DUAKonstanten.FEHLERHAFT); //$NON-NLS-1$ //$NON-NLS-2$
-
-					data.getItem("qKfz").getItem("Status").getItem("MessWertErsetzung").   //$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$
-					getUnscaledValue("Implausibel").set(DUAKonstanten.JA); //$NON-NLS-1$
-					data.getItem("qLkw").getItem("Status").getItem("MessWertErsetzung").   //$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$
-					getUnscaledValue("Implausibel").set(DUAKonstanten.JA); //$NON-NLS-1$
-					data.getItem("qPkw").getItem("Status").getItem("MessWertErsetzung").   //$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$
-					getUnscaledValue("Implausibel").set(DUAKonstanten.JA); //$NON-NLS-1$
-					data.getItem("vPkw").getItem("Status").getItem("MessWertErsetzung").   //$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$
-					getUnscaledValue("Implausibel").set(DUAKonstanten.JA); //$NON-NLS-1$
+			if(qKfz >= 0 && qLkw >= 0){
+				if(qKfz - qLkw == 0){
+					if(!(qPkw == 0 && vPkw == DUAKonstanten.NICHT_ERMITTELBAR)){
+						this.setQUndVImplausibel(data);
+						return;
+					}
 				}
 			}
 
 			/**
-			 * Regel Nr.3 (aus SE-02.00.00.00.00-AFo-4.0, S.94)
+			 * Regel Nr.3 (aus SE-02.00.00.00.00-AFo-5.2, S.95)
 			 */
 			if(qLkw == 0){
 				if(!(vLkw == DUAKonstanten.NICHT_ERMITTELBAR)){
-					data.getItem("qLkw").getUnscaledValue("Wert").set(DUAKonstanten.FEHLERHAFT); //$NON-NLS-1$ //$NON-NLS-2$
-					data.getItem("vLkw").getUnscaledValue("Wert").set(DUAKonstanten.FEHLERHAFT); //$NON-NLS-1$ //$NON-NLS-2$
-
-					data.getItem("qLkw").getItem("Status").getItem("MessWertErsetzung").   //$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$
-					getUnscaledValue("Implausibel").set(DUAKonstanten.JA); //$NON-NLS-1$
-					data.getItem("vLkw").getItem("Status").getItem("MessWertErsetzung").   //$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$
-					getUnscaledValue("Implausibel").set(DUAKonstanten.JA); //$NON-NLS-1$
+					this.setQUndVImplausibel(data);
+					return;
 				}
 			}
 
 			/**
-			 * Regel Nr.4 (aus SE-02.00.00.00.00-AFo-4.0, S.94)
+			 * Regel Nr.4 (aus SE-02.00.00.00.00-AFo-5.2, S.95)
 			 */
-			if(qPkw <= 0){
+			if(qPkw == 0){
 				if(!(vPkw == DUAKonstanten.NICHT_ERMITTELBAR)){
-					data.getItem("qPkw").getUnscaledValue("Wert").set(DUAKonstanten.FEHLERHAFT); //$NON-NLS-1$ //$NON-NLS-2$
-					data.getItem("vPkw").getUnscaledValue("Wert").set(DUAKonstanten.FEHLERHAFT); //$NON-NLS-1$ //$NON-NLS-2$
-
-					data.getItem("qPkw").getItem("Status").getItem("MessWertErsetzung").   //$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$
-					getUnscaledValue("Implausibel").set(DUAKonstanten.JA); //$NON-NLS-1$
-					data.getItem("vPkw").getItem("Status").getItem("MessWertErsetzung").   //$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$
-					getUnscaledValue("Implausibel").set(DUAKonstanten.JA); //$NON-NLS-1$
+					this.setQUndVImplausibel(data);
+					return;
 				}
 			}		
 		}
 
 		/**
-		 * Regel Nr.5 (aus SE-02.00.00.00.00-AFo-4.0, S.94)
+		 * Regel Nr.5 (aus SE-02.00.00.00.00-AFo-5.2, S.95)
 		 */
-		if(qKfz < qLkw){
-			data.getItem("qKfz").getUnscaledValue("Wert").set(DUAKonstanten.FEHLERHAFT); //$NON-NLS-1$ //$NON-NLS-2$
-			data.getItem("qLkw").getUnscaledValue("Wert").set(DUAKonstanten.FEHLERHAFT); //$NON-NLS-1$ //$NON-NLS-2$
-
-			data.getItem("qKfz").getItem("Status").getItem("MessWertErsetzung").   //$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$
-			getUnscaledValue("Implausibel").set(DUAKonstanten.JA); //$NON-NLS-1$
-			data.getItem("qLkw").getItem("Status").getItem("MessWertErsetzung").   //$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$
-			getUnscaledValue("Implausibel").set(DUAKonstanten.JA); //$NON-NLS-1$
-		}
-
-		/**
-		 * Regel Nr.6 (aus SE-02.00.00.00.00-AFo-4.0, S.94)
-		 */
-		if(qKfz - qLkw > 0){
-			if(!(0 < vPkw)){
-				data.getItem("qKfz").getUnscaledValue("Wert").set(DUAKonstanten.FEHLERHAFT); //$NON-NLS-1$ //$NON-NLS-2$
-				data.getItem("qLkw").getUnscaledValue("Wert").set(DUAKonstanten.FEHLERHAFT); //$NON-NLS-1$ //$NON-NLS-2$
-				data.getItem("vPkw").getUnscaledValue("Wert").set(DUAKonstanten.FEHLERHAFT); //$NON-NLS-1$ //$NON-NLS-2$
-
-				data.getItem("qKfz").getItem("Status").getItem("MessWertErsetzung").   //$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$
-				getUnscaledValue("Implausibel").set(DUAKonstanten.JA); //$NON-NLS-1$
-				data.getItem("qLkw").getItem("Status").getItem("MessWertErsetzung").   //$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$
-				getUnscaledValue("Implausibel").set(DUAKonstanten.JA); //$NON-NLS-1$
-				data.getItem("vPkw").getItem("Status").getItem("MessWertErsetzung").   //$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$
-				getUnscaledValue("Implausibel").set(DUAKonstanten.JA); //$NON-NLS-1$
+		if(qKfz >= 0 && qLkw >= 0){
+			if(qKfz < qLkw){
+				this.setQUndVImplausibel(data);
+				return;
 			}
 		}
 
 		/**
-		 * Regel Nr.7 (aus SE-02.00.00.00.00-AFo-4.0, S.94)
+		 * Regel Nr.6 (aus SE-02.00.00.00.00-AFo-5.2, S.95)
+		 */
+		if(qKfz >= 0 && qLkw >= 0){
+			if(qKfz - qLkw > 0){
+				if(vPkw >= 0){
+					if(!(0 < vPkw)){
+						this.setQUndVImplausibel(data);
+						return;
+					}
+				}
+			}
+		}
+
+		/**
+		 * Regel Nr.7 (aus SE-02.00.00.00.00-AFo-5.2, S.95)
 		 */
 		if(qKfz > 0){
-			if(!(0 < vKfz)){
-				data.getItem("qKfz").getUnscaledValue("Wert").set(DUAKonstanten.FEHLERHAFT); //$NON-NLS-1$ //$NON-NLS-2$
-				data.getItem("vKfz").getUnscaledValue("Wert").set(DUAKonstanten.FEHLERHAFT); //$NON-NLS-1$ //$NON-NLS-2$
-
-				data.getItem("qKfz").getItem("Status").getItem("MessWertErsetzung").   //$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$
-				getUnscaledValue("Implausibel").set(DUAKonstanten.JA); //$NON-NLS-1$
-				data.getItem("vKfz").getItem("Status").getItem("MessWertErsetzung").   //$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$
-				getUnscaledValue("Implausibel").set(DUAKonstanten.JA); //$NON-NLS-1$
+			if(vKfz >= 0){
+				if(!(0 < vKfz)){
+					this.setQUndVImplausibel(data);
+					return;
+				}
 			}
 		}
 
 		/**
-		 * Regel Nr.8 (aus SE-02.00.00.00.00-AFo-4.0, S.94)
+		 * Regel Nr.8 (aus SE-02.00.00.00.00-AFo-5.2, S.95)
 		 */
 		if(qLkw > 0){
-			if( !(0 < vLkw) ){
-				data.getItem("qLkw").getUnscaledValue("Wert").set(DUAKonstanten.FEHLERHAFT); //$NON-NLS-1$ //$NON-NLS-2$
-				data.getItem("vLkw").getUnscaledValue("Wert").set(DUAKonstanten.FEHLERHAFT); //$NON-NLS-1$ //$NON-NLS-2$
+			if(vLkw >= 0){
+				if( !(0 < vLkw) ){
+					this.setQUndVImplausibel(data);
+					return;
+				}
+			}
+		}
 
-				data.getItem("qLkw").getItem("Status").getItem("MessWertErsetzung").   //$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$
-				getUnscaledValue("Implausibel").set(DUAKonstanten.JA); //$NON-NLS-1$
-				data.getItem("vLkw").getItem("Status").getItem("MessWertErsetzung").   //$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$
-				getUnscaledValue("Implausibel").set(DUAKonstanten.JA); //$NON-NLS-1$
+		
+		/**
+		 * Regel Nr.9 (aus SE-02.00.00.00.00-AFo-5.2, S.95)
+		 */
+		if(tNetto >= 0){
+			if( !(0 < tNetto && tNetto <= T) ){
+				data.getItem("tNetto").getUnscaledValue("Wert").set(DUAKonstanten.FEHLERHAFT); //$NON-NLS-1$ //$NON-NLS-2$
+				data.getItem("tNetto").getItem("Status").getItem("MessWertErsetzung").   //$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$
+					getUnscaledValue("Implausibel").set(DUAKonstanten.JA); //$NON-NLS-1$
 			}
 		}
 
 		/**
-		 * Regel Nr.9 (aus SE-02.00.00.00.00-AFo-4.0, S.94)
-		 */
-		if( !(0 < tNetto && tNetto <= T) ){
-			data.getItem("tNetto").getUnscaledValue("Wert").set(DUAKonstanten.FEHLERHAFT); //$NON-NLS-1$ //$NON-NLS-2$
-
-			data.getItem("tNetto").getItem("Status").getItem("MessWertErsetzung").   //$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$
-			getUnscaledValue("Implausibel").set(DUAKonstanten.JA); //$NON-NLS-1$
-		}
-
-		/**
-		 * Regel Nr.10 (aus SE-02.00.00.00.00-AFo-4.0, S.94)
+		 * Regel Nr.10 (aus SE-02.00.00.00.00-AFo-5.2, S.95)
 		 */
 		if(qKfz == 0){
-			if(!(vgKfz == vgKfzLetztesIntervall)){
-				data.getItem("vgKfz").getUnscaledValue("Wert").set(DUAKonstanten.FEHLERHAFT); //$NON-NLS-1$ //$NON-NLS-2$
-
-				data.getItem("vgKfz").getItem("Status").getItem("MessWertErsetzung").   //$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$
-				getUnscaledValue("Implausibel").set(DUAKonstanten.JA); //$NON-NLS-1$
+			if(vgKfz >= 0 && vgKfzLetztesIntervall >= 0){
+				if(!(vgKfz == vgKfzLetztesIntervall)){
+					data.getItem("vgKfz").getUnscaledValue("Wert").set(DUAKonstanten.FEHLERHAFT); //$NON-NLS-1$ //$NON-NLS-2$
+					data.getItem("vgKfz").getItem("Status").getItem("MessWertErsetzung").   //$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$
+						getUnscaledValue("Implausibel").set(DUAKonstanten.JA); //$NON-NLS-1$
+				}				
 			}
 		}
 
 		/**
-		 * Regel Nr.11 (aus SE-02.00.00.00.00-AFo-4.0, S.94)
+		 * Regel Nr.11 (aus SE-02.00.00.00.00-AFo-5.2, S.95)
 		 */
 		if(this.parameterAtgLog != null){
-			synchronized (this.parameterAtgLog) {				
-				if(vKfz > parameterAtgLog.getVKfzGrenz()){
-					if( !(b < parameterAtgLog.getBGrenz()) ){
-						data.getItem("b").getUnscaledValue("Wert").set(DUAKonstanten.FEHLERHAFT); //$NON-NLS-1$ //$NON-NLS-2$
-
-						data.getItem("b").getItem("Status").getItem("MessWertErsetzung").   //$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$
-						getUnscaledValue("Implausibel").set(DUAKonstanten.JA); //$NON-NLS-1$
+			synchronized (this.parameterAtgLog) {
+				if(vKfz >= 0 && parameterAtgLog.getVKfzGrenz() >= 0){
+					if(vKfz > parameterAtgLog.getVKfzGrenz()){
+						if(b >= 0 && parameterAtgLog.getBGrenz() >= 0){
+							if( !(b < parameterAtgLog.getBGrenz()) ){
+								data.getItem("b").getUnscaledValue("Wert").set(DUAKonstanten.FEHLERHAFT); //$NON-NLS-1$ //$NON-NLS-2$
+								data.getItem("b").getItem("Status").getItem("MessWertErsetzung").   //$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$
+									getUnscaledValue("Implausibel").set(DUAKonstanten.JA); //$NON-NLS-1$
+							}
+						}
 					}
 				}
 			}
@@ -262,52 +224,52 @@ extends AbstraktPLFahrStreifen{
 		if(this.parameterAtgLog != null){
 			synchronized (this.parameterAtgLog) {				
 				/**
-				 * Regel Nr.12 (aus SE-02.00.00.00.00-AFo-4.0, S.95)
+				 * Regel Nr.12 (aus SE-02.00.00.00.00-AFo-5.2, S.95)
 				 */
-				this.untersucheWerteBereich(data, resultat, "qKfz", this.parameterAtgLog.getQKfzBereichMin(),  //$NON-NLS-1$
-														  this.parameterAtgLog.getQKfzBereichMax());
+				if(this.untersucheAufMaxVerletzung(data, resultat, "qKfz", //$NON-NLS-1$
+														  this.parameterAtgLog.getQKfzBereichMax()))return;
 	
 				/**
-				 * Regel Nr.13 (aus SE-02.00.00.00.00-AFo-4.0, S.95)
+				 * Regel Nr.13 (aus SE-02.00.00.00.00-AFo-5.2, S.95)
 				 */
-				this.untersucheWerteBereich(data, resultat, "qPkw", this.parameterAtgLog.getQPkwBereichMin(),  //$NON-NLS-1$
-								  					      this.parameterAtgLog.getQPkwBereichMax());
+				if(this.untersucheAufMaxVerletzung(data, resultat, "qPkw",  //$NON-NLS-1$
+								  					      this.parameterAtgLog.getQPkwBereichMax()))return;
 
 				/**
-				 * Regel Nr.14 (aus SE-02.00.00.00.00-AFo-4.0, S.95)
+				 * Regel Nr.14 (aus SE-02.00.00.00.00-AFo-5.2, S.95)
 				 */
-				this.untersucheWerteBereich(data, resultat, "qLkw", this.parameterAtgLog.getQLkwBereichMin(),  //$NON-NLS-1$
-														  this.parameterAtgLog.getQLkwBereichMax());
+				if(this.untersucheAufMaxVerletzung(data, resultat, "qLkw", //$NON-NLS-1$
+														  this.parameterAtgLog.getQLkwBereichMax()))return;
 
 				/**
-				 * Regel Nr.15 (aus SE-02.00.00.00.00-AFo-4.0, S.95)
+				 * Regel Nr.15 (aus SE-02.00.00.00.00-AFo-5.2, S.95)
 				 */
-				this.untersucheWerteBereich(data, resultat, "vKfz", this.parameterAtgLog.getVKfzBereichMin(),  //$NON-NLS-1$
-														  this.parameterAtgLog.getVKfzBereichMax());
+				if(this.untersucheAufMaxVerletzung(data, resultat, "vKfz",  //$NON-NLS-1$
+														  this.parameterAtgLog.getVKfzBereichMax()))return;
 
 				/**
-				 * Regel Nr.16 (aus SE-02.00.00.00.00-AFo-4.0, S.96)
+				 * Regel Nr.16 (aus SE-02.00.00.00.00-AFo-5.2, S.96)
 				 */
-				this.untersucheWerteBereich(data, resultat, "vLkw", this.parameterAtgLog.getVLkwBereichMin(),  //$NON-NLS-1$
-														  this.parameterAtgLog.getVLkwBereichMax());
+				if(this.untersucheAufMaxVerletzung(data, resultat, "vLkw", //$NON-NLS-1$
+														  this.parameterAtgLog.getVLkwBereichMax()))return;
 
 				/**
-				 * Regel Nr.17 (aus SE-02.00.00.00.00-AFo-4.0, S.96)
+				 * Regel Nr.17 (aus SE-02.00.00.00.00-AFo-5.2, S.96)
 				 */
-				this.untersucheWerteBereich(data, resultat, "vPkw", this.parameterAtgLog.getVPkwBereichMin(),  //$NON-NLS-1$
-														  this.parameterAtgLog.getVPkwBereichMax());
+				if(this.untersucheAufMaxVerletzung(data, resultat, "vPkw",  //$NON-NLS-1$
+														  this.parameterAtgLog.getVPkwBereichMax()))return;
 
 				/**
-				 * Regel Nr.18 (aus SE-02.00.00.00.00-AFo-4.0, S.96)
+				 * Regel Nr.18 (aus SE-02.00.00.00.00-AFo-5.2, S.96)
 				 */
-				this.untersucheWerteBereich(data, resultat, "vgKfz", this.parameterAtgLog.getVgKfzBereichMin(),  //$NON-NLS-1$
-														   this.parameterAtgLog.getVgKfzBereichMax());
+				if(this.untersucheAufMaxVerletzung(data, resultat, "vgKfz",  //$NON-NLS-1$
+														   this.parameterAtgLog.getVgKfzBereichMax()))return;
 
 				/**
-				 * Regel Nr.19 (aus SE-02.00.00.00.00-AFo-4.0, S.96)
+				 * Regel Nr.19 (aus SE-02.00.00.00.00-AFo-5.2, S.96)
 				 */
-				this.untersucheWerteBereich(data, resultat, "b", this.parameterAtgLog.getBelegungBereichMin(),  //$NON-NLS-1$
-													   this.parameterAtgLog.getBelegungBereichMax());
+				if(this.untersucheAufMaxVerletzung(data, resultat, "b",   //$NON-NLS-1$
+													   this.parameterAtgLog.getBelegungBereichMax()))return;
 			}
 		}
 	}

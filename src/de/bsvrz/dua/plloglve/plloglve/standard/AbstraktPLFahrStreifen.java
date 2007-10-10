@@ -44,8 +44,8 @@ import de.bsvrz.sys.funclib.bitctrl.daf.Konstanten;
 import de.bsvrz.sys.funclib.bitctrl.dua.DUAKonstanten;
 import de.bsvrz.sys.funclib.bitctrl.dua.DUAUtensilien;
 import de.bsvrz.sys.funclib.bitctrl.dua.GanzZahl;
+import de.bsvrz.sys.funclib.bitctrl.dua.MesswertUnskaliert;
 import de.bsvrz.sys.funclib.bitctrl.dua.schnittstellen.IVerwaltungMitGuete;
-import de.bsvrz.sys.funclib.bitctrl.konstante.Konstante;
 import de.bsvrz.sys.funclib.bitctrl.modell.AbstractSystemObjekt;
 import de.bsvrz.sys.funclib.bitctrl.modell.SystemObjekt;
 import de.bsvrz.sys.funclib.bitctrl.modell.SystemObjektTyp;
@@ -245,8 +245,9 @@ implements ClientReceiverInterface{
 		
 	
 	/**
+	 * <b>Nach AFo 4.0</b><br>
 	 * Untersucht den Wertebereich eines Verkehrs-Datums und
-	 * markiert ggf. verletzte Wertebereiche<br><br>
+	 * markiert ggf. verletzte Wertebereiche<br><br> 
 	 * 
 	 *   i. Setze Min: Wenn Wert != -1, -2, -3 UND Wert < Min --> Ersetzung und Kennzeichnung mit MIN<br>
      *  ii. Setze Max: Wenn Wert != -1, -2, -3 UND Wert > Max --> Ersetzung und Kennzeichnung mit MAX<br>
@@ -261,6 +262,7 @@ implements ClientReceiverInterface{
 	 * @param max obere Grenze des Wertes
 	 * @return das plaubilisierte (markierte) Datum 
 	 */
+	@Deprecated
 	protected final Data untersucheWerteBereich(Data davDatum, final ResultData resultat, 
 												final String wertName, final long min, final long max){
 		
@@ -328,6 +330,188 @@ implements ClientReceiverInterface{
 	
 	
 	/**
+	 * <b>Nach Afo 5.2</b><br>
+	 * Untersucht die obere Grenze des Wertebereichs eines Verkehrs-Datums und
+	 * markiert ggf. Verletzungen<br><br>
+	 * 
+	 *   i. Setze Min: mache nichts<br>
+     *  ii. Setze Max: Wenn Wert >= 0 UND Wert > Max --> Ersetzung und Kennzeichnung mit MAX<br>
+     * iii. Setze MinMax: wie bei ii<br>
+     *  iv. Nur Prüfung: Wenn Wert >= 0 UND Wert > Max --> Kennzeichnung als Implausibel UND fehlerhaft<br>
+     *   v. Keine Prüfung: mache nichts<br>
+     *   
+	 * @param davDatum ein zu veränderndes Verkehrs-Datums (darf nicht <code>null</code> sein)
+	 * @param resultat das Originaldatum
+	 * @param wertName der Name des final Attributs 
+	 * @param max obere Grenze des Wertes
+	 * @return ob die Pl-Pruefung an dieser Stelle abgebrochen werden soll 
+	 */
+	protected final boolean untersucheAufMaxVerletzung(Data davDatum, final ResultData resultat, 
+													   final String wertName, final long max){
+		boolean abbruch = false;
+		
+		if(this.parameterAtgLog != null){
+			
+			OptionenPlausibilitaetsPruefungLogischVerkehr optionen = this.parameterAtgLog.getOptionen();
+
+			if(!optionen.equals(OptionenPlausibilitaetsPruefungLogischVerkehr.KEINE_PRUEFUNG)){
+				final long wert = resultat.getData().getItem(wertName).getUnscaledValue("Wert").longValue(); //$NON-NLS-1$
+
+				GanzZahl sweGueteWert = GanzZahl.getGueteIndex();
+				sweGueteWert.setSkaliertenWert(VERWALTUNG.getGueteFaktor());
+				GWert sweGuete = new GWert(sweGueteWert, GueteVerfahren.STANDARD, false);
+
+				/**
+				 * sonst handelt es sich nicht um einen Messwert
+				 */
+				if(wert >= 0 && max >= 0){
+					boolean maxVerletzt = wert > max;
+		
+					if(maxVerletzt){
+						if(optionen.equals(OptionenPlausibilitaetsPruefungLogischVerkehr.SETZE_MAX) || 
+						   optionen.equals(OptionenPlausibilitaetsPruefungLogischVerkehr.SETZE_MIN_MAX)){
+							davDatum.getItem(wertName).getUnscaledValue("Wert").set(max); //$NON-NLS-1$
+							davDatum.getItem(wertName).getItem("Status"). //$NON-NLS-1$
+								getItem("PlLogisch").getUnscaledValue("WertMaxLogisch").set(DUAKonstanten.JA); //$NON-NLS-1$ //$NON-NLS-2$
+							davDatum.getItem(wertName).getItem("Güte").//$NON-NLS-1$
+								getUnscaledValue("Index").set(sweGuete.getIndexUnskaliert());  //$NON-NLS-1$
+							
+							/**
+							 * Neue Anforderungen nach AFo 5.2
+							 */
+							if(wertName.equals("qKfz")){ //$NON-NLS-1$
+								/**
+								 * Neu aus AFo 5.2:
+								 * Ist qKfzMax >= qLkw ist qPkw=qKfzMax-qLkw zu setzen, sonst werden alle Werte qKfz, qLkw,
+								 * qPkw, vKfz, vLkw, vPkw mit den Statusflags Implausibel und Fehlerhaft gekennzeichnet und
+								 * die Prüfung abgebrochen.
+								 */
+								
+								long qLkw = davDatum.getItem("qLkw").getUnscaledValue("Wert").longValue(); //$NON-NLS-1$ //$NON-NLS-2$
+								GWert qLkwGuete = new GWert(davDatum, "qLkw"); //$NON-NLS-1$
+								if(qLkw >= 0){
+									if(max >= qLkw){
+										long qPkw = max - qLkw;
+										MesswertUnskaliert qPkwMW = new MesswertUnskaliert("qPkw"); //$NON-NLS-1$
+										qPkwMW.setWertUnskaliert(qPkw);
+										qPkwMW.setNichtErfasst(true);										
+										qPkwMW.kopiereInhaltNach(davDatum);
+										
+										GWert qLkwGueteNeu = GWert.getNichtErmittelbareGuete(GueteVerfahren.STANDARD); 
+										try {
+											qLkwGueteNeu = GueteVerfahren.differenz(sweGuete, qLkwGuete);
+										} catch (GueteException e) {
+											LOGGER.error("Guete von qLkw konnte nicht aktualisiert werden in " + resultat); //$NON-NLS-1$
+											e.printStackTrace();
+										}
+										
+										davDatum.getItem(wertName).getItem("Güte").//$NON-NLS-1$
+												getScaledValue("Index").set(qLkwGueteNeu.getIndexUnskaliert());  //$NON-NLS-1$
+									}else{
+										this.setQUndVImplausibel(davDatum);
+										abbruch = true;										
+									}
+								}
+							}else
+							if(wertName.equals("qPkw")){ //$NON-NLS-1$
+								/**
+								 * Neu aus AFo 5.2:
+								 * 13. qPkw <= qPkwMax, sonst Wert entsprechend Parametrierung setzen und kennzeichnen und
+								 * qKfz = qKfz – (qPkw – qPkwMax) sowie qLkw = qKfz – qPkwMax zu setzen.
+								 */
+								final long qKfz = davDatum.getItem("qKfz").getUnscaledValue("Wert").longValue(); //$NON-NLS-1$ //$NON-NLS-2$
+								if(qKfz >= 0){
+									/**
+									 * qKfz anpassen
+									 */
+									long qKfzNeu = qKfz - (wert - max);
+									MesswertUnskaliert qKfzMW = new MesswertUnskaliert("qKfz"); //$NON-NLS-1$
+									qKfzMW.setWertUnskaliert(qKfzNeu);
+									qKfzMW.kopiereInhaltNach(davDatum);
+									
+									GWert qKfzGuete = new GWert(davDatum, "qKfz"); //$NON-NLS-1$
+									GWert qKfzGueteNeu = GWert.getNichtErmittelbareGuete(GueteVerfahren.STANDARD);
+									try {
+										qKfzGueteNeu = GueteVerfahren.differenz(qKfzGuete, sweGuete);
+									} catch (GueteException e) {
+										LOGGER.error("Guete von qKfz konnte nicht aktualisiert werden in " + resultat); //$NON-NLS-1$
+										e.printStackTrace();
+									}
+									
+									davDatum.getItem("qKfz").getItem("Güte").//$NON-NLS-1$//$NON-NLS-2$
+											getScaledValue("Index").set(qKfzGueteNeu.getIndexUnskaliert());  //$NON-NLS-1$
+									
+									/**
+									 * qLkw anpassen
+									 */
+									long qLkwNeu = qKfzNeu - max;
+									MesswertUnskaliert qLkwMW = new MesswertUnskaliert("qLkw"); //$NON-NLS-1$
+									qLkwMW.setWertUnskaliert(qLkwNeu);
+									qLkwMW.kopiereInhaltNach(davDatum);
+									
+									GWert qLkwGueteNeu = GWert.getNichtErmittelbareGuete(GueteVerfahren.STANDARD);
+									try {
+										qLkwGueteNeu = GueteVerfahren.differenz(qKfzGueteNeu, sweGuete);
+									} catch (GueteException e) {
+										LOGGER.error("Guete von qLkw konnte nicht aktualisiert werden in " + resultat); //$NON-NLS-1$
+										e.printStackTrace();
+									}
+									
+									davDatum.getItem("qLkw").getItem("Güte").//$NON-NLS-1$//$NON-NLS-2$
+											getScaledValue("Index").set(qLkwGueteNeu.getIndexUnskaliert());  //$NON-NLS-1$									
+								}
+							}else
+							if(wertName.equals("qLkw")){ //$NON-NLS-1$
+								/**
+								 * Neu aus AFo 5.2:
+								 * 14. qLkw <= qLkwMax, sonst Wert entsprechend Parametrierung setzen und kennzeichnen und
+								 * qPkw=qKfz-qLkw zu setzen.
+								 */
+								final long qKfz = davDatum.getItem("qKfz").getUnscaledValue("Wert").longValue(); //$NON-NLS-1$ //$NON-NLS-2$
+								final long qLkw = davDatum.getItem("qLkw").getUnscaledValue("Wert").longValue(); //$NON-NLS-1$ //$NON-NLS-2$
+								if(qKfz >= 0 && qLkw >= 0){
+									/**
+									 * qPkw anpassen
+									 */
+									long qPkwNeu = qKfz - qLkw;
+									MesswertUnskaliert qPkwMW = new MesswertUnskaliert("qPkw"); //$NON-NLS-1$
+									qPkwMW.setWertUnskaliert(qPkwNeu);
+									qPkwMW.setNichtErfasst(true);
+									qPkwMW.kopiereInhaltNach(davDatum);
+									
+									GWert qKfzGuete = new GWert(davDatum, "qKfz"); //$NON-NLS-1$
+									GWert qLkwGuete = new GWert(davDatum, "qLkw"); //$NON-NLS-1$
+									GWert qPkwGueteNeu = GWert.getNichtErmittelbareGuete(GueteVerfahren.STANDARD);
+									try {
+										qPkwGueteNeu = GueteVerfahren.differenz(qKfzGuete, qLkwGuete);
+									} catch (GueteException e) {
+										LOGGER.error("Guete von qPkw konnte nicht aktualisiert werden in " + resultat); //$NON-NLS-1$
+										e.printStackTrace();
+									}
+									
+									davDatum.getItem("qKfz").getItem("Güte").//$NON-NLS-1$//$NON-NLS-2$
+											getScaledValue("Index").set(qPkwGueteNeu.getIndexUnskaliert());  //$NON-NLS-1$									
+								}
+							}							
+						}else
+						if(optionen.equals(OptionenPlausibilitaetsPruefungLogischVerkehr.NUR_PRUEFUNG)){							
+							if(wertName.equals("vKfz") || wertName.startsWith("qKfz") ||  //$NON-NLS-1$ //$NON-NLS-2$
+							   wertName.equals("vLkw") || wertName.startsWith("qLkw") ||  //$NON-NLS-1$ //$NON-NLS-2$
+							   wertName.equals("vPkw") || wertName.startsWith("qPkw")){  //$NON-NLS-1$ //$NON-NLS-2$
+								this.setQUndVImplausibel(davDatum);
+								abbruch = true;
+							}
+						}
+					}					
+				}
+			}
+		}
+		
+		return abbruch;
+	}
+
+	
+	/**
 	 * Plausibilisiert ein übergebenes Datum
 	 * 
 	 * @param resultat ein Originaldatum
@@ -339,17 +523,12 @@ implements ClientReceiverInterface{
 		
 		if(resultat.getData() != null){
 			try{
-				copy = resultat.getData().createModifiableCopy();
-			}catch(IllegalStateException e){
-				LOGGER.error(Konstante.LEERSTRING, e);
-			}
-			
-			if(copy != null){
+				copy = resultat.getData().createModifiableCopy();			
 				this.berechneQPkwUndVKfz(copy);
 				this.ueberpruefe(copy, resultat);
-			}else{
-				LOGGER.warning("Es konnte keine Kopie von Datensatz erzeugt werden:\n" //$NON-NLS-1$
-						+ resultat);
+			}catch(IllegalStateException e){
+				LOGGER.error("Es konnte keine Kopie von Datensatz erzeugt werden:\n" //$NON-NLS-1$
+						+ resultat, e);
 			}
 		}
 		this.letztesKZDatum = resultat;
@@ -357,6 +536,38 @@ implements ClientReceiverInterface{
 		return copy;
 	}
 
+	
+	/**
+	 * Setzt im uebergebenen Datensatz die Werte <code>qPkw</code>, <code>qLkw</code>, 
+	 * <code>qKfz</code> und <code>vPkw</code>, <code>vLkw</code>, <code>vKfz</code>
+	 * auf implausibel und fehlerhaft 
+	 * 
+	 * @param veraenderbaresDatum ein veraenderbarer LVE-Datensatz (muss <code>!= null</code> sein)
+	 */
+	protected final void setQUndVImplausibel(Data veraenderbaresDatum){
+		veraenderbaresDatum.getItem("qKfz").getUnscaledValue("Wert").set(DUAKonstanten.FEHLERHAFT); //$NON-NLS-1$ //$NON-NLS-2$
+		veraenderbaresDatum.getItem("qLkw").getUnscaledValue("Wert").set(DUAKonstanten.FEHLERHAFT); //$NON-NLS-1$ //$NON-NLS-2$
+		veraenderbaresDatum.getItem("qPkw").getUnscaledValue("Wert").set(DUAKonstanten.FEHLERHAFT); //$NON-NLS-1$ //$NON-NLS-2$
+
+		veraenderbaresDatum.getItem("vKfz").getUnscaledValue("Wert").set(DUAKonstanten.FEHLERHAFT); //$NON-NLS-1$ //$NON-NLS-2$
+		veraenderbaresDatum.getItem("vLkw").getUnscaledValue("Wert").set(DUAKonstanten.FEHLERHAFT); //$NON-NLS-1$ //$NON-NLS-2$
+		veraenderbaresDatum.getItem("vPkw").getUnscaledValue("Wert").set(DUAKonstanten.FEHLERHAFT); //$NON-NLS-1$ //$NON-NLS-2$
+
+		veraenderbaresDatum.getItem("qKfz").getItem("Status").getItem("MessWertErsetzung").   //$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$
+			getUnscaledValue("Implausibel").set(DUAKonstanten.JA); //$NON-NLS-1$
+		veraenderbaresDatum.getItem("qLkw").getItem("Status").getItem("MessWertErsetzung").   //$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$
+			getUnscaledValue("Implausibel").set(DUAKonstanten.JA); //$NON-NLS-1$
+		veraenderbaresDatum.getItem("qPkw").getItem("Status").getItem("MessWertErsetzung").   //$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$
+			getUnscaledValue("Implausibel").set(DUAKonstanten.JA); //$NON-NLS-1$
+		
+		veraenderbaresDatum.getItem("vKfz").getItem("Status").getItem("MessWertErsetzung").   //$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$
+			getUnscaledValue("Implausibel").set(DUAKonstanten.JA); //$NON-NLS-1$
+		veraenderbaresDatum.getItem("vLkw").getItem("Status").getItem("MessWertErsetzung").   //$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$
+			getUnscaledValue("Implausibel").set(DUAKonstanten.JA); //$NON-NLS-1$
+		veraenderbaresDatum.getItem("vPkw").getItem("Status").getItem("MessWertErsetzung").   //$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$
+			getUnscaledValue("Implausibel").set(DUAKonstanten.JA); //$NON-NLS-1$
+	}
+	
 	
 	/**
 	 * {@inheritDoc}

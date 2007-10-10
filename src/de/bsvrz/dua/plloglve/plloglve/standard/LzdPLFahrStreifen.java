@@ -66,14 +66,12 @@ extends KzdPLFahrStreifen{
 				/**
 				 * Regel Nr.12 (aus SE-02.00.00.00.00-AFo-4.0, S.95)
 				 */
-				this.untersucheWerteBereich(data, resultat, "qKfz", this.parameterAtgLog.getQKfzBereichMin(),  //$NON-NLS-1$
-														  this.parameterAtgLog.getQKfzBereichMax());
+				this.untersucheAufMaxVerletzung(data, resultat, "qKfz", this.parameterAtgLog.getQKfzBereichMax()); //$NON-NLS-1$
 
 				/**
 				 * Regel Nr.14 (aus SE-02.00.00.00.00-AFo-4.0, S.95)
 				 */
-				this.untersucheWerteBereich(data, resultat, "qLkw", this.parameterAtgLog.getQLkwBereichMin(),  //$NON-NLS-1$
-														  this.parameterAtgLog.getQLkwBereichMax());
+				this.untersucheAufMaxVerletzung(data, resultat, "qLkw", this.parameterAtgLog.getQLkwBereichMax()); //$NON-NLS-1$
 			}
 		}
 	}
