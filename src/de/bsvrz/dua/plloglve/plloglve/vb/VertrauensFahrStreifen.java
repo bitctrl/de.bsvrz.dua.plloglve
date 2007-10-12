@@ -38,6 +38,7 @@ import de.bsvrz.dav.daf.main.ReceiverRole;
 import de.bsvrz.dav.daf.main.ResultData;
 import de.bsvrz.dav.daf.main.config.SystemObject;
 import de.bsvrz.dua.plloglve.plloglve.TestParameter;
+import de.bsvrz.sys.funclib.bitctrl.daf.DaVKonstanten;
 import de.bsvrz.sys.funclib.bitctrl.dua.DUAKonstanten;
 import de.bsvrz.sys.funclib.bitctrl.dua.schnittstellen.IVerwaltung;
 import de.bsvrz.sys.funclib.bitctrl.konstante.Konstante;
@@ -164,7 +165,7 @@ implements ClientReceiverInterface{
 			VERWALTUNG = verwaltung;
 			PARA_VERTRAUEN_DD = new DataDescription(
 					VERWALTUNG.getVerbindung().getDataModel().getAttributeGroup("atg.verkehrsDatenVertrauensBereichFs"), //$NON-NLS-1$
-					VERWALTUNG.getVerbindung().getDataModel().getAspect(Konstante.DAV_ASP_PARAMETER_SOLL),
+					VERWALTUNG.getVerbindung().getDataModel().getAspect(DaVKonstanten.ASP_PARAMETER_SOLL),
 					(short)0);
 			ATG_KZD_ID = VERWALTUNG.getVerbindung().getDataModel().getAttributeGroup(DUAKonstanten.ATG_KZD).getId();
 		}

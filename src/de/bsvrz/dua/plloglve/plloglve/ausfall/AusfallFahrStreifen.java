@@ -40,7 +40,7 @@ import de.bsvrz.dav.daf.main.ResultData;
 import de.bsvrz.dav.daf.main.config.SystemObject;
 import de.bsvrz.dua.plloglve.plloglve.PlPruefungLogischLVE;
 import de.bsvrz.dua.plloglve.plloglve.TestParameter;
-import de.bsvrz.sys.funclib.bitctrl.daf.Konstanten;
+import de.bsvrz.sys.funclib.bitctrl.daf.DaVKonstanten;
 import de.bsvrz.sys.funclib.bitctrl.dua.DUAKonstanten;
 import de.bsvrz.sys.funclib.bitctrl.dua.schnittstellen.IVerwaltung;
 import de.bsvrz.sys.funclib.bitctrl.konstante.Konstante;
@@ -112,7 +112,7 @@ implements ClientReceiverInterface{
 			VERWALTUNG = verwaltung;
 			AUSFALL_BESCHREIBUNG = new DataDescription(
 					VERWALTUNG.getVerbindung().getDataModel().getAttributeGroup("atg.verkehrsDatenAusfallHäufigkeitFs"), //$NON-NLS-1$
-					VERWALTUNG.getVerbindung().getDataModel().getAspect(Konstanten.ASP_PARAMETER_SOLL),
+					VERWALTUNG.getVerbindung().getDataModel().getAspect(DaVKonstanten.ASP_PARAMETER_SOLL),
 					(short)0);
 			ATG_KZD_ID = VERWALTUNG.getVerbindung().getDataModel().getAttributeGroup(DUAKonstanten.ATG_KZD).getId();
 		}

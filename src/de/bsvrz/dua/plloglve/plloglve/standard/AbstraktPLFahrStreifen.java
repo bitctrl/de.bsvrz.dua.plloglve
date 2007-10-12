@@ -40,7 +40,7 @@ import de.bsvrz.dua.guete.GueteException;
 import de.bsvrz.dua.guete.GueteVerfahren;
 import de.bsvrz.dua.guete.vorschriften.IGuete;
 import de.bsvrz.dua.plloglve.plloglve.typen.OptionenPlausibilitaetsPruefungLogischVerkehr;
-import de.bsvrz.sys.funclib.bitctrl.daf.Konstanten;
+import de.bsvrz.sys.funclib.bitctrl.daf.DaVKonstanten;
 import de.bsvrz.sys.funclib.bitctrl.dua.DUAKonstanten;
 import de.bsvrz.sys.funclib.bitctrl.dua.DUAUtensilien;
 import de.bsvrz.sys.funclib.bitctrl.dua.GanzZahl;
@@ -105,7 +105,7 @@ implements ClientReceiverInterface{
 		VERWALTUNG.getVerbindung().subscribeReceiver(this, obj,
 				new DataDescription(
 						this.getPlausibilisierungsParameterAtg(VERWALTUNG.getVerbindung()),
-						VERWALTUNG.getVerbindung().getDataModel().getAspect(Konstanten.ASP_PARAMETER_SOLL),
+						VERWALTUNG.getVerbindung().getDataModel().getAspect(DaVKonstanten.ASP_PARAMETER_SOLL),
 						(short)0),
 				ReceiveOptions.normal(), ReceiverRole.receiver());
 	}

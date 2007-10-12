@@ -36,7 +36,7 @@ import de.bsvrz.dav.daf.main.ReceiveOptions;
 import de.bsvrz.dav.daf.main.ReceiverRole;
 import de.bsvrz.dav.daf.main.ResultData;
 import de.bsvrz.dav.daf.main.config.SystemObject;
-import de.bsvrz.sys.funclib.bitctrl.daf.Konstanten;
+import de.bsvrz.sys.funclib.bitctrl.daf.DaVKonstanten;
 import de.bsvrz.sys.funclib.bitctrl.dua.DUAKonstanten;
 import de.bsvrz.sys.funclib.bitctrl.dua.VariableMitKonstanzZaehler;
 import de.bsvrz.sys.funclib.bitctrl.dua.schnittstellen.IVerwaltung;
@@ -148,7 +148,7 @@ implements ClientReceiverInterface{
 			VERWALTUNG = verwaltung;
 			DIFF_PARA_BESCHREIBUNG = new DataDescription(
 					VERWALTUNG.getVerbindung().getDataModel().getAttributeGroup("atg.verkehrsDatenDifferenzialKontrolleFs"), //$NON-NLS-1$
-					VERWALTUNG.getVerbindung().getDataModel().getAspect(Konstanten.ASP_PARAMETER_SOLL),
+					VERWALTUNG.getVerbindung().getDataModel().getAspect(DaVKonstanten.ASP_PARAMETER_SOLL),
 					(short)0);
 
 		}

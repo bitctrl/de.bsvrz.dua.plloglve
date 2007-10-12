@@ -36,9 +36,9 @@ import de.bsvrz.dav.daf.main.config.AttributeGroup;
 import de.bsvrz.dav.daf.main.config.SystemObject;
 import de.bsvrz.dua.plloglve.plloglve.standard.AtgVerkehrsDatenLZIPlPruefLogisch;
 import de.bsvrz.dua.plloglve.plloglve.typen.OptionenPlausibilitaetsPruefungLogischVerkehr;
+import de.bsvrz.sys.funclib.bitctrl.daf.DaVKonstanten;
 import de.bsvrz.sys.funclib.bitctrl.dua.DUAUtensilien;
 import de.bsvrz.sys.funclib.bitctrl.dua.test.CSVImporter;
-import de.bsvrz.sys.funclib.bitctrl.konstante.Konstante;
 
 
 /**
@@ -120,22 +120,22 @@ implements ClientSenderInterface{
 
 		DD_LOGISCH = new DataDescription(
 				this.getParameterAtg(), 
-				DAV.getDataModel().getAspect(Konstante.DAV_ASP_PARAMETER_VORGABE),
+				DAV.getDataModel().getAspect(DaVKonstanten.ASP_PARAMETER_VORGABE),
 				(short)0);
 		
 		DD_DIFF = new DataDescription(
 				diffFs, 
-				DAV.getDataModel().getAspect(Konstante.DAV_ASP_PARAMETER_VORGABE),
+				DAV.getDataModel().getAspect(DaVKonstanten.ASP_PARAMETER_VORGABE),
 				(short)0);
 		
 		DD_AUSFALL = new DataDescription(
 				ausfallHFs, 
-				DAV.getDataModel().getAspect(Konstante.DAV_ASP_PARAMETER_VORGABE),
+				DAV.getDataModel().getAspect(DaVKonstanten.ASP_PARAMETER_VORGABE),
 				(short)0);
 		
 		DD_VERTRAUENSBEREICH = new DataDescription(
 				vertrauensbereichFs, 
-				DAV.getDataModel().getAspect(Konstante.DAV_ASP_PARAMETER_VORGABE),
+				DAV.getDataModel().getAspect(DaVKonstanten.ASP_PARAMETER_VORGABE),
 				(short)0);
 		
 		this.objekt = objekt;
@@ -209,7 +209,7 @@ implements ClientSenderInterface{
 		
 		ResultData resultat = new ResultData(this.objekt, new DataDescription(
 				this.getParameterAtg(), 
-				DAV.getDataModel().getAspect(Konstante.DAV_ASP_PARAMETER_VORGABE),
+				DAV.getDataModel().getAspect(DaVKonstanten.ASP_PARAMETER_VORGABE),
 				(short)0), System.currentTimeMillis(), this.fuelleRestAttribute(parameter));
 		DAV.sendData(resultat);
 		
@@ -244,7 +244,7 @@ implements ClientSenderInterface{
 		
 		ResultData resultat = new ResultData(this.objekt, new DataDescription(
 				this.getParameterAtg(), 
-				DAV.getDataModel().getAspect(Konstante.DAV_ASP_PARAMETER_VORGABE),
+				DAV.getDataModel().getAspect(DaVKonstanten.ASP_PARAMETER_VORGABE),
 				(short)0), System.currentTimeMillis(), parameter);
 		DAV.sendData(resultat);
 	}
@@ -268,7 +268,7 @@ implements ClientSenderInterface{
 		
 		ResultData resultat = new ResultData(this.objekt, new DataDescription(
 				diffFs, 
-				DAV.getDataModel().getAspect(Konstante.DAV_ASP_PARAMETER_VORGABE),
+				DAV.getDataModel().getAspect(DaVKonstanten.ASP_PARAMETER_VORGABE),
 				(short)0), System.currentTimeMillis(), parameter);
 		DAV.sendData(resultat);
 		
@@ -292,7 +292,7 @@ implements ClientSenderInterface{
 		
 		ResultData resultat = new ResultData(this.objekt, new DataDescription(
 				diffFs, 
-				DAV.getDataModel().getAspect(Konstante.DAV_ASP_PARAMETER_VORGABE),
+				DAV.getDataModel().getAspect(DaVKonstanten.ASP_PARAMETER_VORGABE),
 				(short)0), System.currentTimeMillis(), parameter);
 		DAV.sendData(resultat);
 	}
@@ -309,7 +309,7 @@ implements ClientSenderInterface{
 		
 		ResultData resultat = new ResultData(this.objekt, new DataDescription(
 				ausfallHFs, 
-				DAV.getDataModel().getAspect(Konstante.DAV_ASP_PARAMETER_VORGABE),
+				DAV.getDataModel().getAspect(DaVKonstanten.ASP_PARAMETER_VORGABE),
 				(short)0), System.currentTimeMillis(), parameter);
 		DAV.sendData(resultat);
 		
@@ -326,7 +326,7 @@ implements ClientSenderInterface{
 		
 		ResultData resultat = new ResultData(this.objekt, new DataDescription(
 				ausfallHFs, 
-				DAV.getDataModel().getAspect(Konstante.DAV_ASP_PARAMETER_VORGABE),
+				DAV.getDataModel().getAspect(DaVKonstanten.ASP_PARAMETER_VORGABE),
 				(short)0), System.currentTimeMillis(), parameter);
 		DAV.sendData(resultat);
 	}
@@ -345,7 +345,7 @@ implements ClientSenderInterface{
 		DUAUtensilien.getAttributDatum("maxAusfallProBezugsZeitraumAus", parameter).asUnscaledValue().set(20);
 		ResultData resultat = new ResultData(this.objekt, new DataDescription(
 				vertrauensbereichFs, 
-				DAV.getDataModel().getAspect(Konstante.DAV_ASP_PARAMETER_VORGABE),
+				DAV.getDataModel().getAspect(DaVKonstanten.ASP_PARAMETER_VORGABE),
 				(short)0), System.currentTimeMillis(), parameter);
 		DAV.sendData(resultat);
 		
@@ -364,7 +364,7 @@ implements ClientSenderInterface{
 		DUAUtensilien.getAttributDatum("maxAusfallProBezugsZeitraumAus", parameter).asUnscaledValue().set(99);
 		ResultData resultat = new ResultData(this.objekt, new DataDescription(
 				vertrauensbereichFs, 
-				DAV.getDataModel().getAspect(Konstante.DAV_ASP_PARAMETER_VORGABE),
+				DAV.getDataModel().getAspect(DaVKonstanten.ASP_PARAMETER_VORGABE),
 				(short)0), System.currentTimeMillis(), parameter);
 		DAV.sendData(resultat);
 	}
