@@ -16,27 +16,6 @@ import de.bsvrz.sys.funclib.commandLineArgs.ArgumentList;
  */
 public class PlPruefungLogischLVETestAusfall {
 	
-//	/**
-//	 * Verbindungsdaten
-//	 */
-//	public static final String[] CON_DATA = new String[] {
-//			"-datenverteiler=192.168.1.191:8083", //$NON-NLS-1$ 
-//			"-benutzer=Tester", //$NON-NLS-1$
-//			"-authentifizierung=c:\\passwd1" }; //$NON-NLS-1$
-
-	/**
-	 * Verbindungsdaten
-	 */
-	public static final String[] CON_DATA = new String[] {
-			"-datenverteiler=localhost:8083", //$NON-NLS-1$ 
-			"-benutzer=Tester", //$NON-NLS-1$
-			"-authentifizierung=c:\\passwd" }; //$NON-NLS-1$
-	
-	/**
-	 * Verzeichnis, in dem sich die CSV-Dateien mit den Testdaten befinden
-	 */
-	protected static final String TEST_DATEN_VERZ = ".\\testDaten\\"; //$NON-NLS-1$
-
 	/**
 	 * Datenverteiler-Verbindung
 	 */
@@ -55,7 +34,7 @@ public class PlPruefungLogischLVETestAusfall {
 	 */
 	@Before
 	public void setUp() throws Exception {
-		this.dav = DAVTest.getDav(CON_DATA);	
+		this.dav = DAVTest.getDav(Verbindung.getConData());	
 	}
 
 	/**
@@ -63,7 +42,7 @@ public class PlPruefungLogischLVETestAusfall {
 	 */
 	@Test
 	public void testAusfall()throws Exception{
-		PlPruefungAusfall pruefAusfall = new PlPruefungAusfall(dav,TEST_DATEN_VERZ, alLogger);
+		PlPruefungAusfall pruefAusfall = new PlPruefungAusfall(dav, Verbindung.TEST_DATEN_VERZ, alLogger);
 		pruefAusfall.pruefe();
 	}
 }

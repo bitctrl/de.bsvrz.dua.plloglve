@@ -1,5 +1,7 @@
 package de.bsvrz.dua.plloglve.util.pruef;
 
+
+import junit.framework.Assert;
 import de.bsvrz.dav.daf.main.ClientDavInterface;
 import de.bsvrz.dav.daf.main.ClientReceiverInterface;
 import de.bsvrz.dav.daf.main.Data;
@@ -20,6 +22,11 @@ import de.bsvrz.sys.funclib.debug.Debug;
  */
 public class PruefeMarkierung
 implements ClientReceiverInterface {
+	
+	/**
+	 * Ob <code>Assert...</code> benutzt werden soll oder blos Warnungen ausgegeben werden sollen
+	 */
+	private static final boolean USE_ASSERT = false;
 
 	/**
 	 * Logger
@@ -102,7 +109,7 @@ implements ClientReceiverInterface {
 	public void listenOK(String pruefeAttr, long pruefZeitstempel) {
 		pruefeAlleAttr = false;
 		paramOK(pruefeAttr, pruefZeitstempel);
-		LOGGER.info("Prüfe Datum auf fehlerfreies Attribut: "+pruefeAttr);
+		LOGGER.info("Prüfe Datum auf fehlerfreies Attribut: "+pruefeAttr); //$NON-NLS-1$
 	}
 	
 	/**
@@ -111,8 +118,8 @@ implements ClientReceiverInterface {
 	 */
 	public void listenOK(long pruefZeitstempel) {
 		pruefeAlleAttr = true;
-		paramOK("alle", pruefZeitstempel);
-		LOGGER.info("Prüfe alle Attribute des Datums auf fehlerfreiheit");
+		paramOK("alle", pruefZeitstempel); //$NON-NLS-1$
+		LOGGER.info("Prüfe alle Attribute des Datums auf fehlerfreiheit"); //$NON-NLS-1$
 	}
 	
 	/**
@@ -135,7 +142,7 @@ implements ClientReceiverInterface {
 	public void listenFehl(String pruefeAttr, long pruefZeitstempel) {
 		pruefeAlleAttr = false;
 		paramFehl(pruefeAttr, pruefZeitstempel);
-		LOGGER.info("Prüfe Datum auf Fehlerhaft-Markierung des Attributes: "+pruefeAttr);
+		LOGGER.info("Prüfe Datum auf Fehlerhaft-Markierung des Attributes: "+pruefeAttr); //$NON-NLS-1$
 	}
 	
 	/**
@@ -144,8 +151,8 @@ implements ClientReceiverInterface {
 	 */
 	public void listenFehl(long pruefZeitstempel) {
 		pruefeAlleAttr = true;
-		paramFehl("alle", pruefZeitstempel);
-		LOGGER.info("Prüfe Datum auf Fehlerhaft-Markierung aller Attribute");
+		paramFehl("alle", pruefZeitstempel); //$NON-NLS-1$
+		LOGGER.info("Prüfe Datum auf Fehlerhaft-Markierung aller Attribute"); //$NON-NLS-1$
 	}
 	
 	/**
@@ -168,7 +175,7 @@ implements ClientReceiverInterface {
 	public void listenImpl(String pruefeAttr, long pruefZeitstempel) {
 		pruefeAlleAttr = false;
 		paramImpl(pruefeAttr, pruefZeitstempel);
-		LOGGER.info("Prüfe Datum auf Implausibel-Markierung des Attributes: "+pruefeAttr);
+		LOGGER.info("Prüfe Datum auf Implausibel-Markierung des Attributes: "+pruefeAttr); //$NON-NLS-1$
 	}
 	
 	/**
@@ -177,8 +184,8 @@ implements ClientReceiverInterface {
 	 */
 	public void listenImpl(long pruefZeitstempel) {
 		pruefeAlleAttr = true;
-		paramImpl("alle", pruefZeitstempel);
-		LOGGER.info("Prüfe Datum auf Implausibel-Markierung aller Attribute");
+		paramImpl("alle", pruefZeitstempel); //$NON-NLS-1$
+		LOGGER.info("Prüfe Datum auf Implausibel-Markierung aller Attribute"); //$NON-NLS-1$
 	}
 	
 	/**
@@ -201,7 +208,7 @@ implements ClientReceiverInterface {
 	public void listenFehlImpl(String pruefeAttr, long pruefZeitstempel) {
 		pruefeAlleAttr = false;
 		paramFehlImpl(pruefeAttr, pruefZeitstempel);
-		LOGGER.info("Prüfe Datum auf Fehlerhaft- und Implausibel-Markierung des Attributes: "+pruefeAttr);
+		LOGGER.info("Prüfe Datum auf Fehlerhaft- und Implausibel-Markierung des Attributes: "+pruefeAttr); //$NON-NLS-1$
 	}
 	
 	/**
@@ -210,8 +217,8 @@ implements ClientReceiverInterface {
 	 */
 	public void listenFehlImpl(long pruefZeitstempel) {
 		pruefeAlleAttr = true;
-		paramFehlImpl("alle", pruefZeitstempel);
-		LOGGER.info("Prüfe Datum auf Fehlerhaft- und Implausibel-Markierung aller Attribute");
+		paramFehlImpl("alle", pruefZeitstempel); //$NON-NLS-1$
+		LOGGER.info("Prüfe Datum auf Fehlerhaft- und Implausibel-Markierung aller Attribute"); //$NON-NLS-1$
 	}
 	
 	/**
@@ -232,14 +239,14 @@ implements ClientReceiverInterface {
 	 */
 	private void pruefeDS(Data data) {
 		if(pruefeAlleAttr) {
-			pruefeAttr("qKfz", data);
-			pruefeAttr("qLkw", data);
-			pruefeAttr("qPkw", data);
-			pruefeAttr("vPkw", data);
-			pruefeAttr("vLkw", data);
-			pruefeAttr("vKfz", data);
-			pruefeAttr("b", data);
-			pruefeAttr("sKfz", data);
+			pruefeAttr("qKfz", data); //$NON-NLS-1$
+			pruefeAttr("qLkw", data); //$NON-NLS-1$
+			pruefeAttr("qPkw", data); //$NON-NLS-1$
+			pruefeAttr("vPkw", data); //$NON-NLS-1$
+			pruefeAttr("vLkw", data); //$NON-NLS-1$
+			pruefeAttr("vKfz", data); //$NON-NLS-1$
+			pruefeAttr("b", data); //$NON-NLS-1$
+			pruefeAttr("sKfz", data); //$NON-NLS-1$
 		} else {
 			pruefeAttr(pruefeAttr, data);
 		}
@@ -252,28 +259,43 @@ implements ClientReceiverInterface {
 	 * @param data Ergebnisdatensatz
 	 */
 	private void pruefeAttr(String pruefeAttr, Data data) {
-		final long wert = data.getItem(pruefeAttr).getUnscaledValue("Wert").longValue();
-		final int impl = data.getItem(pruefeAttr).getItem("Status").getItem("MessWertErsetzung").getUnscaledValue("Implausibel").intValue();
+		final long wert = data.getItem(pruefeAttr).getUnscaledValue("Wert").longValue(); //$NON-NLS-1$
+		final int impl = data.getItem(pruefeAttr).getItem("Status").getItem("MessWertErsetzung").getUnscaledValue("Implausibel").intValue(); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 		
 		if(sollWert < 0) {
 			if(wert != sollWert) {
-				LOGGER.warning("Fehlerhafter Attributwert ("+pruefeAttr+"): "+sollWert+" (SOLL)<>(IST) "+wert);
+				String fehler = "Fehlerhafter Attributwert (" + pruefeAttr + "): " + sollWert + " (SOLL)<>(IST) " + wert; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+				if(USE_ASSERT){
+					Assert.assertTrue(fehler, false);
+				}else{
+					LOGGER.warning(fehler);
+				}
 			} else {
-				LOGGER.info("Attributwert OK ("+pruefeAttr+"): "+sollWert+" (SOLL)==(IST) "+wert);
+				LOGGER.info("Attributwert OK (" + pruefeAttr+"): " + sollWert + " (SOLL)==(IST) " + wert);   //$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$
 			}
 		} else if (sollWert == SOLL_WERT_KEIN_FEHLER) {
 			if(wert < 0) {
-				LOGGER.warning("Fehlerhafter Attributwert ("+pruefeAttr+"): Wert >= 0 (SOLL)<>(IST) "+wert);
+				String fehler = "Fehlerhafter Attributwert ("+pruefeAttr+"): Wert >= 0 (SOLL)<>(IST) "+wert; //$NON-NLS-1$ //$NON-NLS-2$ 
+				if(USE_ASSERT){
+					Assert.assertTrue(fehler, false);
+				}else{
+					LOGGER.warning(fehler);
+				}
 			} else {
-				LOGGER.info("Attributwert OK ("+pruefeAttr+"): Wert >= 0 (SOLL)==(IST) "+wert);
+				LOGGER.info("Attributwert OK ("+pruefeAttr+"): Wert >= 0 (SOLL)==(IST) "+wert);  //$NON-NLS-1$//$NON-NLS-2$
 			}
 		}
 		
 		if(sollImplausibel != SOLL_IMPLAUSIBEL_KEINE_PRUEFUNG) {
 			if(sollImplausibel != impl) {
-				LOGGER.warning("Fehlerhafte Implausibel-Markierung ("+pruefeAttr+"): "+sollImplausibel+" (SOLL)<>(IST) "+impl);
+				String fehler = "Fehlerhafte Implausibel-Markierung ("+pruefeAttr+"): "+sollImplausibel+" (SOLL)<>(IST) "+impl; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ 
+				if(USE_ASSERT){
+					Assert.assertTrue(fehler, false);
+				}else{
+					LOGGER.warning(fehler);
+				}
 			} else {
-				LOGGER.info("Implausibel-Markierung OK ("+pruefeAttr+"): "+sollImplausibel+" (SOLL)==(IST) "+impl);
+				LOGGER.info("Implausibel-Markierung OK ("+pruefeAttr+"): "+sollImplausibel+" (SOLL)==(IST) "+impl);   //$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$
 			}
 		}
 	}

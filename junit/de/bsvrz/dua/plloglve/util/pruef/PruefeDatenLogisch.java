@@ -3,6 +3,8 @@ package de.bsvrz.dua.plloglve.util.pruef;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import junit.framework.Assert;
+
 import de.bsvrz.dav.daf.main.ClientDavInterface;
 import de.bsvrz.dav.daf.main.ClientReceiverInterface;
 import de.bsvrz.dav.daf.main.Data;
@@ -18,14 +20,14 @@ import de.bsvrz.sys.funclib.bitctrl.dua.DUAUtensilien;
 import de.bsvrz.sys.funclib.bitctrl.dua.test.CSVImporter;
 import de.bsvrz.sys.funclib.debug.Debug;
 
-/*
+/**
  * KZD Listener
  * Liest Ergebnis-CSV-Datei
  * Wartet auf gesendete und gepruefte Daten und gibt diese an Vergleicher-Klasse weiter
  */
 public class PruefeDatenLogisch
 implements ClientReceiverInterface {
-
+	
 	/**
 	 * Logger
 	 */
@@ -122,7 +124,7 @@ implements ClientReceiverInterface {
 			//CSV Importer initialisieren
 			this.csvImp = new CSVImporter(csvQuelle);
 		} catch(Exception e) {
-			LOGGER.error("Fehler beim öffnen der CSV Datei (" + csvQuelle + "): "+e);
+			LOGGER.error("Fehler beim öffnen der CSV Datei (" + csvQuelle + "): "+e); //$NON-NLS-1$ //$NON-NLS-2$
 		}
 		csvImp.getNaechsteZeile();  //Tabellenkopf in CSV ueberspringen
 		csvEinlesen();  //CSV einlesen
@@ -166,7 +168,7 @@ implements ClientReceiverInterface {
 				}
 			}
 		} catch (Exception e) {
-			LOGGER.error("Fehler beim einlesen der CSV Datei: "+e);
+			LOGGER.error("Fehler beim einlesen der CSV Datei: "+e); //$NON-NLS-1$
 		}
 	}
 	
@@ -377,7 +379,7 @@ implements ClientReceiverInterface {
 					}
 				} catch(Exception e) {}
 
-				LOGGER.info("Zu prüfendes Datum empfangen. Warte auf Prüfung...");
+				LOGGER.info("Zu prüfendes Datum empfangen. Warte auf Prüfung..."); //$NON-NLS-1$
 			}
 		}
 	}
@@ -387,7 +389,7 @@ implements ClientReceiverInterface {
 	 */
 	private void pruefungFertig() {
 		if(pruefungFS1Fertig && pruefungFS2Fertig && pruefungFS3Fertig) {
-			LOGGER.info("Prüfung aller Fahrstreifen für diesen Intervall abgeschlossen");
+			LOGGER.info("Prüfung aller Fahrstreifen für diesen Intervall abgeschlossen"); //$NON-NLS-1$
 			caller.doNotify();  //Benachrichtige aufrufende Klasse
 		}
 	}
@@ -419,6 +421,11 @@ implements ClientReceiverInterface {
  * Vergleicht CSV Daten mit Ergebnisdaten
  */
 class VergleicheKZD extends Thread {
+
+	/**
+	 * Assert-Statements benutzen?
+	 */
+	protected static final boolean USE_ASSERT = true;
 
 	/**
 	 * Logger
@@ -657,17 +664,19 @@ class VergleicheKZD extends Thread {
 						if(attribWertKopie.contains(".Wert.Kopie") && hmCSV.get(attribWertKopie).equals(hmResult.get(attribut))) {
 							warnung += "\n\r"+ident+"W-OK ("+attribWertKopie+"):"+ hmCSV.get(attribWertKopie)+" (SOLL)==(IST) "+hmResult.get(attribut);
 						}
+						
 						LOGGER.warning(warnung);
+						
 						pruefLog += ident+"DIFF ("+attribut+"):"+ hmCSV.get(attribut) + sollWertErl +" (SOLL)<>(IST) "+hmResult.get(attribut) + istWertErl +"\n\r";
 					} else {
 						pruefLog += ident+" OK  ("+attribut+"):"+ hmCSV.get(attribut) + sollWertErl +" (SOLL)==(IST) "+hmResult.get(attribut) + istWertErl +"\n\r";
 					}
 				} else {
-					
 					sollWertErl = wertErl((int)csvWerttNetto);
 					istWertErl = wertErl((int)resultWerttNetto);
 					
 					if(csvWerttNetto != resultWerttNetto) {
+						Assert.assertTrue(ident + "DIFF (" + attribut + "):" + csvWerttNetto + sollWertErl + " (SOLL)<>(IST) " + resultWerttNetto + istWertErl, false);
 						LOGGER.error(ident+"DIFF ("+attribut+"):"+ csvWerttNetto + sollWertErl +" (SOLL)<>(IST) "+resultWerttNetto + istWertErl);
 						pruefLog += ident+"DIFF ("+attribut+"):"+ csvWerttNetto + sollWertErl +" (SOLL)<>(IST) "+resultWerttNetto + istWertErl +"\n\r";
 					} else {

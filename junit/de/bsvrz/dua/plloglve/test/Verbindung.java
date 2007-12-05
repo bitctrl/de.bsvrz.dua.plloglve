@@ -1,5 +1,5 @@
-/** 
- * Segment 4 Datenübernahme und Aufbereitung (DUA), SWE 4.2 Pl-Prüfung logisch LVE
+/**
+ * Segment 4 Datenübernahme und Aufbereitung (DUA), SWE 4.2 Pl-Pruefung LVE
  * Copyright (C) 2007 BitCtrl Systems GmbH 
  * 
  * This program is free software; you can redistribute it and/or modify it under
@@ -23,26 +23,43 @@
  * Phone: +49 341-490670<br>
  * mailto: info@bitctrl.de
  */
-package de.bsvrz.dua.plloglve.plloglve;
+
+package de.bsvrz.dua.plloglve.test;
 
 /**
- * Klasse mit allen Testflags
+ * Speichert die Verbindungsdaten
  * 
  * @author BitCtrl Systems GmbH, Thierfelder
  *
  */
-public class TestParameter {
+public class Verbindung {
 	
 	/**
-	 * Ist dieses Flag gesetzt, so läuft die Applikation im Testbetrieb für das Modul
-	 * Vertrauensbereich. Ein Tag ist dann für dieses Modul genau 144s lang!
+	 * Verbindungsdaten
 	 */
-	public static final boolean TEST_VERTRAUEN = false;
+	private static final String[] CON_DATA = new String[] {
+			"-datenverteiler=localhost:8083",   //$NON-NLS-1$
+			"-benutzer=Tester",  //$NON-NLS-1$
+			"-authentifizierung=c:\\passwd1",  //$NON-NLS-1$
+			"-debugLevelStdErrText=WARNÌNG", //$NON-NLS-1$
+			"-debugLevelFileText=WARNÌNG" }; //$NON-NLS-1$
 	
 	/**
-	 * Ist dieses Flag gesetzt, so läuft die Applikation im Testbetrieb für das Modul
-	 * Ausfallhäufigkeit. Ein Tag ist dann für dieses Modul genau 144s lang!
+	 * Verzeichnis, in dem sich die CSV-Dateien mit den Testdaten befinden
 	 */
-	public static final boolean TEST_AUSFALL = true;
-	
+	public static final String TEST_DATEN_VERZ = ".\\testDaten\\V_2.0(28.11.07)\\"; //$NON-NLS-1$
+
+	/**
+	 * Erfragt eine Kopie der Verbindungsdaten
+	 * 
+	 * @return eine Kopie der Verbindungsdaten
+	 */
+	protected static final String[] getConData(){
+		String[] conDataKopie = new String[CON_DATA.length];
+		
+		for(int i = 0; i < conDataKopie.length; i++)conDataKopie[i] = CON_DATA[i];
+		
+		return conDataKopie;
+	}
+
 }

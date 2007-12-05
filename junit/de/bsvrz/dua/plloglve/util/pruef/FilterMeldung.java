@@ -1,14 +1,12 @@
 package de.bsvrz.dua.plloglve.util.pruef;
 
+import junit.framework.Assert;
 import de.bsvrz.dav.daf.main.ClientDavInterface;
-import de.bsvrz.dav.daf.main.ClientReceiverInterface;
 import de.bsvrz.dav.daf.main.DataDescription;
-import de.bsvrz.dav.daf.main.ReceiveOptions;
-import de.bsvrz.dav.daf.main.ReceiverRole;
-import de.bsvrz.dav.daf.main.ResultData;
 import de.bsvrz.dav.daf.main.config.SystemObject;
-import de.bsvrz.dav.daf.main.impl.InvalidArgumentException;
 import de.bsvrz.dua.plloglve.util.PlPruefungInterface;
+import de.bsvrz.sys.funclib.bitctrl.dua.bm.BmClient;
+import de.bsvrz.sys.funclib.bitctrl.dua.bm.IBmListener;
 import de.bsvrz.sys.funclib.debug.Debug;
 
 /**
@@ -17,12 +15,17 @@ import de.bsvrz.sys.funclib.debug.Debug;
  * Wartet auf gesendete und gepruefte Daten und gibt diese an Vergleicher-Klasse weiter
  */
 public class FilterMeldung
-implements ClientReceiverInterface {
+implements IBmListener {
 
+	/**
+	 * Ob <code>Assert...</code> benutzt werden soll oder blos Warnungen ausgegeben werden sollen
+	 */
+	private static final boolean USE_ASSERT = false;
+	
 	/**
 	 * Logger
 	 */
-	protected Debug LOGGER = Debug.getLogger();
+	protected static final Debug LOGGER = Debug.getLogger();
 	
 	/**
 	 * Aufrufende Klasse
@@ -75,43 +78,37 @@ implements ClientReceiverInterface {
 		this.erfAnz = erfAnz;
 		this.caller = caller;
 		
-		//MELD = this.dav.getDataModel().getObject("kv.aoe.bitctrl.tester");
-		MELD = this.dav.getDataModel().getObject("kv.bitctrl.thierfelder");
-		
-		LOGGER.info("Filtere Betriebsmeldungen nach \""+filter+"\" - Erwarte "+erfAnz+" gefilterte Meldungen");
+		LOGGER.info("Filtere Betriebsmeldungen nach \""+filter+"\" - Erwarte "+erfAnz+" gefilterte Meldungen"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 		
 		/*
 		 * Melde Empfänger für Betriebsmeldungen an
 		 */
-		DD_MELD_EMPF = new DataDescription(this.dav.getDataModel().getAttributeGroup("atg.betriebsMeldung"),
-			      this.dav.getDataModel().getAspect("asp.information"),
+		DD_MELD_EMPF = new DataDescription(this.dav.getDataModel().getAttributeGroup("atg.betriebsMeldung"), //$NON-NLS-1$
+			      this.dav.getDataModel().getAspect("asp.information"), //$NON-NLS-1$
 			      (short)0);
 		
-		this.dav.subscribeReceiver(this, MELD, 
-				DD_MELD_EMPF, ReceiveOptions.normal(), ReceiverRole.receiver());
+		BmClient.getInstanz(dav).addListener(this);
 	}
+	
 	
 	/**
 	 * {@inheritDoc}
-	 * 
-	 * @param results Ergebnisdatensätze vom DaV
-	 * @throws InvalidArgumentException 
 	 */
-	public void update(ResultData[] results) {
-		for (ResultData result : results) {
-			if (result.getDataDescription().equals(DD_MELD_EMPF) &&
-				result.getData() != null &&
-				result.toString().contains(filter)) {
-				String meldung = result.getData().getItem("MeldungsText").asTextValue().toString();
-				meldAnzahl++;
-				LOGGER.info(meldAnzahl+". Meldung empfangen\n\r"+meldung);
-			}
+	public void aktualisiereBetriebsMeldungen(SystemObject obj, long zeit,
+			String text) {
+		if (text.contains(filter)) {
+			meldAnzahl++;
+			LOGGER.info(meldAnzahl + ". Meldung empfangen\n\r" + text); //$NON-NLS-1$
 		}
 		if(meldAnzahl == erfAnz) {
-			LOGGER.info("Erforderliche Anzahl an Meldungen erhalten");
+			LOGGER.info("Erforderliche Anzahl an Meldungen erhalten"); //$NON-NLS-1$
 			caller.doNotify();
 		} else if (meldAnzahl > erfAnz) {
-			LOGGER.warning("Mehr Meldungen gefiltert als erwartet");
+			if(USE_ASSERT){
+				Assert.assertTrue("Mehr Meldungen gefiltert als erwartet", false); //$NON-NLS-1$
+			}else{
+				LOGGER.warning("Mehr Meldungen gefiltert als erwartet"); //$NON-NLS-1$	
+			}			
 		}
 	}
 }
