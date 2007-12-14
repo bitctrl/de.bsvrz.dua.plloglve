@@ -41,14 +41,16 @@ public class Verbindung {
 			"-datenverteiler=localhost:8083",   //$NON-NLS-1$
 			"-benutzer=Tester",  //$NON-NLS-1$
 			"-authentifizierung=c:\\passwd1",  //$NON-NLS-1$
-			"-debugLevelStdErrText=WARNÌNG", //$NON-NLS-1$
-			"-debugLevelFileText=WARNÌNG" }; //$NON-NLS-1$
+			"-debugLevelStdErrText=INFO", //$NON-NLS-1$
+			"-debugLevelFileText=INFO" }; //$NON-NLS-1$
+	
 	
 	/**
 	 * Verzeichnis, in dem sich die CSV-Dateien mit den Testdaten befinden
 	 */
-	public static final String TEST_DATEN_VERZ = ".\\testDaten\\V_2.0(28.11.07)\\"; //$NON-NLS-1$
+	public static final String TEST_DATEN_VERZ = ".\\testDaten\\V_2.1(11.12.07)\\"; //$NON-NLS-1$
 
+	
 	/**
 	 * Erfragt eine Kopie der Verbindungsdaten
 	 * 

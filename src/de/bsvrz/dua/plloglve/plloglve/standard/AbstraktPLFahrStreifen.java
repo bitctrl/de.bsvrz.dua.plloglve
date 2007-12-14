@@ -408,7 +408,7 @@ implements ClientReceiverInterface{
 										davDatum.getItem(wertName).getItem("Güte").//$NON-NLS-1$
 												getScaledValue("Index").set(qLkwGueteNeu.getIndexUnskaliert());  //$NON-NLS-1$
 									}else{
-										this.setQUndVImplausibel(davDatum);
+										this.setAllesImplausibel(davDatum);
 										abbruch = true;										
 									}
 								}
@@ -498,7 +498,7 @@ implements ClientReceiverInterface{
 							if(wertName.equals("vKfz") || wertName.startsWith("qKfz") ||  //$NON-NLS-1$ //$NON-NLS-2$
 							   wertName.equals("vLkw") || wertName.startsWith("qLkw") ||  //$NON-NLS-1$ //$NON-NLS-2$
 							   wertName.equals("vPkw") || wertName.startsWith("qPkw")){  //$NON-NLS-1$ //$NON-NLS-2$
-								this.setQUndVImplausibel(davDatum);
+								this.setAllesImplausibel(davDatum);
 								abbruch = true;
 							}
 						}
@@ -538,13 +538,12 @@ implements ClientReceiverInterface{
 
 	
 	/**
-	 * Setzt im uebergebenen Datensatz die Werte <code>qPkw</code>, <code>qLkw</code>, 
-	 * <code>qKfz</code> und <code>vPkw</code>, <code>vLkw</code>, <code>vKfz</code>
+	 * Setzt im uebergebenen Datensatz alle Werte
 	 * auf implausibel und fehlerhaft 
 	 * 
 	 * @param veraenderbaresDatum ein veraenderbarer LVE-Datensatz (muss <code>!= null</code> sein)
 	 */
-	protected final void setQUndVImplausibel(Data veraenderbaresDatum){
+	protected final void setAllesImplausibel(Data veraenderbaresDatum){
 		veraenderbaresDatum.getItem("qKfz").getUnscaledValue("Wert").set(DUAKonstanten.FEHLERHAFT); //$NON-NLS-1$ //$NON-NLS-2$
 		veraenderbaresDatum.getItem("qLkw").getUnscaledValue("Wert").set(DUAKonstanten.FEHLERHAFT); //$NON-NLS-1$ //$NON-NLS-2$
 		veraenderbaresDatum.getItem("qPkw").getUnscaledValue("Wert").set(DUAKonstanten.FEHLERHAFT); //$NON-NLS-1$ //$NON-NLS-2$
@@ -565,6 +564,21 @@ implements ClientReceiverInterface{
 		veraenderbaresDatum.getItem("vLkw").getItem("Status").getItem("MessWertErsetzung").   //$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$
 			getUnscaledValue("Implausibel").set(DUAKonstanten.JA); //$NON-NLS-1$
 		veraenderbaresDatum.getItem("vPkw").getItem("Status").getItem("MessWertErsetzung").   //$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$
+			getUnscaledValue("Implausibel").set(DUAKonstanten.JA); //$NON-NLS-1$
+		
+		
+		veraenderbaresDatum.getItem("b").getUnscaledValue("Wert").set(DUAKonstanten.FEHLERHAFT); //$NON-NLS-1$ //$NON-NLS-2$
+		veraenderbaresDatum.getItem("tNetto").getUnscaledValue("Wert").set(DUAKonstanten.FEHLERHAFT); //$NON-NLS-1$ //$NON-NLS-2$
+		veraenderbaresDatum.getItem("sKfz").getUnscaledValue("Wert").set(DUAKonstanten.FEHLERHAFT); //$NON-NLS-1$ //$NON-NLS-2$
+		veraenderbaresDatum.getItem("vgKfz").getUnscaledValue("Wert").set(DUAKonstanten.FEHLERHAFT); //$NON-NLS-1$ //$NON-NLS-2$
+
+		veraenderbaresDatum.getItem("b").getItem("Status").getItem("MessWertErsetzung").   //$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$
+			getUnscaledValue("Implausibel").set(DUAKonstanten.JA); //$NON-NLS-1$
+		veraenderbaresDatum.getItem("tNetto").getItem("Status").getItem("MessWertErsetzung").   //$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$
+			getUnscaledValue("Implausibel").set(DUAKonstanten.JA); //$NON-NLS-1$
+		veraenderbaresDatum.getItem("sKfz").getItem("Status").getItem("MessWertErsetzung").   //$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$
+			getUnscaledValue("Implausibel").set(DUAKonstanten.JA); //$NON-NLS-1$
+		veraenderbaresDatum.getItem("vgKfz").getItem("Status").getItem("MessWertErsetzung").   //$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$
 			getUnscaledValue("Implausibel").set(DUAKonstanten.JA); //$NON-NLS-1$
 	}
 	

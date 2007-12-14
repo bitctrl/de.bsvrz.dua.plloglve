@@ -74,6 +74,11 @@ extends AbstraktPLFahrStreifen{
 		long T = data.getTimeValue("T").getMillis(); //$NON-NLS-1$
 		long b = data.getItem("b").getUnscaledValue("Wert").longValue(); //$NON-NLS-1$ //$NON-NLS-2$
 
+		if(tNetto==169000){
+			System.out.println();
+		}
+		
+		
 		long vgKfzLetztesIntervall = -4;
 		if(this.letztesKZDatum != null){
 			if(this.letztesKZDatum.getData() != null){
@@ -89,7 +94,7 @@ extends AbstraktPLFahrStreifen{
 		 */
 		if(qKfz == 0){
 			if(!(qLkw == 0 && qPkw == 0)){
-				this.setQUndVImplausibel(data);
+				this.setAllesImplausibel(data);
 				return;
 			}
 		}
@@ -102,7 +107,7 @@ extends AbstraktPLFahrStreifen{
 			if(qKfz >= 0 && qLkw >= 0){
 				if(qKfz - qLkw == 0){
 					if(!(qPkw == 0 && vPkw == DUAKonstanten.NICHT_ERMITTELBAR)){
-						this.setQUndVImplausibel(data);
+						this.setAllesImplausibel(data);
 						return;
 					}
 				}
@@ -113,7 +118,7 @@ extends AbstraktPLFahrStreifen{
 			 */
 			if(qLkw == 0){
 				if(!(vLkw == DUAKonstanten.NICHT_ERMITTELBAR)){
-					this.setQUndVImplausibel(data);
+					this.setAllesImplausibel(data);
 					return;
 				}
 			}
@@ -123,7 +128,7 @@ extends AbstraktPLFahrStreifen{
 			 */
 			if(qPkw == 0){
 				if(!(vPkw == DUAKonstanten.NICHT_ERMITTELBAR)){
-					this.setQUndVImplausibel(data);
+					this.setAllesImplausibel(data);
 					return;
 				}
 			}		
@@ -134,7 +139,7 @@ extends AbstraktPLFahrStreifen{
 		 */
 		if(qKfz >= 0 && qLkw >= 0){
 			if(qKfz < qLkw){
-				this.setQUndVImplausibel(data);
+				this.setAllesImplausibel(data);
 				return;
 			}
 		}
@@ -146,7 +151,7 @@ extends AbstraktPLFahrStreifen{
 			if(qKfz - qLkw > 0){
 				if(vPkw >= 0){
 					if(!(0 < vPkw)){
-						this.setQUndVImplausibel(data);
+						this.setAllesImplausibel(data);
 						return;
 					}
 				}
@@ -159,7 +164,7 @@ extends AbstraktPLFahrStreifen{
 		if(qKfz > 0){
 			if(vKfz >= 0){
 				if(!(0 < vKfz)){
-					this.setQUndVImplausibel(data);
+					this.setAllesImplausibel(data);
 					return;
 				}
 			}
@@ -171,7 +176,7 @@ extends AbstraktPLFahrStreifen{
 		if(qLkw > 0){
 			if(vLkw >= 0){
 				if( !(0 < vLkw) ){
-					this.setQUndVImplausibel(data);
+					this.setAllesImplausibel(data);
 					return;
 				}
 			}

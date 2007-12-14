@@ -288,7 +288,7 @@ implements ClientReceiverInterface {
 		
 		if(sollImplausibel != SOLL_IMPLAUSIBEL_KEINE_PRUEFUNG) {
 			if(sollImplausibel != impl) {
-				String fehler = "Fehlerhafte Implausibel-Markierung ("+pruefeAttr+"): "+sollImplausibel+" (SOLL)<>(IST) "+impl; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ 
+				String fehler = "Fehlerhafte Implausibel-Markierung ("+pruefeAttr+"): "+sollImplausibel+" (SOLL)<>(IST) "+impl+ ",\n" + data; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ 
 				if(USE_ASSERT){
 					Assert.assertTrue(fehler, false);
 				}else{
