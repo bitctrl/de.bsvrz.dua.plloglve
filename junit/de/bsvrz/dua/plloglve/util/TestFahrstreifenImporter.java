@@ -142,8 +142,9 @@ extends CSVImporter{
 			}else{
 				datensatz = null;
 			}
+			
 		}
-		
+				
 		return datensatz;
 	}
 	

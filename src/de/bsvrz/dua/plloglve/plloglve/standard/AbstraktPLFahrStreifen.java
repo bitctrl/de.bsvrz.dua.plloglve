@@ -160,7 +160,7 @@ implements ClientReceiverInterface{
 		
 		long qPkw = DUAKonstanten.NICHT_ERMITTELBAR;
 		GWert qPkwGuete = GueteVerfahren.STD_FEHLERHAFT_BZW_NICHT_ERMITTELBAR;
-		
+				
 		if(qKfz >= 0 && !qKfzImplausibel){
 			if(qLkw >= 0 && !qLkwImplausibel){
 				if(qLkw > qKfz){
@@ -211,14 +211,24 @@ implements ClientReceiverInterface{
 				GWert qLkwG = new GWert(data, "qLkw"); //$NON-NLS-1$
 				GWert vLkwG = new GWert(data, "vLkw"); //$NON-NLS-1$
 				GWert qKfzG = new GWert(data, "qKfz"); //$NON-NLS-1$
-				
-				vKfzGuete = GueteVerfahren.quotient(
-								GueteVerfahren.summe(
-										GueteVerfahren.produkt(qPkwG, vPkwG),
-										GueteVerfahren.produkt(qLkwG, vLkwG)
-								),
-								qKfzG
-							);
+
+				if(qPkwDummy * vPkwDummy == 0){
+					vKfzGuete = GueteVerfahren.quotient(
+								GueteVerfahren.produkt(qLkwG, vLkwG), qKfzG
+						);
+				}else if(qLkwDummy * vLkwDummy == 0){
+					vKfzGuete = GueteVerfahren.quotient(
+								GueteVerfahren.produkt(qPkwG, vPkwG), qKfzG
+						);					
+				}else{					
+					vKfzGuete = GueteVerfahren.quotient(
+									GueteVerfahren.summe(
+											GueteVerfahren.produkt(qPkwG, vPkwG),
+											GueteVerfahren.produkt(qLkwG, vLkwG)
+									),
+									qKfzG
+								);
+				}
 				
 			} catch (GueteException e) {
 				e.printStackTrace();
@@ -565,8 +575,7 @@ implements ClientReceiverInterface{
 			getUnscaledValue("Implausibel").set(DUAKonstanten.JA); //$NON-NLS-1$
 		veraenderbaresDatum.getItem("vPkw").getItem("Status").getItem("MessWertErsetzung").   //$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$
 			getUnscaledValue("Implausibel").set(DUAKonstanten.JA); //$NON-NLS-1$
-		
-		
+				
 		veraenderbaresDatum.getItem("b").getUnscaledValue("Wert").set(DUAKonstanten.FEHLERHAFT); //$NON-NLS-1$ //$NON-NLS-2$
 		veraenderbaresDatum.getItem("tNetto").getUnscaledValue("Wert").set(DUAKonstanten.FEHLERHAFT); //$NON-NLS-1$ //$NON-NLS-2$
 		veraenderbaresDatum.getItem("sKfz").getUnscaledValue("Wert").set(DUAKonstanten.FEHLERHAFT); //$NON-NLS-1$ //$NON-NLS-2$

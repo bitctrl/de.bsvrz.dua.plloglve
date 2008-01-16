@@ -73,10 +73,6 @@ extends AbstraktPLFahrStreifen{
 		long tNetto = data.getItem("tNetto").getUnscaledValue("Wert").longValue(); //$NON-NLS-1$ //$NON-NLS-2$
 		long T = data.getTimeValue("T").getMillis(); //$NON-NLS-1$
 		long b = data.getItem("b").getUnscaledValue("Wert").longValue(); //$NON-NLS-1$ //$NON-NLS-2$
-
-		if(tNetto==169000){
-			System.out.println();
-		}
 		
 		
 		long vgKfzLetztesIntervall = -4;

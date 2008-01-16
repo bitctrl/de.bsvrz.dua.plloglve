@@ -6,6 +6,7 @@ import org.junit.Test;
 import de.bsvrz.dav.daf.main.ClientDavInterface;
 import de.bsvrz.dua.plloglve.util.PlPruefungDiff;
 import de.bsvrz.dua.plloglve.util.PlPruefungLogisch;
+import de.bsvrz.sys.funclib.bitctrl.app.Pause;
 import de.bsvrz.sys.funclib.bitctrl.dua.test.DAVTest;
 import de.bsvrz.sys.funclib.commandLineArgs.ArgumentList;
 

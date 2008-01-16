@@ -130,6 +130,7 @@ implements ClientSenderInterface {
 	 */
 	public void pruefeKZDTLS() throws Exception {
 		this.csvPruefDatei = "PL-Pruef_LVE_TLS"; //$NON-NLS-1$
+		
 		this.tlsPruefung = true;
 		
 		LOGGER.info("Prüfe KZD TLS..."); //$NON-NLS-1$
@@ -263,7 +264,9 @@ implements ClientSenderInterface {
 			if((zeileFS1 = fsImpFS1.getNaechstenDatensatz(DD_KZD_SEND.getAttributeGroup())) != null) {
 				LOGGER.info("Sende Daten fuer FS1 (CSV-Zeile "+(csvIndex+2)+")");		 //$NON-NLS-1$ //$NON-NLS-2$
 				resultat1 = new ResultData(FS1, DD_KZD_SEND, aktZeit, zeileFS1);
-			} else datenFS1Vorhanden = false;
+			} else{				
+				datenFS1Vorhanden = false;
+			}
 
 			if((zeileFS2 = fsImpFS2.getNaechstenDatensatz(DD_KZD_SEND.getAttributeGroup())) != null) {
 				LOGGER.info("Sende Daten fuer FS2 (CSV-Zeile "+(csvIndex+2)+")");		 //$NON-NLS-1$ //$NON-NLS-2$
