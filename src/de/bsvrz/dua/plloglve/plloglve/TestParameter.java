@@ -37,12 +37,12 @@ public class TestParameter {
 	 * Ist dieses Flag gesetzt, so läuft die Applikation im Testbetrieb für das Modul
 	 * Vertrauensbereich. Ein Tag ist dann für dieses Modul genau 144s lang!
 	 */
-	public static final boolean TEST_VERTRAUEN = false;
+	public static final boolean TEST_VERTRAUEN = true;
 	
 	/**
 	 * Ist dieses Flag gesetzt, so läuft die Applikation im Testbetrieb für das Modul
 	 * Ausfallhäufigkeit. Ein Tag ist dann für dieses Modul genau 144s lang!
 	 */
-	public static final boolean TEST_AUSFALL = true;
+	public static final boolean TEST_AUSFALL = false;
 	
 }

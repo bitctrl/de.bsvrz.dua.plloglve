@@ -60,7 +60,7 @@ implements ClientSenderInterface, PlPruefungInterface {
 		/*
 		 * Melde Sender für FS an
 		 */
-		FS = this.dav.getDataModel().getObject("AAA.Test.fs.kzd.1"); //$NON-NLS-1$
+		FS = this.dav.getDataModel().getObject("fs.mq.a100.0000.hfs"); //$NON-NLS-1$
 		
 		DD_KZD_SEND = new DataDescription(this.dav.getDataModel().getAttributeGroup(DUAKonstanten.ATG_KZD),
 				  	  this.dav.getDataModel().getAspect(DUAKonstanten.ASP_EXTERNE_ERFASSUNG),
@@ -88,7 +88,7 @@ implements ClientSenderInterface, PlPruefungInterface {
 		 * Initialisiere FS-Daten-Importer 
 		 */
 		TestFahrstreifenImporter fsImpFSDiff = null;
-		fsImpFSDiff = new TestFahrstreifenImporter(this.dav, TEST_DATEN_VERZ + "fahrstreifen_Diff"); //$NON-NLS-1$
+		fsImpFSDiff = new TestFahrstreifenImporter(this.dav, TEST_DATEN_VERZ + "Fahrstreifen_Diff"); //$NON-NLS-1$
 		
 		Data zeileFSDiff;
 		

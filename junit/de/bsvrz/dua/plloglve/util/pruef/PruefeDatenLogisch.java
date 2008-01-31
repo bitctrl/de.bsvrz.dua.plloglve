@@ -369,11 +369,14 @@ implements ClientReceiverInterface {
 
 				try {
 					//Ermittle FS und pruefe Daten
-					if(result.getObject().getName().endsWith(".1")) {
+					if(result.getObject().getName().endsWith(".hfs") ||
+							result.getObject().getName().endsWith(".1")) {
 						vergleicheFS1.vergleiche(result, csvZeilenFS1, csvOffset);
-					} else if(result.getObject().getName().endsWith(".2")) {
+					} else if(result.getObject().getName().endsWith(".1üfs") ||
+							result.getObject().getName().endsWith(".2")) {
 						vergleicheFS2.vergleiche(result, csvZeilenFS2, csvOffset);
-					} else if(result.getObject().getName().endsWith(".3")) {
+					} else if(result.getObject().getName().endsWith(".2üfs") ||
+							result.getObject().getName().endsWith(".3")) {
 						vergleicheFS3.vergleiche(result, csvZeilenFS3, csvOffset);
 					}
 				} catch(Exception e) {}

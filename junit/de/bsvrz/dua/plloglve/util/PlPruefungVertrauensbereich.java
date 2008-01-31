@@ -87,7 +87,7 @@ implements ClientSenderInterface, PlPruefungInterface {
 		/*
 		 * Melde Sender für FS an
 		 */
-		FS = this.dav.getDataModel().getObject("AAA.Test.fs.kzd.1"); //$NON-NLS-1$
+		FS = this.dav.getDataModel().getObject("fs.mq.a100.0000.hfs"); //$NON-NLS-1$
 		
 		DD_KZD_SEND = new DataDescription(this.dav.getDataModel().getAttributeGroup(DUAKonstanten.ATG_KZD),
 				  	  this.dav.getDataModel().getAspect(DUAKonstanten.ASP_EXTERNE_ERFASSUNG),
@@ -205,7 +205,8 @@ implements ClientSenderInterface, PlPruefungInterface {
 			 * Verlassen des VB vom 29. - 71. DS und vom 511. - 551. DS
 			 * Innerhalb dieser Bereiche werden alle Werte des FS als Implausibel erwartet
 			 */
-			if((i >= 4 && i <= 9) || (i >= 23 && i <= 29) || (i >= 490 && i <= 494) || (i >= 501 && i <= 506) || (i >= 512 && i <= 514)) {
+			//if((i >= 4 && i <= 9) || (i >= 23 && i <= 29) || (i >= 490 && i <= 494) || (i >= 501 && i <= 506) || (i >= 512 && i <= 514)) {
+			if((i >= 2 && i <= 9) || (i >= 23 && i <= 29)) {
 				/*
 				 * Es wird ein fehlerhafter DS (qKfz, qPkw, qLkw, vPkw) gesendet
 				 * Dabei wird der VB entsprechend Afo beim 29. DS verlassen
@@ -219,22 +220,23 @@ implements ClientSenderInterface, PlPruefungInterface {
 				 * Ab dem 552. DS liegt der prozentuale Ausfall entsprechend Afo wieder im VB 
 				 */
 				LOGGER.info("Intervall "+i+": Sende fehlerhaftes Datum (qKfz, qPkw, qLkw, vPkw)");
-				sendeFehler1(pruefZeit);
-			} else if ((i >= 10 && i <= 16) || (i >= 30 && i <= 36) || (i >= 482 && i <= 489) || (i >= 507 && i <= 511)) {
-				/*
-				 * Es wird ein fehlerhafter DS (b) gesendet
-				 * Der prozentuale Ausfall der Attribute liegt ab dem 35. DS über 20% wobei der VB jedoch
-				 * aufgrund der anderen Fehlerdaten bereits früher verlassen wird
-				 * 
-				 * Ab dem 72. DS liegt der prozentuale Ausfall entsprechend Afo wieder im VB 
-				 * 
-				 * Für den zweiten Testbereich wird der VB ab dem 511. DS entsprechend Afo verlassen
-				 * 
-				 * Der prozentuale Ausfall der Attribute liegt ab dem 543. DS unter 20% wobei der VB jedoch
-				 * aufgrund der anderen Fehlerdaten weiterhin verlassen bleibt
-				 */
-				LOGGER.info("Intervall "+i+": Sende fehlerhaftes Datum (b)");
 				sendeFehler2(pruefZeit);
+//			} else if ((i >= 10 && i <= 16) || (i >= 30 && i <= 36) || (i >= 482 && i <= 489) || (i >= 507 && i <= 511)) {
+			} else if((i >= 10 && i <= 16) || (i >= 30 && i <= 36)) {
+				//				/*
+//				 * Es wird ein fehlerhafter DS (b) gesendet
+//				 * Der prozentuale Ausfall der Attribute liegt ab dem 35. DS über 20% wobei der VB jedoch
+//				 * aufgrund der anderen Fehlerdaten bereits früher verlassen wird
+//				 * 
+//				 * Ab dem 72. DS liegt der prozentuale Ausfall entsprechend Afo wieder im VB 
+//				 * 
+//				 * Für den zweiten Testbereich wird der VB ab dem 511. DS entsprechend Afo verlassen
+//				 * 
+//				 * Der prozentuale Ausfall der Attribute liegt ab dem 543. DS unter 20% wobei der VB jedoch
+//				 * aufgrund der anderen Fehlerdaten weiterhin verlassen bleibt
+//				 */
+				LOGGER.info("Intervall "+i+": Sende fehlerhaftes Datum (b)");
+				sendeFehler1(pruefZeit);
 			} else {
 				if((zeileFSOK = paraImpFSOK.getNaechstenDatensatz(DD_KZD_SEND.getAttributeGroup())) == null) {
 					paraImpFSOK.reset();

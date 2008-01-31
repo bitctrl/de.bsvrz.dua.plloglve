@@ -44,8 +44,8 @@ public class PlPruefungLogischLVETestStandardDiff {
 	 */
 	@Test
 	public void testKZDTLS()throws Exception{
-		PlPruefungLogisch pruefLogisch = new PlPruefungLogisch(dav,Verbindung.TEST_DATEN_VERZ, alLogger);
-		pruefLogisch.pruefeKZDTLS();
+//		PlPruefungLogisch pruefLogisch = new PlPruefungLogisch(dav,Verbindung.TEST_DATEN_VERZ, alLogger);
+//		pruefLogisch.pruefeKZDTLS();
 	}
 	
 	/**
@@ -53,7 +53,7 @@ public class PlPruefungLogischLVETestStandardDiff {
 	 */
 	@Test
 	public void testKZDGrenz()throws Exception{
-//		PlPruefungLogisch pruefLogisch = new PlPruefungLogisch(dav,TEST_DATEN_VERZ);
+//		PlPruefungLogisch pruefLogisch = new PlPruefungLogisch(dav,Verbindung.TEST_DATEN_VERZ, alLogger);
 //		pruefLogisch.pruefeKZDGrenz();
 	}
 	
@@ -62,8 +62,8 @@ public class PlPruefungLogischLVETestStandardDiff {
 	 */
 	@Test
 	public void testLZDTLS()throws Exception{
-//		PlPruefungLogisch pruefLogisch = new PlPruefungLogisch(dav,TEST_DATEN_VERZ);
-//		pruefLogisch.pruefeLZDGrenz();
+		PlPruefungLogisch pruefLogisch = new PlPruefungLogisch(dav,Verbindung.TEST_DATEN_VERZ, alLogger);
+		pruefLogisch.pruefeLZDGrenz();
 	}
 	
 	/**

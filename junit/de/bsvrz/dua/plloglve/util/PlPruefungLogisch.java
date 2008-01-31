@@ -105,9 +105,9 @@ implements ClientSenderInterface {
 		/*
 		 * Meldet Sender für KZD und LZD unter dem Aspekt Externe Erfassung an
 		 */
-		FS1 = this.dav.getDataModel().getObject("AAA.Test.fs.kzd.1"); //$NON-NLS-1$
-		FS2 = this.dav.getDataModel().getObject("AAA.Test.fs.kzd.2"); //$NON-NLS-1$
-		FS3 = this.dav.getDataModel().getObject("AAA.Test.fs.kzd.3"); //$NON-NLS-1$
+		FS1 = this.dav.getDataModel().getObject("fs.mq.a100.0000.hfs"); //$NON-NLS-1$
+		FS2 = this.dav.getDataModel().getObject("fs.mq.a100.0000.1üfs"); //$NON-NLS-1$
+		FS3 = this.dav.getDataModel().getObject("fs.mq.a100.0000.2üfs"); //$NON-NLS-1$
 
 		FS1_LZ = this.dav.getDataModel().getObject("AAA.Test.fs.lzd.1"); //$NON-NLS-1$
 		FS2_LZ = this.dav.getDataModel().getObject("AAA.Test.fs.lzd.2"); //$NON-NLS-1$
