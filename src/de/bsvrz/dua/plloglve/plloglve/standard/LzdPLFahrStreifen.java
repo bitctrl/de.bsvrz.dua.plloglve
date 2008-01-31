@@ -31,6 +31,7 @@ import de.bsvrz.dav.daf.main.Data;
 import de.bsvrz.dav.daf.main.ResultData;
 import de.bsvrz.dav.daf.main.config.AttributeGroup;
 import de.bsvrz.dav.daf.main.config.SystemObject;
+import de.bsvrz.sys.funclib.bitctrl.dua.DUAKonstanten;
 import de.bsvrz.sys.funclib.bitctrl.dua.schnittstellen.IVerwaltungMitGuete;
 
 /**
@@ -83,6 +84,42 @@ extends KzdPLFahrStreifen{
 	@Override
 	protected AttributeGroup getPlausibilisierungsParameterAtg(ClientDavInterface dav) {
 		return dav.getDataModel().getAttributeGroup(AtgVerkehrsDatenLZIPlPruefLogisch.getPid());
-	}	
+	}
+	
+	
+	/**
+	 * Setzt im uebergebenen Datensatz alle Werte
+	 * auf implausibel und fehlerhaft 
+	 * 
+	 * @param veraenderbaresDatum ein veraenderbarer LVE-Datensatz (muss <code>!= null</code> sein)
+	 */
+	protected void setAllesImplausibel(Data veraenderbaresDatum){
+		veraenderbaresDatum.getItem("qKfz").getUnscaledValue("Wert").set(DUAKonstanten.FEHLERHAFT); //$NON-NLS-1$ //$NON-NLS-2$
+		veraenderbaresDatum.getItem("qLkw").getUnscaledValue("Wert").set(DUAKonstanten.FEHLERHAFT); //$NON-NLS-1$ //$NON-NLS-2$
+		veraenderbaresDatum.getItem("qPkw").getUnscaledValue("Wert").set(DUAKonstanten.FEHLERHAFT); //$NON-NLS-1$ //$NON-NLS-2$
+
+		veraenderbaresDatum.getItem("vKfz").getUnscaledValue("Wert").set(DUAKonstanten.FEHLERHAFT); //$NON-NLS-1$ //$NON-NLS-2$
+		veraenderbaresDatum.getItem("vLkw").getUnscaledValue("Wert").set(DUAKonstanten.FEHLERHAFT); //$NON-NLS-1$ //$NON-NLS-2$
+		veraenderbaresDatum.getItem("vPkw").getUnscaledValue("Wert").set(DUAKonstanten.FEHLERHAFT); //$NON-NLS-1$ //$NON-NLS-2$
+
+		veraenderbaresDatum.getItem("qKfz").getItem("Status").getItem("MessWertErsetzung").   //$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$
+			getUnscaledValue("Implausibel").set(DUAKonstanten.JA); //$NON-NLS-1$
+		veraenderbaresDatum.getItem("qLkw").getItem("Status").getItem("MessWertErsetzung").   //$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$
+			getUnscaledValue("Implausibel").set(DUAKonstanten.JA); //$NON-NLS-1$
+		veraenderbaresDatum.getItem("qPkw").getItem("Status").getItem("MessWertErsetzung").   //$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$
+			getUnscaledValue("Implausibel").set(DUAKonstanten.JA); //$NON-NLS-1$
+		
+		veraenderbaresDatum.getItem("vKfz").getItem("Status").getItem("MessWertErsetzung").   //$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$
+			getUnscaledValue("Implausibel").set(DUAKonstanten.JA); //$NON-NLS-1$
+		veraenderbaresDatum.getItem("vLkw").getItem("Status").getItem("MessWertErsetzung").   //$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$
+			getUnscaledValue("Implausibel").set(DUAKonstanten.JA); //$NON-NLS-1$
+		veraenderbaresDatum.getItem("vPkw").getItem("Status").getItem("MessWertErsetzung").   //$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$
+			getUnscaledValue("Implausibel").set(DUAKonstanten.JA); //$NON-NLS-1$
+				
+		veraenderbaresDatum.getItem("sKfz").getUnscaledValue("Wert").set(DUAKonstanten.FEHLERHAFT); //$NON-NLS-1$ //$NON-NLS-2$
+
+		veraenderbaresDatum.getItem("sKfz").getItem("Status").getItem("MessWertErsetzung").   //$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$
+			getUnscaledValue("Implausibel").set(DUAKonstanten.JA); //$NON-NLS-1$
+	}
 	
 }
