@@ -29,6 +29,8 @@ package de.bsvrz.dua.plloglve.plloglve.diff;
 import java.util.ArrayList;
 import java.util.Collection;
 
+import com.bitctrl.Constants;
+
 import de.bsvrz.dav.daf.main.ClientReceiverInterface;
 import de.bsvrz.dav.daf.main.Data;
 import de.bsvrz.dav.daf.main.DataDescription;
@@ -40,7 +42,6 @@ import de.bsvrz.sys.funclib.bitctrl.daf.DaVKonstanten;
 import de.bsvrz.sys.funclib.bitctrl.dua.DUAKonstanten;
 import de.bsvrz.sys.funclib.bitctrl.dua.VariableMitKonstanzZaehler;
 import de.bsvrz.sys.funclib.bitctrl.dua.schnittstellen.IVerwaltung;
-import de.bsvrz.sys.funclib.bitctrl.konstante.Konstante;
 import de.bsvrz.sys.funclib.bitctrl.modell.AbstractSystemObjekt;
 import de.bsvrz.sys.funclib.bitctrl.modell.SystemObjekt;
 import de.bsvrz.sys.funclib.bitctrl.modell.SystemObjektTyp;
@@ -232,7 +233,7 @@ implements ClientReceiverInterface{
 								copy.getItem(wert.getName()).getUnscaledValue("Wert").set(DUAKonstanten.FEHLERHAFT); //$NON-NLS-1$			
 								copy.getItem(wert.getName()).getItem("Status").getItem("MessWertErsetzung").   //$NON-NLS-1$//$NON-NLS-2$
 								getUnscaledValue("Implausibel").set(DUAKonstanten.JA); //$NON-NLS-1$	
-								VERWALTUNG.sendeBetriebsMeldung(MELDUNGS_ID, MessageType.APPLICATION_DOMAIN, Konstante.LEERSTRING,
+								VERWALTUNG.sendeBetriebsMeldung(MELDUNGS_ID, MessageType.APPLICATION_DOMAIN, Constants.EMPTY_STRING,
 										MessageGrade.WARNING, MessageState.MESSAGE, "Fahrstreifen " +  //$NON-NLS-1$
 										this + ": " + wert); //$NON-NLS-1$
 							}

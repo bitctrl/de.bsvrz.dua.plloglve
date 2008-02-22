@@ -32,6 +32,8 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.TreeSet;
 
+import com.bitctrl.Constants;
+
 import de.bsvrz.dav.daf.main.ClientReceiverInterface;
 import de.bsvrz.dav.daf.main.DataDescription;
 import de.bsvrz.dav.daf.main.ReceiveOptions;
@@ -43,7 +45,6 @@ import de.bsvrz.dua.plloglve.plloglve.TestParameter;
 import de.bsvrz.sys.funclib.bitctrl.daf.DaVKonstanten;
 import de.bsvrz.sys.funclib.bitctrl.dua.DUAKonstanten;
 import de.bsvrz.sys.funclib.bitctrl.dua.schnittstellen.IVerwaltung;
-import de.bsvrz.sys.funclib.bitctrl.konstante.Konstante;
 import de.bsvrz.sys.funclib.bitctrl.modell.AbstractSystemObjekt;
 import de.bsvrz.sys.funclib.bitctrl.modell.SystemObjekt;
 import de.bsvrz.sys.funclib.bitctrl.modell.SystemObjektTyp;
@@ -173,20 +174,20 @@ implements ClientReceiverInterface{
 					if(TestParameter.TEST_AUSFALL) {
 						ausfallInProzent = (((double)ausfallZeit / (double)144000) * 100.0);
 					} else {
-						ausfallInProzent = (((double)ausfallZeit / (double)Konstante.TAG_24_IN_MS) * 100.0);
+						ausfallInProzent = (((double)ausfallZeit / (double)Constants.MILLIS_PER_DAY) * 100.0);
 					}
 					
 					if(ausfallInProzent > this.maxAusfallProTag){
-						long stunden = ausfallZeit / Konstante.STUNDE_IN_MS;
-						long minuten = (ausfallZeit - (stunden * Konstante.STUNDE_IN_MS)) / Konstante.MINUTE_IN_MS;
+						long stunden = ausfallZeit / Constants.MILLIS_PER_HOUR;
+						long minuten = (ausfallZeit - (stunden * Constants.MILLIS_PER_HOUR)) / Constants.MILLIS_PER_MINUTE;
 
 						String nachricht = "Ausfallhäufigkeit innerhalb der letzten 24 Stunden überschritten. Im Zeitraum von " +  //$NON-NLS-1$
-						FORMAT.format(new Date(System.currentTimeMillis() - Konstante.TAG_24_IN_MS)) + " Uhr bis " +  //$NON-NLS-1$
+						FORMAT.format(new Date(System.currentTimeMillis() - Constants.MILLIS_PER_DAY)) + " Uhr bis " +  //$NON-NLS-1$
 						FORMAT.format(new Date(System.currentTimeMillis())) + " Uhr (1 Tag) implausible Fahrstreifenwerte am Fahrstreifen " + //$NON-NLS-1$
 						this.getSystemObject() + " von " + ausfallInProzent + "% (> " + this.maxAusfallProTag +  //$NON-NLS-1$//$NON-NLS-2$
 						"%) entspricht Ausfall von " + stunden + " Stunde(n) " + minuten + " Minute(n).";  //$NON-NLS-1$ //$NON-NLS-2$//$NON-NLS-3$
 
-						VERWALTUNG.sendeBetriebsMeldung(MELDUNGS_ID, MessageType.APPLICATION_DOMAIN, Konstante.LEERSTRING,
+						VERWALTUNG.sendeBetriebsMeldung(MELDUNGS_ID, MessageType.APPLICATION_DOMAIN, Constants.EMPTY_STRING,
 								MessageGrade.WARNING, MessageState.MESSAGE, nachricht);
 					}
 				}
@@ -241,7 +242,7 @@ implements ClientReceiverInterface{
 		if(TestParameter.TEST_AUSFALL){
 			return PlPruefungLogischLVE.START_ZEIT + 144000l < System.currentTimeMillis();
 		}
-		return PlPruefungLogischLVE.START_ZEIT + Konstante.TAG_24_IN_MS < System.currentTimeMillis(); 
+		return PlPruefungLogischLVE.START_ZEIT + Constants.MILLIS_PER_DAY < System.currentTimeMillis(); 
 	}	
 
 }

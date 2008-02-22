@@ -28,11 +28,12 @@ package de.bsvrz.dua.plloglve.plloglve.vb;
 
 import java.util.Date;
 
+import com.bitctrl.Constants;
+
 import de.bsvrz.dav.daf.main.ResultData;
 import de.bsvrz.dua.plloglve.plloglve.AbstraktDAVZeitEinzelDatum;
 import de.bsvrz.dua.plloglve.plloglve.TestParameter;
 import de.bsvrz.sys.funclib.bitctrl.dua.DUAKonstanten;
-import de.bsvrz.sys.funclib.bitctrl.konstante.Konstante;
 
 /**
  * Speichert für ein finales DAV-Attribut des Datensatzes
@@ -85,7 +86,7 @@ extends AbstraktDAVZeitEinzelDatum{
 	 * @return ob das Datum noch aktuell ist
 	 */
 	public final boolean isDatumVeraltet(final long bezugsIntervall) {
-		long bezugsIntervallInMillis = TestParameter.TEST_VERTRAUEN?bezugsIntervall*6000:bezugsIntervall * Konstante.STUNDE_IN_MS;
+		long bezugsIntervallInMillis = TestParameter.TEST_VERTRAUEN?bezugsIntervall*6000:bezugsIntervall * Constants.MILLIS_PER_HOUR;
 		return this.datenZeit + bezugsIntervallInMillis < System.currentTimeMillis();
 	}
 	

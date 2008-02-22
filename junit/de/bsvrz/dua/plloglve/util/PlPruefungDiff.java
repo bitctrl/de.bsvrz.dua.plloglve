@@ -1,5 +1,7 @@
 package de.bsvrz.dua.plloglve.util;
 
+import com.bitctrl.Constants;
+
 import de.bsvrz.dav.daf.main.ClientDavInterface;
 import de.bsvrz.dav.daf.main.ClientSenderInterface;
 import de.bsvrz.dav.daf.main.Data;
@@ -11,7 +13,6 @@ import de.bsvrz.dua.plloglve.util.para.ParaKZDLogImport;
 import de.bsvrz.dua.plloglve.util.pruef.FilterMeldung;
 import de.bsvrz.dua.plloglve.util.pruef.PruefeMarkierung;
 import de.bsvrz.sys.funclib.bitctrl.dua.DUAKonstanten;
-import de.bsvrz.sys.funclib.bitctrl.konstante.Konstante;
 import de.bsvrz.sys.funclib.commandLineArgs.ArgumentList;
 import de.bsvrz.sys.funclib.debug.Debug;
 
@@ -161,7 +162,7 @@ implements ClientSenderInterface, PlPruefungInterface {
 
 				doWait(75);
 				
-				aktZeit = aktZeit + Konstante.MINUTE_IN_MS;
+				aktZeit = aktZeit + Constants.MILLIS_PER_MINUTE;
 			}
 			fsImpFSDiff.reset();
 			fsImpFSDiff.getNaechsteZeile();

@@ -30,6 +30,8 @@ import java.util.Date;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
+import com.bitctrl.Constants;
+
 import de.bsvrz.dav.daf.main.ClientReceiverInterface;
 import de.bsvrz.dav.daf.main.Data;
 import de.bsvrz.dav.daf.main.DataDescription;
@@ -41,7 +43,6 @@ import de.bsvrz.dua.plloglve.plloglve.TestParameter;
 import de.bsvrz.sys.funclib.bitctrl.daf.DaVKonstanten;
 import de.bsvrz.sys.funclib.bitctrl.dua.DUAKonstanten;
 import de.bsvrz.sys.funclib.bitctrl.dua.schnittstellen.IVerwaltung;
-import de.bsvrz.sys.funclib.bitctrl.konstante.Konstante;
 import de.bsvrz.sys.funclib.bitctrl.modell.AbstractSystemObjekt;
 import de.bsvrz.sys.funclib.bitctrl.modell.SystemObjekt;
 import de.bsvrz.sys.funclib.bitctrl.modell.SystemObjektTyp;
@@ -234,7 +235,7 @@ implements ClientReceiverInterface{
 						}
 					}else{
 						if(verletztAlt){
-							long vertrauensBereich = TestParameter.TEST_VERTRAUEN?parameter.getBezugsZeitraum()*6000:parameter.getBezugsZeitraum() * Konstante.STUNDE_IN_MS;
+							long vertrauensBereich = TestParameter.TEST_VERTRAUEN?parameter.getBezugsZeitraum()*6000:parameter.getBezugsZeitraum() * Constants.MILLIS_PER_HOUR;
 							
 							Date start = new Date(originalDatum.getDataTime() - vertrauensBereich);
 							Date ende = new Date(originalDatum.getDataTime());
@@ -246,7 +247,7 @@ implements ClientReceiverInterface{
 							". Fahrstreifenwerte werden wieder verarbeitet."; //$NON-NLS-1$
 
 							VERWALTUNG.sendeBetriebsMeldung("Vertrauensbereichsprüfung", //$NON-NLS-1$
-									MessageType.APPLICATION_DOMAIN, Konstante.LEERSTRING,
+									MessageType.APPLICATION_DOMAIN, Constants.EMPTY_STRING,
 									MessageGrade.WARNING, MessageState.NEW_MESSAGE, nachricht);
 						}
 					}

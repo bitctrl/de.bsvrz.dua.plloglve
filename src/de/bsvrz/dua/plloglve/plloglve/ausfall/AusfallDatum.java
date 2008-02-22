@@ -28,12 +28,13 @@ package de.bsvrz.dua.plloglve.plloglve.ausfall;
 
 import java.util.Date;
 
+import com.bitctrl.Constants;
+
 import de.bsvrz.dav.daf.main.Data;
 import de.bsvrz.dav.daf.main.ResultData;
 import de.bsvrz.dua.plloglve.plloglve.AbstraktDAVZeitEinzelDatum;
 import de.bsvrz.dua.plloglve.plloglve.TestParameter;
 import de.bsvrz.sys.funclib.bitctrl.dua.DUAKonstanten;
-import de.bsvrz.sys.funclib.bitctrl.konstante.Konstante;
 
 /**
  * Repräsentiert ein ausgefallenes KZ-Datum
@@ -92,7 +93,7 @@ extends AbstraktDAVZeitEinzelDatum{
 		final long bImpl = data.getItem("b").getItem("Status").getItem("MessWertErsetzung").   //$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$
 								getUnscaledValue("Implausibel").longValue(); //$NON-NLS-1$
 		
-		this.ausfallStr = Konstante.LEERSTRING;
+		this.ausfallStr = Constants.EMPTY_STRING;
 		if(qKfzWert == DUAKonstanten.FEHLERHAFT || qKfzImpl == DUAKonstanten.JA){
 			this.ausgefallen = true;
 			this.ausfallStr += "qKfz, "; //$NON-NLS-1$
@@ -160,7 +161,7 @@ extends AbstraktDAVZeitEinzelDatum{
 		if(TestParameter.TEST_AUSFALL){
 			return this.datenZeit + 144000l < System.currentTimeMillis();
 		}
-		return this.datenZeit + Konstante.TAG_24_IN_MS < System.currentTimeMillis();
+		return this.datenZeit + Constants.MILLIS_PER_DAY < System.currentTimeMillis();
 	}
 	
 	

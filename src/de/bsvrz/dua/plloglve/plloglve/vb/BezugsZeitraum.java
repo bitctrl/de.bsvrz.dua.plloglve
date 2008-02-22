@@ -31,12 +31,13 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.TreeSet;
 
+import com.bitctrl.Constants;
+
 import de.bsvrz.dav.daf.main.ResultData;
 import de.bsvrz.dua.plloglve.plloglve.PlPruefungLogischLVE;
 import de.bsvrz.dua.plloglve.plloglve.TestParameter;
 import de.bsvrz.sys.funclib.bitctrl.dua.DUAKonstanten;
 import de.bsvrz.sys.funclib.bitctrl.dua.schnittstellen.IVerwaltung;
-import de.bsvrz.sys.funclib.bitctrl.konstante.Konstante;
 import de.bsvrz.sys.funclib.operatingMessage.MessageGrade;
 import de.bsvrz.sys.funclib.operatingMessage.MessageState;
 import de.bsvrz.sys.funclib.operatingMessage.MessageType;
@@ -141,7 +142,7 @@ public class BezugsZeitraum {
 			this.ausgefalleneDaten.removeAll(veralteteDaten);
 		}
 
-		final long bezugsZeitraumInMillis = TestParameter.TEST_VERTRAUEN?parameter.getBezugsZeitraum()*6000:parameter.getBezugsZeitraum() * Konstante.STUNDE_IN_MS;
+		final long bezugsZeitraumInMillis = TestParameter.TEST_VERTRAUEN?parameter.getBezugsZeitraum()*6000:parameter.getBezugsZeitraum() * Constants.MILLIS_PER_HOUR;
 		double ausfallInProzent = 0;
 		if(bezugsZeitraumInMillis > 0){
 			//ausfallInProzent = (int)((ausfallZeit / bezugsZeitraumInMillis) * 100.0 + 0.5);
@@ -173,8 +174,8 @@ public class BezugsZeitraum {
 				if(ausschaltSchwelleUNTERSchritten){					
 					if(this.vertrauensBereichVerletzt){
 						this.vertrauensBereichVerletzt = false;
-						long stunden = ausfallZeit / Konstante.STUNDE_IN_MS;
-						long minuten = (ausfallZeit - (stunden * Konstante.STUNDE_IN_MS)) / Konstante.MINUTE_IN_MS;
+						long stunden = ausfallZeit / Constants.MILLIS_PER_HOUR;
+						long minuten = (ausfallZeit - (stunden * Constants.MILLIS_PER_HOUR)) / Constants.MILLIS_PER_MINUTE;
 						ausfall = new BezugsZeitraumAusfall(parameter.getMaxAusfallProBezugsZeitraumAus(), ausfallInProzent, stunden, minuten);
 					}
 				}
@@ -182,8 +183,8 @@ public class BezugsZeitraum {
 				if(this.vertrauensBereichVerletzt){
 					Date start = new Date(originalDatum.getDataTime() - bezugsZeitraumInMillis);
 					Date ende = new Date(originalDatum.getDataTime());
-					long stunden = ausfallZeit / Konstante.STUNDE_IN_MS;
-					long minuten = (ausfallZeit - (stunden * Konstante.STUNDE_IN_MS)) / Konstante.MINUTE_IN_MS;
+					long stunden = ausfallZeit / Constants.MILLIS_PER_HOUR;
+					long minuten = (ausfallZeit - (stunden * Constants.MILLIS_PER_HOUR)) / Constants.MILLIS_PER_MINUTE;
 					
 					String nachricht = "Daten außerhalb des Vertrauensbereichs. Im Zeitraum von " +  //$NON-NLS-1$
 							DUAKonstanten.BM_ZEIT_FORMAT.format(start) + " Uhr bis " + DUAKonstanten.BM_ZEIT_FORMAT.format(ende) + //$NON-NLS-1$ 
@@ -193,7 +194,7 @@ public class BezugsZeitraum {
 							minuten + " Minute(n). Fahrstreifenwerte werden auf Implausibel gesetzt."; //$NON-NLS-1$
 					
 					VERWALTUNG.sendeBetriebsMeldung("Vertrauensbereichsprüfung", //$NON-NLS-1$
-							MessageType.APPLICATION_DOMAIN, Konstante.LEERSTRING,
+							MessageType.APPLICATION_DOMAIN, "", //$NON-NLS-1$
 							MessageGrade.WARNING, MessageState.NEW_MESSAGE, nachricht);
 				}
 			}

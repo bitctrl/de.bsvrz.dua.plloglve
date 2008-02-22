@@ -42,7 +42,6 @@ import de.bsvrz.sys.funclib.bitctrl.dua.DUAKonstanten;
 import de.bsvrz.sys.funclib.bitctrl.dua.DUAUtensilien;
 import de.bsvrz.sys.funclib.bitctrl.dua.adapter.AbstraktVerwaltungsAdapterMitGuete;
 import de.bsvrz.sys.funclib.bitctrl.dua.dfs.typen.SWETyp;
-import de.bsvrz.sys.funclib.bitctrl.konstante.Konstante;
 
 /**
  * Implementierung des Moduls Verwaltung der SWE Pl-Prüfung logisch LVE.
@@ -84,7 +83,7 @@ extends AbstraktVerwaltungsAdapterMitGuete{
 	throws DUAInitialisierungsException {
 		super.initialisiere();
 		
-		String infoStr = Konstante.LEERSTRING;
+		String infoStr = ""; //$NON-NLS-1$
 		Collection<SystemObject> plLogLveObjekte = DUAUtensilien.getBasisInstanzen(
 				this.verbindung.getDataModel().getType(DUAKonstanten.TYP_FAHRSTREIFEN),
 				this.verbindung, this.getKonfigurationsBereiche());
