@@ -404,7 +404,8 @@ implements ClientReceiverInterface{
 										long qPkw = max - qLkw;
 										MesswertUnskaliert qPkwMW = new MesswertUnskaliert("qPkw", davDatum); //$NON-NLS-1$
 										qPkwMW.setWertUnskaliert(qPkw);
-										qPkwMW.setNichtErfasst(true);										
+										qPkwMW.setNichtErfasst(true);
+										qPkwMW.setLogischMax(true);
 										qPkwMW.kopiereInhaltNach(davDatum);
 										
 										GWert qLkwGueteNeu = GWert.getNichtErmittelbareGuete(GueteVerfahren.STANDARD); 
@@ -437,6 +438,7 @@ implements ClientReceiverInterface{
 									long qKfzNeu = qKfz - (wert - max);
 									MesswertUnskaliert qKfzMW = new MesswertUnskaliert("qKfz"); //$NON-NLS-1$
 									qKfzMW.setWertUnskaliert(qKfzNeu);
+									qKfzMW.setLogischMax(true);
 									qKfzMW.kopiereInhaltNach(davDatum);
 									
 									GWert qKfzGuete = new GWert(davDatum, "qKfz"); //$NON-NLS-1$
@@ -457,6 +459,7 @@ implements ClientReceiverInterface{
 									long qLkwNeu = qKfzNeu - max;
 									MesswertUnskaliert qLkwMW = new MesswertUnskaliert("qLkw", davDatum); //$NON-NLS-1$
 									qLkwMW.setWertUnskaliert(qLkwNeu);
+									qLkwMW.setLogischMax(true);
 									qLkwMW.kopiereInhaltNach(davDatum);
 									
 									GWert qLkwGueteNeu = GWert.getNichtErmittelbareGuete(GueteVerfahren.STANDARD);
@@ -496,6 +499,7 @@ implements ClientReceiverInterface{
 										MesswertUnskaliert qPkwMW = new MesswertUnskaliert("qPkw", davDatum); //$NON-NLS-1$
 										qPkwMW.setWertUnskaliert(qPkwNeu);
 										qPkwMW.setNichtErfasst(true);
+										qPkwMW.setLogischMax(true);
 										qPkwMW.kopiereInhaltNach(davDatum);
 										
 										GWert qKfzGuete = new GWert(davDatum, "qKfz"); //$NON-NLS-1$
