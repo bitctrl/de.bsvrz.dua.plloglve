@@ -365,7 +365,7 @@ implements ClientReceiverInterface{
 			OptionenPlausibilitaetsPruefungLogischVerkehr optionen = this.parameterAtgLog.getOptionen();
 
 			if(!optionen.equals(OptionenPlausibilitaetsPruefungLogischVerkehr.KEINE_PRUEFUNG)){
-				final long wert = resultat.getData().getItem(wertName).getUnscaledValue("Wert").longValue(); //$NON-NLS-1$
+				final long wert = davDatum.getItem(wertName).getUnscaledValue("Wert").longValue(); //$NON-NLS-1$
 
 				GanzZahl sweGueteWert = GanzZahl.getGueteIndex();
 				sweGueteWert.setSkaliertenWert(VERWALTUNG.getGueteFaktor());
@@ -402,7 +402,7 @@ implements ClientReceiverInterface{
 								if(qLkw >= 0){
 									if(max >= qLkw){
 										long qPkw = max - qLkw;
-										MesswertUnskaliert qPkwMW = new MesswertUnskaliert("qPkw"); //$NON-NLS-1$
+										MesswertUnskaliert qPkwMW = new MesswertUnskaliert("qPkw", davDatum); //$NON-NLS-1$
 										qPkwMW.setWertUnskaliert(qPkw);
 										qPkwMW.setNichtErfasst(true);										
 										qPkwMW.kopiereInhaltNach(davDatum);
@@ -416,7 +416,7 @@ implements ClientReceiverInterface{
 										}
 										
 										davDatum.getItem(wertName).getItem("Güte").//$NON-NLS-1$
-												getScaledValue("Index").set(qLkwGueteNeu.getIndexUnskaliert());  //$NON-NLS-1$
+												getUnscaledValue("Index").set(qLkwGueteNeu.getIndexUnskaliert());  //$NON-NLS-1$
 									}else{
 										this.setAllesImplausibel(davDatum);
 										abbruch = true;										
@@ -449,13 +449,13 @@ implements ClientReceiverInterface{
 									}
 									
 									davDatum.getItem("qKfz").getItem("Güte").//$NON-NLS-1$//$NON-NLS-2$
-											getScaledValue("Index").set(qKfzGueteNeu.getIndexUnskaliert());  //$NON-NLS-1$
+											getUnscaledValue("Index").set(qKfzGueteNeu.getIndexUnskaliert());  //$NON-NLS-1$
 									
 									/**
 									 * qLkw anpassen
 									 */
 									long qLkwNeu = qKfzNeu - max;
-									MesswertUnskaliert qLkwMW = new MesswertUnskaliert("qLkw"); //$NON-NLS-1$
+									MesswertUnskaliert qLkwMW = new MesswertUnskaliert("qLkw", davDatum); //$NON-NLS-1$
 									qLkwMW.setWertUnskaliert(qLkwNeu);
 									qLkwMW.kopiereInhaltNach(davDatum);
 									
@@ -468,7 +468,7 @@ implements ClientReceiverInterface{
 									}
 									
 									davDatum.getItem("qLkw").getItem("Güte").//$NON-NLS-1$//$NON-NLS-2$
-											getScaledValue("Index").set(qLkwGueteNeu.getIndexUnskaliert());  //$NON-NLS-1$									
+											getUnscaledValue("Index").set(qLkwGueteNeu.getIndexUnskaliert());  //$NON-NLS-1$									
 								}
 							}else
 							if(wertName.equals("qLkw")){ //$NON-NLS-1$
@@ -476,6 +476,9 @@ implements ClientReceiverInterface{
 								 * Neu aus AFo 5.2:
 								 * 14. qLkw <= qLkwMax, sonst Wert entsprechend Parametrierung setzen und kennzeichnen und
 								 * qPkw=qKfz-qLkw zu setzen.
+								 * Zusatz: Wenn qPkw > qPkwMax werden alle Werte qKfz, qLkw,
+								 * qPkw, vKfz, vLkw, vPkw mit den Statusflags Implausibel und Fehlerhaft gekennzeichnet und
+								 * die Prüfung abgebrochen.
 								 */
 								final long qKfz = davDatum.getItem("qKfz").getUnscaledValue("Wert").longValue(); //$NON-NLS-1$ //$NON-NLS-2$
 								final long qLkw = davDatum.getItem("qLkw").getUnscaledValue("Wert").longValue(); //$NON-NLS-1$ //$NON-NLS-2$
@@ -483,24 +486,31 @@ implements ClientReceiverInterface{
 									/**
 									 * qPkw anpassen
 									 */
+									long qPkwMax = this.parameterAtgLog.getQPkwBereichMax();
 									long qPkwNeu = qKfz - qLkw;
-									MesswertUnskaliert qPkwMW = new MesswertUnskaliert("qPkw"); //$NON-NLS-1$
-									qPkwMW.setWertUnskaliert(qPkwNeu);
-									qPkwMW.setNichtErfasst(true);
-									qPkwMW.kopiereInhaltNach(davDatum);
-									
-									GWert qKfzGuete = new GWert(davDatum, "qKfz"); //$NON-NLS-1$
-									GWert qLkwGuete = new GWert(davDatum, "qLkw"); //$NON-NLS-1$
-									GWert qPkwGueteNeu = GWert.getNichtErmittelbareGuete(GueteVerfahren.STANDARD);
-									try {
-										qPkwGueteNeu = GueteVerfahren.differenz(qKfzGuete, qLkwGuete);
-									} catch (GueteException e) {
-										LOGGER.error("Guete von qPkw konnte nicht aktualisiert werden in " + resultat); //$NON-NLS-1$
-										e.printStackTrace();
+
+									if(qPkwNeu > qPkwMax) {
+										this.setAllesImplausibel(davDatum);
+										abbruch = true;
+									} else {
+										MesswertUnskaliert qPkwMW = new MesswertUnskaliert("qPkw", davDatum); //$NON-NLS-1$
+										qPkwMW.setWertUnskaliert(qPkwNeu);
+										qPkwMW.setNichtErfasst(true);
+										qPkwMW.kopiereInhaltNach(davDatum);
+										
+										GWert qKfzGuete = new GWert(davDatum, "qKfz"); //$NON-NLS-1$
+										GWert qLkwGuete = new GWert(davDatum, "qLkw"); //$NON-NLS-1$
+										GWert qPkwGueteNeu = GWert.getNichtErmittelbareGuete(GueteVerfahren.STANDARD);
+										try {
+											qPkwGueteNeu = GueteVerfahren.differenz(qKfzGuete, qLkwGuete);
+										} catch (GueteException e) {
+											LOGGER.error("Guete von qPkw konnte nicht aktualisiert werden in " + resultat); //$NON-NLS-1$
+											e.printStackTrace();
+										}
+										
+										davDatum.getItem("qKfz").getItem("Güte").//$NON-NLS-1$//$NON-NLS-2$
+												getUnscaledValue("Index").set(qPkwGueteNeu.getIndexUnskaliert());  //$NON-NLS-1$	
 									}
-									
-									davDatum.getItem("qKfz").getItem("Güte").//$NON-NLS-1$//$NON-NLS-2$
-											getScaledValue("Index").set(qPkwGueteNeu.getIndexUnskaliert());  //$NON-NLS-1$									
 								}
 							}							
 						}else
