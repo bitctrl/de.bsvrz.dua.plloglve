@@ -27,10 +27,7 @@
 package de.bsvrz.dua.plloglve.plloglve.ausfall;
 
 import java.text.SimpleDateFormat;
-import java.util.Collection;
-import java.util.Collections;
 import java.util.Date;
-import java.util.TreeSet;
 
 import com.bitctrl.Constants;
 
@@ -44,10 +41,12 @@ import de.bsvrz.dua.plloglve.plloglve.PlPruefungLogischLVE;
 import de.bsvrz.dua.plloglve.plloglve.TestParameter;
 import de.bsvrz.sys.funclib.bitctrl.daf.DaVKonstanten;
 import de.bsvrz.sys.funclib.bitctrl.dua.DUAKonstanten;
+import de.bsvrz.sys.funclib.bitctrl.dua.intpuf.IntervallPufferException;
 import de.bsvrz.sys.funclib.bitctrl.dua.schnittstellen.IVerwaltung;
 import de.bsvrz.sys.funclib.bitctrl.modell.AbstractSystemObjekt;
 import de.bsvrz.sys.funclib.bitctrl.modell.SystemObjekt;
 import de.bsvrz.sys.funclib.bitctrl.modell.SystemObjektTyp;
+import de.bsvrz.sys.funclib.debug.Debug;
 import de.bsvrz.sys.funclib.operatingMessage.MessageGrade;
 import de.bsvrz.sys.funclib.operatingMessage.MessageState;
 import de.bsvrz.sys.funclib.operatingMessage.MessageType;
@@ -61,12 +60,17 @@ import de.bsvrz.sys.funclib.operatingMessage.MessageType;
 public class AusfallFahrStreifen 
 extends AbstractSystemObjekt
 implements ClientReceiverInterface{
-		
+	
+	/**
+	 * Debug-Logger
+	 */
+	private static final Debug LOGGER = Debug.getLogger();
+	
 	/**
 	 * Format der Zeitangabe innerhalb der Betriebsmeldung
 	 */
 	private static final SimpleDateFormat FORMAT = new SimpleDateFormat("dd.MM.yyyy HH:mm"); //$NON-NLS-1$
-	
+		
 	/**
 	 * IP der ATG KZD
 	 */
@@ -94,11 +98,10 @@ implements ClientReceiverInterface{
 	private long maxAusfallProTag = -4;
 	
 	/**
-	 * Datensätze mit Ausfallinformationen der letzten 24h
+	 * Datensaetze mit Ausfallinformationen der letzten 24h
 	 */
-	private Collection<AusfallDatum> gleitenderTag = 
-				Collections.synchronizedCollection(new TreeSet<AusfallDatum>());
-
+	private AusfallPuffer gleitenderTag = new AusfallPuffer(); 
+	
 	
 	/**
 	 * Standardkonstruktor
@@ -132,11 +135,14 @@ implements ClientReceiverInterface{
 		if(resultat != null && resultat.getData() != null && 
 				resultat.getDataDescription().getAttributeGroup().getId() == ATG_KZD_ID){
 
-			AusfallDatum ausfallDatum = AusfallDatum.getAusfallDatumVon(resultat);
+			AusfallDatumKomplett ausfallDatum = AusfallDatumKomplett.getAusfallDatumVon(resultat);
 			if(ausfallDatum != null){
 				synchronized (this.gleitenderTag) {
-					if(ausfallDatum.isAusgefallen()){
-						gleitenderTag.add(ausfallDatum);
+					try {
+						this.gleitenderTag.add(ausfallDatum);
+					} catch (IntervallPufferException e) {
+						LOGGER.error(Constants.EMPTY_STRING, e);
+						e.printStackTrace();
 					}
 				}					
 			}
@@ -149,21 +155,16 @@ implements ClientReceiverInterface{
 	 * Erreichnet den Ausfall dieses Fahrstreifens und gibt ggf. eine Betriebsmeldung aus 
 	 **/
 	private final void testAufAusfall(){
-		Collection<AusfallDatum> veralteteDaten = new TreeSet<AusfallDatum>();
 		long ausfallZeit = 0;
 		
 		synchronized (this.gleitenderTag) {
-			for(AusfallDatum ausfallDatum:this.gleitenderTag){
-				if(ausfallDatum.isDatumVeraltet()){
-					veralteteDaten.add(ausfallDatum);
-				}else{
-					ausfallZeit += ausfallDatum.getIntervallLaenge();
-				}				
-			}			
-			
-			for(AusfallDatum veraltet:veralteteDaten){
-				this.gleitenderTag.remove(veraltet);
-			}			
+			try {
+				this.gleitenderTag.loescheAllesUnterhalbVon(System.currentTimeMillis() - Constants.MILLIS_PER_DAY);
+				ausfallZeit = this.gleitenderTag.getAusfallZeit();
+			} catch (IntervallPufferException e) {
+				LOGGER.error(Constants.EMPTY_STRING, e);
+				e.printStackTrace();
+			}
 		}
 		
 		if(programmLaeuftSchonLaengerAlsEinTag()){

@@ -66,8 +66,6 @@ extends AbstraktVerwaltungsAdapterMitGuete{
 	private PlPruefungLogischLVE plPruefungLogischLVE = null;
 	
 	
-	
-	
 	/**
 	 * {@inheritDoc}
 	 */

@@ -26,15 +26,10 @@
 
 package de.bsvrz.dua.plloglve.plloglve.ausfall;
 
-import java.util.Date;
-
-import com.bitctrl.Constants;
-
 import de.bsvrz.dav.daf.main.Data;
 import de.bsvrz.dav.daf.main.ResultData;
-import de.bsvrz.dua.plloglve.plloglve.AbstraktDAVZeitEinzelDatum;
-import de.bsvrz.dua.plloglve.plloglve.TestParameter;
 import de.bsvrz.sys.funclib.bitctrl.dua.DUAKonstanten;
+import de.bsvrz.sys.funclib.bitctrl.dua.intpuf.IIntervallDatum;
 
 /**
  * Repräsentiert ein ausgefallenes KZ-Datum
@@ -43,12 +38,7 @@ import de.bsvrz.sys.funclib.bitctrl.dua.DUAKonstanten;
  *
  */
 public class AusfallDatum 
-extends AbstraktDAVZeitEinzelDatum{
-		
-	/**
-	 * eine Zeichenkette, die den Ausfall illustriert (formatiert für Betriebsmeldungen)
-	 */
-	private String ausfallStr = null;
+implements IIntervallDatum<AusfallDatum>{
 	
 	/**
 	 * ist dieses Datum "ausgefallen"
@@ -64,9 +54,6 @@ extends AbstraktDAVZeitEinzelDatum{
 	private AusfallDatum(ResultData resultat){
 		Data data = resultat.getData();
 
-		this.datenZeit = resultat.getDataTime();
-		this.intervallLaenge = data.getTimeValue("T").getMillis(); //$NON-NLS-1$
-		
 		final long qKfzWert = data.getItem("qKfz").getUnscaledValue("Wert").longValue(); //$NON-NLS-1$ //$NON-NLS-2$
 		final long qLkwWert = data.getItem("qLkw").getUnscaledValue("Wert").longValue(); //$NON-NLS-1$ //$NON-NLS-2$
 		final long qPkwWert = data.getItem("qPkw").getUnscaledValue("Wert").longValue(); //$NON-NLS-1$ //$NON-NLS-2$
@@ -93,53 +80,41 @@ extends AbstraktDAVZeitEinzelDatum{
 		final long bImpl = data.getItem("b").getItem("Status").getItem("MessWertErsetzung").   //$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$
 								getUnscaledValue("Implausibel").longValue(); //$NON-NLS-1$
 		
-		this.ausfallStr = Constants.EMPTY_STRING;
 		if(qKfzWert == DUAKonstanten.FEHLERHAFT || qKfzImpl == DUAKonstanten.JA){
 			this.ausgefallen = true;
-			this.ausfallStr += "qKfz, "; //$NON-NLS-1$
 		}
 		if(qLkwWert == DUAKonstanten.FEHLERHAFT || qLkwImpl == DUAKonstanten.JA){
 			this.ausgefallen = true;
-			this.ausfallStr += "qLkw, "; //$NON-NLS-1$
 		}
 		if(qPkwWert == DUAKonstanten.FEHLERHAFT || qPkwImpl == DUAKonstanten.JA){
 			this.ausgefallen = true;
-			this.ausfallStr += "qPkw, "; //$NON-NLS-1$
 		}
 		if(vKfzWert == DUAKonstanten.FEHLERHAFT || vKfzImpl == DUAKonstanten.JA){
 			this.ausgefallen = true;
-			this.ausfallStr += "vKfz, "; //$NON-NLS-1$
 		}
 		if(vLkwWert == DUAKonstanten.FEHLERHAFT || vLkwImpl == DUAKonstanten.JA){
 			this.ausgefallen = true;
-			this.ausfallStr += "vLkw, "; //$NON-NLS-1$
 		}
 		if(vPkwWert == DUAKonstanten.FEHLERHAFT || vPkwImpl == DUAKonstanten.JA){
 			this.ausgefallen = true;
-			this.ausfallStr += "vPkw, "; //$NON-NLS-1$
 		}
 		if(sKfzWert == DUAKonstanten.FEHLERHAFT || sKfzImpl == DUAKonstanten.JA){
 			this.ausgefallen = true;
-			this.ausfallStr += "sKfz, "; //$NON-NLS-1$
 		}
 		if(bWert == DUAKonstanten.FEHLERHAFT || bImpl == DUAKonstanten.JA){
 			this.ausgefallen = true;
-			this.ausfallStr += "b, "; //$NON-NLS-1$
-		}
-		
-		if(this.ausgefallen){
-			this.ausfallStr = this.ausfallStr.substring(0, this.ausfallStr.length() - 2);
 		}
 	}
 	
+	
 	/**
-	 * Gibt nur ein Datum zurück, wenn es sich um ein Datum handelt, dass
+	 * Gibt nur ein Datum zurueck, wenn es sich um ein Datum handelt, dass
 	 * auch im Sinne der Plausibilisierung ausgewertet werden kann
-	 * Also z.B. nicht "Keine Quelle"
+	 * Also z.B. nicht <code>keine Quelle</code> oder <code>keine Daten</code>
 	 * 
 	 * @param resultat ein Kz-Datum
-	 * @return eine mit dem übergebenen Datum korrespondierende Instanz dieser Klasse
-	 * oder <code>null</code> für keine Quelle usw.
+	 * @return eine mit dem uebergebenen Datum korrespondierende Instanz dieser Klasse
+	 * oder <code>null</code> fuer <code>keine Quelle</code> usw.
 	 */
 	public static final AusfallDatum getAusfallDatumVon(final ResultData resultat){
 		AusfallDatum datum = null;
@@ -149,19 +124,6 @@ extends AbstraktDAVZeitEinzelDatum{
 		}
 			
 		return datum;
-	}
-
-	
-	/**
-	 * Erfragt, ob dieses Datum im Sinne des gleitenden Tages veraltet ist
-	 * 
-	 * @return ob dieses Datum im Sinne des gleitenden Tages veraltet ist
-	 */
-	public boolean isDatumVeraltet(){
-		if(TestParameter.TEST_AUSFALL){
-			return this.datenZeit + 144000l < System.currentTimeMillis();
-		}
-		return this.datenZeit + Constants.MILLIS_PER_DAY < System.currentTimeMillis();
 	}
 	
 	
@@ -174,21 +136,32 @@ extends AbstraktDAVZeitEinzelDatum{
 		return this.ausgefallen;
 	}
 
+	
 	/**
 	 * {@inheritDoc}
 	 */
 	@Override
 	public String toString() {
-		String s = "Datenzeit: " + DUAKonstanten.ZEIT_FORMAT_GENAU.format(new Date(this.datenZeit)) +  //$NON-NLS-1$
-								" (" + this.datenZeit + "ms)\n"; //$NON-NLS-1$ //$NON-NLS-2$
-		
+		String s = null;
+
 		if(this.ausgefallen){
-			s += "Ausgefallen: " + this.ausfallStr; //$NON-NLS-1$
+			s = "Ausgefallen"; //$NON-NLS-1$
 		}else{
-			s += "OK"; //$NON-NLS-1$
+			s = "OK"; //$NON-NLS-1$
 		}
-		
+
 		return s;
+	}
+
+	
+	/**
+	 * {@inheritDoc}<br>
+	 * 
+	 * Zwei Ausfalldaten sind gleich, wenn deren Attribute <code>ausgefallen</code>
+	 * den selben Wert haben.
+	 */
+	public boolean istGleich(AusfallDatum that) {
+		return this.isAusgefallen() == that.isAusgefallen();
 	}
 
 }
