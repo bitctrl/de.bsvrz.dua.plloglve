@@ -159,7 +159,11 @@ implements ClientReceiverInterface{
 		
 		synchronized (this.gleitenderTag) {
 			try {
-				this.gleitenderTag.loescheAllesUnterhalbVon(System.currentTimeMillis() - Constants.MILLIS_PER_DAY);
+				if(TestParameter.TEST_AUSFALL){
+					this.gleitenderTag.loescheAllesUnterhalbVon(System.currentTimeMillis() - 144000L);
+				}else{
+					this.gleitenderTag.loescheAllesUnterhalbVon(System.currentTimeMillis() - Constants.MILLIS_PER_DAY);
+				}
 				ausfallZeit = this.gleitenderTag.getAusfallZeit();
 			} catch (IntervallPufferException e) {
 				LOGGER.error(Constants.EMPTY_STRING, e);
