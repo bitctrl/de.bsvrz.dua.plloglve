@@ -121,7 +121,7 @@ extends AbstraktBearbeitungsKnotenAdapter{
 						if(fs != null){
 							datum = fs.plausibilisiere(resultat);
 						}else{
-							LOGGER.warning("Datum für nicht identifizierbaren Fahrstreifen empfangen: " +  //$NON-NLS-1$
+							LOGGER.warning("Datum fuer nicht identifizierbaren Fahrstreifen empfangen: " +  //$NON-NLS-1$
 									resultat.getObject());
 						}						
 					}

@@ -26,14 +26,9 @@
 
 package de.bsvrz.dua.plloglve.plloglve.vb;
 
-import java.util.Date;
-
-import com.bitctrl.Constants;
-
 import de.bsvrz.dav.daf.main.ResultData;
-import de.bsvrz.dua.plloglve.plloglve.AbstraktDAVZeitEinzelDatum;
-import de.bsvrz.dua.plloglve.plloglve.TestParameter;
 import de.bsvrz.sys.funclib.bitctrl.dua.DUAKonstanten;
+import de.bsvrz.sys.funclib.bitctrl.dua.intpuf.IntervallPufferElementAdapter;
 
 /**
  * Speichert für ein finales DAV-Attribut des Datensatzes
@@ -44,61 +39,21 @@ import de.bsvrz.sys.funclib.bitctrl.dua.DUAKonstanten;
  * @author BitCtrl Systems GmbH, Thierfelder
  *
  */
-public class AusfallEinzelDatum 
-extends AbstraktDAVZeitEinzelDatum{
-		
-	/**
-	 * Gibt an, ob dieses Datum (im Sinne der Vertrauensbereichsprüfung)
-	 * ausgefallen ist
-	 */
-	private boolean ausgefallen = false;
+public class VertrauensEinzelDatum 
+extends IntervallPufferElementAdapter<VertrauensDatum>{
 
 	/**
 	 * Standardkonstruktor
 	 * 
 	 * @param name der Name dieses Datums
 	 */
-	protected AusfallEinzelDatum(final String name, final ResultData originalDatum){
-		this.datenZeit = originalDatum.getDataTime();
-		this.intervallLaenge = originalDatum.getData().getTimeValue("T").getMillis(); //$NON-NLS-1$
-		this.ausgefallen = 
+	protected VertrauensEinzelDatum(final String name, final ResultData originalDatum){
+		super(originalDatum.getDataTime(), 
+				originalDatum.getDataTime() + originalDatum.getData().getTimeValue("T").getMillis()); //$NON-NLS-1$
+		this.inhalt = new VertrauensDatum( 
 			originalDatum.getData().getItem(name).getUnscaledValue("Wert").longValue() == DUAKonstanten.FEHLERHAFT || //$NON-NLS-1$
 			originalDatum.getData().getItem(name).getItem("Status").getItem("MessWertErsetzung").   //$NON-NLS-1$//$NON-NLS-2$
-					getUnscaledValue("Implausibel").longValue() == DUAKonstanten.JA;   //$NON-NLS-1$
-	}
-
-	
-	/**
-	 * Erfragt, ob dieses Datum (im Sinne der Vertrauensbereichsprüfung)
-	 * ausgefallen ist oder nicht
-	 * 
-	 * @return ob dieses Datum ausgefallen ist
-	 */
-	public final boolean isAusgefallen(){
-		return this.ausgefallen;
+					getUnscaledValue("Implausibel").longValue() == DUAKonstanten.JA);   //$NON-NLS-1$
 	}
 	
-	
-	/**
-	 * Erfragt, ob das Datum noch aktuell ist
-	 * 
-	 * @param bezugsIntervall das Bezugsintervall in Stunden
-	 * @return ob das Datum noch aktuell ist
-	 */
-	public final boolean isDatumVeraltet(final long bezugsIntervall) {
-		long bezugsIntervallInMillis = TestParameter.TEST_VERTRAUEN?bezugsIntervall*6000:bezugsIntervall * Constants.MILLIS_PER_HOUR;
-		return this.datenZeit + bezugsIntervallInMillis < System.currentTimeMillis();
-	}
-	
-
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public String toString() {
-		return (this.ausgefallen?"Ausgefallen":"OK") + //$NON-NLS-1$ //$NON-NLS-2$
-				"\nDatenzeit: " + DUAKonstanten.ZEIT_FORMAT_GENAU.format(new Date(this.datenZeit)) +  //$NON-NLS-1$
-					" (" + this.datenZeit + "ms)"; //$NON-NLS-1$ //$NON-NLS-2$
-	}
-
 }

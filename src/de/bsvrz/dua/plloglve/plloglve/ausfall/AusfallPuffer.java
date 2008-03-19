@@ -46,10 +46,12 @@ extends IntervallPuffer<AusfallDatum>{
 	public final long getAusfallZeit(){
 		long ausfall = 0;
 		
-		for(Intervall intervall:this.puffer.values()){
-			if(intervall.getInhalt().isAusgefallen()){
-				ausfall += intervall.getIntervallEnde() - intervall.getIntervallStart();
-			}
+		synchronized (this.puffer) {
+			for(Intervall<AusfallDatum> intervall:this.puffer.values()){
+				if(intervall.getInhalt().isAusgefallen()){
+					ausfall += intervall.getIntervallEnde() - intervall.getIntervallStart();
+				}
+			}			
 		}
 		
 		return ausfall;

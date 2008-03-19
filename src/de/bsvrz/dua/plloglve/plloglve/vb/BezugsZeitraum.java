@@ -26,10 +26,7 @@
 
 package de.bsvrz.dua.plloglve.plloglve.vb;
 
-import java.util.Collection;
-import java.util.Collections;
 import java.util.Date;
-import java.util.TreeSet;
 
 import com.bitctrl.Constants;
 
@@ -37,7 +34,9 @@ import de.bsvrz.dav.daf.main.ResultData;
 import de.bsvrz.dua.plloglve.plloglve.PlPruefungLogischLVE;
 import de.bsvrz.dua.plloglve.plloglve.TestParameter;
 import de.bsvrz.sys.funclib.bitctrl.dua.DUAKonstanten;
+import de.bsvrz.sys.funclib.bitctrl.dua.intpuf.IntervallPufferException;
 import de.bsvrz.sys.funclib.bitctrl.dua.schnittstellen.IVerwaltung;
+import de.bsvrz.sys.funclib.debug.Debug;
 import de.bsvrz.sys.funclib.operatingMessage.MessageGrade;
 import de.bsvrz.sys.funclib.operatingMessage.MessageState;
 import de.bsvrz.sys.funclib.operatingMessage.MessageType;
@@ -53,15 +52,19 @@ import de.bsvrz.sys.funclib.operatingMessage.MessageType;
 public class BezugsZeitraum {
 	
 	/**
+	 * Debug-Logger
+	 */
+	private static final Debug LOGGER = Debug.getLogger();
+	
+	/**
 	 * Verbindung zum Verwaltungsmodul
 	 */
 	private static IVerwaltung VERWALTUNG = null;
 	
 	/**
-	 * alle ausgefallenen Datensätze in diesem Bezugszeitraum
+	 * alle ausgefallenen Datensaetze in diesem Bezugszeitraum
 	 */
-	private Collection<AusfallEinzelDatum> ausgefalleneDaten =
-			Collections.synchronizedCollection(new TreeSet<AusfallEinzelDatum>());
+	private VertrauensPuffer ausgefalleneDaten = new VertrauensPuffer(); 
 	
 	/**
 	 * Name des finalen DAV-Attributs, für den Werte in diesem
@@ -118,28 +121,29 @@ public class BezugsZeitraum {
 												 		  final AtgVerkehrsDatenVertrauensBereichFs parameter){
 		BezugsZeitraumAusfall ausfall = new BezugsZeitraumAusfall(0, 0, 0, 0);
 		
-		AusfallEinzelDatum neuesAusfallEinzelDatum = 
-			new AusfallEinzelDatum(this.name, originalDatum);
+		VertrauensEinzelDatum neuesAusfallEinzelDatum = 
+			new VertrauensEinzelDatum(this.name, originalDatum);
 
-		if(neuesAusfallEinzelDatum.isAusgefallen()){
-			synchronized (this.ausgefalleneDaten) {
-				ausgefalleneDaten.add(neuesAusfallEinzelDatum);	
-			}					
-		}
-
-		Collection<AusfallEinzelDatum> veralteteDaten = new TreeSet<AusfallEinzelDatum>();
-		long ausfallZeit = 0;
-		
 		synchronized (this.ausgefalleneDaten) {
-			for(AusfallEinzelDatum ausfallEinzelDatum:this.ausgefalleneDaten){
-				if(ausfallEinzelDatum.isDatumVeraltet(parameter.getBezugsZeitraum())){
-					veralteteDaten.add(ausfallEinzelDatum);
-				}else{
-					ausfallZeit += ausfallEinzelDatum.getIntervallLaenge();
-				}				
+			try {
+				ausgefalleneDaten.add(neuesAusfallEinzelDatum);
+			} catch (IntervallPufferException e) {
+				LOGGER.error(Constants.EMPTY_STRING, e);
+				e.printStackTrace();
+			}	
+		}					
+
+		long ausfallZeit = 0;
+		synchronized (this.ausgefalleneDaten) {
+			try {
+				this.ausgefalleneDaten.loescheAllesUnterhalbVon(System.currentTimeMillis() -
+						(parameter.getBezugsZeitraum() * Constants.MILLIS_PER_HOUR));
+			} catch (IntervallPufferException e) {
+				LOGGER.error(Constants.EMPTY_STRING, e);
+				e.printStackTrace();
 			}
 			
-			this.ausgefalleneDaten.removeAll(veralteteDaten);
+			ausfallZeit += ausgefalleneDaten.getAusfall();
 		}
 
 		final long bezugsZeitraumInMillis = TestParameter.TEST_VERTRAUEN?parameter.getBezugsZeitraum()*6000:parameter.getBezugsZeitraum() * Constants.MILLIS_PER_HOUR;
