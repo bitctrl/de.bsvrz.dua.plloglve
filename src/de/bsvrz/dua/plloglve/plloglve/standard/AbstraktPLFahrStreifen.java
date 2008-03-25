@@ -383,8 +383,17 @@ implements ClientReceiverInterface{
 							davDatum.getItem(wertName).getUnscaledValue("Wert").set(max); //$NON-NLS-1$
 							davDatum.getItem(wertName).getItem("Status"). //$NON-NLS-1$
 								getItem("PlLogisch").getUnscaledValue("WertMaxLogisch").set(DUAKonstanten.JA); //$NON-NLS-1$ //$NON-NLS-2$
+							GWert guete = new GWert(davDatum, wertName);
+							GWert neueGuete = GWert.getNichtErmittelbareGuete(guete.getVerfahren());
+							try {
+								neueGuete = GueteVerfahren.produkt(guete, sweGuete);
+							} catch (GueteException e1) {
+								LOGGER.error("Guete von " + wertName + " konnte nicht aktualisiert werden in " + resultat); //$NON-NLS-1$
+								e1.printStackTrace();
+							}
+							
 							davDatum.getItem(wertName).getItem("Güte").//$NON-NLS-1$
-								getUnscaledValue("Index").set(sweGuete.getIndexUnskaliert());  //$NON-NLS-1$
+								getUnscaledValue("Index").set(neueGuete.getIndexUnskaliert());  //$NON-NLS-1$
 							
 							/**
 							 * Neue Anforderungen nach AFo 5.2
@@ -398,7 +407,6 @@ implements ClientReceiverInterface{
 								 */
 								
 								long qLkw = davDatum.getItem("qLkw").getUnscaledValue("Wert").longValue(); //$NON-NLS-1$ //$NON-NLS-2$
-								GWert qLkwGuete = new GWert(davDatum, "qLkw"); //$NON-NLS-1$
 								if(qLkw >= 0){
 									if(max >= qLkw){
 										long qPkw = max - qLkw;
@@ -408,16 +416,16 @@ implements ClientReceiverInterface{
 										qPkwMW.setLogischMax(true);
 										qPkwMW.kopiereInhaltNach(davDatum);
 										
-										GWert qLkwGueteNeu = GWert.getNichtErmittelbareGuete(GueteVerfahren.STANDARD); 
+										GWert qPkwGueteNeu = new GWert(davDatum, "qPkw"); 
 										try {
-											qLkwGueteNeu = GueteVerfahren.differenz(sweGuete, qLkwGuete);
+											qPkwGueteNeu = GueteVerfahren.produkt(sweGuete, qPkwGueteNeu);
 										} catch (GueteException e) {
-											LOGGER.error("Guete von qLkw konnte nicht aktualisiert werden in " + resultat); //$NON-NLS-1$
+											LOGGER.error("Guete von qPkw konnte nicht aktualisiert werden in " + resultat); //$NON-NLS-1$
 											e.printStackTrace();
 										}
 										
-										davDatum.getItem(wertName).getItem("Güte").//$NON-NLS-1$
-												getUnscaledValue("Index").set(qLkwGueteNeu.getIndexUnskaliert());  //$NON-NLS-1$
+										davDatum.getItem("qPkw").getItem("Güte").//$NON-NLS-1$
+												getUnscaledValue("Index").set(qPkwGueteNeu.getIndexUnskaliert());  //$NON-NLS-1$
 									}else{
 										this.setAllesImplausibel(davDatum);
 										abbruch = true;										
@@ -436,7 +444,7 @@ implements ClientReceiverInterface{
 									 * qKfz anpassen
 									 */
 									long qKfzNeu = qKfz - (wert - max);
-									MesswertUnskaliert qKfzMW = new MesswertUnskaliert("qKfz"); //$NON-NLS-1$
+									MesswertUnskaliert qKfzMW = new MesswertUnskaliert("qKfz", davDatum); //$NON-NLS-1$
 									qKfzMW.setWertUnskaliert(qKfzNeu);
 									qKfzMW.setLogischMax(true);
 									qKfzMW.kopiereInhaltNach(davDatum);
@@ -444,7 +452,7 @@ implements ClientReceiverInterface{
 									GWert qKfzGuete = new GWert(davDatum, "qKfz"); //$NON-NLS-1$
 									GWert qKfzGueteNeu = GWert.getNichtErmittelbareGuete(GueteVerfahren.STANDARD);
 									try {
-										qKfzGueteNeu = GueteVerfahren.differenz(qKfzGuete, sweGuete);
+										qKfzGueteNeu = GueteVerfahren.produkt(qKfzGuete, sweGuete);
 									} catch (GueteException e) {
 										LOGGER.error("Guete von qKfz konnte nicht aktualisiert werden in " + resultat); //$NON-NLS-1$
 										e.printStackTrace();
@@ -462,9 +470,10 @@ implements ClientReceiverInterface{
 									qLkwMW.setLogischMax(true);
 									qLkwMW.kopiereInhaltNach(davDatum);
 									
+									GWert qLkwGuete = new GWert(davDatum, "qLkw"); //$NON-NLS-1$
 									GWert qLkwGueteNeu = GWert.getNichtErmittelbareGuete(GueteVerfahren.STANDARD);
 									try {
-										qLkwGueteNeu = GueteVerfahren.differenz(qKfzGueteNeu, sweGuete);
+										qLkwGueteNeu = GueteVerfahren.produkt(qLkwGuete, sweGuete);
 									} catch (GueteException e) {
 										LOGGER.error("Guete von qLkw konnte nicht aktualisiert werden in " + resultat); //$NON-NLS-1$
 										e.printStackTrace();
@@ -502,17 +511,18 @@ implements ClientReceiverInterface{
 										qPkwMW.setLogischMax(true);
 										qPkwMW.kopiereInhaltNach(davDatum);
 										
-										GWert qKfzGuete = new GWert(davDatum, "qKfz"); //$NON-NLS-1$
-										GWert qLkwGuete = new GWert(davDatum, "qLkw"); //$NON-NLS-1$
+//										GWert qKfzGuete = new GWert(davDatum, "qKfz"); //$NON-NLS-1$
+//										GWert qLkwGuete = new GWert(davDatum, "qLkw"); //$NON-NLS-1$
+										GWert qPkwGuete = new GWert(davDatum, "qPkw"); //$NON-NLS-1$
 										GWert qPkwGueteNeu = GWert.getNichtErmittelbareGuete(GueteVerfahren.STANDARD);
 										try {
-											qPkwGueteNeu = GueteVerfahren.differenz(qKfzGuete, qLkwGuete);
+											qPkwGueteNeu = GueteVerfahren.produkt(qPkwGuete, sweGuete);
 										} catch (GueteException e) {
 											LOGGER.error("Guete von qPkw konnte nicht aktualisiert werden in " + resultat); //$NON-NLS-1$
 											e.printStackTrace();
 										}
 										
-										davDatum.getItem("qKfz").getItem("Güte").//$NON-NLS-1$//$NON-NLS-2$
+										davDatum.getItem("qPkw").getItem("Güte").//$NON-NLS-1$//$NON-NLS-2$
 												getUnscaledValue("Index").set(qPkwGueteNeu.getIndexUnskaliert());  //$NON-NLS-1$	
 									}
 								}
