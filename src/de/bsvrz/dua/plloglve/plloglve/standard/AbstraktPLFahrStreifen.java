@@ -356,7 +356,7 @@ implements ClientReceiverInterface{
 	 * @param max obere Grenze des Wertes
 	 * @return ob die Pl-Pruefung an dieser Stelle abgebrochen werden soll 
 	 */
-	protected final boolean untersucheAufMaxVerletzung(Data davDatum, final ResultData resultat, 
+	protected boolean untersucheAufMaxVerletzung(Data davDatum, final ResultData resultat, 
 													   final String wertName, final long max){
 		boolean abbruch = false;
 		
@@ -511,8 +511,6 @@ implements ClientReceiverInterface{
 										qPkwMW.setLogischMax(true);
 										qPkwMW.kopiereInhaltNach(davDatum);
 										
-//										GWert qKfzGuete = new GWert(davDatum, "qKfz"); //$NON-NLS-1$
-//										GWert qLkwGuete = new GWert(davDatum, "qLkw"); //$NON-NLS-1$
 										GWert qPkwGuete = new GWert(davDatum, "qPkw"); //$NON-NLS-1$
 										GWert qPkwGueteNeu = GWert.getNichtErmittelbareGuete(GueteVerfahren.STANDARD);
 										try {

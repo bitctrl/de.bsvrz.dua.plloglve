@@ -31,7 +31,12 @@ import de.bsvrz.dav.daf.main.Data;
 import de.bsvrz.dav.daf.main.ResultData;
 import de.bsvrz.dav.daf.main.config.AttributeGroup;
 import de.bsvrz.dav.daf.main.config.SystemObject;
+import de.bsvrz.dua.guete.GWert;
+import de.bsvrz.dua.guete.GueteException;
+import de.bsvrz.dua.guete.GueteVerfahren;
+import de.bsvrz.dua.plloglve.plloglve.typen.OptionenPlausibilitaetsPruefungLogischVerkehr;
 import de.bsvrz.sys.funclib.bitctrl.dua.DUAKonstanten;
+import de.bsvrz.sys.funclib.bitctrl.dua.GanzZahl;
 import de.bsvrz.sys.funclib.bitctrl.dua.schnittstellen.IVerwaltungMitGuete;
 
 /**
@@ -120,6 +125,64 @@ extends KzdPLFahrStreifen{
 
 		veraenderbaresDatum.getItem("sKfz").getItem("Status").getItem("MessWertErsetzung").   //$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$
 			getUnscaledValue("Implausibel").set(DUAKonstanten.JA); //$NON-NLS-1$
+	}
+
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	protected boolean untersucheAufMaxVerletzung(Data davDatum,
+			ResultData resultat, String wertName, long max) {		
+		if(this.parameterAtgLog != null){
+			
+			OptionenPlausibilitaetsPruefungLogischVerkehr optionen = this.parameterAtgLog.getOptionen();
+
+			if(!optionen.equals(OptionenPlausibilitaetsPruefungLogischVerkehr.KEINE_PRUEFUNG)){
+				final long wert = davDatum.getItem(wertName).getUnscaledValue("Wert").longValue(); //$NON-NLS-1$
+
+				GanzZahl sweGueteWert = GanzZahl.getGueteIndex();
+				sweGueteWert.setSkaliertenWert(VERWALTUNG.getGueteFaktor());
+				GWert sweGuete = new GWert(sweGueteWert, GueteVerfahren.STANDARD, false);
+
+				/**
+				 * sonst handelt es sich nicht um einen Messwert
+				 */
+				if(wert >= 0 && max >= 0){
+					boolean maxVerletzt = wert > max;
+		
+					if(maxVerletzt){
+						if(optionen.equals(OptionenPlausibilitaetsPruefungLogischVerkehr.SETZE_MAX) || 
+						   optionen.equals(OptionenPlausibilitaetsPruefungLogischVerkehr.SETZE_MIN_MAX)){
+							davDatum.getItem(wertName).getUnscaledValue("Wert").set(max); //$NON-NLS-1$
+							davDatum.getItem(wertName).getItem("Status"). //$NON-NLS-1$
+								getItem("PlLogisch").getUnscaledValue("WertMaxLogisch").set(DUAKonstanten.JA); //$NON-NLS-1$ //$NON-NLS-2$
+							
+							GWert guete = new GWert(davDatum, wertName);
+							GWert neueGuete = GWert.getNichtErmittelbareGuete(guete.getVerfahren());
+							try {
+								neueGuete = GueteVerfahren.produkt(guete, sweGuete);
+							} catch (GueteException e1) {
+								LOGGER.error("Guete von " + wertName + " konnte nicht aktualisiert werden in " + resultat); //$NON-NLS-1$ //$NON-NLS-2$
+								e1.printStackTrace();
+							}							
+							davDatum.getItem(wertName).getItem("Güte").//$NON-NLS-1$
+								getUnscaledValue("Index").set(neueGuete.getIndexUnskaliert());  //$NON-NLS-1$
+						}else
+						if(optionen.equals(OptionenPlausibilitaetsPruefungLogischVerkehr.NUR_PRUEFUNG)){							
+							if(wertName.equals("vKfz") || wertName.startsWith("qKfz") ||  //$NON-NLS-1$ //$NON-NLS-2$
+							   wertName.equals("vLkw") || wertName.startsWith("qLkw") ||  //$NON-NLS-1$ //$NON-NLS-2$
+							   wertName.equals("vPkw") || wertName.startsWith("qPkw")){  //$NON-NLS-1$ //$NON-NLS-2$
+								davDatum.getItem(wertName).getItem("Status"). //$NON-NLS-1$
+								getItem("PlLogisch").getUnscaledValue("WertMaxLogisch").set(DUAKonstanten.JA); //$NON-NLS-1$ //$NON-NLS-2$
+							}
+						}
+					}					
+				}
+			}
+		}
+		
+		return false;
 	}
 	
 }
