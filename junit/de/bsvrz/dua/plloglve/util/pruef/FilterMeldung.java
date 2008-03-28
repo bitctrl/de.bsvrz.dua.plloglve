@@ -1,6 +1,5 @@
 package de.bsvrz.dua.plloglve.util.pruef;
 
-import junit.framework.Assert;
 import de.bsvrz.dav.daf.main.ClientDavInterface;
 import de.bsvrz.dav.daf.main.DataDescription;
 import de.bsvrz.dav.daf.main.config.SystemObject;
@@ -17,11 +16,6 @@ import de.bsvrz.sys.funclib.debug.Debug;
 public class FilterMeldung
 implements IBmListener {
 
-	/**
-	 * Ob <code>Assert...</code> benutzt werden soll oder blos Warnungen ausgegeben werden sollen
-	 */
-	private static final boolean USE_ASSERT = false;
-	
 	/**
 	 * Logger
 	 */
@@ -58,9 +52,19 @@ implements IBmListener {
 	private int erfAnz;
 	
 	/**
+	 * Erlaubte Abweichung der Anzahl an gefilterten Meldungen
+	 */
+	private int anzHyst;
+	
+	/**
 	 * Empfange-Datenbeschreibung für KZD und LZD
 	 */
 	public static DataDescription DD_MELD_EMPF = null;
+	
+	/**
+	 * Gibt an, ob die geforderte Anzahl inklusive Hysterese eingehalten wurde
+	 */
+	private boolean anzahlEingehalten = false;
 	
 	
 	/**
@@ -71,11 +75,12 @@ implements IBmListener {
 	 * @param erfAnz
 	 * @throws Exception
 	 */
-	public FilterMeldung(PlPruefungInterface caller, ClientDavInterface dav, String filter, int erfAnz)
+	public FilterMeldung(PlPruefungInterface caller, ClientDavInterface dav, String filter, int erfAnz, int anzHyst)
 	throws Exception {
 		this.dav = dav;
 		this.filter = filter;
 		this.erfAnz = erfAnz;
+		this.anzHyst = anzHyst;
 		this.caller = caller;
 		
 		LOGGER.info("Filtere Betriebsmeldungen nach \""+filter+"\" - Erwarte "+erfAnz+" gefilterte Meldungen"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
@@ -99,16 +104,40 @@ implements IBmListener {
 		if (text.contains(filter)) {
 			meldAnzahl++;
 			LOGGER.info(meldAnzahl + ". Meldung empfangen\n\r" + text); //$NON-NLS-1$
-		}
-		if(meldAnzahl == erfAnz) {
-			LOGGER.info("Erforderliche Anzahl an Meldungen erhalten"); //$NON-NLS-1$
-			caller.doNotify();
-		} else if (meldAnzahl > erfAnz) {
-			if(USE_ASSERT){
-				Assert.assertTrue("Mehr Meldungen gefiltert als erwartet", false); //$NON-NLS-1$
-			}else{
+			
+			if(meldAnzahl == erfAnz) {
+				LOGGER.info("Erforderliche Anzahl an Meldungen erhalten"); //$NON-NLS-1$
+				anzahlEingehalten = true;
+				caller.doNotify();
+			} else if (meldAnzahl > (erfAnz+anzHyst)) {
+				anzahlEingehalten = false;
 				LOGGER.warning("Mehr Meldungen gefiltert als erwartet"); //$NON-NLS-1$	
 			}			
 		}
+	}
+	
+	/**
+	 * Wurde die geforderte Anzahl inklusive Hysterese eingehalten 
+	 * @return <code>True</code>, wenn die Anzahl inklusive Hysterese eingehalten
+	 * wurde, sonst <code>False</code>
+	 */
+	public boolean wurdeAnzahlEingehalten() {
+		return anzahlEingehalten;
+	}
+	
+	/**
+	 * Liefert die Anzahl erhaltener Meldungen
+	 * @return Anzahl erhaltener Meldungen
+	 */
+	public int getAnzahlErhaltenerMeldungen() {
+		return meldAnzahl;
+	}
+	
+	/**
+	 * Liefert die erwartete Anzahl an Meldungen
+	 * @return Erwartete Anzahl an Meldungen
+	 */
+	public int getErwarteteAnzahlMeldungen() {
+		return erfAnz;
 	}
 }

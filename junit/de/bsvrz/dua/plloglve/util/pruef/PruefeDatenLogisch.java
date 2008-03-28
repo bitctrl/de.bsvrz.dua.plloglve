@@ -80,9 +80,9 @@ implements ClientReceiverInterface {
 	/**
 	 * Vergleicherthreads für FS 1-3
 	 */
-	private VergleicheKZD vergleicheFS1;
-	private VergleicheKZD vergleicheFS2;
-	private VergleicheKZD vergleicheFS3;
+	private VergleicheDaten vergleicheFS1;
+	private VergleicheDaten vergleicheFS2;
+	private VergleicheDaten vergleicheFS3;
 	
 	/**
 	 * Empfange-Datenbeschreibung für KZD und LZD
@@ -131,9 +131,9 @@ implements ClientReceiverInterface {
 		/*
 		 * Initialisiere Vergleicherthreads
 		 */
-		vergleicheFS1 = new VergleicheKZD(this,1);
-		vergleicheFS2 = new VergleicheKZD(this,2);
-		vergleicheFS3 = new VergleicheKZD(this,3);
+		vergleicheFS1 = new VergleicheDaten(this,1);
+		vergleicheFS2 = new VergleicheDaten(this,2);
+		vergleicheFS3 = new VergleicheDaten(this,3);
 	}
 	
 	/**
@@ -417,18 +417,27 @@ implements ClientReceiverInterface {
 		pruefungFertig();
 	}
 	
+	/**
+	 * Soll Assert zur Fehlermeldung genutzt werden?
+	 * @param useAssert
+	 */
+	public void benutzeAssert(final boolean useAssert) {
+		vergleicheFS1.benutzeAssert(useAssert);
+		vergleicheFS2.benutzeAssert(useAssert);
+		vergleicheFS3.benutzeAssert(useAssert);
+	}
 }
 
 /**
  * Vergleicht CSV Daten mit Ergebnisdaten
  */
-class VergleicheKZD extends Thread {
+class VergleicheDaten extends Thread {
 
 	/**
 	 * Assert-Statements benutzen?
 	 */
-	protected static final boolean USE_ASSERT = false;
-
+	private boolean useAssert = true;
+	
 	/**
 	 * Logger
 	 */
@@ -492,7 +501,7 @@ class VergleicheKZD extends Thread {
 	 * @param caller Die aufrufende Klasse
 	 * @param fsIndex Der zu prüfende Fahrstreifen
 	 */
-	public VergleicheKZD(PruefeDatenLogisch caller, int fsIndex) {
+	public VergleicheDaten(PruefeDatenLogisch caller, int fsIndex) {
 		this.caller = caller;  //uebernehme aufrufende Klasse
 		this.fsIndex = fsIndex;  //uebernehme FS-Index
 		this.start();  //starte Thread
@@ -673,7 +682,7 @@ class VergleicheKZD extends Thread {
 									warnung += "\n\r"+ident+"W-OK ("+attribWertKopie+"):"+ hmCSV.get(attribWertKopie)+" (SOLL)==(IST) "+hmResult.get(attribut);
 								}
 								
-								if(USE_ASSERT){
+								if(useAssert){
 									Assert.assertTrue(warnung, false);
 								}else{
 									LOGGER.warning(warnung);
@@ -685,20 +694,25 @@ class VergleicheKZD extends Thread {
 							}
 						}
 					}else{
-						if(!hmCSV.get(attribut).equals(hmResult.get(attribut))) {
-							warnung += ident+"DIFF ("+attribut+"):"+ hmCSV.get(attribut)+ sollWertErl +" (SOLL)<>(IST) "+hmResult.get(attribut) + istWertErl;
-							if(attribWertKopie.contains(".Wert.Kopie") && hmCSV.get(attribWertKopie).equals(hmResult.get(attribut))) {
-								warnung += "\n\r"+ident+"W-OK ("+attribWertKopie+"):"+ hmCSV.get(attribWertKopie)+" (SOLL)==(IST) "+hmResult.get(attribut);
-							}
-							if(USE_ASSERT){
-								Assert.assertTrue(warnung, false);
-							}else{
-								LOGGER.warning(warnung);
-							}
-	
-							pruefLog += ident+"DIFF ("+attribut+"):"+ hmCSV.get(attribut) + sollWertErl +" (SOLL)<>(IST) "+hmResult.get(attribut) + istWertErl +"\n\r";
-						} else {
+						if((hmCSV.get(attribut).equals(-2) || hmCSV.get(attribut).equals(-3)) && 
+								(hmResult.get(attribut).equals(-2) || hmResult.get(attribut).equals(-3))){
 							pruefLog += ident+" OK  ("+attribut+"):"+ hmCSV.get(attribut) + sollWertErl +" (SOLL)==(IST) "+hmResult.get(attribut) + istWertErl +"\n\r";
+						}else{
+							if(!hmCSV.get(attribut).equals(hmResult.get(attribut))) {
+								warnung += ident+"DIFF ("+attribut+"):"+ hmCSV.get(attribut)+ sollWertErl +" (SOLL)<>(IST) "+hmResult.get(attribut) + istWertErl;
+								if(attribWertKopie.contains(".Wert.Kopie") && hmCSV.get(attribWertKopie).equals(hmResult.get(attribut))) {
+									warnung += "\n\r"+ident+"W-OK ("+attribWertKopie+"):"+ hmCSV.get(attribWertKopie)+" (SOLL)==(IST) "+hmResult.get(attribut);
+								}
+								if(useAssert){
+									Assert.assertTrue(warnung, false);
+								}else{
+									LOGGER.warning(warnung);
+								}
+		
+								pruefLog += ident+"DIFF ("+attribut+"):"+ hmCSV.get(attribut) + sollWertErl +" (SOLL)<>(IST) "+hmResult.get(attribut) + istWertErl +"\n\r";
+							} else {
+								pruefLog += ident+" OK  ("+attribut+"):"+ hmCSV.get(attribut) + sollWertErl +" (SOLL)==(IST) "+hmResult.get(attribut) + istWertErl +"\n\r";
+							}
 						}
 					}
 				} else {
@@ -707,7 +721,7 @@ class VergleicheKZD extends Thread {
 					
 					
 					if(csvWerttNetto != resultWerttNetto && resultWerttNetto >= 0) {
-						if(USE_ASSERT){
+						if(useAssert){
 							Assert.assertTrue(ident + "DIFF (" + attribut + "):" + csvWerttNetto + sollWertErl + " (SOLL)<>(IST) " + resultWerttNetto + istWertErl, false);							
 						}else{						
 							LOGGER.error(ident+"DIFF ("+attribut+"):"+ csvWerttNetto + sollWertErl +" (SOLL)<>(IST) "+resultWerttNetto + istWertErl);
@@ -741,4 +755,11 @@ class VergleicheKZD extends Thread {
 			return "";
 	}
 	
+	/**
+	 * Soll Assert zur Fehlermeldung genutzt werden?
+	 * @param useAssert
+	 */
+	public void benutzeAssert(final boolean useAssert) {
+		this.useAssert = useAssert;
+	}
 }

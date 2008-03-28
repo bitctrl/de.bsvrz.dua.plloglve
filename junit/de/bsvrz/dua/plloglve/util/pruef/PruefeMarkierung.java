@@ -26,7 +26,7 @@ implements ClientReceiverInterface {
 	/**
 	 * Ob <code>Assert...</code> benutzt werden soll oder blos Warnungen ausgegeben werden sollen
 	 */
-	private static final boolean USE_ASSERT = false;
+	private boolean useAssert = true;
 
 	/**
 	 * Logger
@@ -265,7 +265,7 @@ implements ClientReceiverInterface {
 		if(sollWert < 0) {
 			if(wert != sollWert) {
 				String fehler = "Fehlerhafter Attributwert (" + pruefeAttr + "): " + sollWert + " (SOLL)<>(IST) " + wert; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-				if(USE_ASSERT){
+				if(useAssert){
 					Assert.assertTrue(fehler, false);
 				}else{
 					LOGGER.warning(fehler);
@@ -276,7 +276,7 @@ implements ClientReceiverInterface {
 		} else if (sollWert == SOLL_WERT_KEIN_FEHLER) {
 			if(wert < 0) {
 				String fehler = "Fehlerhafter Attributwert ("+pruefeAttr+"): Wert >= 0 (SOLL)<>(IST) "+wert; //$NON-NLS-1$ //$NON-NLS-2$ 
-				if(USE_ASSERT){
+				if(useAssert){
 					Assert.assertTrue(fehler, false);
 				}else{
 					LOGGER.warning(fehler);
@@ -289,7 +289,7 @@ implements ClientReceiverInterface {
 		if(sollImplausibel != SOLL_IMPLAUSIBEL_KEINE_PRUEFUNG) {
 			if(sollImplausibel != impl) {
 				String fehler = "Fehlerhafte Implausibel-Markierung ("+pruefeAttr+"): "+sollImplausibel+" (SOLL)<>(IST) "+impl+ ",\n" + data; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ 
-				if(USE_ASSERT){
+				if(useAssert){
 					Assert.assertTrue(fehler, false);
 				}else{
 					LOGGER.warning(fehler);
@@ -316,5 +316,13 @@ implements ClientReceiverInterface {
 				caller.doNotify();
 			}
 		}
+	}
+	
+	/**
+	 * Soll Assert zur Fehlermeldung genutzt werden?
+	 * @param useAssert
+	 */
+	public void benutzeAssert(final boolean useAssert) {
+		this.useAssert = useAssert;
 	}
 }
