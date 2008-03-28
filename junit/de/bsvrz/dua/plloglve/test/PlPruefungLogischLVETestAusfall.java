@@ -43,6 +43,8 @@ public class PlPruefungLogischLVETestAusfall {
 	@Test
 	public void testAusfall()throws Exception{
 		PlPruefungAusfall pruefAusfall = new PlPruefungAusfall(dav, Verbindung.TEST_DATEN_VERZ, alLogger);
+		pruefAusfall.benutzeAssert(true);
+		pruefAusfall.setMeldungHysterese(2);
 		pruefAusfall.pruefe();
 	}
 }
