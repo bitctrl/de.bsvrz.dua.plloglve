@@ -84,8 +84,8 @@ extends AbstraktParameterImport{
 		DUAUtensilien.getAttributDatum("qKfzNkBereich.Max", datensatz).asUnscaledValue().set(0); //$NON-NLS-1$
 		DUAUtensilien.getAttributDatum("qPkwGBereich.Min", datensatz).asUnscaledValue().set(0); //$NON-NLS-1$
 		DUAUtensilien.getAttributDatum("qPkwGBereich.Max", datensatz).asUnscaledValue().set(0); //$NON-NLS-1$
-		DUAUtensilien.getAttributDatum("qPkwBereich.Min", datensatz).asUnscaledValue().set(0); //$NON-NLS-1$
-		DUAUtensilien.getAttributDatum("qPkwBereich.Max", datensatz).asUnscaledValue().set(0); //$NON-NLS-1$
+//		DUAUtensilien.getAttributDatum("qPkwBereich.Min", datensatz).asUnscaledValue().set(0); //$NON-NLS-1$
+//		DUAUtensilien.getAttributDatum("qPkwBereich.Max", datensatz).asUnscaledValue().set(0); //$NON-NLS-1$
 		DUAUtensilien.getAttributDatum("qKradBereich.Min", datensatz).asUnscaledValue().set(0); //$NON-NLS-1$
 		DUAUtensilien.getAttributDatum("qKradBereich.Max", datensatz).asUnscaledValue().set(0); //$NON-NLS-1$
 		DUAUtensilien.getAttributDatum("qLfwBereich.Min", datensatz).asUnscaledValue().set(0); //$NON-NLS-1$
@@ -248,6 +248,12 @@ extends AbstraktParameterImport{
 				}
 				if(attributInCSVDatei.startsWith("qLkwMin")){ //$NON-NLS-1$
 					return "qLkwBereich.Min"; //$NON-NLS-1$
+				}
+				if(attributInCSVDatei.startsWith("qPkwMax")){ //$NON-NLS-1$
+					return "qPkwBereich.Max"; //$NON-NLS-1$
+				}
+				if(attributInCSVDatei.startsWith("qPkwMin")){ //$NON-NLS-1$
+					return "qPkwBereich.Min"; //$NON-NLS-1$
 				}
 			}
 		}
