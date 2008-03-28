@@ -159,7 +159,7 @@ implements ClientReceiverInterface{
 				getUnscaledValue("Implausibel").longValue() == DUAKonstanten.JA; //$NON-NLS-1$
 		
 		long qPkw = DUAKonstanten.NICHT_ERMITTELBAR;
-		GWert qPkwGuete = GueteVerfahren.STD_FEHLERHAFT_BZW_NICHT_ERMITTELBAR;
+		GWert qPkwGuete = GWert.getMaxGueteWert(GueteVerfahren.STANDARD);
 				
 		if(qKfz >= 0 && !qKfzImplausibel){
 			if(qLkw >= 0 && !qLkwImplausibel){
@@ -185,6 +185,10 @@ implements ClientReceiverInterface{
 		
 		
 		if(DUAUtensilien.isWertInWerteBereich(data.getItem("qPkw").getItem("Wert"), qPkw)){ //$NON-NLS-1$ //$NON-NLS-2$
+			if(qPkw == DUAKonstanten.NICHT_ERMITTELBAR){
+				data.getItem("qPkw").getItem("Status"). //$NON-NLS-1$ //$NON-NLS-2$
+				getItem("MessWertErsetzung").getUnscaledValue("Implausibel").set(DUAKonstanten.JA);  //$NON-NLS-1$ //$NON-NLS-2$//$NON-NLS-2%
+			}
 			data.getItem("qPkw").getUnscaledValue("Wert").set(qPkw); //$NON-NLS-1$ //$NON-NLS-2$
 			qPkwGuete.exportiere(data, "qPkw"); //$NON-NLS-1$
 		}else{
@@ -196,7 +200,7 @@ implements ClientReceiverInterface{
 		final long vPkw = data.getItem("vPkw").getUnscaledValue("Wert").longValue(); //$NON-NLS-1$ //$NON-NLS-2$
 		final long vLkw = data.getItem("vLkw").getUnscaledValue("Wert").longValue(); //$NON-NLS-1$ //$NON-NLS-2$
 		long vKfz = DUAKonstanten.NICHT_ERMITTELBAR;
-		GWert vKfzGuete = GueteVerfahren.STD_FEHLERHAFT_BZW_NICHT_ERMITTELBAR;
+		GWert vKfzGuete = GWert.getMaxGueteWert(GueteVerfahren.STANDARD);
 		
 		if(qKfz > 0){
 			long qPkwDummy = qPkw >= 0?qPkw:0;
