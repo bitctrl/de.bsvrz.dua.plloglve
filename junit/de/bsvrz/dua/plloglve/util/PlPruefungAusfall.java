@@ -1,5 +1,6 @@
 package de.bsvrz.dua.plloglve.util;
 
+import junit.framework.Assert;
 import de.bsvrz.dav.daf.main.ClientDavInterface;
 import de.bsvrz.dav.daf.main.ClientSenderInterface;
 import de.bsvrz.dav.daf.main.Data;
@@ -17,6 +18,11 @@ import de.bsvrz.sys.funclib.debug.Debug;
 public class PlPruefungAusfall
 implements ClientSenderInterface, PlPruefungInterface {
 
+	/**
+	 * Assert-Statements benutzen?
+	 */
+	private boolean useAssert = true; 
+	
 	/**
 	 * Logger
 	 */
@@ -59,6 +65,12 @@ implements ClientSenderInterface, PlPruefungInterface {
 	private boolean filterTimeout = true;
 	
 	/**
+	 * Abweichung zur erwarteten Anzahl von Meldungen
+	 */
+	private int meldungHyst = 0;
+	
+	
+	/**
 	 * Sendet Testdaten und prüft Ausfallkontrolle
 	 * @param dav Datenverteilerverbindung
 	 * @param TEST_DATEN_VERZ Testdatenverzeichnis
@@ -76,7 +88,7 @@ implements ClientSenderInterface, PlPruefungInterface {
 		/*
 		 * Melde Sender für FS an
 		 */
-		FS = this.dav.getDataModel().getObject("fs.mq.a100.0000.hfs"); //$NON-NLS-1$
+		FS = this.dav.getDataModel().getObject("AAA.Test.fs.kzd.1"); //$NON-NLS-1$
 		
 		DD_KZD_SEND = new DataDescription(this.dav.getDataModel().getAttributeGroup(DUAKonstanten.ATG_KZD),
 				  	  this.dav.getDataModel().getAspect(DUAKonstanten.ASP_EXTERNE_ERFASSUNG),
@@ -159,7 +171,7 @@ implements ClientSenderInterface, PlPruefungInterface {
 		/*
 		 * Initialisiert Meldungsfilter
 		 */
-		new FilterMeldung(this, dav,"Ausfallhäufigkeit", 1457);
+		FilterMeldung meldFilter = new FilterMeldung(this, dav,"Ausfallhäufigkeit", 1457, meldungHyst);
 		LOGGER.info("Meldungsfilter initialisiert: Erwarte 1457 Meldungen mit \"Ausfallhäufigkeit\"");
 
 		/*
@@ -203,6 +215,17 @@ implements ClientSenderInterface, PlPruefungInterface {
 
 		LOGGER.info("Warte auf Meldungsfilter");
 		doWait(30000);
+		
+		String warnung = meldFilter.getAnzahlErhaltenerMeldungen() + " von " + meldFilter.getErwarteteAnzahlMeldungen() + " (Hysterese:" + meldungHyst + ") Betriebsmeldungen erhalten";
+		if(!meldFilter.wurdeAnzahlEingehalten()) {
+			if(useAssert) {
+				Assert.assertTrue(warnung, false);
+			} else {
+				LOGGER.warning(warnung);
+			}
+		} else {
+			LOGGER.info(warnung);
+		}
 
 		LOGGER.info("Prüfung erfolgreich abgeschlossen");
 		
@@ -247,5 +270,21 @@ implements ClientSenderInterface, PlPruefungInterface {
 	 */
 	public boolean isRequestSupported(SystemObject object, DataDescription dataDescription) {
 		return false;
+	}
+	
+	/**
+	 * Soll Assert zur Fehlermeldung genutzt werden?
+	 * @param useAssert
+	 */
+	public void benutzeAssert(final boolean useAssert) {
+		this.useAssert = useAssert;
+	}
+	
+	/**
+	 * Setzt die erlaubte Abweichung zur erwarteten Anzahl an Betriebsmeldungen
+	 * @param meldungHyst
+	 */
+	public void setMeldungHysterese(final int meldungHyst) {
+		this.meldungHyst = meldungHyst;
 	}
 }

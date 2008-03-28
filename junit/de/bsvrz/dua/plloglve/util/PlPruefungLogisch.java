@@ -23,7 +23,7 @@ implements ClientSenderInterface {
 	/**
 	 * Assert-Statements benutzen?
 	 */
-	private static final boolean USE_ASSERT = true; 
+	private boolean useAssert = true; 
 
 	/**
 	 * Logger und Loggerargument
@@ -106,9 +106,9 @@ implements ClientSenderInterface {
 		/*
 		 * Meldet Sender für KZD und LZD unter dem Aspekt Externe Erfassung an
 		 */
-		FS1 = this.dav.getDataModel().getObject("fs.mq.a100.0000.hfs"); //$NON-NLS-1$
-		FS2 = this.dav.getDataModel().getObject("fs.mq.a100.0000.1üfs"); //$NON-NLS-1$
-		FS3 = this.dav.getDataModel().getObject("fs.mq.a100.0000.2üfs"); //$NON-NLS-1$
+		FS1 = this.dav.getDataModel().getObject("AAA.Test.fs.kzd.1"); //$NON-NLS-1$
+		FS2 = this.dav.getDataModel().getObject("AAA.Test.fs.kzd.2"); //$NON-NLS-1$
+		FS3 = this.dav.getDataModel().getObject("AAA.Test.fs.kzd.3"); //$NON-NLS-1$
 
 		FS1_LZ = this.dav.getDataModel().getObject("AAA.Test.fs.lzd.1"); //$NON-NLS-1$
 		FS2_LZ = this.dav.getDataModel().getObject("AAA.Test.fs.lzd.2"); //$NON-NLS-1$
@@ -129,10 +129,15 @@ implements ClientSenderInterface {
 	 * und führt Prüfung durch
 	 * @throws Exception
 	 */
-	public void pruefeKZDTLS() throws Exception {
+	public void pruefeKZDTLS(final int[][] bereiche) throws Exception {
 		this.csvPruefDatei = "PL-Pruef_LVE_TLS"; //$NON-NLS-1$
 		
 		this.tlsPruefung = true;
+		
+		/*
+		 * Initialisiere Logger
+		 */
+		Debug.init("PlPruefeKZDTLS", alLogger); //$NON-NLS-1$
 		
 		LOGGER.info("Prüfe KZD TLS..."); //$NON-NLS-1$
 		
@@ -143,7 +148,7 @@ implements ClientSenderInterface {
 		kzdImport2 = new ParaKZDLogImport(dav, FS2, TEST_DATEN_VERZ + "Parameter"); //$NON-NLS-1$
 		kzdImport3 = new ParaKZDLogImport(dav, FS3, TEST_DATEN_VERZ + "Parameter"); //$NON-NLS-1$
 		
-		doPruefeKZD();
+		doPruefeKZD(bereiche);
 	}
 	
 	/**
@@ -151,7 +156,7 @@ implements ClientSenderInterface {
 	 * und führt Prüfung durch
 	 * @throws Exception
 	 */
-	public void pruefeKZDGrenz() throws Exception {
+	public void pruefeKZDGrenz(final int[][] bereiche) throws Exception {
 		this.csvPruefDatei = "PL-Pruef_LVE_Grenz";
 
 		/*
@@ -169,7 +174,7 @@ implements ClientSenderInterface {
 		kzdImport3 = new ParaKZDLogImport(dav, FS3, TEST_DATEN_VERZ + "Parameter");
 		
 		importOptionenKZD(OptionenPlausibilitaetsPruefungLogischVerkehr.SETZE_MAX);
-		doPruefeKZD();
+		doPruefeKZD(bereiche);
 	}
 	
 	/**
@@ -177,8 +182,13 @@ implements ClientSenderInterface {
 	 * und führt Prüfung durch
 	 * @throws Exception
 	 */
-	public void pruefeLZDGrenz() throws Exception {
+	public void pruefeLZDGrenz(final int[][] bereiche) throws Exception {
 		this.csvPruefDatei = "PL-Pruefung_LZD";
+		
+		/*
+		 * Initialisiere Logger
+		 */
+		Debug.init("PlPruefeLZDGrenz", alLogger); //$NON-NLS-1$
 		
 		LOGGER.info("Prüfe LZD Grenzwerte...");
 		
@@ -190,15 +200,16 @@ implements ClientSenderInterface {
 		lzdImport3 = new ParaLZDLogImport(dav, FS3_LZ, TEST_DATEN_VERZ + "Parameter");
 		
 		importOptionenLZD(OptionenPlausibilitaetsPruefungLogischVerkehr.SETZE_MAX);
-		doPruefeLZD();
+		doPruefeLZD(bereiche);
 	}
 	
 	/**
 	 * Sendet Testdaten und führt KZD Prüfung entsprechend der Konfiguration durch
 	 * @throws Exception
 	 */
-	private void doPruefeKZD()
+	private void doPruefeKZD(final int[][] bereiche)
 	throws Exception {
+		
 		/*
 		 * Sender anmelden
 		 */
@@ -286,9 +297,13 @@ implements ClientSenderInterface {
 				csvDatenVorhanden = false;
 				LOGGER.info("Keine Daten mehr vorhanedn. Beende Prüfung..."); //$NON-NLS-1$
 			} else {
-				LOGGER.info("Warte auf SOLL-IST-Vergleich (CSV-Zeile "+(csvIndex+1)+")...");  //$NON-NLS-1$//$NON-NLS-2$
-				this.dav.sendData(new ResultData[]{resultat1,resultat2,resultat3});
-				doWait();  //Warte auf Ueberpruefung der FS1-FS3
+				for(int[] bereich : bereiche) {
+					if(csvIndex >= (bereich[0]-2) && csvIndex <= (bereich[1]-2)) {
+						LOGGER.info("Warte auf SOLL-IST-Vergleich (CSV-Zeile "+(csvIndex+1)+")...");  //$NON-NLS-1$//$NON-NLS-2$
+						this.dav.sendData(new ResultData[]{resultat1,resultat2,resultat3});
+						doWait();  //Warte auf Ueberpruefung der FS1-FS3
+					}
+				}
 			}
 			
 			csvIndex++;
@@ -311,7 +326,7 @@ implements ClientSenderInterface {
 	 * Sendet Testdaten und führt LZD Prüfung entsprechend der Konfiguration durch
 	 * @throws Exception
 	 */
-	private void doPruefeLZD() throws Exception {
+	private void doPruefeLZD(final int[][] bereiche) throws Exception {
 		/*
 		 * Sender anmelden
 		 */
@@ -397,9 +412,13 @@ implements ClientSenderInterface {
 				csvDatenVorhanden = false;
 				LOGGER.info("Keine Daten mehr vorhanedn. Beende Prüfung...");
 			} else {
-				LOGGER.info("Warte auf SOLL-IST-Vergleich (CSV-Zeile "+(csvIndex+1)+")...");
-				this.dav.sendData(new ResultData[]{resultat1,resultat2,resultat3});
-				doWait();  //Warte auf Ueberpruefung der FS1-FS3
+				for(int[] bereich : bereiche) {
+					if(csvIndex >= (bereich[0]-2) && csvIndex <= (bereich[1]-2)) {
+						LOGGER.info("Warte auf SOLL-IST-Vergleich (CSV-Zeile "+(csvIndex+1)+")...");
+						this.dav.sendData(new ResultData[]{resultat1,resultat2,resultat3});
+						doWait();  //Warte auf Ueberpruefung der FS1-FS3
+					}
+				}
 			}
 			
 			csvIndex++;
@@ -538,4 +557,11 @@ implements ClientSenderInterface {
 		return false;
 	}
 	
+	/**
+	 * Soll Assert zur Fehlermeldung genutzt werden?
+	 * @param useAssert
+	 */
+	public void benutzeAssert(final boolean useAssert) {
+		this.useAssert = useAssert;
+	}
 }

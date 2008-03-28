@@ -1,5 +1,6 @@
 package de.bsvrz.dua.plloglve.util;
 
+import junit.framework.Assert;
 import de.bsvrz.dav.daf.main.ClientDavInterface;
 import de.bsvrz.dav.daf.main.ClientSenderInterface;
 import de.bsvrz.dav.daf.main.Data;
@@ -19,6 +20,11 @@ import de.bsvrz.sys.funclib.debug.Debug;
 public class PlPruefungVertrauensbereich
 implements ClientSenderInterface, PlPruefungInterface {
 
+	/**
+	 * Assert-Statements benutzen?
+	 */
+	private boolean useAssert = true; 
+	
 	/**
 	 * Logger
 	 */
@@ -68,6 +74,12 @@ implements ClientSenderInterface, PlPruefungInterface {
 	 */
 	private boolean sendeFehler1_2 = false;
 	private boolean sendeFehler2_2 = false;
+	
+	/**
+	 * Abweichung zur erwarteten Anzahl von Meldungen
+	 */
+	private int meldungHyst = 0;
+	
 	
 	/**
 	 * Sendet Testdaten und prüft Ausfallkontrolle
@@ -182,13 +194,14 @@ implements ClientSenderInterface, PlPruefungInterface {
 		 * 32 (b)
 		 * 2 (Gutmeldung)
 		 */
-		new FilterMeldung(this, dav,"Vertrauensbereichs", 371);
+		FilterMeldung meldFilter = new FilterMeldung(this, dav,"Vertrauensbereichs", 371, meldungHyst);
 		LOGGER.info("Meldungsfilter initialisiert: Erwarte 371 Meldungen mit \"Vertrauensbereichs\"");
 		
 		/*
 		 * Testerobjekt
 		 */
 		PruefeMarkierung markPruefer = new PruefeMarkierung(this, dav, FS);
+		markPruefer.benutzeAssert(useAssert);
 		
 		for(int i=1;i<=600;i++) {
 			
@@ -252,6 +265,17 @@ implements ClientSenderInterface, PlPruefungInterface {
 		
 		//Warte 30s auf Filterung der Betriebsmeldungen
 		doWait(30000);
+
+		String warnung = meldFilter.getAnzahlErhaltenerMeldungen() + " von " + meldFilter.getErwarteteAnzahlMeldungen() + " (Hysterese:" + meldungHyst + ") Betriebsmeldungen erhalten";
+		if(!meldFilter.wurdeAnzahlEingehalten()) {
+			if(useAssert) {
+				Assert.assertTrue(warnung, false);
+			} else {
+				LOGGER.warning(warnung);
+			}
+		} else {
+			LOGGER.info(warnung);
+		}
 		
 		LOGGER.info("Prüfung erfolgreich abgeschlossen");
 		
@@ -331,5 +355,21 @@ implements ClientSenderInterface, PlPruefungInterface {
 	 */
 	public boolean isRequestSupported(SystemObject object, DataDescription dataDescription) {
 		return false;
+	}
+	
+	/**
+	 * Soll Assert zur Fehlermeldung genutzt werden?
+	 * @param useAssert
+	 */
+	public void benutzeAssert(final boolean useAssert) {
+		this.useAssert = useAssert;
+	}
+	
+	/**
+	 * Setzt die erlaubte Abweichung zur erwarteten Anzahl an Betriebsmeldungen
+	 * @param meldungHyst
+	 */
+	public void setMeldungHysterese(final int meldungHyst) {
+		this.meldungHyst = meldungHyst;
 	}
 }

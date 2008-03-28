@@ -1,5 +1,7 @@
 package de.bsvrz.dua.plloglve.util;
 
+import junit.framework.Assert;
+
 import com.bitctrl.Constants;
 
 import de.bsvrz.dav.daf.main.ClientDavInterface;
@@ -18,6 +20,11 @@ import de.bsvrz.sys.funclib.debug.Debug;
 
 public class PlPruefungDiff
 implements ClientSenderInterface, PlPruefungInterface {
+	
+	/**
+	 * Assert-Statements benutzen?
+	 */
+	private boolean useAssert = true; 
 	
 	/**
 	 * Debug-Logger
@@ -50,6 +57,12 @@ implements ClientSenderInterface, PlPruefungInterface {
 	private ClientDavInterface dav = null;
 	
 	/**
+	 * Abweichung zur erwarteten Anzahl von Meldungen
+	 */
+	private int meldungHyst = 0;
+	
+	
+	/**
 	 * Sendet Testdaten und prüft Differenzielkontrolle
 	 * @param dav Datenteilerverbindung
 	 * @param TEST_DATEN_VERZ Verzeichnis mit Testdaten
@@ -58,6 +71,11 @@ implements ClientSenderInterface, PlPruefungInterface {
 		this.dav = dav;
 		this.TEST_DATEN_VERZ = TEST_DATEN_VERZ;
 	
+		/*
+		 * Initialisiere Logger
+		 */
+		Debug.init("PlPruefungDifferenzialkontrolle", alLogger); //$NON-NLS-1$
+		
 		/*
 		 * Melde Sender für FS an
 		 */
@@ -98,13 +116,14 @@ implements ClientSenderInterface, PlPruefungInterface {
 		/*
 		 * Initialisiert Meldungsfilter
 		 */
-		new FilterMeldung(this, dav, "konstant", 63); //$NON-NLS-1$
+		FilterMeldung meldFilter = new FilterMeldung(this, dav, "konstant", 63, meldungHyst); //$NON-NLS-1$
 		LOGGER.info("Meldungsfilter initialisiert: Erwarte 63 Meldungen mit \"konstant\""); //$NON-NLS-1$
 		
 		/*
 		 * Testerobjekt
 		 */
 		PruefeMarkierung markPruefer = new PruefeMarkierung(this, dav, FS);
+		markPruefer.benutzeAssert(useAssert);
 		
 		/*
 		 * Sende Differentialkontrolldaten (3x)
@@ -171,6 +190,17 @@ implements ClientSenderInterface, PlPruefungInterface {
 		LOGGER.info("Warte 30 Sekunden auf Meldungsfilter"); //$NON-NLS-1$
 		doWait(30000);
 		
+		String warnung = meldFilter.getAnzahlErhaltenerMeldungen() + " von " + meldFilter.getErwarteteAnzahlMeldungen() + " (Hysterese:" + meldungHyst + ") Betriebsmeldungen erhalten";
+		if(!meldFilter.wurdeAnzahlEingehalten()) {
+			if(useAssert) {
+				Assert.assertTrue(warnung, false);
+			} else {
+				LOGGER.warning(warnung);
+			}
+		} else {
+			LOGGER.info(warnung);
+		}
+		
 		LOGGER.info("Prüfung erfolgreich abgeschlossen"); //$NON-NLS-1$
 		
 		/*
@@ -211,5 +241,21 @@ implements ClientSenderInterface, PlPruefungInterface {
 	 */
 	public boolean isRequestSupported(SystemObject object, DataDescription dataDescription) {
 		return false;
+	}
+	
+	/**
+	 * Soll Assert zur Fehlermeldung genutzt werden?
+	 * @param useAssert
+	 */
+	public void benutzeAssert(final boolean useAssert) {
+		this.useAssert = useAssert;
+	}
+	
+	/**
+	 * Setzt die erlaubte Abweichung zur erwarteten Anzahl an Betriebsmeldungen
+	 * @param meldungHyst
+	 */
+	public void setMeldungHysterese(final int meldungHyst) {
+		this.meldungHyst = meldungHyst;
 	}
 }
