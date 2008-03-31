@@ -64,6 +64,20 @@ extends AbstractSystemObjekt
 implements ClientReceiverInterface{
 	
 	/**
+	 * Alle Attribute, die innerhalb der PL-Prüfung logisch bzwl eines KZD veraendert werden
+	 * koennen
+	 */
+	private static final String[] ATTRIBUT_NAMEN = {"qKfz", //$NON-NLS-1$
+		"qLkw", //$NON-NLS-1$
+		"qPkw", //$NON-NLS-1$
+		"vPkw", //$NON-NLS-1$
+		"vLkw", //$NON-NLS-1$
+		"vKfz", //$NON-NLS-1$
+		"vgKfz", //$NON-NLS-1$
+		"tNetto", //$NON-NLS-1$
+		"b"}; //$NON-NLS-1$
+	
+	/**
 	 * Debug-Logger
 	 */
 	protected static final Debug LOGGER = Debug.getLogger();
@@ -562,6 +576,7 @@ implements ClientReceiverInterface{
 				copy = resultat.getData().createModifiableCopy();			
 				this.berechneQPkwUndVKfz(copy);
 				this.ueberpruefe(copy, resultat);
+				this.passeGueteAn(copy);
 			}catch(IllegalStateException e){
 				LOGGER.error("Es konnte keine Kopie von Datensatz erzeugt werden:\n" //$NON-NLS-1$
 						+ resultat, e);
@@ -571,7 +586,23 @@ implements ClientReceiverInterface{
 
 		return copy;
 	}
+	
 
+	/**
+	 * Passt die Guete aller Attribute eines Gesamten Datensatzes an die Vorgaben
+	 * der Gueteberechnung an, dass bei einem bestimmten Wertezustand die Guete immer
+	 * auf 0 gesetzt werden soll (siehe Kappich-Mail 27.03.08)
+	 * 
+	 * @param daten ein veraenderbares KZ-Datum
+	 */
+	private final void passeGueteAn(Data daten){
+		for(String attributName:ATTRIBUT_NAMEN){
+			if(daten.getItem(attributName).getItem("Wert").asUnscaledValue().longValue() == DUAKonstanten.NICHT_ERMITTELBAR_BZW_FEHLERHAFT){ //$NON-NLS-1$
+				daten.getItem(attributName).getItem("Guete").getUnscaledValue("Index").set(0);  //$NON-NLS-1$//$NON-NLS-2$
+			}
+		}
+	}
+	
 	
 	/**
 	 * {@inheritDoc}
