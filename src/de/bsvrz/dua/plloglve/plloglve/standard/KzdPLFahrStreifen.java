@@ -45,6 +45,20 @@ import de.bsvrz.sys.funclib.bitctrl.dua.schnittstellen.IVerwaltungMitGuete;
 public class KzdPLFahrStreifen
 extends AbstraktPLFahrStreifen{
 	
+	/**
+	 * Alle Attribute, die innerhalb der PL-Prüfung logisch bzwl eines KZD veraendert werden
+	 * koennen
+	 */
+	private static final String[] ATTRIBUT_NAMEN = {"qKfz", //$NON-NLS-1$
+		"qLkw", //$NON-NLS-1$
+		"qPkw", //$NON-NLS-1$
+		"vPkw", //$NON-NLS-1$
+		"vLkw", //$NON-NLS-1$
+		"vKfz", //$NON-NLS-1$
+		"vgKfz", //$NON-NLS-1$
+		"tNetto", //$NON-NLS-1$
+		"b"}; //$NON-NLS-1$
+	
 
 	/**
 	 * Standartdkonstruktor 
@@ -319,14 +333,23 @@ extends AbstraktPLFahrStreifen{
 			}
 		}
 	}
-
-
+	
+	
 	/**
 	 * {@inheritDoc}
 	 */
 	@Override
 	protected AttributeGroup getPlausibilisierungsParameterAtg(ClientDavInterface dav) {
 		return dav.getDataModel().getAttributeGroup(AtgVerkehrsDatenKZIPlPruefLogisch.getPid());
+	}
+
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	protected String[] getAttributNamen() {
+		return ATTRIBUT_NAMEN;
 	}	
 	
 }

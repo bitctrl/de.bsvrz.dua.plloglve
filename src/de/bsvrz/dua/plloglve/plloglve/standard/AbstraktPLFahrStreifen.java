@@ -62,21 +62,7 @@ import de.bsvrz.sys.funclib.debug.Debug;
 public abstract class AbstraktPLFahrStreifen
 extends AbstractSystemObjekt
 implements ClientReceiverInterface{
-	
-	/**
-	 * Alle Attribute, die innerhalb der PL-Prüfung logisch bzwl eines KZD veraendert werden
-	 * koennen
-	 */
-	private static final String[] ATTRIBUT_NAMEN = {"qKfz", //$NON-NLS-1$
-		"qLkw", //$NON-NLS-1$
-		"qPkw", //$NON-NLS-1$
-		"vPkw", //$NON-NLS-1$
-		"vLkw", //$NON-NLS-1$
-		"vKfz", //$NON-NLS-1$
-		"vgKfz", //$NON-NLS-1$
-		"tNetto", //$NON-NLS-1$
-		"b"}; //$NON-NLS-1$
-	
+
 	/**
 	 * Debug-Logger
 	 */
@@ -587,7 +573,6 @@ implements ClientReceiverInterface{
 		return copy;
 	}
 	
-
 	/**
 	 * Passt die Guete aller Attribute eines Gesamten Datensatzes an die Vorgaben
 	 * der Gueteberechnung an, dass bei einem bestimmten Wertezustand die Guete immer
@@ -596,7 +581,7 @@ implements ClientReceiverInterface{
 	 * @param daten ein veraenderbares KZ-Datum
 	 */
 	private final void passeGueteAn(Data daten){
-		for(String attributName:ATTRIBUT_NAMEN){
+		for(String attributName:getAttributNamen()){
 			long wert = daten.getItem(attributName).getItem("Wert").asUnscaledValue().longValue(); //$NON-NLS-1$ 
 			if(wert == DUAKonstanten.NICHT_ERMITTELBAR || wert == DUAKonstanten.FEHLERHAFT ||
 					wert == DUAKonstanten.NICHT_ERMITTELBAR_BZW_FEHLERHAFT){
@@ -604,6 +589,16 @@ implements ClientReceiverInterface{
 			}
 		}
 	}
+
+	
+	/**
+	 * Erfragt eine Liste aller Attributnamen, dieninnerhalb eines bestimmten
+	 * Datensatzes enthalten sind (KZD bzw. LZD)
+	 * 
+	 * @return eine Liste aller Attributnamen, dieninnerhalb eines bestimmten
+	 * Datensatzes enthalten sind (KZD bzw. LZD)
+	 */
+	protected abstract String[] getAttributNamen();
 	
 	
 	/**

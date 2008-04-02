@@ -50,6 +50,17 @@ import de.bsvrz.sys.funclib.bitctrl.dua.schnittstellen.IVerwaltungMitGuete;
 public class LzdPLFahrStreifen 
 extends KzdPLFahrStreifen{
 	
+	/**
+	 * Alle Attribute, die innerhalb der PL-Prüfung logisch bzwl eines KZD veraendert werden
+	 * koennen
+	 */
+	private static final String[] ATTRIBUT_NAMEN = {"qKfz", //$NON-NLS-1$
+		"qLkw", //$NON-NLS-1$
+		"qPkw", //$NON-NLS-1$
+		"vPkw", //$NON-NLS-1$
+		"vLkw", //$NON-NLS-1$
+		"vKfz", //$NON-NLS-1$
+		"sKfz"}; //$NON-NLS-1$
 	
 	/**
 	 * Standartdkonstruktor 
@@ -183,6 +194,15 @@ extends KzdPLFahrStreifen{
 		}
 		
 		return false;
+	}
+
+
+	/**
+	 *  {@inheritDoc}
+	 */
+	@Override
+	protected String[] getAttributNamen() {
+		return ATTRIBUT_NAMEN;
 	}
 	
 }
