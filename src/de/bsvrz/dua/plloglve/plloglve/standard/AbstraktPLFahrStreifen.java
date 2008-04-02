@@ -597,8 +597,10 @@ implements ClientReceiverInterface{
 	 */
 	private final void passeGueteAn(Data daten){
 		for(String attributName:ATTRIBUT_NAMEN){
-			if(daten.getItem(attributName).getItem("Wert").asUnscaledValue().longValue() == DUAKonstanten.NICHT_ERMITTELBAR_BZW_FEHLERHAFT){ //$NON-NLS-1$
-				daten.getItem(attributName).getItem("Guete").getUnscaledValue("Index").set(0);  //$NON-NLS-1$//$NON-NLS-2$
+			long wert = daten.getItem(attributName).getItem("Wert").asUnscaledValue().longValue(); //$NON-NLS-1$ 
+			if(wert == DUAKonstanten.NICHT_ERMITTELBAR || wert == DUAKonstanten.FEHLERHAFT ||
+					wert == DUAKonstanten.NICHT_ERMITTELBAR_BZW_FEHLERHAFT){
+				daten.getItem(attributName).getItem("Güte").getUnscaledValue("Index").set(0);  //$NON-NLS-1$//$NON-NLS-2$
 			}
 		}
 	}
