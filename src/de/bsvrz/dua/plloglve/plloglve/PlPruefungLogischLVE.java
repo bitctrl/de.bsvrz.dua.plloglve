@@ -32,6 +32,7 @@ import de.bsvrz.dua.plloglve.plloglve.diff.DifferenzialKontrolle;
 import de.bsvrz.dua.plloglve.plloglve.standard.PlLogischLVEStandard;
 import de.bsvrz.dua.plloglve.plloglve.vb.Vertrauensbereich;
 import de.bsvrz.sys.funclib.bitctrl.dua.DUAInitialisierungsException;
+import de.bsvrz.sys.funclib.bitctrl.dua.DUAKonstanten;
 import de.bsvrz.sys.funclib.bitctrl.dua.adapter.AbstraktBearbeitungsKnotenAdapter;
 import de.bsvrz.sys.funclib.bitctrl.dua.dfs.schnittstellen.IDatenFlussSteuerung;
 import de.bsvrz.sys.funclib.bitctrl.dua.dfs.typen.ModulTyp;
@@ -74,6 +75,16 @@ extends AbstraktBearbeitungsKnotenAdapter{
 	 */	
 	private Vertrauensbereich vb = null;
 	
+	/**
+	 * Datenverteiler-ID der KZD-Attributgruppe
+	 */
+	public static long ATG_KZD_ID = -1;
+
+	/**
+	 * Datenverteiler-ID der LZD-Attributgruppe
+	 */
+	public static long ATG_LZD_ID = -1;
+	
 	
 	/**
 	 * Standardkonstruktor
@@ -94,6 +105,8 @@ extends AbstraktBearbeitungsKnotenAdapter{
 	public void initialisiere(IVerwaltung dieVerwaltung)
 	throws DUAInitialisierungsException {
 		super.initialisiere(dieVerwaltung);
+		ATG_KZD_ID = dieVerwaltung.getVerbindung().getDataModel().getAttributeGroup(DUAKonstanten.ATG_KZD).getId();
+		ATG_LZD_ID = dieVerwaltung.getVerbindung().getDataModel().getAttributeGroup(DUAKonstanten.ATG_LZD).getId();
 		
 		this.vb = new Vertrauensbereich(this.standardAspekte);
 	
@@ -135,4 +148,5 @@ extends AbstraktBearbeitungsKnotenAdapter{
 		// wird hier nicht benötigt, da die Publikation erst im letzten Submodul
 		// "Vertrauensbereich" stattfindet
 	}
+	
 }

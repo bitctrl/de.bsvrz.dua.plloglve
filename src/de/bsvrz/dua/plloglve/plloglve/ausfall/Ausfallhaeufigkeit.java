@@ -33,21 +33,28 @@ import java.util.Map;
 
 import de.bsvrz.dav.daf.main.ResultData;
 import de.bsvrz.dav.daf.main.config.SystemObject;
+import de.bsvrz.dua.plloglve.plloglve.PlPruefungLogischLVE;
 import de.bsvrz.sys.funclib.bitctrl.dua.DUAInitialisierungsException;
 import de.bsvrz.sys.funclib.bitctrl.dua.adapter.AbstraktBearbeitungsKnotenAdapter;
 import de.bsvrz.sys.funclib.bitctrl.dua.dfs.schnittstellen.IDatenFlussSteuerung;
 import de.bsvrz.sys.funclib.bitctrl.dua.dfs.typen.ModulTyp;
 import de.bsvrz.sys.funclib.bitctrl.dua.schnittstellen.IVerwaltung;
+import de.bsvrz.sys.funclib.debug.Debug;
 
 /**
- * Dieses Submodul überprüft, ob die parametrierte maximal zulässige
- * Ausfallhäufigkeit eines Fahrstreifens pro Tag überschritten wurde
+ * Dieses Submodul ueberprueft, ob die parametrierte maximal zulaessige
+ * Ausfallhaeufigkeit eines Fahrstreifens pro Tag ueberschritten wurde
  * 
  * @author BitCtrl Systems GmbH, Thierfelder
  *
  */
 public class Ausfallhaeufigkeit
 extends AbstraktBearbeitungsKnotenAdapter{
+	
+	/**
+	 * Debug-Logger
+	 */
+	private static final Debug LOGGER = Debug.getLogger();
 	
 	/**
 	 * Mapt FS-Systemobjekte auf Fahrstreifenobjekte mit den für dieses
@@ -80,15 +87,19 @@ extends AbstraktBearbeitungsKnotenAdapter{
 			
 			for(ResultData resultat:resultate){				
 				if(resultat != null){
-					if(resultat.getData() != null){					
+					if(resultat.getDataDescription().getAttributeGroup().getId() == PlPruefungLogischLVE.ATG_KZD_ID
+							&& resultat.getData() != null){					
 						AusfallFahrStreifen fs = this.fahrStreifen.get(resultat.getObject());
-						
+
 						if(fs != null){
 							fs.plausibilisiere(resultat);
-						}						
+						}else{
+							LOGGER.error("Konnte Fahrstreifen zu Datensatz nicht identifizieren:\n" //$NON-NLS-1$
+									+ resultat);
+						}
 					}
-					
-					weiterzuleitendeResultate.add(resultat);				
+
+					weiterzuleitendeResultate.add(resultat);
 				}
 			}
 			
@@ -113,4 +124,5 @@ extends AbstraktBearbeitungsKnotenAdapter{
 	public void aktualisierePublikation(IDatenFlussSteuerung dfs) {
 		// hier wird nicht publiziert		
 	}
+	
 }

@@ -34,11 +34,13 @@ import java.util.Map;
 import de.bsvrz.dav.daf.main.Data;
 import de.bsvrz.dav.daf.main.ResultData;
 import de.bsvrz.dav.daf.main.config.SystemObject;
+import de.bsvrz.dua.plloglve.plloglve.PlPruefungLogischLVE;
 import de.bsvrz.sys.funclib.bitctrl.dua.DUAInitialisierungsException;
 import de.bsvrz.sys.funclib.bitctrl.dua.adapter.AbstraktBearbeitungsKnotenAdapter;
 import de.bsvrz.sys.funclib.bitctrl.dua.dfs.schnittstellen.IDatenFlussSteuerung;
 import de.bsvrz.sys.funclib.bitctrl.dua.dfs.typen.ModulTyp;
 import de.bsvrz.sys.funclib.bitctrl.dua.schnittstellen.IVerwaltung;
+import de.bsvrz.sys.funclib.debug.Debug;
 
 /**
  * Submodul Differentialkontrolle. Dieses Submodul überprüft, ob die maximal
@@ -50,6 +52,11 @@ import de.bsvrz.sys.funclib.bitctrl.dua.schnittstellen.IVerwaltung;
  */
 public class DifferenzialKontrolle
 extends AbstraktBearbeitungsKnotenAdapter{
+	
+	/**
+	 * Debug-Logger
+	 */
+	private static final Debug LOGGER = Debug.getLogger();
 
 	/**
 	 * Map von Fahrtreifen-Systemobjekten auf Objekte mit Konstanzzählern
@@ -81,25 +88,35 @@ extends AbstraktBearbeitungsKnotenAdapter{
 			
 			for(ResultData resultat:resultate){				
 				if(resultat != null){
-					if(resultat.getData() != null){
-						ResultData resultatNeu = resultat;
-						
-						DiffFahrStreifen fs = this.fahrStreifen.get(resultat.getObject());
-						
-						Data data = null;
-						if(fs != null){
-							data = fs.plausibilisiere(resultat);
+					if(resultat.getDataDescription().getAttributeGroup().getId() == PlPruefungLogischLVE.ATG_KZD_ID){
+						if(resultat.getData() != null){
+							ResultData resultatNeu = resultat;
+							
+							DiffFahrStreifen fs = this.fahrStreifen.get(resultat.getObject());
+							
+							Data data = null;
+							if(fs != null){
+								data = fs.plausibilisiere(resultat);
+							}else{
+								LOGGER.error("Fahrstreifen zu Datensatz konnte nicht identifiziert werden:\n" +  //$NON-NLS-1$
+										resultat);
+							}
+							
+							if(data != null){
+								resultatNeu = new ResultData(resultat.getObject(), resultat.getDataDescription(),
+										resultat.getDataTime(), data, resultat.isDelayedData());							
+							}
+							
+							weiterzuleitendeResultate.add(resultatNeu);
+						}else{
+							weiterzuleitendeResultate.add(resultat);
 						}
-						
-						if(data != null){
-							resultatNeu = new ResultData(resultat.getObject(), resultat.getDataDescription(),
-									resultat.getDataTime(), data, resultat.isDelayedData());							
-						}
-						
-						weiterzuleitendeResultate.add(resultatNeu);
 					}else{
+						/**
+						 * LZ-Datum empfangen. Dieses wird nicht einer Differentialkontrolle unterzogen
+						 */
 						weiterzuleitendeResultate.add(resultat);
-					}					
+					}
 				}
 			}
 			

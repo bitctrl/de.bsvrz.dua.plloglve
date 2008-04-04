@@ -127,13 +127,12 @@ implements ClientReceiverInterface{
 	
 	
 	/**
-	 * Führt die Plausibilisierung durch. (nur für KZD)
+	 * Fuehrt die Plausibilisierung durch. (nur für KZD)
 	 * 
 	 * @param resultat ein Fahrstreifendatum (KZD)
 	 */
 	protected final void plausibilisiere(final ResultData resultat){		
-		if(resultat != null && resultat.getData() != null && 
-				resultat.getDataDescription().getAttributeGroup().getId() == ATG_KZD_ID){
+		if(resultat.getDataDescription().getAttributeGroup().getId() == ATG_KZD_ID){
 
 			AusfallDatumKomplett ausfallDatum = AusfallDatumKomplett.getAusfallDatumVon(resultat);
 			if(ausfallDatum != null){

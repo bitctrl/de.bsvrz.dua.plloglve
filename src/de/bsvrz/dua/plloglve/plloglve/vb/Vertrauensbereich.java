@@ -34,6 +34,7 @@ import de.bsvrz.dav.daf.main.Data;
 import de.bsvrz.dav.daf.main.DataDescription;
 import de.bsvrz.dav.daf.main.ResultData;
 import de.bsvrz.dav.daf.main.config.SystemObject;
+import de.bsvrz.dua.plloglve.plloglve.PlPruefungLogischLVE;
 import de.bsvrz.sys.funclib.bitctrl.dua.DUAInitialisierungsException;
 import de.bsvrz.sys.funclib.bitctrl.dua.adapter.AbstraktBearbeitungsKnotenAdapter;
 import de.bsvrz.sys.funclib.bitctrl.dua.dfs.schnittstellen.IDatenFlussSteuerung;
@@ -43,10 +44,10 @@ import de.bsvrz.sys.funclib.bitctrl.dua.schnittstellen.IVerwaltung;
 import de.bsvrz.sys.funclib.debug.Debug;
 
 /**
- * Dieses Submodul überwacht die Einschalt- bzw. Ausschaltschwelle für
+ * Dieses Submodul ueberwacht die Einschalt- bzw. Ausschaltschwelle für
  * den Vertrauensbereich eines Fahrstreifens im Bezugszeitraum. Beim
  * Betreten bzw. Verlassen des Vertrauensbereichs wird eine entsprechende
- * Meldung generiert. Darüber hinaus findet innerhalb dieses Submoduls
+ * Meldung generiert. Darueber hinaus findet innerhalb dieses Submoduls
  * ggf. die Publikation aller empfangenen Daten statt.
  * 
  * @author BitCtrl Systems GmbH, Thierfelder
@@ -66,12 +67,7 @@ extends AbstraktBearbeitungsKnotenAdapter{
 	 */
 	private Map<SystemObject, VertrauensFahrStreifen> fahrStreifenMap = 
 				new HashMap<SystemObject, VertrauensFahrStreifen>();
-	
-	/**
-	 * speichert ob das letzte Ergebnis (pro Fahrstreifen) auf keine Daten stand
-	 */
-	private Map<SystemObject, Boolean> keineDaten = new HashMap<SystemObject, Boolean>();
-	
+		
 	
 	/**
 	 * Standardkonstruktor
@@ -114,16 +110,20 @@ extends AbstraktBearbeitungsKnotenAdapter{
 			for(ResultData resultat:resultate){
 				if(resultat != null){
 					Data datum = null;
+					
+					if(resultat.getDataDescription().getAttributeGroup().getId() == PlPruefungLogischLVE.ATG_KZD_ID){
+						if(resultat.getData() != null){
+							VertrauensFahrStreifen fs = this.fahrStreifenMap.get(resultat.getObject());
 
-					if(resultat.getData() != null){
-						VertrauensFahrStreifen fs = this.fahrStreifenMap.get(resultat.getObject());
-						
-						if(fs != null){
-							datum = fs.plausibilisiere(resultat);
-						}else{
-							LOGGER.warning("Datum fuer nicht identifizierbaren Fahrstreifen empfangen: " +  //$NON-NLS-1$
-									resultat.getObject());
+							if(fs != null){
+								datum = fs.plausibilisiere(resultat);
+							}else{
+								LOGGER.warning("Datum fuer nicht identifizierbaren Fahrstreifen empfangen: " +  //$NON-NLS-1$
+										resultat.getObject());
+							}						
 						}						
+					}else{
+						datum = resultat.getData();
 					}
 					
 					ResultData publikationsDatum = new ResultData(resultat.getObject(),
@@ -135,18 +135,7 @@ extends AbstraktBearbeitungsKnotenAdapter{
 																	resultat.getDataTime(), datum, resultat.isDelayedData());
 
 					if(this.publizieren){
-						boolean sende = true;
-						if(publikationsDatum.getData() == null){
-							Boolean letztesDatumKeineDaten = this.keineDaten.get(publikationsDatum.getObject());
-							if(letztesDatumKeineDaten == null || letztesDatumKeineDaten){
-								sende = false;
-							}
-						}	
-						
-						if(sende){
-							this.publikationsAnmeldungen.sende(publikationsDatum);
-							this.keineDaten.put(publikationsDatum.getObject(), publikationsDatum.getData() == null);
-						}
+						this.publikationsAnmeldungen.sende(publikationsDatum);
 					}
 					
 					weiterzuleitendeResultate.add(weiterzuleitendesDatum);
@@ -174,4 +163,5 @@ extends AbstraktBearbeitungsKnotenAdapter{
 	public void aktualisierePublikation(IDatenFlussSteuerung dfs) {
 		// Datenflusssteuerung ist hier nicht dynamisch
 	}
+	
 }

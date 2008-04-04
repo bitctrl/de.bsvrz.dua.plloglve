@@ -34,6 +34,7 @@ import java.util.Map;
 import de.bsvrz.dav.daf.main.Data;
 import de.bsvrz.dav.daf.main.ResultData;
 import de.bsvrz.dav.daf.main.config.SystemObject;
+import de.bsvrz.dua.plloglve.plloglve.PlPruefungLogischLVE;
 import de.bsvrz.sys.funclib.bitctrl.dua.DUAInitialisierungsException;
 import de.bsvrz.sys.funclib.bitctrl.dua.DUAKonstanten;
 import de.bsvrz.sys.funclib.bitctrl.dua.adapter.AbstraktBearbeitungsKnotenAdapter;
@@ -76,16 +77,6 @@ extends AbstraktBearbeitungsKnotenAdapter{
 	 */
 	private Map<SystemObject, AbstraktPLFahrStreifen> kzdFahrStreifen =
 								new HashMap<SystemObject, AbstraktPLFahrStreifen>();
-	
-	/**
-	 * Datenverteiler-ID der KZD-Attributgruppe
-	 */
-	private static long ATG_KZD_ID = -1;
-
-	/**
-	 * Datenverteiler-ID der LZD-Attributgruppe
-	 */
-	private static long ATG_LZD_ID = -1;
 
 
 	/**
@@ -103,10 +94,7 @@ extends AbstraktBearbeitungsKnotenAdapter{
 	public void initialisiere(IVerwaltung dieVerwaltung)
 	throws DUAInitialisierungsException {
 		super.initialisiere(dieVerwaltung);
-		
-		ATG_KZD_ID = dieVerwaltung.getVerbindung().getDataModel().getAttributeGroup(DUAKonstanten.ATG_KZD).getId();
-		ATG_LZD_ID = dieVerwaltung.getVerbindung().getDataModel().getAttributeGroup(DUAKonstanten.ATG_LZD).getId();
-		
+				
 		IVerwaltungMitGuete verwaltungMitGuete = null;
 		if(dieVerwaltung instanceof IVerwaltungMitGuete){
 			verwaltungMitGuete = (IVerwaltungMitGuete)dieVerwaltung;
@@ -135,13 +123,13 @@ extends AbstraktBearbeitungsKnotenAdapter{
 					
 					AbstraktPLFahrStreifen fahrStreifen = null;
 					
-					if(resultat.getDataDescription().getAttributeGroup().getId() == ATG_KZD_ID){
+					if(resultat.getDataDescription().getAttributeGroup().getId() == PlPruefungLogischLVE.ATG_KZD_ID){
 						/**
 						 * Es wurden KZD empfangen
 						 */
 						fahrStreifen = this.kzdFahrStreifen.get(resultat.getObject());	
 					}else
-					if(resultat.getDataDescription().getAttributeGroup().getId() == ATG_LZD_ID){
+					if(resultat.getDataDescription().getAttributeGroup().getId() == PlPruefungLogischLVE.ATG_LZD_ID){
 						/**
 						 * Es wurden LZD empfangen
 						 */

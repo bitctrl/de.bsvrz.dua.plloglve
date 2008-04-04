@@ -73,6 +73,7 @@ extends AbstraktVerwaltungsAdapterMitGuete{
 		return SWETyp.PL_PRUEFUNG_LOGISCH_LVE;
 	}
 
+	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -123,12 +124,14 @@ extends AbstraktVerwaltungsAdapterMitGuete{
 		}
 	}
 	
+	
 	/**
 	 * {@inheritDoc}
 	 */
 	public void update(ResultData[] resultate) {
 		this.plPruefungFormal.aktualisiereDaten(resultate);
 	}
+
 	
 	/**
 	 * Startet diese Applikation

@@ -159,7 +159,7 @@ implements ClientSenderInterface, PlPruefungInterface {
 			
 			//Warte bis Intervallende
 			if((aktZeit = System.currentTimeMillis()) < pruefZeit) {
-				Pause.warte(pruefZeit - aktZeit);
+				try{ Thread.sleep(pruefZeit - aktZeit); }catch(InterruptedException ex) {}
 			}
 		}
 

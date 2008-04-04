@@ -77,9 +77,13 @@ extends AbstraktParameterImport{
 	 */
 	@Override
 	public Data fuelleRestAttribute(Data datensatz) {
-		datensatz.getItem("Urlasser").getReferenceValue("BenutzerReferenz").setSystemObject(null);  //$NON-NLS-1$//$NON-NLS-2$
-		datensatz.getItem("Urlasser").getTextValue("Ursache").setText("");  //$NON-NLS-1$//$NON-NLS-2$  //$NON-NLS-3$
-		datensatz.getItem("Urlasser").getTextValue("Veranlasser").setText("");  //$NON-NLS-1$//$NON-NLS-2$  //$NON-NLS-3$
+		try{
+			datensatz.getItem("Urlasser").getReferenceValue("BenutzerReferenz").setSystemObject(null);  //$NON-NLS-1$//$NON-NLS-2$
+			datensatz.getItem("Urlasser").getTextValue("Ursache").setText("");  //$NON-NLS-1$//$NON-NLS-2$  //$NON-NLS-3$
+			datensatz.getItem("Urlasser").getTextValue("Veranlasser").setText("");  //$NON-NLS-1$//$NON-NLS-2$  //$NON-NLS-3$
+		}catch(Exception ex){
+			System.out.println("Kein Urlasser"); //$NON-NLS-1$
+		}
 		datensatz.getUnscaledValue("Optionen").set(this.optionen.getCode()); //$NON-NLS-1$
 		return datensatz;
 	}
