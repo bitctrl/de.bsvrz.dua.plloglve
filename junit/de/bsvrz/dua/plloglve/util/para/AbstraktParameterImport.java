@@ -114,9 +114,9 @@ implements ClientSenderInterface{
 			DAV = dav;
 		}
 		
-		diffFs = DAV.getDataModel().getAttributeGroup("atg.verkehrsDatenDifferenzialKontrolleFs");
-		ausfallHFs = DAV.getDataModel().getAttributeGroup("atg.verkehrsDatenAusfallHäufigkeitFs");
-		vertrauensbereichFs = DAV.getDataModel().getAttributeGroup("atg.verkehrsDatenVertrauensBereichFs");
+		diffFs = DAV.getDataModel().getAttributeGroup("atg.verkehrsDatenDifferenzialKontrolleFs"); //$NON-NLS-1$
+		ausfallHFs = DAV.getDataModel().getAttributeGroup("atg.verkehrsDatenAusfallHäufigkeitFs"); //$NON-NLS-1$
+		vertrauensbereichFs = DAV.getDataModel().getAttributeGroup("atg.verkehrsDatenVertrauensBereichFs"); //$NON-NLS-1$
 
 		DD_LOGISCH = new DataDescription(
 				this.getParameterAtg(), 
@@ -222,25 +222,25 @@ implements ClientSenderInterface{
 	 */
 	private final void deaktiviereParaStandard(final OptionenPlausibilitaetsPruefungLogischVerkehr optionen) throws Exception {
 		Data parameter = DAV.createData(this.getParameterAtg());
-		DUAUtensilien.getAttributDatum("Optionen", parameter).asUnscaledValue().set(optionen.getCode());
-		DUAUtensilien.getAttributDatum("qKfzBereich.Min", parameter).asUnscaledValue().set(0);
-		DUAUtensilien.getAttributDatum("qKfzBereich.Max", parameter).asUnscaledValue().set(999999);
-		DUAUtensilien.getAttributDatum("qLkwBereich.Min", parameter).asUnscaledValue().set(0);
-		DUAUtensilien.getAttributDatum("qLkwBereich.Max", parameter).asUnscaledValue().set(999999);
-		DUAUtensilien.getAttributDatum("qPkwBereich.Min", parameter).asUnscaledValue().set(0);
-		DUAUtensilien.getAttributDatum("qPkwBereich.Max", parameter).asUnscaledValue().set(999999);
-		DUAUtensilien.getAttributDatum("vKfzBereich.Min", parameter).asUnscaledValue().set(0);
-		DUAUtensilien.getAttributDatum("vKfzBereich.Max", parameter).asUnscaledValue().set(254);
-		DUAUtensilien.getAttributDatum("vLkwBereich.Min", parameter).asUnscaledValue().set(0);
-		DUAUtensilien.getAttributDatum("vLkwBereich.Max", parameter).asUnscaledValue().set(254);
-		DUAUtensilien.getAttributDatum("vPkwBereich.Min", parameter).asUnscaledValue().set(0);
-		DUAUtensilien.getAttributDatum("vPkwBereich.Max", parameter).asUnscaledValue().set(254);
-		DUAUtensilien.getAttributDatum("vgKfzBereich.Min", parameter).asUnscaledValue().set(0);
-		DUAUtensilien.getAttributDatum("vgKfzBereich.Max", parameter).asUnscaledValue().set(254);
-		DUAUtensilien.getAttributDatum("BelegungBereich.Min", parameter).asUnscaledValue().set(0);
-		DUAUtensilien.getAttributDatum("BelegungBereich.Max", parameter).asUnscaledValue().set(100);
-		DUAUtensilien.getAttributDatum("vKfzGrenz", parameter).asUnscaledValue().set(101);
-		DUAUtensilien.getAttributDatum("bGrenz", parameter).asUnscaledValue().set(53);
+		DUAUtensilien.getAttributDatum("Optionen", parameter).asUnscaledValue().set(optionen.getCode()); //$NON-NLS-1$
+		DUAUtensilien.getAttributDatum("qKfzBereich.Min", parameter).asUnscaledValue().set(0); //$NON-NLS-1$
+		DUAUtensilien.getAttributDatum("qKfzBereich.Max", parameter).asUnscaledValue().set(999999); //$NON-NLS-1$
+		DUAUtensilien.getAttributDatum("qLkwBereich.Min", parameter).asUnscaledValue().set(0); //$NON-NLS-1$
+		DUAUtensilien.getAttributDatum("qLkwBereich.Max", parameter).asUnscaledValue().set(999999); //$NON-NLS-1$
+		DUAUtensilien.getAttributDatum("qPkwBereich.Min", parameter).asUnscaledValue().set(0); //$NON-NLS-1$
+		DUAUtensilien.getAttributDatum("qPkwBereich.Max", parameter).asUnscaledValue().set(999999); //$NON-NLS-1$
+		DUAUtensilien.getAttributDatum("vKfzBereich.Min", parameter).asUnscaledValue().set(0); //$NON-NLS-1$
+		DUAUtensilien.getAttributDatum("vKfzBereich.Max", parameter).asUnscaledValue().set(254); //$NON-NLS-1$
+		DUAUtensilien.getAttributDatum("vLkwBereich.Min", parameter).asUnscaledValue().set(0); //$NON-NLS-1$
+		DUAUtensilien.getAttributDatum("vLkwBereich.Max", parameter).asUnscaledValue().set(254); //$NON-NLS-1$
+		DUAUtensilien.getAttributDatum("vPkwBereich.Min", parameter).asUnscaledValue().set(0); //$NON-NLS-1$
+		DUAUtensilien.getAttributDatum("vPkwBereich.Max", parameter).asUnscaledValue().set(254); //$NON-NLS-1$
+		DUAUtensilien.getAttributDatum("vgKfzBereich.Min", parameter).asUnscaledValue().set(0); //$NON-NLS-1$
+		DUAUtensilien.getAttributDatum("vgKfzBereich.Max", parameter).asUnscaledValue().set(254); //$NON-NLS-1$
+		DUAUtensilien.getAttributDatum("BelegungBereich.Min", parameter).asUnscaledValue().set(0); //$NON-NLS-1$
+		DUAUtensilien.getAttributDatum("BelegungBereich.Max", parameter).asUnscaledValue().set(100); //$NON-NLS-1$
+		DUAUtensilien.getAttributDatum("vKfzGrenz", parameter).asUnscaledValue().set(101); //$NON-NLS-1$
+		DUAUtensilien.getAttributDatum("bGrenz", parameter).asUnscaledValue().set(53); //$NON-NLS-1$
 		
 		ResultData resultat = new ResultData(this.objekt, new DataDescription(
 				this.getParameterAtg(), 
@@ -257,14 +257,14 @@ implements ClientSenderInterface{
 		DAV.subscribeSender(this, objekt, DD_DIFF, SenderRole.sender());
 		
 		Data parameter = DAV.createData(diffFs);
-		DUAUtensilien.getAttributDatum("maxAnzKonstanzqKfz", parameter).asUnscaledValue().set(3);
-		DUAUtensilien.getAttributDatum("maxAnzKonstanzqLkw", parameter).asUnscaledValue().set(3);
-		DUAUtensilien.getAttributDatum("maxAnzKonstanzqPkw", parameter).asUnscaledValue().set(3);
-		DUAUtensilien.getAttributDatum("maxAnzKonstanzvKfz", parameter).asUnscaledValue().set(3);
-		DUAUtensilien.getAttributDatum("maxAnzKonstanzvLkw", parameter).asUnscaledValue().set(5);
-		DUAUtensilien.getAttributDatum("maxAnzKonstanzvPkw", parameter).asUnscaledValue().set(2);
-		DUAUtensilien.getAttributDatum("maxAnzKonstanzStreung", parameter).asUnscaledValue().set(10);
-		DUAUtensilien.getAttributDatum("maxAnzKonstanzBelegung", parameter).asUnscaledValue().set(3);
+		DUAUtensilien.getAttributDatum("maxAnzKonstanzqKfz", parameter).asUnscaledValue().set(3); //$NON-NLS-1$
+		DUAUtensilien.getAttributDatum("maxAnzKonstanzqLkw", parameter).asUnscaledValue().set(3); //$NON-NLS-1$
+		DUAUtensilien.getAttributDatum("maxAnzKonstanzqPkw", parameter).asUnscaledValue().set(3); //$NON-NLS-1$
+		DUAUtensilien.getAttributDatum("maxAnzKonstanzvKfz", parameter).asUnscaledValue().set(3); //$NON-NLS-1$
+		DUAUtensilien.getAttributDatum("maxAnzKonstanzvLkw", parameter).asUnscaledValue().set(5); //$NON-NLS-1$
+		DUAUtensilien.getAttributDatum("maxAnzKonstanzvPkw", parameter).asUnscaledValue().set(2); //$NON-NLS-1$
+		DUAUtensilien.getAttributDatum("maxAnzKonstanzStreung", parameter).asUnscaledValue().set(10); //$NON-NLS-1$
+		DUAUtensilien.getAttributDatum("maxAnzKonstanzBelegung", parameter).asUnscaledValue().set(3); //$NON-NLS-1$
 		
 		ResultData resultat = new ResultData(this.objekt, new DataDescription(
 				diffFs, 
@@ -281,14 +281,14 @@ implements ClientSenderInterface{
 	 */
 	private final void deaktiviereParaDiff() throws Exception {
 		Data parameter = DAV.createData(diffFs);
-		DUAUtensilien.getAttributDatum("maxAnzKonstanzqKfz", parameter).asUnscaledValue().set(99999999);
-		DUAUtensilien.getAttributDatum("maxAnzKonstanzqLkw", parameter).asUnscaledValue().set(99999999);
-		DUAUtensilien.getAttributDatum("maxAnzKonstanzqPkw", parameter).asUnscaledValue().set(99999999);
-		DUAUtensilien.getAttributDatum("maxAnzKonstanzvKfz", parameter).asUnscaledValue().set(99999999);
-		DUAUtensilien.getAttributDatum("maxAnzKonstanzvLkw", parameter).asUnscaledValue().set(99999999);
-		DUAUtensilien.getAttributDatum("maxAnzKonstanzvPkw", parameter).asUnscaledValue().set(99999999);
-		DUAUtensilien.getAttributDatum("maxAnzKonstanzStreung", parameter).asUnscaledValue().set(99999999);
-		DUAUtensilien.getAttributDatum("maxAnzKonstanzBelegung", parameter).asUnscaledValue().set(99999999);
+		DUAUtensilien.getAttributDatum("maxAnzKonstanzqKfz", parameter).asUnscaledValue().set(99999999); //$NON-NLS-1$
+		DUAUtensilien.getAttributDatum("maxAnzKonstanzqLkw", parameter).asUnscaledValue().set(99999999); //$NON-NLS-1$
+		DUAUtensilien.getAttributDatum("maxAnzKonstanzqPkw", parameter).asUnscaledValue().set(99999999); //$NON-NLS-1$
+		DUAUtensilien.getAttributDatum("maxAnzKonstanzvKfz", parameter).asUnscaledValue().set(99999999); //$NON-NLS-1$
+		DUAUtensilien.getAttributDatum("maxAnzKonstanzvLkw", parameter).asUnscaledValue().set(99999999); //$NON-NLS-1$
+		DUAUtensilien.getAttributDatum("maxAnzKonstanzvPkw", parameter).asUnscaledValue().set(99999999); //$NON-NLS-1$
+		DUAUtensilien.getAttributDatum("maxAnzKonstanzStreung", parameter).asUnscaledValue().set(99999999); //$NON-NLS-1$
+		DUAUtensilien.getAttributDatum("maxAnzKonstanzBelegung", parameter).asUnscaledValue().set(99999999); //$NON-NLS-1$
 		
 		ResultData resultat = new ResultData(this.objekt, new DataDescription(
 				diffFs, 
@@ -305,7 +305,7 @@ implements ClientSenderInterface{
 		DAV.subscribeSender(this, objekt, DD_AUSFALL, SenderRole.sender());
 		
 		Data parameter = DAV.createData(ausfallHFs);
-		DUAUtensilien.getAttributDatum("maxAusfallProTag", parameter).asUnscaledValue().set(3);
+		DUAUtensilien.getAttributDatum("maxAusfallProTag", parameter).asUnscaledValue().set(3); //$NON-NLS-1$
 		
 		ResultData resultat = new ResultData(this.objekt, new DataDescription(
 				ausfallHFs, 
@@ -322,7 +322,7 @@ implements ClientSenderInterface{
 	 */
 	private final void deaktiviereParaAusfall() throws Exception {
 		Data parameter = DAV.createData(ausfallHFs);
-		DUAUtensilien.getAttributDatum("maxAusfallProTag", parameter).asUnscaledValue().set(99);
+		DUAUtensilien.getAttributDatum("maxAusfallProTag", parameter).asUnscaledValue().set(99); //$NON-NLS-1$
 		
 		ResultData resultat = new ResultData(this.objekt, new DataDescription(
 				ausfallHFs, 
@@ -340,9 +340,9 @@ implements ClientSenderInterface{
 		
 		Data parameter = DAV.createData(vertrauensbereichFs);
 		
-		DUAUtensilien.getAttributDatum("BezugsZeitraum", parameter).asUnscaledValue().set(1);
-		DUAUtensilien.getAttributDatum("maxAusfallProBezugsZeitraumEin", parameter).asUnscaledValue().set(20);
-		DUAUtensilien.getAttributDatum("maxAusfallProBezugsZeitraumAus", parameter).asUnscaledValue().set(20);
+		DUAUtensilien.getAttributDatum("BezugsZeitraum", parameter).asUnscaledValue().set(1); //$NON-NLS-1$
+		DUAUtensilien.getAttributDatum("maxAusfallProBezugsZeitraumEin", parameter).asUnscaledValue().set(20); //$NON-NLS-1$
+		DUAUtensilien.getAttributDatum("maxAusfallProBezugsZeitraumAus", parameter).asUnscaledValue().set(20); //$NON-NLS-1$
 		ResultData resultat = new ResultData(this.objekt, new DataDescription(
 				vertrauensbereichFs, 
 				DAV.getDataModel().getAspect(DaVKonstanten.ASP_PARAMETER_VORGABE),
@@ -359,9 +359,9 @@ implements ClientSenderInterface{
 	private final void deaktiviereParaVertrauensbereich() throws Exception {
 		Data parameter = DAV.createData(vertrauensbereichFs);
 		
-		DUAUtensilien.getAttributDatum("BezugsZeitraum", parameter).asUnscaledValue().set(24);
-		DUAUtensilien.getAttributDatum("maxAusfallProBezugsZeitraumEin", parameter).asUnscaledValue().set(99);
-		DUAUtensilien.getAttributDatum("maxAusfallProBezugsZeitraumAus", parameter).asUnscaledValue().set(99);
+		DUAUtensilien.getAttributDatum("BezugsZeitraum", parameter).asUnscaledValue().set(24); //$NON-NLS-1$
+		DUAUtensilien.getAttributDatum("maxAusfallProBezugsZeitraumEin", parameter).asUnscaledValue().set(99); //$NON-NLS-1$
+		DUAUtensilien.getAttributDatum("maxAusfallProBezugsZeitraumAus", parameter).asUnscaledValue().set(99); //$NON-NLS-1$
 		ResultData resultat = new ResultData(this.objekt, new DataDescription(
 				vertrauensbereichFs, 
 				DAV.getDataModel().getAspect(DaVKonstanten.ASP_PARAMETER_VORGABE),
