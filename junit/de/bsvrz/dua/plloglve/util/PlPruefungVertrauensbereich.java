@@ -12,7 +12,6 @@ import de.bsvrz.dua.plloglve.plloglve.typen.OptionenPlausibilitaetsPruefungLogis
 import de.bsvrz.dua.plloglve.util.para.ParaKZDLogImport;
 import de.bsvrz.dua.plloglve.util.pruef.FilterMeldung;
 import de.bsvrz.dua.plloglve.util.pruef.PruefeMarkierung;
-import de.bsvrz.sys.funclib.bitctrl.app.Pause;
 import de.bsvrz.sys.funclib.bitctrl.dua.DUAKonstanten;
 import de.bsvrz.sys.funclib.commandLineArgs.ArgumentList;
 import de.bsvrz.sys.funclib.debug.Debug;
@@ -193,7 +192,7 @@ implements ClientSenderInterface, PlPruefungInterface {
 			
 			//Warte bis Intervallende
 			if((aktZeit = System.currentTimeMillis()) < pruefZeit) {
-				Pause.warte(pruefZeit - aktZeit);
+				try{ Thread.sleep(pruefZeit - aktZeit); }catch(InterruptedException ex){}
 			}
 		}
 
@@ -257,7 +256,7 @@ implements ClientSenderInterface, PlPruefungInterface {
 			
 			//Warte bis Intervallende
 			if((aktZeit = System.currentTimeMillis()) < pruefZeit) {
-				Pause.warte(pruefZeit - aktZeit);
+				try{ Thread.sleep(pruefZeit - aktZeit); }catch(InterruptedException ex){}
 			}
 		}
 

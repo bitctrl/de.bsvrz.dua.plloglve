@@ -10,7 +10,6 @@ import de.bsvrz.dav.daf.main.SenderRole;
 import de.bsvrz.dav.daf.main.config.SystemObject;
 import de.bsvrz.dua.plloglve.util.para.ParaKZDLogImport;
 import de.bsvrz.dua.plloglve.util.pruef.FilterMeldung;
-import de.bsvrz.sys.funclib.bitctrl.app.Pause;
 import de.bsvrz.sys.funclib.bitctrl.dua.DUAKonstanten;
 import de.bsvrz.sys.funclib.commandLineArgs.ArgumentList;
 import de.bsvrz.sys.funclib.debug.Debug;
@@ -209,7 +208,7 @@ implements ClientSenderInterface, PlPruefungInterface {
 			
 			//Warte bis Intervallende
 			if((aktZeit = System.currentTimeMillis()) < pruefZeit) {
-				Pause.warte(pruefZeit - aktZeit);
+				try{ Thread.sleep(pruefZeit - aktZeit); }catch(InterruptedException ex) {}
 			}
 		}
 
