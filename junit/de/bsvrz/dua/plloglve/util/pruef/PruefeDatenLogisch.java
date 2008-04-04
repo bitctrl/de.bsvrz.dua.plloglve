@@ -653,8 +653,11 @@ class VergleicheDaten extends Thread {
 				
 				if(attributNamen[j].length() == 5 && attribWertKopie.contains(".Wert")) {
 					attribWertKopie = attribWertKopie.replace(".Wert", ".Wert.Kopie");
+					/*
+					 * Eingangsgeschwindigkeitswerte >= 255 werden als fehlerhaft interpretiert
+					 */
 					if(attribut.startsWith("v") && hmCSV.get(attribut) >= 255) {
-						hmCSV.put(attribut, -2);
+						hmCSV.put(attribut, DUAKonstanten.FEHLERHAFT);
 						hmCSV.put(attributNamenPraefix[i]+".Status.MessWertErsetzung.Implausibel", DUAKonstanten.JA);
 					}
 				}
@@ -663,6 +666,9 @@ class VergleicheDaten extends Thread {
 				istWertErl = "";
 				warnung = "";
 				
+				/*
+				 * tNetto wird separat behandelt
+				 */
 				if(!attribut.equals("tNetto.Wert")) {
 
 					if(attribut.endsWith(".Wert")) {
@@ -670,14 +676,26 @@ class VergleicheDaten extends Thread {
 						istWertErl = wertErl(hmResult.get(attribut));
 					}
 				
+					/*
+					 * Sonderbehandlung für vKfz- und qPkw-Werte (werden errechnet)
+					 */
 					if(attribut.equals("vKfz.Wert") || attribut.equals("qPkw.Wert")){
 						System.out.println(hmCSV.get(attribut) + ", " + hmResult.get(attribut));
+						/*
+						 * Ausnahme: Soll- und Istwerte sind identisch, solange es sich bei beiden Werten um Zustände handelt 
+						 */
 						if(hmCSV.get(attribut).equals(-2) || hmCSV.get(attribut).equals(-3) || 
 								hmResult.get(attribut).equals(-2) || hmResult.get(attribut).equals(-3)){
 							pruefLog += ident+" OK  ("+attribut+"):"+ hmCSV.get(attribut) + sollWertErl +" (SOLL)==(IST) "+hmResult.get(attribut) + istWertErl +"\n\r";
 						}else{
+							/*
+							 * Hier der eigentliche Wertvergleich von vKfz bzw. qPkw
+							 */
 							if(!hmCSV.get(attribut).equals(hmResult.get(attribut))) {
 								warnung += ident+"DIFF ("+attribut+"):"+ hmCSV.get(attribut)+ sollWertErl +" (SOLL)<>(IST) "+hmResult.get(attribut) + istWertErl;
+								/*
+								 * Wenn Werte nicht identisch wird zusätzlich mit dem separat in der Solltabelle aufgeführten errechneten Wert verglichen
+								 */
 								if(attribWertKopie.contains(".Wert.Kopie") && hmCSV.get(attribWertKopie).equals(hmResult.get(attribut))) {
 									warnung += "\n\r"+ident+"W-OK ("+attribWertKopie+"):"+ hmCSV.get(attribWertKopie)+" (SOLL)==(IST) "+hmResult.get(attribut);
 								}
@@ -694,6 +712,13 @@ class VergleicheDaten extends Thread {
 							}
 						}
 					}else{
+						/*
+						 * Überprüfung der restlichen Attribute
+						 */
+						
+						/*
+						 * Ausnahme: Soll- und Istwerte sind identisch, solange es sich bei beiden Werten um Zustände handelt 
+						 */
 						if((hmCSV.get(attribut).equals(-2) || hmCSV.get(attribut).equals(-3)) && 
 								(hmResult.get(attribut).equals(-2) || hmResult.get(attribut).equals(-3))){
 							pruefLog += ident+" OK  ("+attribut+"):"+ hmCSV.get(attribut) + sollWertErl +" (SOLL)==(IST) "+hmResult.get(attribut) + istWertErl +"\n\r";
@@ -703,24 +728,27 @@ class VergleicheDaten extends Thread {
 								if(attribWertKopie.contains(".Wert.Kopie") && hmCSV.get(attribWertKopie).equals(hmResult.get(attribut))) {
 									warnung += "\n\r"+ident+"W-OK ("+attribWertKopie+"):"+ hmCSV.get(attribWertKopie)+" (SOLL)==(IST) "+hmResult.get(attribut);
 								}
+								
 								if(useAssert){
 									Assert.assertTrue(warnung, false);
 								}else{
 									LOGGER.warning(warnung);
 								}
-		
+								
 								pruefLog += ident+"DIFF ("+attribut+"):"+ hmCSV.get(attribut) + sollWertErl +" (SOLL)<>(IST) "+hmResult.get(attribut) + istWertErl +"\n\r";
 							} else {
 								pruefLog += ident+" OK  ("+attribut+"):"+ hmCSV.get(attribut) + sollWertErl +" (SOLL)==(IST) "+hmResult.get(attribut) + istWertErl +"\n\r";
 							}
 						}
 					}
-				} else {
+				} else if (attribut.equals("tNetto.Wert")){
+					/*
+					 * Sonderbehandlung für tNetto (long)
+					 */
 					sollWertErl = wertErl((int)csvWerttNetto);
 					istWertErl = wertErl((int)resultWerttNetto);
 					
-					
-					if(csvWerttNetto != resultWerttNetto && resultWerttNetto >= 0) {
+					if(csvWerttNetto != resultWerttNetto) {
 						if(useAssert){
 							Assert.assertTrue(ident + "DIFF (" + attribut + "):" + csvWerttNetto + sollWertErl + " (SOLL)<>(IST) " + resultWerttNetto + istWertErl, false);							
 						}else{						
@@ -730,7 +758,7 @@ class VergleicheDaten extends Thread {
 					} else {
 						pruefLog += ident+" OK  ("+attribut+"):"+ csvWerttNetto + sollWertErl +" (SOLL)<>(IST) "+resultWerttNetto + istWertErl +"\n\r";
 					}
-				}
+				}				
 			}
 		}
 		
