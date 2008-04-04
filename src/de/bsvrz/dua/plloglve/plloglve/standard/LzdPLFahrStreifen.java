@@ -78,6 +78,51 @@ extends KzdPLFahrStreifen{
 	 */
 	@Override
 	protected void ueberpruefe(Data data, ResultData resultat) {
+
+		/**
+		 * Aenderung laut Mailverkehr vom 2.4.08 - 4.4.08:
+		 * 
+		 * ...mir ist beim Test der PL-Prüfung LVE für die Langzeitdaten weiterhin aufgefallen,
+		 * dass (seit 2.7.5) immer wenn qLkw > qKfz ist, qKfz auf -2 gesetzt zu werden scheint.
+		 * Dies ist aber durch keine Regel gedeckt.
+		 * 
+		 * ...Sie haben recht, es gibt keine explizite Regel bzgl. der Reaktion auf  die hier erkannten
+		 * fehlerhaften Langzeitwerte (hier Lkw>Kfz), ich bin aber der Meinung, dass es nicht verkehrt
+		 * ist, dann einen entsprechenden Status zu setzen, bevor das Programm ggf. an einer anderen
+		 * Stelle aufgrund einer unzulässigen Operation abgebrochen wird oder eine unzulässigen
+		 * Entscheidung trifft....
+		 * 
+		 * ...Ich kann dies so ändern, es würde aber wieder auf eine explizite Änderung der Anforderungen
+		 * hinauslaufen. Eigentlich heißt das doch, dass für LZD jetzt auch ein Teil der Standardtests
+		 * gemacht werden soll, der bisher nur für KZD vorgesehen war. Die Frage ist nun, ob es dann
+		 * wirklich nur diese eine Regel sein soll (R5)  oder ob vielleicht noch andere Regeln mit
+		 * dran hängen. Für Rückfragen stehe ich Ihnen gern zur Verfügung....
+		 * 
+		 * ...ich wollte eigentlich keine neue Regel vorgeben, sondern nur bei der Berechnung von qPkw 
+		 * einen möglichen Fehler ausschließen, so wie man bei einer Division den Null-Fall ausschließt
+		 * oder in anderen Fällen z.B. auf negative Werte abgefragt werden könnte, d..h. die generelle
+		 * Anforderung, mögliche Fehler bei Berechnungen zu erkennen und zu melden (zu kennzeichnen),
+		 * ist eine über alles stehende Regel. Zukünftig ist aber nicht auszuschließen, dass für LZD
+		 * weitere explizite Regeln aufgestellt werden....
+		 */
+		long qKfz = data.getItem("qKfz").getUnscaledValue("Wert").longValue(); //$NON-NLS-1$ //$NON-NLS-2$
+		long qLkw = data.getItem("qLkw").getUnscaledValue("Wert").longValue(); //$NON-NLS-1$ //$NON-NLS-2$
+
+		/**
+		 * Regel Nr.5 (aus SE-02.00.00.00.00-AFo-5.2, S.95)
+		 */
+		if(qKfz >= 0 && qLkw >= 0){
+			if(qKfz < qLkw){
+				data.getItem("qKfz").getUnscaledValue("Wert").set(DUAKonstanten.FEHLERHAFT); //$NON-NLS-1$ //$NON-NLS-2$
+				data.getItem("qKfz").getItem("Status").getItem("MessWertErsetzung").   //$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$
+					getUnscaledValue("Implausibel").set(DUAKonstanten.JA); //$NON-NLS-1$
+				data.getItem("qKfz").getItem("Güte").getUnscaledValue("Index").set(0); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+			}
+		}				
+		/**
+		 * Aenderung Ende:
+		 */
+		
 		if(this.parameterAtgLog != null){	
 			synchronized (this.parameterAtgLog) {				
 				/**
