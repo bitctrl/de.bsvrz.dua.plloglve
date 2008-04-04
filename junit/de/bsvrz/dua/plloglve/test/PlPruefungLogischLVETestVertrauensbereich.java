@@ -26,7 +26,7 @@ public class PlPruefungLogischLVETestVertrauensbereich {
 	 * 
 	 * Pfadangabe mit Argument: -debugFilePath=[Pfad]
 	 */
-	private String[] argumente = new String[] {"-debugLevelFileText=ALL"};
+	private String[] argumente = new String[] {"-debugLevelFileText=ALL"}; //$NON-NLS-1$
 	private ArgumentList alLogger = new ArgumentList(argumente);
 	
 	/**
