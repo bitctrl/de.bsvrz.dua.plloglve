@@ -580,7 +580,7 @@ implements ClientReceiverInterface{
 	 * 
 	 * @param daten ein veraenderbares KZ-Datum
 	 */
-	private final void passeGueteAn(Data daten){
+	protected final void passeGueteAn(Data daten){
 		for(String attributName:getAttributNamen()){
 			long wert = daten.getItem(attributName).getItem("Wert").asUnscaledValue().longValue(); //$NON-NLS-1$ 
 			if(wert == DUAKonstanten.NICHT_ERMITTELBAR || wert == DUAKonstanten.FEHLERHAFT ||
