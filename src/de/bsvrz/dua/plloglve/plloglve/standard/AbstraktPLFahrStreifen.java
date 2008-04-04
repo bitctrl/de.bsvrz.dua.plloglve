@@ -185,10 +185,6 @@ implements ClientReceiverInterface{
 		
 		
 		if(DUAUtensilien.isWertInWerteBereich(data.getItem("qPkw").getItem("Wert"), qPkw)){ //$NON-NLS-1$ //$NON-NLS-2$
-			if(qPkw == DUAKonstanten.NICHT_ERMITTELBAR){
-				data.getItem("qPkw").getItem("Status"). //$NON-NLS-1$ //$NON-NLS-2$
-				getItem("MessWertErsetzung").getUnscaledValue("Implausibel").set(DUAKonstanten.JA);  //$NON-NLS-1$ //$NON-NLS-2$//$NON-NLS-2%
-			}
 			data.getItem("qPkw").getUnscaledValue("Wert").set(qPkw); //$NON-NLS-1$ //$NON-NLS-2$
 			qPkwGuete.exportiere(data, "qPkw"); //$NON-NLS-1$
 		}else{
