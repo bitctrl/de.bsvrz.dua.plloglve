@@ -31,10 +31,12 @@ import de.bsvrz.sys.funclib.bitctrl.dua.DUAKonstanten;
 import de.bsvrz.sys.funclib.bitctrl.dua.intpuf.IntervallPufferElementAdapter;
 
 /**
- * Speichert für ein finales DAV-Attribut des Datensatzes
+ * Speichert fuer ein finales DAV-Attribut des Datensatzes
  * <code>atg.verkehrsDatenKurzZeitIntervall</code>, ob dieses
- * (im Sinne der Vertrauensbereichsprüfung) ausgefallen ist
- * oder nicht
+ * (im Sinne der Vertrauensbereichspruefung) ausgefallen ist
+ * oder nicht. Ein Datum gilt als ausgefallen, wenn es als
+ * <code>fehlerhaft</code> bzw. <code>implausibel</code>
+ * gekennzeichnet ist.
  * 
  * @author BitCtrl Systems GmbH, Thierfelder
  *
@@ -50,6 +52,12 @@ extends IntervallPufferElementAdapter<VertrauensDatum>{
 	protected VertrauensEinzelDatum(final String name, final ResultData originalDatum){
 		super(originalDatum.getDataTime(), 
 				originalDatum.getDataTime() + originalDatum.getData().getTimeValue("T").getMillis()); //$NON-NLS-1$
+		
+		/**
+		 * ein Datum gilt als ausgefallen, wenn
+		 * es als fehlerhaft bzw. implausibel 
+		 * gekennzeichnet ist
+		 */
 		this.inhalt = new VertrauensDatum( 
 			originalDatum.getData().getItem(name).getUnscaledValue("Wert").longValue() == DUAKonstanten.FEHLERHAFT || //$NON-NLS-1$
 			originalDatum.getData().getItem(name).getItem("Status").getItem("MessWertErsetzung").   //$NON-NLS-1$//$NON-NLS-2$

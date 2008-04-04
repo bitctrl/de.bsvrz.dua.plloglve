@@ -64,7 +64,7 @@ implements Comparable<BezugsZeitraumAusfall>{
 	 * @param ausfallInProzent der prozentuale Ausfall des Attributs
 	 * im Bezugszeitraum
 	 * @param ausfallInStunden Ausfall in Stunden
-	 * @param ausfallInMinuten Ausfall in Stunden  
+	 * @param ausfallInMinuten Ausfall in Minuten  
 	 */
 	public BezugsZeitraumAusfall(final long grenze,
 								 final double ausfallInProzent,
