@@ -231,6 +231,7 @@ implements ClientSenderInterface {
 		 * Initialisiert Testerobjekt für den SOLL-IST-Vergleich
 		 */
 		PruefeDatenLogisch fsPruefer = new PruefeDatenLogisch(this, dav, new SystemObject[]{FS1, FS2, FS3}, TEST_DATEN_VERZ + csvPruefDatei);
+		fsPruefer.benutzeAssert(useAssert);
 		
 		int csvIndex = 0;
 		
@@ -317,6 +318,11 @@ implements ClientSenderInterface {
 		}		
 		
 		/*
+		 * Fehlerausgabe
+		 */
+		reportFehler(fsPruefer);
+		
+		/*
 		 * Sender abmelden
 		 */
 		this.dav.unsubscribeSender(this, new SystemObject[]{FS1, FS2, FS3},	DD_KZD_SEND);
@@ -348,6 +354,7 @@ implements ClientSenderInterface {
 		 * Initialisiert Testerobjekt für den SOLL-IST-Vergleich
 		 */
 		PruefeDatenLogisch fsPruefer = new PruefeDatenLogisch(this, dav, new SystemObject[]{FS1_LZ, FS2_LZ, FS3_LZ}, TEST_DATEN_VERZ + csvPruefDatei);
+		fsPruefer.benutzeAssert(useAssert);
 		
 		//Aktueller Index (Zeile) in CSV Datei
 		int csvIndex = 0;
@@ -430,6 +437,11 @@ implements ClientSenderInterface {
 			
 			aktZeit = aktZeit + Constants.MILLIS_PER_MINUTE;
 		}
+		
+		/*
+		 * Fehlerausgabe
+		 */
+		reportFehler(fsPruefer);
 		
 		/*
 		 * Sender abmelden
@@ -563,5 +575,34 @@ implements ClientSenderInterface {
 	 */
 	public void benutzeAssert(final boolean useAssert) {
 		this.useAssert = useAssert;
+	}
+	
+	private void reportFehler(PruefeDatenLogisch fsPruefer) {
+		/*
+		 * Fehlerausgabe FehlerAlles
+		 */
+		for(int i=0;i<=2;i++) {
+			if(fsPruefer.getFehlerAlles()[i] > 0) {
+				LOGGER.warning("ERR: Insgesamt "+fsPruefer.getFehlerAlles()[i]+" FehlerAlles auf FS"+(i+1));
+			}
+		}
+		
+		/*
+		 * Fehlerausgabe FehlerLinks
+		 */
+		for(int i=0;i<=2;i++) {
+			if(fsPruefer.getFehlerLinks()[i] > 0) {
+				LOGGER.warning("ERR: Insgesamt "+fsPruefer.getFehlerLinks()[i]+" FehlerLinks auf FS"+(i+1));
+			}
+		}
+		
+		/*
+		 * Fehlerausgabe FehlerRechts
+		 */
+		for(int i=0;i<=2;i++) {
+			if(fsPruefer.getFehlerRechts()[i] > 0) {
+				LOGGER.warning("ERR: Insgesamt "+fsPruefer.getFehlerRechts()[i]+" FehlerRechts auf FS"+(i+1));
+			}
+		}
 	}
 }
