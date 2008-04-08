@@ -1,5 +1,7 @@
 package de.bsvrz.dua.plloglve.util;
 
+import java.util.Random;
+
 import junit.framework.Assert;
 import de.bsvrz.dav.daf.main.ClientDavInterface;
 import de.bsvrz.dav.daf.main.ClientSenderInterface;
@@ -17,6 +19,11 @@ import de.bsvrz.sys.funclib.debug.Debug;
 public class PlPruefungAusfall
 implements ClientSenderInterface, PlPruefungInterface {
 
+	/**
+	 * Zufallsgenerator
+	 */
+	private static final Random R = new Random(System.currentTimeMillis());
+	
 	/**
 	 * Assert-Statements benutzen?
 	 */
@@ -191,7 +198,30 @@ implements ClientSenderInterface, PlPruefungInterface {
 					paraImpFSFehler.getNaechsteZeile();
 					zeileFSFehler = paraImpFSFehler.getNaechstenDatensatz(DD_KZD_SEND.getAttributeGroup());
 				}
-				ResultData resultat1 = new ResultData(FS, DD_KZD_SEND, pruefZeit, zeileFSFehler);
+				
+				Data dummy = zeileFSFehler.createModifiableCopy();
+				boolean set = false;
+				for(String attribut:new String[]{"qKfz", "qLkw", "qPkw", "vKfz", "vLkw", "vPkw", "b", "s"}){
+					if(R.nextBoolean()){
+						set = true;
+						if(R.nextBoolean()){
+							dummy.getItem(attribut).getUnscaledValue("Wert").set(DUAKonstanten.FEHLERHAFT);
+							if(R.nextBoolean()){
+								dummy.getItem(attribut).getItem("Status").getItem("MessWertErsetzung").getUnscaledValue("Implausibel").set(DUAKonstanten.JA);
+							}
+						}else{
+							dummy.getItem(attribut).getItem("Status").getItem("MessWertErsetzung").getUnscaledValue("Implausibel").set(DUAKonstanten.JA);
+							if(R.nextBoolean()){
+								dummy.getItem(attribut).getUnscaledValue("Wert").set(DUAKonstanten.FEHLERHAFT);
+							}						
+						}
+					}
+				}
+				if(!set){
+					dummy.getItem("qPkw").getUnscaledValue("Wert").set(DUAKonstanten.FEHLERHAFT);
+				}
+				
+				ResultData resultat1 = new ResultData(FS, DD_KZD_SEND, pruefZeit, dummy);
 				this.dav.sendData(resultat1);
 			} else {
 				LOGGER.info("Intervall "+i+": Sende fehlerfreies Datum");
@@ -213,7 +243,8 @@ implements ClientSenderInterface, PlPruefungInterface {
 		}
 
 		LOGGER.info("Warte auf Meldungsfilter");
-		doWait(30000);
+		
+		try{ Thread.sleep(30000L); }catch (InterruptedException e) {}
 		
 		String warnung = meldFilter.getAnzahlErhaltenerMeldungen() + " von " + meldFilter.getErwarteteAnzahlMeldungen() + " (Hysterese:" + meldungHyst + ") Betriebsmeldungen erhalten";
 		if(!meldFilter.wurdeAnzahlEingehalten()) {
@@ -234,7 +265,9 @@ implements ClientSenderInterface, PlPruefungInterface {
 		this.dav.unsubscribeSender(this, FS, DD_KZD_SEND);
 	}
 	
-	/* (Kein Javadoc)
+	
+	/**
+	 * (Kein Javadoc)
 	 * @see de.bsvrz.dua.plloglve.util.PlPruefungInterface#doNotify()
 	 */
 	public void doNotify() {
@@ -244,18 +277,6 @@ implements ClientSenderInterface, PlPruefungInterface {
 		}
 	}
 	
-	/**
-	 * Lässten diesen Thread warten
-	 */
-	private void doWait(int zeit) {
-		if(filterTimeout) {
-			synchronized(this) {
-				try {
-					this.wait(zeit);
-				}catch(Exception e){};
-			}
-		}
-	}
 	
 	/**
 	 * {@inheritDoc}
@@ -264,12 +285,14 @@ implements ClientSenderInterface, PlPruefungInterface {
 		//VOID
 	}
 	
+	
 	/**
 	 * {@inheritDoc}
 	 */
 	public boolean isRequestSupported(SystemObject object, DataDescription dataDescription) {
 		return false;
 	}
+	
 	
 	/**
 	 * Soll Assert zur Fehlermeldung genutzt werden?
@@ -278,6 +301,7 @@ implements ClientSenderInterface, PlPruefungInterface {
 	public void benutzeAssert(final boolean useAssert) {
 		this.useAssert = useAssert;
 	}
+	
 	
 	/**
 	 * Setzt die erlaubte Abweichung zur erwarteten Anzahl an Betriebsmeldungen

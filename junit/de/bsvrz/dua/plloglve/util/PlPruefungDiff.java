@@ -123,7 +123,7 @@ implements ClientSenderInterface, PlPruefungInterface {
 		 * Testerobjekt
 		 */
 		PruefeMarkierung markPruefer = new PruefeMarkierung(this, dav, FS);
-		markPruefer.benutzeAssert(useAssert);
+		markPruefer.benutzeAssert(false);//useAssert);
 		
 		/*
 		 * Sende Differentialkontrolldaten (3x)

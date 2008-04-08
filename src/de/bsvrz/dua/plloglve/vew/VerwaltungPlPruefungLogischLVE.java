@@ -82,6 +82,16 @@ extends AbstraktVerwaltungsAdapterMitGuete{
 	throws DUAInitialisierungsException {
 		super.initialisiere();
 		
+		
+		/**
+		 * Fuer den Start der Applikation im Testmodus
+		 */		
+		final String test = this.getArgument("test");
+		if(test != null && test.length() > 0){
+			new TestParameter(test);
+		}
+		
+		
 		String infoStr = ""; //$NON-NLS-1$
 		Collection<SystemObject> plLogLveObjekte = DUAUtensilien.getBasisInstanzen(
 				this.verbindung.getDataModel().getType(DUAKonstanten.TYP_FAHRSTREIFEN),

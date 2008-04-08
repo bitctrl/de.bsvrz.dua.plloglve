@@ -35,6 +35,7 @@ import de.bsvrz.dav.daf.main.Data;
 import de.bsvrz.dav.daf.main.ResultData;
 import de.bsvrz.dav.daf.main.config.SystemObject;
 import de.bsvrz.dua.plloglve.plloglve.PlPruefungLogischLVE;
+import de.bsvrz.dua.plloglve.vew.TestParameter;
 import de.bsvrz.sys.funclib.bitctrl.dua.DUAInitialisierungsException;
 import de.bsvrz.sys.funclib.bitctrl.dua.adapter.AbstraktBearbeitungsKnotenAdapter;
 import de.bsvrz.sys.funclib.bitctrl.dua.dfs.schnittstellen.IDatenFlussSteuerung;
@@ -88,33 +89,39 @@ extends AbstraktBearbeitungsKnotenAdapter{
 			
 			for(ResultData resultat:resultate){				
 				if(resultat != null){
-					if(resultat.getDataDescription().getAttributeGroup().getId() == PlPruefungLogischLVE.ATG_KZD_ID){
-						if(resultat.getData() != null){
-							ResultData resultatNeu = resultat;
-							
-							DiffFahrStreifen fs = this.fahrStreifen.get(resultat.getObject());
-							
-							Data data = null;
-							if(fs != null){
-								data = fs.plausibilisiere(resultat);
+					
+					if(!TestParameter.getInstanz().isTestVertrauen() && !TestParameter.getInstanz().isTestAusfall()){
+						
+						if(resultat.getDataDescription().getAttributeGroup().getId() == PlPruefungLogischLVE.ATG_KZD_ID){
+							if(resultat.getData() != null){
+								ResultData resultatNeu = resultat;
+								
+								DiffFahrStreifen fs = this.fahrStreifen.get(resultat.getObject());
+								
+								Data data = null;
+								if(fs != null){
+									data = fs.plausibilisiere(resultat);
+								}else{
+									LOGGER.error("Fahrstreifen zu Datensatz konnte nicht identifiziert werden:\n" +  //$NON-NLS-1$
+											resultat);
+								}
+								
+								if(data != null){
+									resultatNeu = new ResultData(resultat.getObject(), resultat.getDataDescription(),
+											resultat.getDataTime(), data, resultat.isDelayedData());							
+								}
+								
+								weiterzuleitendeResultate.add(resultatNeu);
 							}else{
-								LOGGER.error("Fahrstreifen zu Datensatz konnte nicht identifiziert werden:\n" +  //$NON-NLS-1$
-										resultat);
+								weiterzuleitendeResultate.add(resultat);
 							}
-							
-							if(data != null){
-								resultatNeu = new ResultData(resultat.getObject(), resultat.getDataDescription(),
-										resultat.getDataTime(), data, resultat.isDelayedData());							
-							}
-							
-							weiterzuleitendeResultate.add(resultatNeu);
 						}else{
+							/**
+							 * LZ-Datum empfangen. Dieses wird nicht einer Differentialkontrolle unterzogen
+							 */
 							weiterzuleitendeResultate.add(resultat);
-						}
+						}						
 					}else{
-						/**
-						 * LZ-Datum empfangen. Dieses wird nicht einer Differentialkontrolle unterzogen
-						 */
 						weiterzuleitendeResultate.add(resultat);
 					}
 				}

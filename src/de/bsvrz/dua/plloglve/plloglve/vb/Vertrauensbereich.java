@@ -35,6 +35,7 @@ import de.bsvrz.dav.daf.main.DataDescription;
 import de.bsvrz.dav.daf.main.ResultData;
 import de.bsvrz.dav.daf.main.config.SystemObject;
 import de.bsvrz.dua.plloglve.plloglve.PlPruefungLogischLVE;
+import de.bsvrz.dua.plloglve.vew.TestParameter;
 import de.bsvrz.sys.funclib.bitctrl.dua.DUAInitialisierungsException;
 import de.bsvrz.sys.funclib.bitctrl.dua.adapter.AbstraktBearbeitungsKnotenAdapter;
 import de.bsvrz.sys.funclib.bitctrl.dua.dfs.schnittstellen.IDatenFlussSteuerung;
@@ -110,33 +111,38 @@ extends AbstraktBearbeitungsKnotenAdapter{
 			for(ResultData resultat:resultate){
 				if(resultat != null){
 					Data datum = null;
-					
-					if(resultat.getDataDescription().getAttributeGroup().getId() == PlPruefungLogischLVE.ATG_KZD_ID){
-						if(resultat.getData() != null){
-							VertrauensFahrStreifen fs = this.fahrStreifenMap.get(resultat.getObject());
 
-							if(fs != null){
-								datum = fs.plausibilisiere(resultat);
-							}else{
-								LOGGER.warning("Datum fuer nicht identifizierbaren Fahrstreifen empfangen: " +  //$NON-NLS-1$
-										resultat.getObject());
+					if(!TestParameter.getInstanz().isTestAusfall()){
+						if(resultat.getDataDescription().getAttributeGroup().getId() == PlPruefungLogischLVE.ATG_KZD_ID){
+							if(resultat.getData() != null){
+								VertrauensFahrStreifen fs = this.fahrStreifenMap.get(resultat.getObject());
+	
+								if(fs != null){
+									datum = fs.plausibilisiere(resultat);
+								}else{
+									LOGGER.warning("Datum fuer nicht identifizierbaren Fahrstreifen empfangen: " +  //$NON-NLS-1$
+											resultat.getObject());
+								}						
 							}						
-						}						
+						}else{
+							datum = resultat.getData();
+						}
 					}else{
 						datum = resultat.getData();
 					}
-					
+
 					ResultData publikationsDatum = new ResultData(resultat.getObject(),
-																	new DataDescription(resultat.getDataDescription().getAttributeGroup(), 
-																	standardAspekte.getStandardAspekt(resultat), (short)0),
-																	resultat.getDataTime(), datum, resultat.isDelayedData());
+							new DataDescription(resultat.getDataDescription().getAttributeGroup(), 
+									standardAspekte.getStandardAspekt(resultat), (short)0),
+									resultat.getDataTime(), datum, resultat.isDelayedData());
 					ResultData weiterzuleitendesDatum = new ResultData(resultat.getObject(),
-																	resultat.getDataDescription(),
-																	resultat.getDataTime(), datum, resultat.isDelayedData());
+							resultat.getDataDescription(),
+							resultat.getDataTime(), datum, resultat.isDelayedData());
 
 					if(this.publizieren){
 						this.publikationsAnmeldungen.sende(publikationsDatum);
 					}
+					
 					
 					weiterzuleitendeResultate.add(weiterzuleitendesDatum);
 				}

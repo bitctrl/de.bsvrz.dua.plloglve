@@ -27,11 +27,8 @@ package de.bsvrz.dua.plloglve.plloglve.ausfall;
 
 import java.util.Date;
 
-import com.bitctrl.Constants;
-
 import de.bsvrz.dav.daf.main.Data;
 import de.bsvrz.dav.daf.main.ResultData;
-import de.bsvrz.dua.plloglve.plloglve.TestParameter;
 import de.bsvrz.sys.funclib.bitctrl.dua.DUAKonstanten;
 import de.bsvrz.sys.funclib.bitctrl.dua.intpuf.IIntervallPufferElement;
 
@@ -92,20 +89,6 @@ implements IIntervallPufferElement<AusfallDatum>{
 		}
 			
 		return datum;
-	}
-
-	
-	/**
-	 * Erfragt, ob dieses Datum im Sinne des gleitenden Tages veraltet ist
-	 * 
-	 * @return ob dieses Datum im Sinne des gleitenden Tages veraltet ist
-	 */
-	@Deprecated
-	public boolean isDatumVeraltet(){
-		if(TestParameter.TEST_AUSFALL){
-			return this.intervallAnfang + 144000l < System.currentTimeMillis();
-		}
-		return this.intervallAnfang + Constants.MILLIS_PER_DAY < System.currentTimeMillis();
 	}
 	
 	

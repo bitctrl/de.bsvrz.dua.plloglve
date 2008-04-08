@@ -1,3 +1,29 @@
+/**
+ * Segment 4 Datenübernahme und Aufbereitung (DUA), SWE 4.2 Pl-Pruefung LVE
+ * Copyright (C) 2007 BitCtrl Systems GmbH 
+ * 
+ * This program is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU General Public License as published by the Free Software
+ * Foundation; either version 2 of the License, or (at your option) any later
+ * version.
+ *
+ * This program is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
+ * details.
+ *
+ * You should have received a copy of the GNU General Public License along with
+ * this program; if not, write to the Free Software Foundation, Inc., 51
+ * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ *
+ * Contact Information:<br>
+ * BitCtrl Systems GmbH<br>
+ * Weißenfelser Straße 67<br>
+ * 04229 Leipzig<br>
+ * Phone: +49 341-490670<br>
+ * mailto: info@bitctrl.de
+ */
+
 package de.bsvrz.dua.plloglve.test;
 
 import org.junit.Before;
@@ -9,9 +35,9 @@ import de.bsvrz.sys.funclib.bitctrl.dua.test.DAVTest;
 import de.bsvrz.sys.funclib.commandLineArgs.ArgumentList;
 
 /**
- * Automatisierter Test nach Prüfspezifikation für SWE Pl-Prüfung logisch LVE
+ * Automatisierter Test nach Pruefspezifikation für SWE Pl-Prüfung logisch LVE
  * 
- * @author Thierfelder
+ * @author BitCtrl Systems GmbH, Thierfelder
  *
  */
 public class PlPruefungLogischLVETestVertrauensbereich {
@@ -27,7 +53,12 @@ public class PlPruefungLogischLVETestVertrauensbereich {
 	 * Pfadangabe mit Argument: -debugFilePath=[Pfad]
 	 */
 	private String[] argumente = new String[] {"-debugLevelFileText=ALL"}; //$NON-NLS-1$
+	
+	/**
+	 * Argumentliste
+	 */
 	private ArgumentList alLogger = new ArgumentList(argumente);
+	
 	
 	/**
 	 * Vorbereitungen (DAV-Anmeldung)
@@ -37,14 +68,18 @@ public class PlPruefungLogischLVETestVertrauensbereich {
 		this.dav = DAVTest.getDav(Verbindung.getConData());	
 	}
 
+	
 	/**
 	 * Vertrauensbereichstest nach Prüfspezifikation
 	 */
 	@Test
-	public void testVB()throws Exception{
-		PlPruefungVertrauensbereich pruefVertrB = new PlPruefungVertrauensbereich(dav,Verbindung.TEST_DATEN_VERZ, alLogger);
+	public void testVB()
+	throws Exception{
+		PlPruefungVertrauensbereich pruefVertrB = 
+			new PlPruefungVertrauensbereich(dav,Verbindung.TEST_DATEN_VERZ, alLogger);
 		pruefVertrB.benutzeAssert(true);
-		pruefVertrB.setMeldungHysterese(0);
+		pruefVertrB.setMeldungHysterese(3);
 		pruefVertrB.pruefe();
 	}
+	
 }

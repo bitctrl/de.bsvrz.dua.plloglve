@@ -1,5 +1,35 @@
+/**
+ * Segment 4 Datenübernahme und Aufbereitung (DUA), SWE 4.2 Pl-Prüfung logisch LVE
+ * Copyright (C) 2007 BitCtrl Systems GmbH 
+ * 
+ * This program is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU General Public License as published by the Free Software
+ * Foundation; either version 2 of the License, or (at your option) any later
+ * version.
+ *
+ * This program is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
+ * details.
+ *
+ * You should have received a copy of the GNU General Public License along with
+ * this program; if not, write to the Free Software Foundation, Inc., 51
+ * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ *
+ * Contact Information:<br>
+ * BitCtrl Systems GmbH<br>
+ * Weißenfelser Straße 67<br>
+ * 04229 Leipzig<br>
+ * Phone: +49 341-490670<br>
+ * mailto: info@bitctrl.de
+ */
+
 package de.bsvrz.dua.plloglve.util.pruef;
 
+
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
 import junit.framework.Assert;
 import de.bsvrz.dav.daf.main.ClientDavInterface;
@@ -10,7 +40,6 @@ import de.bsvrz.dav.daf.main.ReceiveOptions;
 import de.bsvrz.dav.daf.main.ReceiverRole;
 import de.bsvrz.dav.daf.main.ResultData;
 import de.bsvrz.dav.daf.main.config.SystemObject;
-import de.bsvrz.dav.daf.main.impl.InvalidArgumentException;
 import de.bsvrz.dua.plloglve.util.PlPruefungInterface;
 import de.bsvrz.sys.funclib.bitctrl.dua.DUAKonstanten;
 import de.bsvrz.sys.funclib.debug.Debug;
@@ -39,6 +68,11 @@ implements ClientReceiverInterface {
 	private ClientDavInterface dav;
 	
 	/**
+	 * die Attribute, die nicht ueberprueft werden sollen
+	 */
+	private List<String> ignoreAttributeList = new ArrayList<String>();
+	
+	/**
 	 * Aufrunfende Klasse
 	 */
 	private PlPruefungInterface caller;
@@ -46,7 +80,7 @@ implements ClientReceiverInterface {
 	/**
 	 * Zeitstempel der zu pruefenden Daten
 	 */
-	private long pruefZeitstempel;
+	private long pruefZeitstempel = -1;
 	
 	/**
 	 * Gibt an, welches Attribut getestet werden soll
@@ -90,15 +124,8 @@ implements ClientReceiverInterface {
 			      this.dav.getDataModel().getAspect(DUAKonstanten.ASP_PL_PRUEFUNG_LOGISCH),
 			      (short)0);
 		
-		DD_LZD_EMPF = new DataDescription(this.dav.getDataModel().getAttributeGroup(DUAKonstanten.ATG_LZD),
-			      this.dav.getDataModel().getAspect(DUAKonstanten.ASP_PL_PRUEFUNG_LOGISCH),
-			      (short)0);
-		
 		this.dav.subscribeReceiver(this, fs, 
 				DD_KZD_EMPF, ReceiveOptions.normal(), ReceiverRole.receiver());
-		
-		this.dav.subscribeReceiver(this, fs, 
-				DD_LZD_EMPF, ReceiveOptions.delayed(), ReceiverRole.receiver());
 	}
 	
 	/**
@@ -233,25 +260,57 @@ implements ClientReceiverInterface {
 		this.sollImplausibel = DUAKonstanten.JA;	
 	}
 	
+	
 	/**
-	 * Prüft Daten entsprechend der Konfiguration 
+	 * Fuegt ein Attribut hinzu, dass nicht ueberprueft werden soll
+	 * 
+	 * @param attribut der Name des Attributs
+	 */
+	public final void addIgnore(final String attribut){
+		synchronized (ignoreAttributeList) {
+			this.ignoreAttributeList.add(attribut);
+		}
+	}
+	
+	
+	/**
+	 * Prueft Daten entsprechend der Konfiguration
+	 *  
 	 * @param data Ergebnisdatensatz
 	 */
 	private void pruefeDS(Data data) {
 		if(pruefeAlleAttr) {
-			pruefeAttr("qKfz", data); //$NON-NLS-1$
-			pruefeAttr("qLkw", data); //$NON-NLS-1$
-			pruefeAttr("qPkw", data); //$NON-NLS-1$
-			pruefeAttr("vPkw", data); //$NON-NLS-1$
-			pruefeAttr("vLkw", data); //$NON-NLS-1$
-			pruefeAttr("vKfz", data); //$NON-NLS-1$
-			pruefeAttr("b", data); //$NON-NLS-1$
-			pruefeAttr("sKfz", data); //$NON-NLS-1$
+			for(String attribut:new String[]{"qKfz", "qLkw", "vPkw", "vLkw", "b", "sKfz"}){
+				boolean ignore = false;
+				synchronized (this.ignoreAttributeList) {
+					for(String attrIgnore:this.ignoreAttributeList){
+						if(attribut.equals(attrIgnore)){
+							ignore = true;
+							break;
+						}
+					}
+				}	
+				if(!ignore){
+					pruefeAttr(attribut, data); //$NON-NLS-1$
+				}
+			}
+			synchronized (this.ignoreAttributeList) {
+				this.ignoreAttributeList.clear();
+			}
 		} else {
+			synchronized (this.ignoreAttributeList) {
+				for(String attrIgnore:this.ignoreAttributeList){
+					if(pruefeAttr.equals(attrIgnore)){
+						this.ignoreAttributeList.clear();
+						return;					
+					}
+				}
+				this.ignoreAttributeList.clear();
+			}
 			pruefeAttr(pruefeAttr, data);
 		}
-
 	}
+	
 	
 	/**
 	 * Prueft Attribut entsprechend der Konfiguration
@@ -261,28 +320,31 @@ implements ClientReceiverInterface {
 	private void pruefeAttr(String pruefeAttr, Data data) {
 		final long wert = data.getItem(pruefeAttr).getUnscaledValue("Wert").longValue(); //$NON-NLS-1$
 		final int impl = data.getItem(pruefeAttr).getItem("Status").getItem("MessWertErsetzung").getUnscaledValue("Implausibel").intValue(); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-		
+			
 		if(sollWert < 0) {
 			if(wert != sollWert) {
-				String fehler = "Fehlerhafter Attributwert (" + pruefeAttr + "): " + sollWert + " (SOLL)<>(IST) " + wert; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+				String fehler = "Fehlerhafter Attributwert (" + pruefeAttr + "): " + sollWert + " (SOLL)<>(IST) " + wert +  //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+				"\n" + data;
 				if(useAssert){
+					//System.out.println(DUAKonstanten.ZEIT_FORMAT_GENAU.format(new Date(this.pruefZeitstempel)) + " --> FEHLER\n" + fehler);
 					Assert.assertTrue(fehler, false);
 				}else{
-					LOGGER.warning(fehler);
+					System.out.println(DUAKonstanten.ZEIT_FORMAT_GENAU.format(new Date(this.pruefZeitstempel)) + " --> FEHLER\n" + fehler);
 				}
 			} else {
-				LOGGER.info("Attributwert OK (" + pruefeAttr+"): " + sollWert + " (SOLL)==(IST) " + wert);   //$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$
+				System.out.println(DUAKonstanten.ZEIT_FORMAT_GENAU.format(new Date(this.pruefZeitstempel)) + " --> OK (" + pruefeAttr+"):\n" + sollWert + " (SOLL)==(IST) " + wert);   //$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$
 			}
 		} else if (sollWert == SOLL_WERT_KEIN_FEHLER) {
 			if(wert < 0) {
 				String fehler = "Fehlerhafter Attributwert ("+pruefeAttr+"): Wert >= 0 (SOLL)<>(IST) "+wert; //$NON-NLS-1$ //$NON-NLS-2$ 
 				if(useAssert){
+					//System.out.println(DUAKonstanten.ZEIT_FORMAT_GENAU.format(new Date(this.pruefZeitstempel)) + " --> FEHLER\n" + fehler);
 					Assert.assertTrue(fehler, false);
 				}else{
-					LOGGER.warning(fehler);
+					System.out.println(DUAKonstanten.ZEIT_FORMAT_GENAU.format(new Date(this.pruefZeitstempel)) + " --> FEHLER\n" + fehler);
 				}
 			} else {
-				LOGGER.info("Attributwert OK ("+pruefeAttr+"): Wert >= 0 (SOLL)==(IST) "+wert);  //$NON-NLS-1$//$NON-NLS-2$
+				System.out.println(DUAKonstanten.ZEIT_FORMAT_GENAU.format(new Date(this.pruefZeitstempel)) + " --> OK:\n (Wert >= 0) (SOLL)==(IST) " + wert);   //$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$
 			}
 		}
 		
@@ -290,26 +352,25 @@ implements ClientReceiverInterface {
 			if(sollImplausibel != impl) {
 				String fehler = "Fehlerhafte Implausibel-Markierung ("+pruefeAttr+"): "+sollImplausibel+" (SOLL)<>(IST) "+impl+ ",\n" + data; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ 
 				if(useAssert){
+					//System.out.println(DUAKonstanten.ZEIT_FORMAT_GENAU.format(new Date(this.pruefZeitstempel)) + " --> FEHLER\n" + fehler);
 					Assert.assertTrue(fehler, false);
 				}else{
-					LOGGER.warning(fehler);
+					System.out.println(DUAKonstanten.ZEIT_FORMAT_GENAU.format(new Date(this.pruefZeitstempel)) + " --> FEHLER\n" + fehler);
 				}
 			} else {
-				LOGGER.info("Implausibel-Markierung OK ("+pruefeAttr+"): "+sollImplausibel+" (SOLL)==(IST) "+impl);   //$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$
+				System.out.println(DUAKonstanten.ZEIT_FORMAT_GENAU.format(new Date(this.pruefZeitstempel)) + " --> OK (" + sollImplausibel+"):\n" + impl + " (SOLL)==(IST) " + wert);   //$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$
 			}
 		}
 	}
 	
-	/** {@inheritDoc}
-	 * 
-	 * @param results Ergebnisdatensätze vom DaV
-	 * @throws InvalidArgumentException 
+	
+	/**
+	 * {@inheritDoc}
 	 */
 	public void update(ResultData[] results) {
 		for (ResultData result : results) {
-			//Pruefe Ergebnisdatensatz auf Zeitstempel
-			if ((result.getDataDescription().equals(DD_KZD_EMPF) ||
-				result.getDataDescription().equals(DD_LZD_EMPF)) &&
+			//Pruefe Ergebnisdatensatz auf Zeitstempel	
+			if (pruefZeitstempel > 0 &&	
 				result.getData() != null &&
 				result.getDataTime() == pruefZeitstempel) {
 				pruefeDS(result.getData());
@@ -318,11 +379,14 @@ implements ClientReceiverInterface {
 		}
 	}
 	
+	
 	/**
 	 * Soll Assert zur Fehlermeldung genutzt werden?
+	 * 
 	 * @param useAssert
 	 */
 	public void benutzeAssert(final boolean useAssert) {
 		this.useAssert = useAssert;
 	}
+	
 }

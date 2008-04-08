@@ -39,7 +39,7 @@ import de.bsvrz.dav.daf.main.ReceiveOptions;
 import de.bsvrz.dav.daf.main.ReceiverRole;
 import de.bsvrz.dav.daf.main.ResultData;
 import de.bsvrz.dav.daf.main.config.SystemObject;
-import de.bsvrz.dua.plloglve.plloglve.TestParameter;
+import de.bsvrz.dua.plloglve.vew.TestParameter;
 import de.bsvrz.sys.funclib.bitctrl.daf.DaVKonstanten;
 import de.bsvrz.sys.funclib.bitctrl.dua.DUAKonstanten;
 import de.bsvrz.sys.funclib.bitctrl.dua.schnittstellen.IVerwaltung;
@@ -235,7 +235,7 @@ implements ClientReceiverInterface{
 						}
 					}else{
 						if(verletztAlt){
-							long vertrauensBereich = TestParameter.TEST_VERTRAUEN?parameter.getBezugsZeitraum()*6000:parameter.getBezugsZeitraum() * Constants.MILLIS_PER_HOUR;
+							long vertrauensBereich = TestParameter.getInstanz().isTestVertrauen()?parameter.getBezugsZeitraum()*TestParameter.INTERVALL_VB * 60L:parameter.getBezugsZeitraum() * Constants.MILLIS_PER_HOUR;
 							
 							Date start = new Date(originalDatum.getDataTime() - vertrauensBereich);
 							Date ende = new Date(originalDatum.getDataTime());

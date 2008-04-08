@@ -38,7 +38,7 @@ import de.bsvrz.dav.daf.main.ReceiverRole;
 import de.bsvrz.dav.daf.main.ResultData;
 import de.bsvrz.dav.daf.main.config.SystemObject;
 import de.bsvrz.dua.plloglve.plloglve.PlPruefungLogischLVE;
-import de.bsvrz.dua.plloglve.plloglve.TestParameter;
+import de.bsvrz.dua.plloglve.vew.TestParameter;
 import de.bsvrz.sys.funclib.bitctrl.daf.DaVKonstanten;
 import de.bsvrz.sys.funclib.bitctrl.dua.DUAKonstanten;
 import de.bsvrz.sys.funclib.bitctrl.dua.intpuf.IntervallPufferException;
@@ -145,7 +145,7 @@ implements ClientReceiverInterface{
 					}
 				}					
 			}
-			this.testAufAusfall();
+			this.testAufAusfall(ausfallDatum);
 		}			
 	}
 	
@@ -153,15 +153,19 @@ implements ClientReceiverInterface{
 	/**
 	 * Erreichnet den Ausfall dieses Fahrstreifens und gibt ggf. eine Betriebsmeldung aus 
 	 **/
-	private final void testAufAusfall(){
+	private final void testAufAusfall(AusfallDatumKomplett letztesAusfallDatum){
 		long ausfallZeit = 0;
 		
 		synchronized (this.gleitenderTag) {
 			try {
-				if(TestParameter.TEST_AUSFALL){
-					this.gleitenderTag.loescheAllesUnterhalbVon(System.currentTimeMillis() - 144000L);
+				if(TestParameter.getInstanz().isTestAusfall()){
+					if(letztesAusfallDatum != null){
+						this.gleitenderTag.loescheAllesUnterhalbVon(letztesAusfallDatum.getIntervallEnde() - 144000L);	
+					}					
 				}else{
-					this.gleitenderTag.loescheAllesUnterhalbVon(System.currentTimeMillis() - Constants.MILLIS_PER_DAY);
+					if(letztesAusfallDatum != null){
+						this.gleitenderTag.loescheAllesUnterhalbVon(letztesAusfallDatum.getIntervallEnde() - Constants.MILLIS_PER_DAY);						
+					}
 				}
 				ausfallZeit = this.gleitenderTag.getAusfallZeit();
 			} catch (IntervallPufferException e) {
@@ -175,7 +179,7 @@ implements ClientReceiverInterface{
 				if(this.maxAusfallProTag >= 0){
 					
 					double ausfallInProzent;
-					if(TestParameter.TEST_AUSFALL) {
+					if(TestParameter.getInstanz().isTestAusfall()) {
 						ausfallInProzent = (((double)ausfallZeit / (double)144000) * 100.0);
 					} else {
 						ausfallInProzent = (((double)ausfallZeit / (double)Constants.MILLIS_PER_DAY) * 100.0);
@@ -243,7 +247,7 @@ implements ClientReceiverInterface{
 	 * @return ob diese Applikation schon länger als einen Tag läuft
 	 */
 	private static final boolean programmLaeuftSchonLaengerAlsEinTag(){
-		if(TestParameter.TEST_AUSFALL){
+		if(TestParameter.getInstanz().isTestAusfall()){
 			return PlPruefungLogischLVE.START_ZEIT + 144000l < System.currentTimeMillis();
 		}
 		return PlPruefungLogischLVE.START_ZEIT + Constants.MILLIS_PER_DAY < System.currentTimeMillis(); 

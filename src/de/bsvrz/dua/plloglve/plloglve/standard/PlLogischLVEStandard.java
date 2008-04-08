@@ -35,6 +35,7 @@ import de.bsvrz.dav.daf.main.Data;
 import de.bsvrz.dav.daf.main.ResultData;
 import de.bsvrz.dav.daf.main.config.SystemObject;
 import de.bsvrz.dua.plloglve.plloglve.PlPruefungLogischLVE;
+import de.bsvrz.dua.plloglve.vew.TestParameter;
 import de.bsvrz.sys.funclib.bitctrl.dua.DUAInitialisierungsException;
 import de.bsvrz.sys.funclib.bitctrl.dua.DUAKonstanten;
 import de.bsvrz.sys.funclib.bitctrl.dua.adapter.AbstraktBearbeitungsKnotenAdapter;
@@ -121,38 +122,42 @@ extends AbstraktBearbeitungsKnotenAdapter{
 			for(ResultData resultat:resultate){
 				if(resultat != null){
 					
-					AbstraktPLFahrStreifen fahrStreifen = null;
-					
-					if(resultat.getDataDescription().getAttributeGroup().getId() == PlPruefungLogischLVE.ATG_KZD_ID){
-						/**
-						 * Es wurden KZD empfangen
-						 */
-						fahrStreifen = this.kzdFahrStreifen.get(resultat.getObject());	
-					}else
-					if(resultat.getDataDescription().getAttributeGroup().getId() == PlPruefungLogischLVE.ATG_LZD_ID){
-						/**
-						 * Es wurden LZD empfangen
-						 */
-						fahrStreifen = this.lzdFahrStreifen.get(resultat.getObject());	
-					}
-					
-					Data pData = null;
-					if(fahrStreifen != null){
-						 pData = fahrStreifen.plausibilisiere(resultat);
+					if(TestParameter.getInstanz().isTestAusfall() || TestParameter.getInstanz().isTestVertrauen()){
+						weiterzuleitendeResultate.add(resultat);
 					}else{
-						LOGGER.warning("Fahrstreifen " + resultat.getObject() +  //$NON-NLS-1$
-								" konnte nicht identifiziert werden"); //$NON-NLS-1$
-					}
-
-					if(pData != null){
-						ResultData ersetztesResultat = new ResultData(
-								resultat.getObject(),
-								resultat.getDataDescription(),
-								resultat.getDataTime(),
-								pData, resultat.isDelayedData());
-						weiterzuleitendeResultate.add(ersetztesResultat);
-					}else{
-						weiterzuleitendeResultate.add(resultat);						
+						AbstraktPLFahrStreifen fahrStreifen = null;
+						
+						if(resultat.getDataDescription().getAttributeGroup().getId() == PlPruefungLogischLVE.ATG_KZD_ID){
+							/**
+							 * Es wurden KZD empfangen
+							 */
+							fahrStreifen = this.kzdFahrStreifen.get(resultat.getObject());	
+						}else
+						if(resultat.getDataDescription().getAttributeGroup().getId() == PlPruefungLogischLVE.ATG_LZD_ID){
+							/**
+							 * Es wurden LZD empfangen
+							 */
+							fahrStreifen = this.lzdFahrStreifen.get(resultat.getObject());	
+						}
+						
+						Data pData = null;
+						if(fahrStreifen != null){
+							 pData = fahrStreifen.plausibilisiere(resultat);
+						}else{
+							LOGGER.warning("Fahrstreifen " + resultat.getObject() +  //$NON-NLS-1$
+									" konnte nicht identifiziert werden"); //$NON-NLS-1$
+						}
+	
+						if(pData != null){
+							ResultData ersetztesResultat = new ResultData(
+									resultat.getObject(),
+									resultat.getDataDescription(),
+									resultat.getDataTime(),
+									pData, resultat.isDelayedData());
+							weiterzuleitendeResultate.add(ersetztesResultat);
+						}else{
+							weiterzuleitendeResultate.add(resultat);						
+						}
 					}
 				}
 			}

@@ -32,7 +32,7 @@ import com.bitctrl.Constants;
 
 import de.bsvrz.dav.daf.main.ResultData;
 import de.bsvrz.dua.plloglve.plloglve.PlPruefungLogischLVE;
-import de.bsvrz.dua.plloglve.plloglve.TestParameter;
+import de.bsvrz.dua.plloglve.vew.TestParameter;
 import de.bsvrz.sys.funclib.bitctrl.dua.DUAKonstanten;
 import de.bsvrz.sys.funclib.bitctrl.dua.intpuf.IntervallPufferException;
 import de.bsvrz.sys.funclib.bitctrl.dua.schnittstellen.IVerwaltung;
@@ -133,14 +133,14 @@ public class BezugsZeitraum {
 
 		long ausfallZeit = 0;
 		try {
-			if(TestParameter.TEST_VERTRAUEN){
+			if(TestParameter.getInstanz().isTestVertrauen()){
 				/**
 				 * Ein Tag ist jetzt genau 144s lang 
 				 */
-				this.ausgefalleneDaten.loescheAllesUnterhalbVon(System.currentTimeMillis() -
-						(parameter.getBezugsZeitraum() * 6000L));				
+				this.ausgefalleneDaten.loescheAllesUnterhalbVon(neuesAusfallEinzelDatum.getIntervallEnde() -
+						(parameter.getBezugsZeitraum() * TestParameter.INTERVALL_VB * 60L));				
 			}else{
-				this.ausgefalleneDaten.loescheAllesUnterhalbVon(System.currentTimeMillis() -
+				this.ausgefalleneDaten.loescheAllesUnterhalbVon(neuesAusfallEinzelDatum.getIntervallEnde() -
 						(parameter.getBezugsZeitraum() * Constants.MILLIS_PER_HOUR));
 			}
 		} catch (IntervallPufferException e) {
@@ -150,7 +150,7 @@ public class BezugsZeitraum {
 
 		ausfallZeit += ausgefalleneDaten.getAusfall();
 
-		final long bezugsZeitraumInMillis = TestParameter.TEST_VERTRAUEN?parameter.getBezugsZeitraum()*6000:parameter.getBezugsZeitraum() * Constants.MILLIS_PER_HOUR;
+		final long bezugsZeitraumInMillis = TestParameter.getInstanz().isTestVertrauen()?parameter.getBezugsZeitraum()* TestParameter.INTERVALL_VB * 60L:parameter.getBezugsZeitraum() * Constants.MILLIS_PER_HOUR;
 		double ausfallInProzent = 0;
 		if(bezugsZeitraumInMillis > 0){
 			ausfallInProzent = (double)(((double)ausfallZeit / (double)bezugsZeitraumInMillis) * 100.0);
@@ -180,8 +180,8 @@ public class BezugsZeitraum {
 			if(ausschaltSchwelleUNTERSchritten){					
 				if(this.vertrauensBereichVerletzt){
 					this.vertrauensBereichVerletzt = false;
-					long stunden = ausfallZeit / (TestParameter.TEST_VERTRAUEN?6000L:Constants.MILLIS_PER_HOUR);
-					long minuten = (ausfallZeit - (stunden * (TestParameter.TEST_VERTRAUEN?6000L:Constants.MILLIS_PER_HOUR))) /
+					long stunden = ausfallZeit / (TestParameter.getInstanz().isTestVertrauen()?TestParameter.INTERVALL_VB * 60L:Constants.MILLIS_PER_HOUR);
+					long minuten = (ausfallZeit - (stunden * (TestParameter.getInstanz().isTestVertrauen()?TestParameter.INTERVALL_VB * 60L:Constants.MILLIS_PER_HOUR))) /
 									Constants.MILLIS_PER_MINUTE;
 					ausfall = new BezugsZeitraumAusfall(parameter.getMaxAusfallProBezugsZeitraumAus(), ausfallInProzent, stunden, minuten);
 				}
@@ -190,8 +190,8 @@ public class BezugsZeitraum {
 			if(this.vertrauensBereichVerletzt){
 				Date start = new Date(originalDatum.getDataTime() - bezugsZeitraumInMillis);
 				Date ende = new Date(originalDatum.getDataTime());
-				long stunden = ausfallZeit / (TestParameter.TEST_VERTRAUEN?6000L:Constants.MILLIS_PER_HOUR);
-				long minuten = (ausfallZeit - (stunden * (TestParameter.TEST_VERTRAUEN?6000L:Constants.MILLIS_PER_HOUR))) / Constants.MILLIS_PER_MINUTE;
+				long stunden = ausfallZeit / (TestParameter.getInstanz().isTestVertrauen()?TestParameter.INTERVALL_VB * 60L:Constants.MILLIS_PER_HOUR);
+				long minuten = (ausfallZeit - (stunden * (TestParameter.getInstanz().isTestVertrauen()?TestParameter.INTERVALL_VB * 60L:Constants.MILLIS_PER_HOUR))) / Constants.MILLIS_PER_MINUTE;
 
 				String nachricht = "Daten auﬂerhalb des Vertrauensbereichs. Im Zeitraum von " +  //$NON-NLS-1$
 				DUAKonstanten.BM_ZEIT_FORMAT.format(start) + " Uhr bis " + DUAKonstanten.BM_ZEIT_FORMAT.format(ende) + //$NON-NLS-1$ 
