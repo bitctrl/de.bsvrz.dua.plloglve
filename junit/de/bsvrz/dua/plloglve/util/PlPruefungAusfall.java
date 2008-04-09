@@ -1,5 +1,6 @@
 package de.bsvrz.dua.plloglve.util;
 
+import java.util.Date;
 import java.util.Random;
 
 import junit.framework.Assert;
@@ -65,10 +66,10 @@ implements ClientSenderInterface, PlPruefungInterface {
 	//static long INTERVALL = Konstante.MINUTE_IN_MS;
 	static long INTERVALL = 100L;
 	
-	/**
-	 * Filter-Timout
-	 */
-	private boolean filterTimeout = true;
+//	/**
+//	 * Filter-Timout
+//	 */
+//	private boolean filterTimeout = true;
 	
 	/**
 	 * Abweichung zur erwarteten Anzahl von Meldungen
@@ -131,8 +132,8 @@ implements ClientSenderInterface, PlPruefungInterface {
 		/*
 		 * Setze Intervallparameter
 		 */
-		paraImpFSOK.setT(INTERVALL);
-		paraImpFSFehler.setT(INTERVALL);
+//		paraImpFSOK.setT(INTERVALL);
+//		paraImpFSFehler.setT(INTERVALL);
 //		paraImpFSOK.setT(60000L);
 //		paraImpFSFehler.setT(60000L);
 		
@@ -192,7 +193,6 @@ implements ClientSenderInterface, PlPruefungInterface {
 			 * Für die restlichen Intervalle werden fehlerfreie Daten gesendet
 			 */
 			if(i >= 929 && i <= 1032) {
-				LOGGER.info("Intervall "+i+": Sende fehlerhaftes Datum");
 				if((zeileFSFehler = paraImpFSFehler.getNaechstenDatensatz(DD_KZD_SEND.getAttributeGroup())) == null) {
 					paraImpFSFehler.reset();
 					paraImpFSFehler.getNaechsteZeile();
@@ -201,30 +201,31 @@ implements ClientSenderInterface, PlPruefungInterface {
 				
 				Data dummy = zeileFSFehler.createModifiableCopy();
 				boolean set = false;
-				for(String attribut:new String[]{"qKfz", "qLkw", "qPkw", "vKfz", "vLkw", "vPkw", "b", "s"}){
-					if(R.nextBoolean()){
-						set = true;
-						if(R.nextBoolean()){
+				for(String attribut:new String[]{"qKfz", "qLkw", "qPkw", "vKfz", "vLkw", "vPkw", "b"}){
+//					if(R.nextBoolean()){
+//						set = true;
+//						if(R.nextBoolean()){
 							dummy.getItem(attribut).getUnscaledValue("Wert").set(DUAKonstanten.FEHLERHAFT);
-							if(R.nextBoolean()){
-								dummy.getItem(attribut).getItem("Status").getItem("MessWertErsetzung").getUnscaledValue("Implausibel").set(DUAKonstanten.JA);
-							}
-						}else{
-							dummy.getItem(attribut).getItem("Status").getItem("MessWertErsetzung").getUnscaledValue("Implausibel").set(DUAKonstanten.JA);
-							if(R.nextBoolean()){
-								dummy.getItem(attribut).getUnscaledValue("Wert").set(DUAKonstanten.FEHLERHAFT);
-							}						
-						}
-					}
+//							if(R.nextBoolean()){
+//								dummy.getItem(attribut).getItem("Status").getItem("MessWertErsetzung").getUnscaledValue("Implausibel").set(DUAKonstanten.JA);
+//							}
+//						}else{
+//							dummy.getItem(attribut).getItem("Status").getItem("MessWertErsetzung").getUnscaledValue("Implausibel").set(DUAKonstanten.JA);
+//							if(R.nextBoolean()){
+//								dummy.getItem(attribut).getUnscaledValue("Wert").set(DUAKonstanten.FEHLERHAFT);
+//							}						
+//						}
+//					}
 				}
-				if(!set){
-					dummy.getItem("qPkw").getUnscaledValue("Wert").set(DUAKonstanten.FEHLERHAFT);
-				}
-				
+//				if(!set){
+//					dummy.getItem("qPkw").getUnscaledValue("Wert").set(DUAKonstanten.FEHLERHAFT);
+//				}
+
+				System.out.println(DUAKonstanten.ZEIT_FORMAT_GENAU.format(new Date(pruefZeit)) + ": Intervall "+i+": Sende Datum FEHLER");
 				ResultData resultat1 = new ResultData(FS, DD_KZD_SEND, pruefZeit, dummy);
 				this.dav.sendData(resultat1);
 			} else {
-				LOGGER.info("Intervall "+i+": Sende fehlerfreies Datum");
+				System.out.println(DUAKonstanten.ZEIT_FORMAT_GENAU.format(new Date(pruefZeit)) + ": Intervall "+i+": Sende Datum OK");
 				if((zeileFSOK = paraImpFSOK.getNaechstenDatensatz(DD_KZD_SEND.getAttributeGroup())) == null) {
 					paraImpFSOK.reset();
 					paraImpFSOK.getNaechsteZeile();
@@ -271,7 +272,7 @@ implements ClientSenderInterface, PlPruefungInterface {
 	 * @see de.bsvrz.dua.plloglve.util.PlPruefungInterface#doNotify()
 	 */
 	public void doNotify() {
-		filterTimeout = false;
+		//filterTimeout = false;
 		synchronized(this) {
 			this.notify();
 		}
