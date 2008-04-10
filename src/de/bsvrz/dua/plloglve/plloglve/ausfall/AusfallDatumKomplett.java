@@ -23,6 +23,7 @@
  * Phone: +49 341-490670<br>
  * mailto: info@bitctrl.de
  */
+
 package de.bsvrz.dua.plloglve.plloglve.ausfall;
 
 import java.util.Date;
@@ -33,76 +34,78 @@ import de.bsvrz.sys.funclib.bitctrl.dua.DUAKonstanten;
 import de.bsvrz.sys.funclib.bitctrl.dua.intpuf.IIntervallPufferElement;
 
 /**
- * Repraesentiert ein in einem temporaeren Puffer speicherbares
- * Element mit der Eigenschaft ausgefallen zu sein oder nicht
+ * Repraesentiert ein in einem temporaeren Puffer speicherbares Element mit der
+ * Eigenschaft ausgefallen zu sein oder nicht.
  * 
  * @author BitCtrl Systems GmbH, Thierfelder
- *
+ * 
+ * @version $Id$
  */
-public class AusfallDatumKomplett
-implements IIntervallPufferElement<AusfallDatum>{
+public final class AusfallDatumKomplett implements
+		IIntervallPufferElement<AusfallDatum> {
 
 	/**
-	 * Intervallanfang
+	 * Intervallanfang.
 	 */
 	private long intervallAnfang = 0;
-	
+
 	/**
-	 * Intervallende 
+	 * Intervallende.
 	 */
 	private long intervallEnde = 0;
-	
+
 	/**
-	 * der Inhalt
+	 * der Inhalt.
 	 */
-	private AusfallDatum inhalt = null; 
-	
-	
+	private AusfallDatum inhalt = null;
+
 	/**
-	 * Standardkonstruktor
+	 * Standardkonstruktor.
 	 * 
-	 * @param resultat ein KZD-Datum
+	 * @param resultat
+	 *            ein KZD-Datum
 	 */
-	private AusfallDatumKomplett(ResultData resultat){
+	private AusfallDatumKomplett(ResultData resultat) {
 		Data data = resultat.getData();
-		
+
 		this.intervallAnfang = resultat.getDataTime();
-		this.intervallEnde = resultat.getDataTime() + data.getTimeValue("T").getMillis(); //$NON-NLS-1$
+		this.intervallEnde = resultat.getDataTime()
+				+ data.getTimeValue("T").getMillis(); //$NON-NLS-1$
 		this.inhalt = AusfallDatum.getAusfallDatumVon(resultat);
 	}
-	
-	
+
 	/**
-	 * Gibt nur ein Datum zurueck, wenn es sich um ein Datum handelt, dass
-	 * auch im Sinne der Plausibilisierung ausgewertet werden kann. Also ein
-	 * Datum mit Nutzdaten
+	 * Gibt nur ein Datum zurueck, wenn es sich um ein Datum handelt, dass auch
+	 * im Sinne der Plausibilisierung ausgewertet werden kann. Also ein Datum
+	 * mit Nutzdaten.
 	 * 
-	 * @param resultat ein Kz-Datum
-	 * @return eine mit dem uebergebenen Datum korrespondierende Instanz dieser Klasse
-	 * oder <code>null</code> fuer keine Quelle usw.
+	 * @param resultat
+	 *            ein Kz-Datum
+	 * @return eine mit dem uebergebenen Datum korrespondierende Instanz dieser
+	 *         Klasse oder <code>null</code> fuer keine Quelle usw.
 	 */
-	public static final AusfallDatumKomplett getAusfallDatumVon(final ResultData resultat){
+	public static AusfallDatumKomplett getAusfallDatumVon(
+			final ResultData resultat) {
 		AusfallDatumKomplett datum = null;
-		
-		if(resultat != null && resultat.getData() != null){
+
+		if (resultat != null && resultat.getData() != null) {
 			datum = new AusfallDatumKomplett(resultat);
 		}
-			
+
 		return datum;
 	}
-	
-	
+
 	/**
 	 * {@inheritDoc}
 	 */
 	@Override
 	public String toString() {
-		String s = "Datenzeit: " + DUAKonstanten.ZEIT_FORMAT_GENAU.format(new Date(this.intervallAnfang)) +  //$NON-NLS-1$
-								" (" + (this.intervallEnde - this.intervallAnfang)  + "ms): " + this.inhalt; //$NON-NLS-1$ //$NON-NLS-2$
+		String s = "Datenzeit: " + DUAKonstanten.ZEIT_FORMAT_GENAU.format(new Date(this.intervallAnfang)) + //$NON-NLS-1$
+				" (" + (this.intervallEnde - this.intervallAnfang)
+				+ "ms): " + this.inhalt; //$NON-NLS-1$ //$NON-NLS-2$
 		return s;
 	}
 
-	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -110,7 +113,6 @@ implements IIntervallPufferElement<AusfallDatum>{
 		return this.intervallEnde;
 	}
 
-	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -118,7 +120,6 @@ implements IIntervallPufferElement<AusfallDatum>{
 		return this.intervallAnfang;
 	}
 
-	
 	/**
 	 * {@inheritDoc}
 	 */

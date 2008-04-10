@@ -1,5 +1,5 @@
 /** 
- * Segment 4 Datenübernahme und Aufbereitung (DUA), SWE 4.2 Plausibilitätsprüfung logisch LVE
+ * Segment 4 Datenübernahme und Aufbereitung (DUA), SWE 4.2 Pl-Prüfung logisch LVE
  * Copyright (C) 2007 BitCtrl Systems GmbH 
  * 
  * This program is free software; you can redistribute it and/or modify it under
@@ -33,82 +33,80 @@ import de.bsvrz.sys.funclib.bitctrl.daf.AbstractDavZustand;
 
 /**
  * Repräsentiert den DAV-Enumerationstypen
- * <code>att.optionenPlausibilitätsPrüfungLogischVerkehr</code> 
+ * <code>att.optionenPlausibilitätsPrüfungLogischVerkehr</code>.
  * 
  * @author BitCtrl Systems GmbH, Thierfelder
- *
+ * 
+ * @version $Id$
  */
-public class OptionenPlausibilitaetsPruefungLogischVerkehr 
-extends AbstractDavZustand{
+public final class OptionenPlausibilitaetsPruefungLogischVerkehr extends
+		AbstractDavZustand {
 
 	/**
-	 * Der Wertebereich dieses DAV-Enumerationstypen
+	 * Der Wertebereich dieses DAV-Enumerationstypen.
 	 */
-	private static Map<Integer, OptionenPlausibilitaetsPruefungLogischVerkehr> WERTE_BEREICH = 
-						new HashMap<Integer, OptionenPlausibilitaetsPruefungLogischVerkehr>();
-	
+	private static Map<Integer, OptionenPlausibilitaetsPruefungLogischVerkehr> werteBereich = new HashMap<Integer, OptionenPlausibilitaetsPruefungLogischVerkehr>();
+
 	/**
 	 * Wertebereichsprüfung wird NICHT durchgeführt. Wert wird nicht verändert,
-	 * es werden keine Statusflags gesetzt
+	 * es werden keine Statusflags gesetzt.
 	 */
-	public static final OptionenPlausibilitaetsPruefungLogischVerkehr KEINE_PRUEFUNG = 
-		new OptionenPlausibilitaetsPruefungLogischVerkehr("Keine Prüfung", 0); //$NON-NLS-1$
-	
+	public static final OptionenPlausibilitaetsPruefungLogischVerkehr KEINE_PRUEFUNG = new OptionenPlausibilitaetsPruefungLogischVerkehr(
+			"Keine Prüfung", 0); //$NON-NLS-1$
+
 	/**
-	 * Wertebereichsprüfung wird durchgeführt. Fehlerhafte Werte werden 
-	 * nicht verändert, es werden nur die Statusflags gesetzt
+	 * Wertebereichsprüfung wird durchgeführt. Fehlerhafte Werte werden nicht
+	 * verändert, es werden nur die Statusflags gesetzt.
 	 */
-	public static final OptionenPlausibilitaetsPruefungLogischVerkehr NUR_PRUEFUNG = 
-		new OptionenPlausibilitaetsPruefungLogischVerkehr("NurPrüfung", 1); //$NON-NLS-1$
-	
+	public static final OptionenPlausibilitaetsPruefungLogischVerkehr NUR_PRUEFUNG = new OptionenPlausibilitaetsPruefungLogischVerkehr(
+			"NurPrüfung", 1); //$NON-NLS-1$
+
 	/**
 	 * Wertebereichsprüfung wird durchgeführt. Bei Bereichsunter- bzw.
 	 * überschreitung wird der Wert auf den parametrierten Min- bzw. /Max-Wert
-	 * korrigiert und die Statusflags gesetzt 
+	 * korrigiert und die Statusflags gesetzt.
 	 */
-	public static final OptionenPlausibilitaetsPruefungLogischVerkehr SETZE_MIN_MAX = 
-		new OptionenPlausibilitaetsPruefungLogischVerkehr("Setze MinMax", 2); //$NON-NLS-1$
-	
+	public static final OptionenPlausibilitaetsPruefungLogischVerkehr SETZE_MIN_MAX = new OptionenPlausibilitaetsPruefungLogischVerkehr(
+			"Setze MinMax", 2); //$NON-NLS-1$
+
 	/**
-	 * Wertebereichsprüfung wird durchgeführt. Bei Bereichsunterschreitung
-	 * wird der Wert auf den parametrierten Min-Wert korrigiert und die
-	 * Statusflags gesetzt, ansonsten Verhalten wie bei Option "NurPrüfen"
+	 * Wertebereichsprüfung wird durchgeführt. Bei Bereichsunterschreitung wird
+	 * der Wert auf den parametrierten Min-Wert korrigiert und die Statusflags
+	 * gesetzt, ansonsten Verhalten wie bei Option "NurPrüfen"
 	 */
-	public static final OptionenPlausibilitaetsPruefungLogischVerkehr SETZE_MIN = 
-		new OptionenPlausibilitaetsPruefungLogischVerkehr("Setze Min", 3); //$NON-NLS-1$
+	public static final OptionenPlausibilitaetsPruefungLogischVerkehr SETZE_MIN = new OptionenPlausibilitaetsPruefungLogischVerkehr(
+			"Setze Min", 3); //$NON-NLS-1$
 
 	/**
 	 * Wertebereichsprüfung wird durchgeführt. Bei Bereichsüberschreitung wird
 	 * der Wert auf den parametrierten Max-Wert korrigiert und die Statusflags
-	 * gesetzt, ansonsten Verhalten wie bei Option "NurPrüfen"
+	 * gesetzt, ansonsten Verhalten wie bei Option "NurPrüfen".
 	 */
-	public static final OptionenPlausibilitaetsPruefungLogischVerkehr SETZE_MAX = 
-		new OptionenPlausibilitaetsPruefungLogischVerkehr("Setze Max", 4); //$NON-NLS-1$
-		
-	
+	public static final OptionenPlausibilitaetsPruefungLogischVerkehr SETZE_MAX = new OptionenPlausibilitaetsPruefungLogischVerkehr(
+			"Setze Max", 4); //$NON-NLS-1$
+
 	/**
-	 * Standardkonstruktor
+	 * Standardkonstruktor.
 	 * 
 	 * @param code
 	 *            der Code
 	 * @param name
 	 *            die Bezeichnung
 	 */
-	private OptionenPlausibilitaetsPruefungLogischVerkehr(String name, int code){
+	private OptionenPlausibilitaetsPruefungLogischVerkehr(String name, int code) {
 		super(code, name);
-		WERTE_BEREICH.put(code, this);
+		werteBereich.put(code, this);
 	}
-	
-	
+
 	/**
-	 * Erfragt den Wert dieses DAV-Enumerationstypen 
-	 * mit dem übergebenen Code
-	 *
-	 * @param code der Kode des Zustands
+	 * Erfragt den Wert dieses DAV-Enumerationstypen mit dem übergebenen Code.
+	 * 
+	 * @param code
+	 *            der Kode des Zustands
 	 * @return der Code des Enumerations-Wertes
 	 */
-	public static final OptionenPlausibilitaetsPruefungLogischVerkehr getZustand(int code){
-		return WERTE_BEREICH.get(code);
+	public static OptionenPlausibilitaetsPruefungLogischVerkehr getZustand(
+			int code) {
+		return werteBereich.get(code);
 	}
 }
-

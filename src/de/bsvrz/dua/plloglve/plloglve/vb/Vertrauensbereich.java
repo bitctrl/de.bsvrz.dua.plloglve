@@ -23,6 +23,7 @@
  * Phone: +49 341-490670<br>
  * mailto: info@bitctrl.de
  */
+
 package de.bsvrz.dua.plloglve.plloglve.vb;
 
 import java.util.ArrayList;
@@ -45,116 +46,121 @@ import de.bsvrz.sys.funclib.bitctrl.dua.schnittstellen.IVerwaltung;
 import de.bsvrz.sys.funclib.debug.Debug;
 
 /**
- * Dieses Submodul ueberwacht die Einschalt- bzw. Ausschaltschwelle für
- * den Vertrauensbereich eines Fahrstreifens im Bezugszeitraum. Beim
- * Betreten bzw. Verlassen des Vertrauensbereichs wird eine entsprechende
- * Meldung generiert. Darueber hinaus findet innerhalb dieses Submoduls
- * ggf. die Publikation aller empfangenen Daten statt.
+ * Dieses Submodul ueberwacht die Einschalt- bzw. Ausschaltschwelle für den
+ * Vertrauensbereich eines Fahrstreifens im Bezugszeitraum. Beim Betreten bzw.
+ * Verlassen des Vertrauensbereichs wird eine entsprechende Meldung generiert.
+ * Darueber hinaus findet innerhalb dieses Submoduls ggf. die Publikation aller
+ * empfangenen Daten statt.
  * 
  * @author BitCtrl Systems GmbH, Thierfelder
- *
+ * 
+ * @version $Id$
  */
-public class Vertrauensbereich
-extends AbstraktBearbeitungsKnotenAdapter{
-	
+public class Vertrauensbereich extends AbstraktBearbeitungsKnotenAdapter {
+
 	/**
-	 * Debug-Logger
+	 * Debug-Logger.
 	 */
 	private static final Debug LOGGER = Debug.getLogger();
 
 	/**
-	 * Map von Systemobjekten auf Fahrstreifenobjekte mit Informationen
-	 * zu den jeweiligen Vertrauensbereichsverletzungen
+	 * Map von Systemobjekten auf Fahrstreifenobjekte mit Informationen zu den
+	 * jeweiligen Vertrauensbereichsverletzungen.
 	 */
-	private Map<SystemObject, VertrauensFahrStreifen> fahrStreifenMap = 
-				new HashMap<SystemObject, VertrauensFahrStreifen>();
-		
-	
+	private Map<SystemObject, VertrauensFahrStreifen> fahrStreifenMap = new HashMap<SystemObject, VertrauensFahrStreifen>();
+
 	/**
-	 * Standardkonstruktor
+	 * Standardkonstruktor.
 	 * 
-	 * @param stdAspekte Informationen zu den
-	 * Standardpublikationsaspekten für dieses Modul
+	 * @param stdAspekte
+	 *            Informationen zu den Standardpublikationsaspekten für dieses
+	 *            Modul
 	 */
-	public Vertrauensbereich(final IStandardAspekte stdAspekte){
+	public Vertrauensbereich(final IStandardAspekte stdAspekte) {
 		this.standardAspekte = stdAspekte;
 	}
 
-	
 	/**
 	 * {@inheritDoc}
 	 */
 	@Override
 	public void initialisiere(IVerwaltung dieVerwaltung)
-	throws DUAInitialisierungsException {
+			throws DUAInitialisierungsException {
 		super.initialisiere(dieVerwaltung);
-		
-		if(this.publizieren){
-			this.publikationsAnmeldungen.modifiziereObjektAnmeldung(this.standardAspekte.
-					getStandardAnmeldungen(this.verwaltung.getSystemObjekte()));
+
+		if (this.publizieren) {
+			this.publikationsAnmeldungen
+					.modifiziereObjektAnmeldung(this.standardAspekte
+							.getStandardAnmeldungen(this.verwaltung
+									.getSystemObjekte()));
 		}
-				
-		for(SystemObject fsObj:dieVerwaltung.getSystemObjekte()){
-			this.fahrStreifenMap.put(fsObj, new VertrauensFahrStreifen(dieVerwaltung, fsObj));
+
+		for (SystemObject fsObj : dieVerwaltung.getSystemObjekte()) {
+			this.fahrStreifenMap.put(fsObj, new VertrauensFahrStreifen(
+					dieVerwaltung, fsObj));
 		}
 	}
-	
 
 	/**
 	 * {@inheritDoc}
 	 */
 	public void aktualisiereDaten(ResultData[] resultate) {
-		if(resultate != null){
-			
+		if (resultate != null) {
+
 			List<ResultData> weiterzuleitendeResultate = new ArrayList<ResultData>();
-			
-			for(ResultData resultat:resultate){
-				if(resultat != null){
+
+			for (ResultData resultat : resultate) {
+				if (resultat != null) {
 					Data datum = null;
 
-					if(!TestParameter.getInstanz().isTestAusfall()){
-						if(resultat.getDataDescription().getAttributeGroup().getId() == PlPruefungLogischLVE.ATG_KZD_ID){
-							if(resultat.getData() != null){
-								VertrauensFahrStreifen fs = this.fahrStreifenMap.get(resultat.getObject());
-	
-								if(fs != null){
+					if (!TestParameter.getInstanz().isTestAusfall()) {
+						if (resultat.getDataDescription().getAttributeGroup()
+								.getId() == PlPruefungLogischLVE.atgKzdId) {
+							if (resultat.getData() != null) {
+								VertrauensFahrStreifen fs = this.fahrStreifenMap
+										.get(resultat.getObject());
+
+								if (fs != null) {
 									datum = fs.plausibilisiere(resultat);
-								}else{
-									LOGGER.warning("Datum fuer nicht identifizierbaren Fahrstreifen empfangen: " +  //$NON-NLS-1$
-											resultat.getObject());
-								}						
-							}						
-						}else{
+								} else {
+									LOGGER
+											.warning("Datum fuer nicht identifizierbaren Fahrstreifen empfangen: " + //$NON-NLS-1$
+													resultat.getObject());
+								}
+							}
+						} else {
 							datum = resultat.getData();
 						}
-					}else{
+					} else {
 						datum = resultat.getData();
 					}
 
-					ResultData publikationsDatum = new ResultData(resultat.getObject(),
-							new DataDescription(resultat.getDataDescription().getAttributeGroup(), 
-									standardAspekte.getStandardAspekt(resultat), (short)0),
-									resultat.getDataTime(), datum, resultat.isDelayedData());
-					ResultData weiterzuleitendesDatum = new ResultData(resultat.getObject(),
-							resultat.getDataDescription(),
-							resultat.getDataTime(), datum, resultat.isDelayedData());
+					ResultData publikationsDatum = new ResultData(resultat
+							.getObject(), new DataDescription(resultat
+							.getDataDescription().getAttributeGroup(),
+							standardAspekte.getStandardAspekt(resultat),
+							(short) 0), resultat.getDataTime(), datum, resultat
+							.isDelayedData());
+					ResultData weiterzuleitendesDatum = new ResultData(resultat
+							.getObject(), resultat.getDataDescription(),
+							resultat.getDataTime(), datum, resultat
+									.isDelayedData());
 
-					if(this.publizieren){
+					if (this.publizieren) {
 						this.publikationsAnmeldungen.sende(publikationsDatum);
 					}
-					
-					
+
 					weiterzuleitendeResultate.add(weiterzuleitendesDatum);
 				}
 			}
-			
-			if(this.knoten != null && !weiterzuleitendeResultate.isEmpty()){
-				this.knoten.aktualisiereDaten(weiterzuleitendeResultate.toArray(new ResultData[0]));
+
+			if (this.knoten != null && !weiterzuleitendeResultate.isEmpty()) {
+				this.knoten.aktualisiereDaten(weiterzuleitendeResultate
+						.toArray(new ResultData[0]));
 			}
 		}
 	}
 
-	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -162,12 +168,11 @@ extends AbstraktBearbeitungsKnotenAdapter{
 		return null;
 	}
 
-	
 	/**
 	 * {@inheritDoc}
 	 */
 	public void aktualisierePublikation(IDatenFlussSteuerung dfs) {
 		// Datenflusssteuerung ist hier nicht dynamisch
 	}
-	
+
 }

@@ -30,63 +30,66 @@ import de.bsvrz.dav.daf.main.Data;
 import de.bsvrz.sys.funclib.bitctrl.dua.AllgemeinerDatenContainer;
 
 /**
- * Repräsentiert die DAV-ATG
- * <code>atg.verkehrsDatenVertrauensBereichFs</code>
+ * Repräsentiert die DAV-ATG <code>atg.verkehrsDatenVertrauensBereichFs</code>.
  * 
  * @author BitCtrl Systems GmbH, Thierfelder
- *
+ * 
+ * @version $Id$
  */
-public class AtgVerkehrsDatenVertrauensBereichFs 
-extends AllgemeinerDatenContainer{
+public class AtgVerkehrsDatenVertrauensBereichFs extends
+		AllgemeinerDatenContainer {
 
 	/**
-	 * Bezugszeitraum für die Vertrauensbereichsüberprüfung
+	 * Bezugszeitraum für die Vertrauensbereichsüberprüfung.
 	 */
 	private long bezugsZeitraum = -1;
-	
+
 	/**
 	 * Einschaltschwelle für den Vertrauensbereich eines Fahrstreifens im
-	 * Bezugszeitraum. Bei Überschreiten dieses Wertes wird eine entsprechende Fehlermeldung generiert
+	 * Bezugszeitraum. Bei Überschreiten dieses Wertes wird eine entsprechende
+	 * Fehlermeldung generiert.
 	 */
 	private long maxAusfallProBezugsZeitraumEin = -1;
-	
-	/**
-	 * Ausschaltschwelle für den Vertrauensbereich eines Fahrstreifens im Bezugszeitraum.
-	 * Bei Unterschreiten dieses Wertes wird eine entsprechende Fehlermeldung zurückgenommen
-	 */
-	private long maxAusfallProBezugsZeitraumAus = -1;  
 
-	
 	/**
-	 * Standardkonstruktor
-	 * 
-	 * @param data initialisierendes DAV-Datum
+	 * Ausschaltschwelle für den Vertrauensbereich eines Fahrstreifens im
+	 * Bezugszeitraum. Bei Unterschreiten dieses Wertes wird eine entsprechende
+	 * Fehlermeldung zurückgenommen.
 	 */
-	public AtgVerkehrsDatenVertrauensBereichFs(final Data data){
-		if(data == null){
+	private long maxAusfallProBezugsZeitraumAus = -1;
+
+	/**
+	 * Standardkonstruktor.
+	 * 
+	 * @param data
+	 *            initialisierendes DAV-Datum
+	 */
+	public AtgVerkehrsDatenVertrauensBereichFs(final Data data) {
+		if (data == null) {
 			throw new NullPointerException("Uebergebenes Datum ist <<null>>"); //$NON-NLS-1$
 		}
-		this.bezugsZeitraum = data.getUnscaledValue("BezugsZeitraum").longValue(); //$NON-NLS-1$
-		this.maxAusfallProBezugsZeitraumEin = data.getUnscaledValue("maxAusfallProBezugsZeitraumEin").longValue(); //$NON-NLS-1$
-		this.maxAusfallProBezugsZeitraumAus = data.getUnscaledValue("maxAusfallProBezugsZeitraumAus").longValue(); //$NON-NLS-1$
+		this.bezugsZeitraum = data
+				.getUnscaledValue("BezugsZeitraum").longValue(); //$NON-NLS-1$
+		this.maxAusfallProBezugsZeitraumEin = data.getUnscaledValue(
+				"maxAusfallProBezugsZeitraumEin").longValue(); //$NON-NLS-1$
+		this.maxAusfallProBezugsZeitraumAus = data.getUnscaledValue(
+				"maxAusfallProBezugsZeitraumAus").longValue(); //$NON-NLS-1$
 	}
 
-	
 	/**
-	 * Erfragt, ob sich diese Parameter zur Überprüfung eines Datensatzes eignen. Dies
-	 * ist nur der Fall, wenn alle Parameter >= 0 sind. 
+	 * Erfragt, ob sich diese Parameter zur Überprüfung eines Datensatzes
+	 * eignen. Dies ist nur der Fall, wenn alle Parameter >= 0 sind.
 	 * 
 	 * @return ob sich diese Parameter zur Überprüfung eines Datensatzes eignen
 	 */
-	public final boolean isAuswertbar(){
-		return this.bezugsZeitraum >= 0 && 
-			   this.maxAusfallProBezugsZeitraumAus >= 0 &&
-			   this.maxAusfallProBezugsZeitraumEin >= 0;
+	public final boolean isAuswertbar() {
+		return this.bezugsZeitraum >= 0
+				&& this.maxAusfallProBezugsZeitraumAus >= 0
+				&& this.maxAusfallProBezugsZeitraumEin >= 0;
 	}
-	
 
 	/**
-	 * Erfragt Bezugszeitraum für die Vertrauensbereichsüberprüfung
+	 * Erfragt Bezugszeitraum für die Vertrauensbereichsüberprüfung.
 	 * 
 	 * @return Bezugszeitraum in Stunden
 	 */
@@ -94,10 +97,10 @@ extends AllgemeinerDatenContainer{
 		return this.bezugsZeitraum;
 	}
 
-
 	/**
-	 * Erfragt Ausschaltschwelle für den Vertrauensbereich eines Fahrstreifens im Bezugszeitraum
-	 * Bei Unterschreiten dieses Wertes wird eine entsprechende Fehlermeldung zurückgenommen
+	 * Erfragt Ausschaltschwelle für den Vertrauensbereich eines Fahrstreifens
+	 * im Bezugszeitraum Bei Unterschreiten dieses Wertes wird eine
+	 * entsprechende Fehlermeldung zurückgenommen.
 	 * 
 	 * @return Ausschaltschwelle für den Vertrauensbereich eines Fahrstreifens
 	 */
@@ -105,16 +108,15 @@ extends AllgemeinerDatenContainer{
 		return this.maxAusfallProBezugsZeitraumAus;
 	}
 
-
 	/**
-	 * Erfragt Einschaltschwelle für den Vertrauensbereich eines Fahrstreifens im
-	 * Bezugszeitraum. Bei Überschreiten dieses Wertes wird eine entsprechende
-	 * Fehlermeldung generiert.
+	 * Erfragt Einschaltschwelle für den Vertrauensbereich eines Fahrstreifens
+	 * im Bezugszeitraum. Bei Überschreiten dieses Wertes wird eine
+	 * entsprechende Fehlermeldung generiert.
 	 * 
 	 * @return Einschaltschwelle für den Vertrauensbereich in %
 	 */
 	public final long getMaxAusfallProBezugsZeitraumEin() {
 		return this.maxAusfallProBezugsZeitraumEin;
 	}
-	
+
 }

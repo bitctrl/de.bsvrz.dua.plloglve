@@ -30,45 +30,43 @@ import de.bsvrz.dua.plloglve.plloglve.ausfall.AusfallDatum;
 
 /**
  * Abstrakter Container für Daten mit den Attributen Zeitstempel und
- * Intervalllänge. Die Objekte sind nach ihrer Datenzeit sortierbar. 
+ * Intervalllänge. Die Objekte sind nach ihrer Datenzeit sortierbar.
  * 
  * @author BitCtrl Systems GmbH, Thierfelder
- *
+ * 
+ * @version $Id$
  */
-public class AbstraktDAVZeitEinzelDatum 
-implements Comparable<AbstraktDAVZeitEinzelDatum>{
-		
+public class AbstraktDAVZeitEinzelDatum implements
+		Comparable<AbstraktDAVZeitEinzelDatum> {
+
 	/**
-	 * die Datenzeit des Datums
+	 * die Datenzeit des Datums.
 	 */
 	protected long datenZeit = -1;
-		
+
 	/**
-	 * die Intervalllänge des Datums
+	 * die Intervalllänge des Datums.
 	 */
 	protected long intervallLaenge = -1;
 
-		
 	/**
-	 * Erfragt die Intervalllänge des Datums
+	 * Erfragt die Intervalllänge des Datums.
 	 * 
 	 * @return die Intervalllänge des Datums
 	 */
-	public final long getIntervallLaenge(){
+	public final long getIntervallLaenge() {
 		return this.intervallLaenge;
 	}
 
-	
 	/**
-	 * Erfragt die Datenzeit des Datums
+	 * Erfragt die Datenzeit des Datums.
 	 * 
 	 * @return die Datenzeit des Datums
 	 */
-	public long getDatenZeit(){
+	public long getDatenZeit() {
 		return this.datenZeit;
 	}
 
-	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -76,19 +74,18 @@ implements Comparable<AbstraktDAVZeitEinzelDatum>{
 		return new Long(this.getDatenZeit()).compareTo(that.getDatenZeit());
 	}
 
-
 	/**
 	 * {@inheritDoc}
 	 */
 	@Override
 	public boolean equals(Object obj) {
 		boolean resultat = false;
-		
-		if(obj instanceof AusfallDatum){
-			AbstraktDAVZeitEinzelDatum that = (AbstraktDAVZeitEinzelDatum)obj;
+
+		if (obj instanceof AusfallDatum) {
+			AbstraktDAVZeitEinzelDatum that = (AbstraktDAVZeitEinzelDatum) obj;
 			resultat = this.getDatenZeit() == that.getDatenZeit();
 		}
-		
+
 		return resultat;
 	}
 

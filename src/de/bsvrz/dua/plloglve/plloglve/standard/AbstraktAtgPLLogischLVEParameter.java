@@ -32,106 +32,114 @@ import de.bsvrz.sys.funclib.bitctrl.dua.AllgemeinerDatenContainer;
 import de.bsvrz.sys.funclib.debug.Debug;
 
 /**
- * Abstrakte Klasse die alle Parameter halten kann, die innerhalb der 
- * Standardplausibilisierung LVE für sowohl LZD als auch KZD benötigt werden
+ * Abstrakte Klasse die alle Parameter halten kann, die innerhalb der
+ * Standardplausibilisierung LVE für sowohl LZD als auch KZD benötigt werden.
  * 
  * @author BitCtrl Systems GmbH, Thierfelder
- *
+ * 
+ * @version $Id$
  */
-public class AbstraktAtgPLLogischLVEParameter 
-extends AllgemeinerDatenContainer{
-	
+public class AbstraktAtgPLLogischLVEParameter extends AllgemeinerDatenContainer {
+
 	/**
-	 * Debug-Logger
+	 * Debug-Logger.
 	 */
 	protected static final Debug LOGGER = Debug.getLogger();
 
 	/**
-	 * Legt das Verhalten für den Umgang mit geprüften Werten nach der Wertebereichsprüfung fest. 
+	 * Legt das Verhalten für den Umgang mit geprüften Werten nach der
+	 * Wertebereichsprüfung fest.
 	 */
 	protected OptionenPlausibilitaetsPruefungLogischVerkehr optionen;
 
 	/**
-	 * Minimum der erlaubten Verkehrsstärke (Anzahl der Fahrzeuge) als normierter Stundenwert.
+	 * Minimum der erlaubten Verkehrsstärke (Anzahl der Fahrzeuge) als
+	 * normierter Stundenwert.
 	 */
 	protected long qKfzBereichMin;
-	
-	/**
-	 * Maximum der erlaubten Verkehrsstärke (Anzahl der Fahrzeuge) als normierter Stundenwert.
-	 */
-	protected long qKfzBereichMax;
-	
-	/**
-	 * Minimum der erlaubten Verkehrsstärke (Anzahl der Fahrzeuge) als normierter Stundenwert.
-	 */
-	protected long qLkwBereichMin;  
-	
-	/**
-	 * Maximum der erlaubten Verkehrsstärke (Anzahl der Fahrzeuge) als normierter Stundenwert.
-	 */
-	protected long qLkwBereichMax;  
 
 	/**
-	 * Grenzgeschwindigkeit für PL-Prüfung. Ist dieser Wert überschritten, 
-	 * muss b kleiner bGrenz sein, sonst ist b inplausibel. 
+	 * Maximum der erlaubten Verkehrsstärke (Anzahl der Fahrzeuge) als
+	 * normierter Stundenwert.
+	 */
+	protected long qKfzBereichMax;
+
+	/**
+	 * Minimum der erlaubten Verkehrsstärke (Anzahl der Fahrzeuge) als
+	 * normierter Stundenwert.
+	 */
+	protected long qLkwBereichMin;
+
+	/**
+	 * Maximum der erlaubten Verkehrsstärke (Anzahl der Fahrzeuge) als
+	 * normierter Stundenwert.
+	 */
+	protected long qLkwBereichMax;
+
+	/**
+	 * Grenzgeschwindigkeit für PL-Prüfung. Ist dieser Wert überschritten, muss
+	 * b kleiner bGrenz sein, sonst ist b inplausibel.
 	 */
 	protected long vKfzGrenz;
-	
+
 	/**
-	 * Ist vKfz größer als vKfzGrenz, so muss b kleiner bGrenz sein, sonst ist b inplausibel. 
+	 * Ist vKfz größer als vKfzGrenz, so muss b kleiner bGrenz sein, sonst ist b
+	 * inplausibel.
 	 */
-	protected	long bGrenz;
-		
+	protected long bGrenz;
+
 	/**
-	 * Minimum der erlaubten Verkehrsstärke (Anzahl der Fahrzeuge) als normierter Stundenwert.
+	 * Minimum der erlaubten Verkehrsstärke (Anzahl der Fahrzeuge) als
+	 * normierter Stundenwert.
 	 */
 	protected long qPkwBereichMin;
-	
+
 	/**
-	 * Maximum der erlaubten Verkehrsstärke (Anzahl der Fahrzeuge) als normierter Stundenwert.
+	 * Maximum der erlaubten Verkehrsstärke (Anzahl der Fahrzeuge) als
+	 * normierter Stundenwert.
 	 */
-	protected long qPkwBereichMax;  
-	
+	protected long qPkwBereichMax;
+
 	/**
 	 * Minimum der erlaubten Geschwindigkeit.
 	 */
-	protected long vKfzBereichMin;  
-	
+	protected long vKfzBereichMin;
+
 	/**
 	 * Maximum der erlaubten Geschwindigkeit.
 	 */
-	protected long vKfzBereichMax;  
-	
+	protected long vKfzBereichMax;
+
 	/**
 	 * Minimum der erlaubten Geschwindigkeit.
 	 */
-	protected long vLkwBereichMin;  
-	
+	protected long vLkwBereichMin;
+
 	/**
 	 * Maximum der erlaubten Geschwindigkeit.
 	 */
-	protected long vLkwBereichMax;  
-	
+	protected long vLkwBereichMax;
+
 	/**
 	 * Minimum der erlaubten Geschwindigkeit.
 	 */
-	protected long vPkwBereichMin;  
-	
+	protected long vPkwBereichMin;
+
 	/**
 	 * Maximum der erlaubten Geschwindigkeit.
 	 */
 	protected long vPkwBereichMax;
-	
+
 	/**
 	 * Minimum der erlaubten Geschwindigkeit.
 	 */
 	protected long vgKfzBereichMin;
-	
+
 	/**
 	 * Maximum der erlaubten Geschwindigkeit.
 	 */
-	protected long vgKfzBereichMax;  
-	
+	protected long vgKfzBereichMax;
+
 	/**
 	 * Minimum des erlaubten Prozentwertes.
 	 */
@@ -140,90 +148,89 @@ extends AllgemeinerDatenContainer{
 	/**
 	 * Maximum des erlaubten Prozentwertes.
 	 */
-	protected long belegungBereichMax; 
+	protected long belegungBereichMax;
 
-	
 	/**
-	 * Erfragt eine Schnittstelle zu den Parametern der logischen Plausibilisierung
+	 * Erfragt eine Schnittstelle zu den Parametern der logischen
+	 * Plausibilisierung.
 	 * 
-	 * @return eine Schnittstelle zu den Parametern der logischen Plausibilisierung
-	 * oder <code>null</code>, wenn diese nicht ausgelesen werden konnten
+	 * @param resultat ein Parameter-Resultat
+	 * @return eine Schnittstelle zu den Parametern der logischen
+	 *         Plausibilisierung oder <code>null</code>, wenn diese nicht
+	 *         ausgelesen werden konnten
 	 */
-	public static final AbstraktAtgPLLogischLVEParameter getInstance(final ResultData resultat){
+	public static final AbstraktAtgPLLogischLVEParameter getInstance(
+			final ResultData resultat) {
 		AbstraktAtgPLLogischLVEParameter dummy = null;
-		
-		if(resultat != null){
-			if(resultat.getData() != null){
-				if(resultat.getDataDescription().getAttributeGroup().getPid().equals(
-						AtgVerkehrsDatenKZIPlPruefLogisch.getPid())){
-					dummy = new AtgVerkehrsDatenKZIPlPruefLogisch(resultat.getData());
-				}else
-				if(resultat.getDataDescription().getAttributeGroup().getPid().equals(
-						AtgVerkehrsDatenLZIPlPruefLogisch.getPid())){
-					dummy = new AtgVerkehrsDatenLZIPlPruefLogisch(resultat.getData());
-				}else{
+
+		if (resultat != null) {
+			if (resultat.getData() != null) {
+				if (resultat.getDataDescription().getAttributeGroup().getPid()
+						.equals(AtgVerkehrsDatenKZIPlPruefLogisch.getPid())) {
+					dummy = new AtgVerkehrsDatenKZIPlPruefLogisch(resultat
+							.getData());
+				} else if (resultat.getDataDescription().getAttributeGroup()
+						.getPid().equals(
+								AtgVerkehrsDatenLZIPlPruefLogisch.getPid())) {
+					dummy = new AtgVerkehrsDatenLZIPlPruefLogisch(resultat
+							.getData());
+				} else {
 					LOGGER.warning("Unbekannter Datensatz übergeben:\n" + //$NON-NLS-1$
 							resultat.getDataDescription().getAttributeGroup());
 				}
 			}
 		}
-		
-		return dummy; 
+
+		return dummy;
 	}
-	
-	
+
 	/**
-	 * Erfragt qKfzBereichMax
+	 * Erfragt qKfzBereichMax.
 	 * 
 	 * @return qKfzBereichMax
 	 */
-	public final long getQKfzBereichMax(){
+	public final long getQKfzBereichMax() {
 		return this.qKfzBereichMax;
 	}
 
-
 	/**
-	 * Erfragt qKfzBereichMin
+	 * Erfragt qKfzBereichMin.
 	 * 
 	 * @return qKfzBereichMin
 	 */
-	public final long getQKfzBereichMin(){
+	public final long getQKfzBereichMin() {
 		return this.qKfzBereichMin;
 	}
 
-
 	/**
-	 * Erfragt qLkwBereichMax
+	 * Erfragt qLkwBereichMax.
 	 * 
 	 * @return qLkwBereichMax
 	 */
-	public final long getQLkwBereichMax(){
+	public final long getQLkwBereichMax() {
 		return this.qLkwBereichMax;
 	}
 
-
 	/**
-	 * Erfragt qLkwBereichMin
+	 * Erfragt qLkwBereichMin.
 	 * 
 	 * @return qLkwBereichMin
 	 */
-	public final long getQLkwBereichMin(){
+	public final long getQLkwBereichMin() {
 		return this.qLkwBereichMin;
 	}
-	
-	
+
 	/**
-	 * Erfragt die Optionen
+	 * Erfragt die Optionen.
 	 * 
 	 * @return optionen
 	 */
-	public final OptionenPlausibilitaetsPruefungLogischVerkehr getOptionen(){
+	public final OptionenPlausibilitaetsPruefungLogischVerkehr getOptionen() {
 		return this.optionen;
 	}
-	
-	
+
 	/**
-	 * Erfragt BelegungBereichMax
+	 * Erfragt BelegungBereichMax.
 	 * 
 	 * @return belegungBereichMax
 	 */
@@ -231,9 +238,8 @@ extends AllgemeinerDatenContainer{
 		return belegungBereichMax;
 	}
 
-
 	/**
-	 * Erfragt BelegungBereichMin
+	 * Erfragt BelegungBereichMin.
 	 * 
 	 * @return belegungBereichMin
 	 */
@@ -241,9 +247,8 @@ extends AllgemeinerDatenContainer{
 		return belegungBereichMin;
 	}
 
-
 	/**
-	 * Erfragt bGrenz
+	 * Erfragt bGrenz.
 	 * 
 	 * @return bGrenz
 	 */
@@ -251,9 +256,8 @@ extends AllgemeinerDatenContainer{
 		return bGrenz;
 	}
 
-
 	/**
-	 * Erfragt qPkwBereichMax
+	 * Erfragt qPkwBereichMax.
 	 * 
 	 * @return qPkwBereichMax
 	 */
@@ -261,9 +265,8 @@ extends AllgemeinerDatenContainer{
 		return qPkwBereichMax;
 	}
 
-
 	/**
-	 * Erfragt qPkwBereichMin
+	 * Erfragt qPkwBereichMin.
 	 * 
 	 * @return qPkwBereichMin
 	 */
@@ -271,9 +274,8 @@ extends AllgemeinerDatenContainer{
 		return qPkwBereichMin;
 	}
 
-
 	/**
-	 * Erfragt vgKfzBereichMax
+	 * Erfragt vgKfzBereichMax.
 	 * 
 	 * @return vgKfzBereichMax
 	 */
@@ -281,9 +283,8 @@ extends AllgemeinerDatenContainer{
 		return vgKfzBereichMax;
 	}
 
-
 	/**
-	 * Erfragt vgKfzBereichMin
+	 * Erfragt vgKfzBereichMin.
 	 * 
 	 * @return vgKfzBereichMin
 	 */
@@ -291,9 +292,8 @@ extends AllgemeinerDatenContainer{
 		return vgKfzBereichMin;
 	}
 
-
 	/**
-	 * Erfragt vKfzBereichMax
+	 * Erfragt vKfzBereichMax.
 	 * 
 	 * @return vKfzBereichMax
 	 */
@@ -301,9 +301,8 @@ extends AllgemeinerDatenContainer{
 		return vKfzBereichMax;
 	}
 
-
 	/**
-	 * Erfragt vKfzBereichMin
+	 * Erfragt vKfzBereichMin.
 	 * 
 	 * @return vKfzBereichMin
 	 */
@@ -311,9 +310,8 @@ extends AllgemeinerDatenContainer{
 		return vKfzBereichMin;
 	}
 
-
 	/**
-	 * Erfragt vKfzGrenz
+	 * Erfragt vKfzGrenz.
 	 * 
 	 * @return vKfzGrenz
 	 */
@@ -321,9 +319,8 @@ extends AllgemeinerDatenContainer{
 		return vKfzGrenz;
 	}
 
-
 	/**
-	 * Erfragt vLkwBereichMax
+	 * Erfragt vLkwBereichMax.
 	 * 
 	 * @return vLkwBereichMax
 	 */
@@ -331,9 +328,8 @@ extends AllgemeinerDatenContainer{
 		return vLkwBereichMax;
 	}
 
-
 	/**
-	 * Erfragt vLkwBereichMin
+	 * Erfragt vLkwBereichMin.
 	 * 
 	 * @return vLkwBereichMin
 	 */
@@ -341,9 +337,8 @@ extends AllgemeinerDatenContainer{
 		return vLkwBereichMin;
 	}
 
-
 	/**
-	 * Erfragt vPkwBereichMax
+	 * Erfragt vPkwBereichMax.
 	 * 
 	 * @return vPkwBereichMax
 	 */
@@ -351,14 +346,13 @@ extends AllgemeinerDatenContainer{
 		return vPkwBereichMax;
 	}
 
-
 	/**
-	 * Erfragt vPkwBereichMin
+	 * Erfragt vPkwBereichMin.
 	 * 
 	 * @return vPkwBereichMin
 	 */
 	public final long getVPkwBereichMin() {
 		return vPkwBereichMin;
 	}
-	
+
 }

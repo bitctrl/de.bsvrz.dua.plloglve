@@ -1,4 +1,4 @@
-/**
+/** 
  * Segment 4 Datenübernahme und Aufbereitung (DUA), SWE 4.2 Pl-Prüfung logisch LVE
  * Copyright (C) 2007 BitCtrl Systems GmbH 
  * 
@@ -44,28 +44,28 @@ import de.bsvrz.sys.funclib.bitctrl.dua.adapter.AbstraktVerwaltungsAdapterMitGue
 import de.bsvrz.sys.funclib.bitctrl.dua.dfs.typen.SWETyp;
 
 /**
- * Implementierung des Moduls Verwaltung der SWE Pl-Prüfung logisch LVE.
- * Dieses Modul erfragt die zu überprüfenden Daten aus der Parametrierung
- * und initialisiert damit die Module Pl-Prüfung formal und Pl-Prüfung logisch LVE,
+ * Implementierung des Moduls Verwaltung der SWE Pl-Prüfung logisch LVE. Dieses
+ * Modul erfragt die zu überprüfenden Daten aus der Parametrierung und
+ * initialisiert damit die Module Pl-Prüfung formal und Pl-Prüfung logisch LVE,
  * die dann die eigentliche Prüfung durchführen.
  * 
  * @author BitCtrl Systems GmbH, Thierfelder
- *
+ * 
+ * @version $Id$
  */
-public class VerwaltungPlPruefungLogischLVE
-extends AbstraktVerwaltungsAdapterMitGuete{
+public class VerwaltungPlPruefungLogischLVE extends
+		AbstraktVerwaltungsAdapterMitGuete {
 
 	/**
-	 * Instanz des Moduls PL-Prüfung formal
+	 * Instanz des Moduls PL-Prüfung formal.
 	 */
 	private PlPruefungFormal plPruefungFormal = null;
 
 	/**
-	 * Instanz des Moduls PL-Prüfung logisch LVE
+	 * Instanz des Moduls PL-Prüfung logisch LVE.
 	 */
 	private PlPruefungLogischLVE plPruefungLogischLVE = null;
-	
-	
+
 	/**
 	 * {@inheritDoc}
 	 */
@@ -73,68 +73,70 @@ extends AbstraktVerwaltungsAdapterMitGuete{
 		return SWETyp.PL_PRUEFUNG_LOGISCH_LVE;
 	}
 
-	
 	/**
 	 * {@inheritDoc}
 	 */
 	@Override
-	protected void initialisiere()
-	throws DUAInitialisierungsException {
+	protected void initialisiere() throws DUAInitialisierungsException {
 		super.initialisiere();
-		
-		
+
 		/**
 		 * Fuer den Start der Applikation im Testmodus
-		 */		
+		 */
 		final String test = this.getArgument("test");
-		if(test != null && test.length() > 0){
+		if (test != null && test.length() > 0) {
 			new TestParameter(test);
 		}
-		
-		
+
 		String infoStr = ""; //$NON-NLS-1$
-		Collection<SystemObject> plLogLveObjekte = DUAUtensilien.getBasisInstanzen(
-				this.verbindung.getDataModel().getType(DUAKonstanten.TYP_FAHRSTREIFEN),
-				this.verbindung, this.getKonfigurationsBereiche());
+		Collection<SystemObject> plLogLveObjekte = DUAUtensilien
+				.getBasisInstanzen(this.verbindung.getDataModel().getType(
+						DUAKonstanten.TYP_FAHRSTREIFEN), this.verbindung, this
+						.getKonfigurationsBereiche());
 		this.objekte = plLogLveObjekte.toArray(new SystemObject[0]);
-		
-		for(SystemObject obj:this.objekte){
+
+		for (SystemObject obj : this.objekte) {
 			infoStr += obj + "\n"; //$NON-NLS-1$
 		}
 		LOGGER.config("---\nBetrachtete Objekte:\n" + infoStr + "---\n"); //$NON-NLS-1$ //$NON-NLS-2$
-		
+
 		this.plPruefungFormal = new PlPruefungFormal(
 				new PPFStandardAspekteVersorger(this).getStandardPubInfos());
 		this.plPruefungFormal.setPublikation(true);
 		this.plPruefungFormal.initialisiere(this);
 
 		this.plPruefungLogischLVE = new PlPruefungLogischLVE(
-				new PlLogLVEStandardAspekteVersorger(this).getStandardPubInfos());
+				new PlLogLVEStandardAspekteVersorger(this)
+						.getStandardPubInfos());
 		this.plPruefungLogischLVE.setPublikation(true);
 		this.plPruefungLogischLVE.initialisiere(this);
-		
-		this.plPruefungFormal.setNaechstenBearbeitungsKnoten(this.plPruefungLogischLVE);		
-		
+
+		this.plPruefungFormal
+				.setNaechstenBearbeitungsKnoten(this.plPruefungLogischLVE);
+
 		DataDescription anmeldungsBeschreibungKZD = new DataDescription(
-				this.verbindung.getDataModel().getAttributeGroup(DUAKonstanten.ATG_KZD),
-				this.verbindung.getDataModel().getAspect(DUAKonstanten.ASP_EXTERNE_ERFASSUNG),
-				(short)0);
+				this.verbindung.getDataModel().getAttributeGroup(
+						DUAKonstanten.ATG_KZD), this.verbindung.getDataModel()
+						.getAspect(DUAKonstanten.ASP_EXTERNE_ERFASSUNG),
+				(short) 0);
 		DataDescription anmeldungsBeschreibungLZD = new DataDescription(
-				this.verbindung.getDataModel().getAttributeGroup(DUAKonstanten.ATG_LZD),
-				this.verbindung.getDataModel().getAspect(DUAKonstanten.ASP_EXTERNE_ERFASSUNG),
-				(short)0);
-			
-		this.verbindung.subscribeReceiver(this, this.objekte, anmeldungsBeschreibungKZD,
-					ReceiveOptions.normal(), ReceiverRole.receiver());
-		for(SystemObject fsObj:this.objekte){
-			if(fsObj.isOfType(DUAKonstanten.TYP_FAHRSTREIFEN_LZ)){
-				this.verbindung.subscribeReceiver(this, fsObj, anmeldungsBeschreibungLZD,
-					ReceiveOptions.delayed(), ReceiverRole.receiver());			
+				this.verbindung.getDataModel().getAttributeGroup(
+						DUAKonstanten.ATG_LZD), this.verbindung.getDataModel()
+						.getAspect(DUAKonstanten.ASP_EXTERNE_ERFASSUNG),
+				(short) 0);
+
+		this.verbindung.subscribeReceiver(this, this.objekte,
+				anmeldungsBeschreibungKZD, ReceiveOptions.normal(),
+				ReceiverRole.receiver());
+		for (SystemObject fsObj : this.objekte) {
+			if (fsObj.isOfType(DUAKonstanten.TYP_FAHRSTREIFEN_LZ)) {
+				this.verbindung.subscribeReceiver(this, fsObj,
+						anmeldungsBeschreibungLZD, ReceiveOptions.delayed(),
+						ReceiverRole.receiver());
 			}
 		}
 	}
-	
-	
+
 	/**
 	 * {@inheritDoc}
 	 */
@@ -142,39 +144,39 @@ extends AbstraktVerwaltungsAdapterMitGuete{
 		this.plPruefungFormal.aktualisiereDaten(resultate);
 	}
 
-	
 	/**
-	 * Startet diese Applikation
+	 * Startet diese Applikation.
 	 * 
-	 * @param argumente Argumente der Kommandozeile
+	 * @param argumente
+	 *            Argumente der Kommandozeile
 	 */
-	public static void main(String argumente[]){
-        Thread.setDefaultUncaughtExceptionHandler(new Thread.
-        				UncaughtExceptionHandler(){
-            public void uncaughtException(@SuppressWarnings("unused")
-			Thread t, Throwable e) {
-            	e.printStackTrace();
-                LOGGER.error("Applikation wird wegen" +  //$NON-NLS-1$
-                		" unerwartetem Fehler beendet", e);  //$NON-NLS-1$
-                Runtime.getRuntime().exit(0);
-            }
-        });
-		StandardApplicationRunner.run(
-					new VerwaltungPlPruefungLogischLVE(), argumente);
+	public static void main(String[] argumente) {
+		Thread
+				.setDefaultUncaughtExceptionHandler(new Thread.UncaughtExceptionHandler() {
+					public void uncaughtException(@SuppressWarnings("unused")
+					Thread t, Throwable e) {
+						e.printStackTrace();
+						LOGGER.error("Applikation wird wegen" + //$NON-NLS-1$
+								" unerwartetem Fehler beendet", e); //$NON-NLS-1$
+						Runtime.getRuntime().exit(0);
+					}
+				});
+		StandardApplicationRunner.run(new VerwaltungPlPruefungLogischLVE(),
+				argumente);
 	}
 
-	
 	/**
 	 * {@inheritDoc}.<br>
 	 * 
 	 * Standard-Gütefaktor für Ersetzungen (90%)<br>
 	 * Wenn das Modul Pl-Prüfung logisch LVE einen Messwert ersetzt (eigentlich
-	 * nur bei Wertebereichsprüfung) so vermindert sich die Güte des Ausgangswertes
-	 * um diesen Faktor (wenn kein anderer Wert über die Kommandozeile übergeben wurde)
+	 * nur bei Wertebereichsprüfung) so vermindert sich die Güte des
+	 * Ausgangswertes um diesen Faktor (wenn kein anderer Wert über die
+	 * Kommandozeile übergeben wurde)
 	 */
 	@Override
 	public double getStandardGueteFaktor() {
 		return 0.9;
 	}
-	
+
 }

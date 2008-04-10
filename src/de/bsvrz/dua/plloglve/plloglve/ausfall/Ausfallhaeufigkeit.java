@@ -44,61 +44,62 @@ import de.bsvrz.sys.funclib.debug.Debug;
 
 /**
  * Dieses Submodul ueberprueft, ob die parametrierte maximal zulaessige
- * Ausfallhaeufigkeit eines Fahrstreifens pro Tag ueberschritten wurde
+ * Ausfallhaeufigkeit eines Fahrstreifens pro Tag ueberschritten wurde.
  * 
  * @author BitCtrl Systems GmbH, Thierfelder
- *
+ * 
+ * @version $Id$
  */
-public class Ausfallhaeufigkeit
-extends AbstraktBearbeitungsKnotenAdapter{
-	
+public class Ausfallhaeufigkeit extends AbstraktBearbeitungsKnotenAdapter {
+
 	/**
-	 * Debug-Logger
+	 * Debug-Logger.
 	 */
 	private static final Debug LOGGER = Debug.getLogger();
-	
+
 	/**
-	 * Mapt FS-Systemobjekte auf Fahrstreifenobjekte mit den für dieses
-	 * Submodul notwendigen Informationen
+	 * Mapt FS-Systemobjekte auf Fahrstreifenobjekte mit den für dieses Submodul
+	 * notwendigen Informationen.
 	 */
-	private Map<SystemObject, AusfallFahrStreifen> fahrStreifen =
-									new HashMap<SystemObject, AusfallFahrStreifen>();
-	
-	
+	private Map<SystemObject, AusfallFahrStreifen> fahrStreifen = new HashMap<SystemObject, AusfallFahrStreifen>();
+
 	/**
 	 * {@inheritDoc}
 	 */
 	@Override
 	public void initialisiere(IVerwaltung dieVerwaltung)
-	throws DUAInitialisierungsException {
+			throws DUAInitialisierungsException {
 		super.initialisiere(dieVerwaltung);
-		
-		for(SystemObject obj:dieVerwaltung.getSystemObjekte()){
-			this.fahrStreifen.put(obj, new AusfallFahrStreifen(dieVerwaltung, obj));
+
+		for (SystemObject obj : dieVerwaltung.getSystemObjekte()) {
+			this.fahrStreifen.put(obj, new AusfallFahrStreifen(dieVerwaltung,
+					obj));
 		}
 	}
 
-	
 	/**
 	 * {@inheritDoc}
 	 */
 	public void aktualisiereDaten(ResultData[] resultate) {
-		if(resultate != null){
+		if (resultate != null) {
 			Collection<ResultData> weiterzuleitendeResultate = new ArrayList<ResultData>();
-			
-			for(ResultData resultat:resultate){				
-				if(resultat != null){
-					
-					if(!TestParameter.getInstanz().isTestVertrauen()){
-						if(resultat.getDataDescription().getAttributeGroup().getId() == PlPruefungLogischLVE.ATG_KZD_ID
-								&& resultat.getData() != null){					
-							AusfallFahrStreifen fs = this.fahrStreifen.get(resultat.getObject());
-	
-							if(fs != null){
+
+			for (ResultData resultat : resultate) {
+				if (resultat != null) {
+
+					if (!TestParameter.getInstanz().isTestVertrauen()) {
+						if (resultat.getDataDescription().getAttributeGroup()
+								.getId() == PlPruefungLogischLVE.atgKzdId
+								&& resultat.getData() != null) {
+							AusfallFahrStreifen fs = this.fahrStreifen
+									.get(resultat.getObject());
+
+							if (fs != null) {
 								fs.plausibilisiere(resultat);
-							}else{
-								LOGGER.error("Konnte Fahrstreifen zu Datensatz nicht identifizieren:\n" //$NON-NLS-1$
-										+ resultat);
+							} else {
+								LOGGER
+										.error("Konnte Fahrstreifen zu Datensatz nicht identifizieren:\n" //$NON-NLS-1$
+												+ resultat);
 							}
 						}
 					}
@@ -106,27 +107,26 @@ extends AbstraktBearbeitungsKnotenAdapter{
 					weiterzuleitendeResultate.add(resultat);
 				}
 			}
-			
-			if(this.knoten != null && !weiterzuleitendeResultate.isEmpty()){
-				this.knoten.aktualisiereDaten(weiterzuleitendeResultate.toArray(new ResultData[0]));
+
+			if (this.knoten != null && !weiterzuleitendeResultate.isEmpty()) {
+				this.knoten.aktualisiereDaten(weiterzuleitendeResultate
+						.toArray(new ResultData[0]));
 			}
 		}
 	}
 
-	
 	/**
 	 * {@inheritDoc}
 	 */
 	public ModulTyp getModulTyp() {
 		return null;
 	}
-	
 
 	/**
 	 * {@inheritDoc}
 	 */
 	public void aktualisierePublikation(IDatenFlussSteuerung dfs) {
-		// hier wird nicht publiziert		
+		// hier wird nicht publiziert
 	}
-	
+
 }

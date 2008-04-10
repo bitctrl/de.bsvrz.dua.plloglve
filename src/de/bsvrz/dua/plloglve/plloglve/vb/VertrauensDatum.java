@@ -23,49 +23,48 @@
  * Phone: +49 341-490670<br>
  * mailto: info@bitctrl.de
  */
+
 package de.bsvrz.dua.plloglve.plloglve.vb;
 
 import de.bsvrz.sys.funclib.bitctrl.dua.intpuf.IIntervallDatum;
 
 /**
- * Ein Ausfalldatum eines Verkehrsattributs
- *
+ * Ein Ausfalldatum eines Verkehrsattributs.
+ * 
  * @author BitCtrl Systems GmbH, Thierfelder
- *
+ * 
+ * @version $Id$
  */
-public class VertrauensDatum 
-implements IIntervallDatum<VertrauensDatum>{
+public class VertrauensDatum implements IIntervallDatum<VertrauensDatum> {
 
 	/**
-	 * Ob dieses Datum als ausgefallen im Sinne der
-	 * Vertrauensbereichskontrolle interpretiert wird
+	 * Ob dieses Datum als ausgefallen im Sinne der Vertrauensbereichskontrolle
+	 * interpretiert wird.
 	 */
 	private boolean ausgefallen = false;
-	
-	
+
 	/**
-	 * Standardkonstruktor
+	 * Standardkonstruktor.
 	 * 
-	 * @param ausgefallen ob dieses Datum als ausgefallen im Sinne
-	 * der Vertrauensbereichskontrolle interpretiert wird
+	 * @param ausgefallen
+	 *            ob dieses Datum als ausgefallen im Sinne der
+	 *            Vertrauensbereichskontrolle interpretiert wird
 	 */
-	public VertrauensDatum(boolean ausgefallen){
+	public VertrauensDatum(boolean ausgefallen) {
 		this.ausgefallen = ausgefallen;
 	}
-	
-	
+
 	/**
-	 * Erfragt, ob dieses Datum als ausgefallen im Sinne
-	 * der Vertrauensbereichskontrolle interpretiert wird
+	 * Erfragt, ob dieses Datum als ausgefallen im Sinne der
+	 * Vertrauensbereichskontrolle interpretiert wird.
 	 * 
-	 * @return ob dieses Datum als ausgefallen im Sinne
-	 * der Vertrauensbereichskontrolle interpretiert wird
+	 * @return ob dieses Datum als ausgefallen im Sinne der
+	 *         Vertrauensbereichskontrolle interpretiert wird
 	 */
-	public final boolean isAusgefallen(){
+	public final boolean isAusgefallen() {
 		return this.ausgefallen;
 	}
-	
-	
+
 	/**
 	 * {@inheritDoc}
 	 */

@@ -1,3 +1,29 @@
+/** 
+ * Segment 4 Datenübernahme und Aufbereitung (DUA), SWE 4.2 Pl-Prüfung logisch LVE
+ * Copyright (C) 2007 BitCtrl Systems GmbH 
+ * 
+ * This program is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU General Public License as published by the Free Software
+ * Foundation; either version 2 of the License, or (at your option) any later
+ * version.
+ *
+ * This program is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
+ * details.
+ *
+ * You should have received a copy of the GNU General Public License along with
+ * this program; if not, write to the Free Software Foundation, Inc., 51
+ * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ *
+ * Contact Information:<br>
+ * BitCtrl Systems GmbH<br>
+ * Weißenfelser Straße 67<br>
+ * 04229 Leipzig<br>
+ * Phone: +49 341-490670<br>
+ * mailto: info@bitctrl.de
+ */
+
 package de.bsvrz.dua.plloglve.util;
 
 import java.util.Random;
@@ -23,74 +49,78 @@ import de.bsvrz.sys.funclib.debug.Debug;
  * Testet den Vertrauensbereich
  * 
  * @author BitCtrl Systems GmbH, Thierfelder
- *
+ * 
+ * @version $Id$
  */
-public class PlPruefungVertrauensbereich
-implements ClientSenderInterface, PlPruefungInterface {
+public class PlPruefungVertrauensbereich implements ClientSenderInterface,
+		PlPruefungInterface {
 
 	/**
 	 * statischer Zufallsgenerator
 	 */
 	private static final Random R = new Random(System.currentTimeMillis());
-	
+
 	/**
 	 * Assert-Statements benutzen?
 	 */
-	private boolean useAssert = true; 
-	
+	private boolean useAssert = true;
+
 	/**
 	 * Logger
 	 */
 	protected Debug LOGGER = Debug.getLogger();
-	
+
 	/**
 	 * Verzeichnis, in dem sich die CSV-Dateien mit den Testdaten befinden
 	 */
 	private String TEST_DATEN_VERZ = null;
-	
+
 	/**
 	 * Testfahrstreifen KZD
 	 */
 	public static SystemObject FS = null;
-	
+
 	/**
 	 * KZD Importer
 	 */
 	private ParaKZDLogImport kzdImport;
-	
+
 	/**
 	 * Sende-Datenbeschreibung für KZD
 	 */
 	public static DataDescription DD_KZD_SEND = null;
-	
+
 	/**
 	 * Datenverteiler-Verbindung
 	 */
 	private ClientDavInterface dav = null;
-	
+
 	/**
 	 * Intervalllänge in Millisekunden
 	 */
-	//static long INTERVALL = Konstante.MINUTE_IN_MS;
+	// static long INTERVALL = Konstante.MINUTE_IN_MS;
 	static long INTERVALL = TestParameter.INTERVALL_VB;
-	
+
 	/**
 	 * Fehlerdatensätze
 	 */
 	private Data zFSFehlB2;
-		
+
 	/**
 	 * Abweichung zur erwarteten Anzahl von Meldungen
 	 */
 	private int meldungHyst = 0;
-	
-	
+
 	/**
 	 * Sendet Testdaten und prüft Ausfallkontrolle
-	 * @param dav Datenverteilerverbindung
-	 * @param TEST_DATEN_VERZ Testdatenverzeichnis
+	 * 
+	 * @param dav
+	 *            Datenverteilerverbindung
+	 * @param TEST_DATEN_VERZ
+	 *            Testdatenverzeichnis
 	 */
-	public PlPruefungVertrauensbereich(ClientDavInterface dav, String TEST_DATEN_VERZ, ArgumentList alLogger) {
+	public PlPruefungVertrauensbereich(ClientDavInterface dav,
+			String TEST_DATEN_VERZ, ArgumentList alLogger) {
 		this.dav = dav;
 		this.TEST_DATEN_VERZ = TEST_DATEN_VERZ;
 
@@ -99,38 +129,44 @@ implements ClientSenderInterface, PlPruefungInterface {
 		 */
 		Debug.init("PlPruefungVertrauensbereich", alLogger); //$NON-NLS-1$
 		LOGGER = Debug.getLogger();
-		
+
 		/*
 		 * Melde Sender für FS an
 		 */
 		FS = this.dav.getDataModel().getObject("AAA.Test.fs.kzd.1"); //$NON-NLS-1$
-		
-		DD_KZD_SEND = new DataDescription(this.dav.getDataModel().getAttributeGroup(DUAKonstanten.ATG_KZD),
-				  	  this.dav.getDataModel().getAspect(DUAKonstanten.ASP_EXTERNE_ERFASSUNG),
-				  	  (short)0);
 
-		try{
-			kzdImport = new ParaKZDLogImport(dav, FS, TEST_DATEN_VERZ + "Parameter");
-			kzdImport.setOptionen(OptionenPlausibilitaetsPruefungLogischVerkehr.KEINE_PRUEFUNG);
+		DD_KZD_SEND = new DataDescription(this.dav.getDataModel()
+				.getAttributeGroup(DUAKonstanten.ATG_KZD), this.dav
+				.getDataModel().getAspect(DUAKonstanten.ASP_EXTERNE_ERFASSUNG),
+				(short) 0);
+
+		try {
+			kzdImport = new ParaKZDLogImport(dav, FS, TEST_DATEN_VERZ
+					+ "Parameter");
+			kzdImport
+					.setOptionen(OptionenPlausibilitaetsPruefungLogischVerkehr.KEINE_PRUEFUNG);
 			kzdImport.importiereParameter(1);
 			kzdImport.importParaVertrauensbereich();
-		}catch(Exception e) {
-			LOGGER.error("Kann Test nicht konfigurieren: "+e);
+		} catch (Exception e) {
+			LOGGER.error("Kann Test nicht konfigurieren: " + e);
 		}
-		
+
 		try {
 			TestFahrstreifenImporter paraImpFSFehler = null;
-			paraImpFSFehler = new TestFahrstreifenImporter(this.dav, TEST_DATEN_VERZ + "fahrstreifen_Fehler"); //$NON-NLS-1$
+			paraImpFSFehler = new TestFahrstreifenImporter(this.dav,
+					TEST_DATEN_VERZ + "fahrstreifen_Fehler"); //$NON-NLS-1$
 			TestFahrstreifenImporter.setT(TestParameter.INTERVALL_VB);
-			zFSFehlB2 = paraImpFSFehler.getNaechstenDatensatz(DD_KZD_SEND.getAttributeGroup());
-		}catch(Exception e) {
-			LOGGER.error("Kann Fehlerdatensätze nicht importieren: "+e);
+			zFSFehlB2 = paraImpFSFehler.getNaechstenDatensatz(DD_KZD_SEND
+					.getAttributeGroup());
+		} catch (Exception e) {
+			LOGGER.error("Kann Fehlerdatensätze nicht importieren: " + e);
 		}
 
 	}
-	
+
 	/**
 	 * Prüfung der Ausfallkontrolle
+	 * 
 	 * @throws Exception
 	 */
 	public void pruefe() throws Exception {
@@ -138,18 +174,19 @@ implements ClientSenderInterface, PlPruefungInterface {
 		 * Sender anmelden
 		 */
 		this.dav.subscribeSender(this, FS, DD_KZD_SEND, SenderRole.source());
-		
+
 		/*
 		 * Initialisiere Parameter Importer für fehlerfreie DS
 		 */
 		TestFahrstreifenImporter paraImpFSOK = null;
-		paraImpFSOK = new TestFahrstreifenImporter(this.dav, TEST_DATEN_VERZ + "fahrstreifen_OK"); //$NON-NLS-1$
-		
+		paraImpFSOK = new TestFahrstreifenImporter(this.dav, TEST_DATEN_VERZ
+				+ "fahrstreifen_OK"); //$NON-NLS-1$
+
 		/*
 		 * Setze Intervall auf 100MS
 		 */
 		TestFahrstreifenImporter.setT(TestParameter.INTERVALL_VB);
-		
+
 		/*
 		 * Aktueller fehlerfreie Fahrstreifen-DS
 		 */
@@ -162,18 +199,16 @@ implements ClientSenderInterface, PlPruefungInterface {
 		 * Prüfung
 		 */
 		LOGGER.info("Beginne Prüfung");
-		
+
 		/*
-		 * Warte auf 371 Meldungen
-		 * 36 x 4 (qKfz, qPkw, qLkw, vPkw)
-		 * 37 (b)
-		 * 39 x 4 (qKfz, qPkw, qLkw, vPkw)
-		 * 32 (b)
-		 * 2 (Gutmeldung)
+		 * Warte auf 371 Meldungen 36 x 4 (qKfz, qPkw, qLkw, vPkw) 37 (b) 39 x 4
+		 * (qKfz, qPkw, qLkw, vPkw) 32 (b) 2 (Gutmeldung)
 		 */
-		FilterMeldung meldFilter = new FilterMeldung(this, dav,"Vertrauensbereichs", 352, meldungHyst);
-		LOGGER.info("Meldungsfilter initialisiert: Erwarte 352 Meldungen mit \"Vertrauensbereichs\"");
-		
+		FilterMeldung meldFilter = new FilterMeldung(this, dav,
+				"Vertrauensbereichs", 352, meldungHyst);
+		LOGGER
+				.info("Meldungsfilter initialisiert: Erwarte 352 Meldungen mit \"Vertrauensbereichs\"");
+
 		/*
 		 * Sendet fehlerfreie DS für eine Stunde
 		 */
@@ -182,108 +217,135 @@ implements ClientSenderInterface, PlPruefungInterface {
 		 * Testerobjekt
 		 */
 		PruefeMarkierung markPruefer = new PruefeMarkierung(this, dav, FS);
-		
-		for(int i=1;i<=60;i++) {
-			
-			if((zeileFSOK = paraImpFSOK.getNaechstenDatensatz(DD_KZD_SEND.getAttributeGroup())) == null) {
+
+		for (int i = 1; i <= 60; i++) {
+
+			if ((zeileFSOK = paraImpFSOK.getNaechstenDatensatz(DD_KZD_SEND
+					.getAttributeGroup())) == null) {
 				paraImpFSOK.reset();
 				paraImpFSOK.getNaechsteZeile();
-				zeileFSOK = paraImpFSOK.getNaechstenDatensatz(DD_KZD_SEND.getAttributeGroup());
+				zeileFSOK = paraImpFSOK.getNaechstenDatensatz(DD_KZD_SEND
+						.getAttributeGroup());
 			}
-			
-			ResultData resultat1 = new ResultData(FS, DD_KZD_SEND, pruefZeit, zeileFSOK);
+
+			ResultData resultat1 = new ResultData(FS, DD_KZD_SEND, pruefZeit,
+					zeileFSOK);
 			this.dav.sendData(resultat1);
-			
-			//Sende Datensatz entsprechend Intervall
+
+			// Sende Datensatz entsprechend Intervall
 			pruefZeit = pruefZeit + INTERVALL;
-			
-			//Warte bis Intervallende
-			if((aktZeit = System.currentTimeMillis()) < pruefZeit) {
-				try{ Thread.sleep(pruefZeit - aktZeit); }catch(InterruptedException ex){}
+
+			// Warte bis Intervallende
+			if ((aktZeit = System.currentTimeMillis()) < pruefZeit) {
+				try {
+					Thread.sleep(pruefZeit - aktZeit);
+				} catch (InterruptedException ex) {
+				}
 			}
 		}
 
-		
-		
 		markPruefer.benutzeAssert(useAssert);
-		
-		for(int i=1;i<=600;i++) {
-			
+
+		for (int i = 1; i <= 600; i++) {
+
 			/*
-			 * Konfiguriert Testerobjekt
-			 * Prüfe Markierung der DS als Implausibel
+			 * Konfiguriert Testerobjekt Prüfe Markierung der DS als Implausibel
 			 */
 			if ((i >= 29 && i < 72) || (i >= 511 && i < 552)) {
 				markPruefer.listenImpl(pruefZeit);
-				LOGGER.info("Intervall "+i+": Erwarte alle Attribute als Implausiebel");
-			}else{
+				LOGGER.info("Intervall " + i
+						+ ": Erwarte alle Attribute als Implausiebel");
+			} else {
 				markPruefer.listenOK(pruefZeit);
 			}
-			
+
 			/*
 			 * Verlassen des VB vom 29. - 71. DS und vom 511. - 551. DS
-			 * Innerhalb dieser Bereiche werden alle Werte des FS als Implausibel erwartet
+			 * Innerhalb dieser Bereiche werden alle Werte des FS als
+			 * Implausibel erwartet
 			 */
-			if((i >= 4 && i <= 9) || (i >= 23 && i <= 29) || (i >= 490 && i <= 494) || (i >= 501 && i <= 506) || (i >= 512 && i <= 514)) {
+			if ((i >= 4 && i <= 9) || (i >= 23 && i <= 29)
+					|| (i >= 490 && i <= 494) || (i >= 501 && i <= 506)
+					|| (i >= 512 && i <= 514)) {
 				/*
 				 * Es wird ein fehlerhafter DS (qKfz, qPkw, qLkw, vPkw) gesendet
 				 * Dabei wird der VB entsprechend Afo beim 29. DS verlassen
 				 * 
-				 * Der prozentuale Ausfall der Attribute liegt ab dem 65. DS unter 20% wobei der VB jedoch
-				 * aufgrund der anderen Fehlerdaten weiterhin verlassen bleibt
+				 * Der prozentuale Ausfall der Attribute liegt ab dem 65. DS
+				 * unter 20% wobei der VB jedoch aufgrund der anderen
+				 * Fehlerdaten weiterhin verlassen bleibt
 				 * 
-				 * Für den zweiten Testbereich liegt der prozentuale Ausfall ab dem 513. DS über 20% wobei
-				 * der VB bereits früher durch die anderen Fehlerdaten verlassen wird
+				 * Für den zweiten Testbereich liegt der prozentuale Ausfall ab
+				 * dem 513. DS über 20% wobei der VB bereits früher durch die
+				 * anderen Fehlerdaten verlassen wird
 				 * 
-				 * Ab dem 552. DS liegt der prozentuale Ausfall entsprechend Afo wieder im VB 
+				 * Ab dem 552. DS liegt der prozentuale Ausfall entsprechend Afo
+				 * wieder im VB
 				 */
-				System.out.println("Intervall "+i+": Sende fehlerhaftes Datum (qKfz, qPkw, qLkw, vPkw)");
+				System.out
+						.println("Intervall "
+								+ i
+								+ ": Sende fehlerhaftes Datum (qKfz, qPkw, qLkw, vPkw)");
 				markPruefer.addIgnore("b");
 				synchronized (this) {
 					sendeFehler2(pruefZeit);
-					doWait();	
-				}				
-			} else if ((i >= 10 && i <= 16) || (i >= 30 && i <= 36) || (i >= 482 && i <= 489) || (i >= 507 && i <= 511)) {
-				System.out.println("Intervall "+i+": Sende fehlerhaftes Datum (b)");
+					doWait();
+				}
+			} else if ((i >= 10 && i <= 16) || (i >= 30 && i <= 36)
+					|| (i >= 482 && i <= 489) || (i >= 507 && i <= 511)) {
+				System.out.println("Intervall " + i
+						+ ": Sende fehlerhaftes Datum (b)");
 				markPruefer.addIgnore("qKfz");
 				markPruefer.addIgnore("qPkw");
 				markPruefer.addIgnore("vLkw");
 				markPruefer.addIgnore("vPkw");
 				synchronized (this) {
 					sendeFehler1(pruefZeit);
-					doWait();					
+					doWait();
 				}
 			} else {
-				if((zeileFSOK = paraImpFSOK.getNaechstenDatensatz(DD_KZD_SEND.getAttributeGroup())) == null) {
+				if ((zeileFSOK = paraImpFSOK.getNaechstenDatensatz(DD_KZD_SEND
+						.getAttributeGroup())) == null) {
 					paraImpFSOK.reset();
 					paraImpFSOK.getNaechsteZeile();
-					zeileFSOK = paraImpFSOK.getNaechstenDatensatz(DD_KZD_SEND.getAttributeGroup());
+					zeileFSOK = paraImpFSOK.getNaechstenDatensatz(DD_KZD_SEND
+							.getAttributeGroup());
 				}
-				ResultData resultat1 = new ResultData(FS, DD_KZD_SEND, pruefZeit, zeileFSOK);
-				System.out.println("Intervall "+i+": Sende fehlerfreies Datum");
+				ResultData resultat1 = new ResultData(FS, DD_KZD_SEND,
+						pruefZeit, zeileFSOK);
+				System.out.println("Intervall " + i
+						+ ": Sende fehlerfreies Datum");
 				synchronized (this) {
 					this.dav.sendData(resultat1);
-					doWait();					
+					doWait();
 				}
 			}
-			
-			//Sende Datensatz entsprechend Intervall
+
+			// Sende Datensatz entsprechend Intervall
 			pruefZeit = pruefZeit + INTERVALL;
-			
-			//Warte bis Intervallende
-			if((aktZeit = System.currentTimeMillis()) < pruefZeit) {
-				try{ Thread.sleep(pruefZeit - aktZeit); }catch(InterruptedException ex){}
+
+			// Warte bis Intervallende
+			if ((aktZeit = System.currentTimeMillis()) < pruefZeit) {
+				try {
+					Thread.sleep(pruefZeit - aktZeit);
+				} catch (InterruptedException ex) {
+				}
 			}
 		}
 
 		LOGGER.info("Warte auf Meldungsfilter");
-		
-		//Warte 30s auf Filterung der Betriebsmeldungen
-		try{ Thread.sleep(30000L); }catch (InterruptedException e) {}
 
-		String warnung = meldFilter.getAnzahlErhaltenerMeldungen() + " von " + meldFilter.getErwarteteAnzahlMeldungen() + " (Hysterese:" + meldungHyst + ") Betriebsmeldungen erhalten";
-		if(!meldFilter.wurdeAnzahlEingehalten()) {
-			if(useAssert) {
+		// Warte 30s auf Filterung der Betriebsmeldungen
+		try {
+			Thread.sleep(30000L);
+		} catch (InterruptedException e) {
+		}
+
+		String warnung = meldFilter.getAnzahlErhaltenerMeldungen() + " von "
+				+ meldFilter.getErwarteteAnzahlMeldungen() + " (Hysterese:"
+				+ meldungHyst + ") Betriebsmeldungen erhalten";
+		if (!meldFilter.wurdeAnzahlEingehalten()) {
+			if (useAssert) {
 				Assert.assertTrue(warnung, false);
 			} else {
 				LOGGER.warning(warnung);
@@ -291,103 +353,113 @@ implements ClientSenderInterface, PlPruefungInterface {
 		} else {
 			LOGGER.info(warnung);
 		}
-		
+
 		LOGGER.info("Prüfung erfolgreich abgeschlossen");
-		
+
 		/*
 		 * Sender abmelden
 		 */
 		this.dav.unsubscribeSender(this, FS, DD_KZD_SEND);
 	}
-	
+
 	/**
-	 * Sendet einen fehlerhaften DS
-	 * Fehlerhafte Attribute: "qKfz", "qPkw", "vLkw", "vPkw"
-	 * @param pruefZeit Zeitstempel des DS
+	 * Sendet einen fehlerhaften DS Fehlerhafte Attribute: "qKfz", "qPkw",
+	 * "vLkw", "vPkw"
+	 * 
+	 * @param pruefZeit
+	 *            Zeitstempel des DS
 	 * @throws Exception
 	 */
 	private void sendeFehler1(long pruefZeit) throws Exception {
 		ResultData resultat1;
 		Data data = zFSFehlB2.createModifiableCopy();
-		for(String attribut:new String[]{"qKfz", "qPkw", "vLkw", "vPkw"}){
-			if(R.nextBoolean()){
-				data.getItem(attribut).
-					getItem("Status").getItem("MessWertErsetzung").
-					getUnscaledValue("Implausibel").set(DUAKonstanten.JA);
-			}else{
-				data.getItem(attribut).getUnscaledValue("Wert").set(DUAKonstanten.FEHLERHAFT);
+		for (String attribut : new String[] { "qKfz", "qPkw", "vLkw", "vPkw" }) {
+			if (R.nextBoolean()) {
+				data.getItem(attribut).getItem("Status").getItem(
+						"MessWertErsetzung").getUnscaledValue("Implausibel")
+						.set(DUAKonstanten.JA);
+			} else {
+				data.getItem(attribut).getUnscaledValue("Wert").set(
+						DUAKonstanten.FEHLERHAFT);
 			}
-		}		
+		}
 		resultat1 = new ResultData(FS, DD_KZD_SEND, pruefZeit, data);
 		this.dav.sendData(resultat1);
 	}
-	
+
 	/**
-	 * Sendet einen fehlerhaften DS
-	 * Fehlerhaftes Attribut: b
-	 * @param pruefZeit Zeitstempel des DS
+	 * Sendet einen fehlerhaften DS Fehlerhaftes Attribut: b
+	 * 
+	 * @param pruefZeit
+	 *            Zeitstempel des DS
 	 * @throws Exception
 	 */
 	private void sendeFehler2(long pruefZeit) throws Exception {
 		ResultData resultat2;
 		Data data = zFSFehlB2.createModifiableCopy();
-		if(R.nextBoolean()){
-			data.getItem("b").
-				getItem("Status").getItem("MessWertErsetzung").
-				getUnscaledValue("Implausibel").set(DUAKonstanten.JA);
-		}else{
-			data.getItem("b").getUnscaledValue("Wert").set(DUAKonstanten.FEHLERHAFT);
+		if (R.nextBoolean()) {
+			data.getItem("b").getItem("Status").getItem("MessWertErsetzung")
+					.getUnscaledValue("Implausibel").set(DUAKonstanten.JA);
+		} else {
+			data.getItem("b").getUnscaledValue("Wert").set(
+					DUAKonstanten.FEHLERHAFT);
 		}
 		resultat2 = new ResultData(FS, DD_KZD_SEND, pruefZeit, data);
 		this.dav.sendData(resultat2);
 	}
-	
-	/* (Kein Javadoc)
+
+	/*
+	 * (Kein Javadoc)
+	 * 
 	 * @see de.bsvrz.dua.plloglve.util.PlPruefungInterface#doNotify()
 	 */
 	public void doNotify() {
-		synchronized(this) {
+		synchronized (this) {
 			this.notify();
 		}
 	}
-	
-	
+
 	/**
 	 * Laesst diesen Thread warten
 	 */
 	private final void doWait() {
-		synchronized(this) {
+		synchronized (this) {
 			try {
 				this.wait();
-			}catch(Exception e){};
+			} catch (Exception e) {
+			}
+			;
 		}
 	}
-	
-	
+
 	/**
 	 * {@inheritDoc}
 	 */
-	public void dataRequest(SystemObject object, DataDescription dataDescription, byte state) {
-		//VOID
+	public void dataRequest(SystemObject object,
+			DataDescription dataDescription, byte state) {
+		// VOID
 	}
-	
+
 	/**
 	 * {@inheritDoc}
 	 */
-	public boolean isRequestSupported(SystemObject object, DataDescription dataDescription) {
+	public boolean isRequestSupported(SystemObject object,
+			DataDescription dataDescription) {
 		return false;
 	}
-	
+
 	/**
 	 * Soll Assert zur Fehlermeldung genutzt werden?
+	 * 
 	 * @param useAssert
 	 */
 	public void benutzeAssert(final boolean useAssert) {
 		this.useAssert = useAssert;
 	}
-	
+
 	/**
-	 * Setzt die erlaubte Abweichung zur erwarteten Anzahl an Betriebsmeldungen
+	 * Setzt die erlaubte Abweichung zur erwarteten Anzahl an Betriebsmeldungen.
+	 * 
 	 * @param meldungHyst
 	 */
 	public void setMeldungHysterese(final int meldungHyst) {

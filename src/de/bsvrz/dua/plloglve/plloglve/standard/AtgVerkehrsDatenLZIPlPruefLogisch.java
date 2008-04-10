@@ -31,38 +31,44 @@ import de.bsvrz.dua.plloglve.plloglve.typen.OptionenPlausibilitaetsPruefungLogis
 
 /**
  * Repräsentiert die DAV-ATG
- * <code>atg.verkehrsDatenLangZeitIntervallPlausibilitätsPrüfungLogisch</code>
+ * <code>atg.verkehrsDatenLangZeitIntervallPlausibilitätsPrüfungLogisch</code>.
  * 
  * @author BitCtrl Systems GmbH, Thierfelder
- *
+ * 
+ * @version $Id$
  */
-public class AtgVerkehrsDatenLZIPlPruefLogisch
-extends AbstraktAtgPLLogischLVEParameter {
-	
+public class AtgVerkehrsDatenLZIPlPruefLogisch extends
+		AbstraktAtgPLLogischLVEParameter {
+
 	/**
-	 * Standardkonstruktor
+	 * Standardkonstruktor.
 	 * 
-	 * @param data initialisierendes DAV-Datum
+	 * @param data
+	 *            initialisierendes DAV-Datum
 	 */
-	public AtgVerkehrsDatenLZIPlPruefLogisch(final Data data){
-		if(data == null){
+	public AtgVerkehrsDatenLZIPlPruefLogisch(final Data data) {
+		if (data == null) {
 			throw new NullPointerException("Uebergebenes Datum ist <<null>>"); //$NON-NLS-1$
 		}
-		this.optionen = OptionenPlausibilitaetsPruefungLogischVerkehr.getZustand(data.getUnscaledValue("Optionen").intValue()); //$NON-NLS-1$
-		this.qKfzBereichMin = data.getItem("qKfzBereich").getUnscaledValue("Min").longValue();  //$NON-NLS-1$//$NON-NLS-2$
-		this.qKfzBereichMax = data.getItem("qKfzBereich").getUnscaledValue("Max").longValue();  //$NON-NLS-1$//$NON-NLS-2$
-		this.qLkwBereichMin = data.getItem("qLkwBereich").getUnscaledValue("Min").longValue();  //$NON-NLS-1$//$NON-NLS-2$
-		this.qLkwBereichMax = data.getItem("qLkwBereich").getUnscaledValue("Max").longValue();  //$NON-NLS-1$//$NON-NLS-2$
+		this.optionen = OptionenPlausibilitaetsPruefungLogischVerkehr
+				.getZustand(data.getUnscaledValue("Optionen").intValue()); //$NON-NLS-1$
+		this.qKfzBereichMin = data
+				.getItem("qKfzBereich").getUnscaledValue("Min").longValue(); //$NON-NLS-1$//$NON-NLS-2$
+		this.qKfzBereichMax = data
+				.getItem("qKfzBereich").getUnscaledValue("Max").longValue(); //$NON-NLS-1$//$NON-NLS-2$
+		this.qLkwBereichMin = data
+				.getItem("qLkwBereich").getUnscaledValue("Min").longValue(); //$NON-NLS-1$//$NON-NLS-2$
+		this.qLkwBereichMax = data
+				.getItem("qLkwBereich").getUnscaledValue("Max").longValue(); //$NON-NLS-1$//$NON-NLS-2$
 	}
 
-	
 	/**
-	 * Erfragt die PID dieser Attributgruppe
+	 * Erfragt die PID dieser Attributgruppe.
 	 * 
 	 * @return die PID dieser Attributgruppe
 	 */
-	public static final String getPid(){
+	public static final String getPid() {
 		return "atg.verkehrsDatenLangZeitIntervallPlausibilitätsPrüfungLogisch"; //$NON-NLS-1$
 	}
-	
+
 }

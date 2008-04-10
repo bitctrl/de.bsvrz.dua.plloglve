@@ -27,55 +27,55 @@
 package de.bsvrz.dua.plloglve.plloglve.vb;
 
 /**
- * Speichert das Ergebnis einer Überprüfung des Vertrauensbereichs
- * für ein bestimmtes Attribut
+ * Speichert das Ergebnis einer Überprüfung des Vertrauensbereichs für ein
+ * bestimmtes Attribut.
  * 
  * @author BitCtrl Systems GmbH, Thierfelder
- *
+ * 
+ * @version $Id$
  */
-public class BezugsZeitraumAusfall 
-implements Comparable<BezugsZeitraumAusfall>{
+public class BezugsZeitraumAusfall implements Comparable<BezugsZeitraumAusfall> {
 
 	/**
-	 * Ausschaltgrenze Grenze
+	 * Ausschaltgrenze Grenze.
 	 */
 	private long grenze = -1;
-	
+
 	/**
-	 * der prozentuale Ausfall
+	 * der prozentuale Ausfall.
 	 */
 	private double ausfallInProzent = -1;
-	
+
 	/**
-	 * Ausfall in Minuten
+	 * Ausfall in Minuten.
 	 */
 	private long ausfallInMinuten = -1;
-	
+
 	/**
-	 * Ausfall in Stunden
+	 * Ausfall in Stunden.
 	 */
 	private long ausfallInStunden = -1;
-	
-	
+
 	/**
-	 * Standardkonstruktor
+	 * Standardkonstruktor.
 	 * 
-	 * @param grenze Ausschaltgrenze
-	 * @param ausfallInProzent der prozentuale Ausfall des Attributs
-	 * im Bezugszeitraum
-	 * @param ausfallInStunden Ausfall in Stunden
-	 * @param ausfallInMinuten Ausfall in Minuten  
+	 * @param grenze
+	 *            Ausschaltgrenze
+	 * @param ausfallInProzent
+	 *            der prozentuale Ausfall des Attributs im Bezugszeitraum
+	 * @param ausfallInStunden
+	 *            Ausfall in Stunden
+	 * @param ausfallInMinuten
+	 *            Ausfall in Minuten
 	 */
 	public BezugsZeitraumAusfall(final long grenze,
-								 final double ausfallInProzent,
-								 final long ausfallInStunden,
-								 final long ausfallInMinuten){
+			final double ausfallInProzent, final long ausfallInStunden,
+			final long ausfallInMinuten) {
 		this.grenze = grenze;
 		this.ausfallInProzent = ausfallInProzent;
 		this.ausfallInStunden = ausfallInStunden;
 		this.ausfallInMinuten = ausfallInMinuten;
 	}
-
 
 	/**
 	 * {@inheritDoc}
@@ -83,31 +83,32 @@ implements Comparable<BezugsZeitraumAusfall>{
 	@Override
 	public boolean equals(Object obj) {
 		boolean result = false;
-		
-		if(obj instanceof BezugsZeitraumAusfall){
-			BezugsZeitraumAusfall that = (BezugsZeitraumAusfall)obj;
+
+		if (obj instanceof BezugsZeitraumAusfall) {
+			BezugsZeitraumAusfall that = (BezugsZeitraumAusfall) obj;
 			result = this.ausfallInProzent == that.ausfallInProzent;
 		}
-		
+
 		return result;
 	}
-
 
 	/**
 	 * {@inheritDoc}
 	 */
 	public int compareTo(BezugsZeitraumAusfall that) {
-		return new Double(this.ausfallInProzent).compareTo(that.ausfallInProzent);
+		return new Double(this.ausfallInProzent)
+				.compareTo(that.ausfallInProzent);
 	}
 
-	
 	/**
 	 * {@inheritDoc}
 	 */
 	@Override
 	public String toString() {
-		return this.ausfallInProzent + "% (< " + this.grenze + "%) entspricht Ausfall von " +   //$NON-NLS-1$//$NON-NLS-2$
-			this.ausfallInStunden + " Stunde(n) " + this.ausfallInMinuten + " Minute(n)"; //$NON-NLS-1$ //$NON-NLS-2$
+		return this.ausfallInProzent
+				+ "% (< " + this.grenze + "%) entspricht Ausfall von " + //$NON-NLS-1$//$NON-NLS-2$
+				this.ausfallInStunden
+				+ " Stunde(n) " + this.ausfallInMinuten + " Minute(n)"; //$NON-NLS-1$ //$NON-NLS-2$
 	}
-		
+
 }

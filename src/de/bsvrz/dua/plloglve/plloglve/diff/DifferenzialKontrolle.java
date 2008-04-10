@@ -45,90 +45,97 @@ import de.bsvrz.sys.funclib.debug.Debug;
 
 /**
  * Submodul Differentialkontrolle. Dieses Submodul überprüft, ob die maximal
- * zulässige Anzahl von Intervallen mit Ergebniskonstanz überschritten wurde
- * und generiert ggf. eine Betriebsmeldung
+ * zulässige Anzahl von Intervallen mit Ergebniskonstanz überschritten wurde und
+ * generiert ggf. eine Betriebsmeldung
  * 
  * @author BitCtrl Systems GmbH, Thierfelder
- *
+ * 
+ * @version $Id$
  */
-public class DifferenzialKontrolle
-extends AbstraktBearbeitungsKnotenAdapter{
-	
+public class DifferenzialKontrolle extends AbstraktBearbeitungsKnotenAdapter {
+
 	/**
-	 * Debug-Logger
+	 * Debug-Logger.
 	 */
 	private static final Debug LOGGER = Debug.getLogger();
 
 	/**
-	 * Map von Fahrtreifen-Systemobjekten auf Objekte mit Konstanzzählern
+	 * Map von Fahrtreifen-Systemobjekten auf Objekte mit Konstanzzählern.
 	 */
-	private Map<SystemObject, DiffFahrStreifen> fahrStreifen =
-									new HashMap<SystemObject, DiffFahrStreifen>();
-	
-	
+	private Map<SystemObject, DiffFahrStreifen> fahrStreifen = new HashMap<SystemObject, DiffFahrStreifen>();
+
 	/**
 	 * {@inheritDoc}
 	 */
 	@Override
 	public void initialisiere(IVerwaltung dieVerwaltung)
-	throws DUAInitialisierungsException {
+			throws DUAInitialisierungsException {
 		super.initialisiere(dieVerwaltung);
-		
-		for(SystemObject obj:dieVerwaltung.getSystemObjekte()){
-			this.fahrStreifen.put(obj, new DiffFahrStreifen(dieVerwaltung, obj));
+
+		for (SystemObject obj : dieVerwaltung.getSystemObjekte()) {
+			this.fahrStreifen
+					.put(obj, new DiffFahrStreifen(dieVerwaltung, obj));
 		}
 	}
-	
 
 	/**
 	 * {@inheritDoc}
 	 */
 	public void aktualisiereDaten(ResultData[] resultate) {
-		if(resultate != null){
+		if (resultate != null) {
 			Collection<ResultData> weiterzuleitendeResultate = new ArrayList<ResultData>();
-			
-			for(ResultData resultat:resultate){				
-				if(resultat != null){
-					
-					if(!TestParameter.getInstanz().isTestVertrauen() && !TestParameter.getInstanz().isTestAusfall()){
-						
-						if(resultat.getDataDescription().getAttributeGroup().getId() == PlPruefungLogischLVE.ATG_KZD_ID){
-							if(resultat.getData() != null){
+
+			for (ResultData resultat : resultate) {
+				if (resultat != null) {
+
+					if (!TestParameter.getInstanz().isTestVertrauen()
+							&& !TestParameter.getInstanz().isTestAusfall()) {
+
+						if (resultat.getDataDescription().getAttributeGroup()
+								.getId() == PlPruefungLogischLVE.atgKzdId) {
+							if (resultat.getData() != null) {
 								ResultData resultatNeu = resultat;
-								
-								DiffFahrStreifen fs = this.fahrStreifen.get(resultat.getObject());
-								
+
+								DiffFahrStreifen fs = this.fahrStreifen
+										.get(resultat.getObject());
+
 								Data data = null;
-								if(fs != null){
+								if (fs != null) {
 									data = fs.plausibilisiere(resultat);
-								}else{
-									LOGGER.error("Fahrstreifen zu Datensatz konnte nicht identifiziert werden:\n" +  //$NON-NLS-1$
-											resultat);
+								} else {
+									LOGGER
+											.error("Fahrstreifen zu Datensatz konnte nicht identifiziert werden:\n" + //$NON-NLS-1$
+													resultat);
 								}
-								
-								if(data != null){
-									resultatNeu = new ResultData(resultat.getObject(), resultat.getDataDescription(),
-											resultat.getDataTime(), data, resultat.isDelayedData());							
+
+								if (data != null) {
+									resultatNeu = new ResultData(resultat
+											.getObject(), resultat
+											.getDataDescription(), resultat
+											.getDataTime(), data, resultat
+											.isDelayedData());
 								}
-								
+
 								weiterzuleitendeResultate.add(resultatNeu);
-							}else{
+							} else {
 								weiterzuleitendeResultate.add(resultat);
 							}
-						}else{
+						} else {
 							/**
-							 * LZ-Datum empfangen. Dieses wird nicht einer Differentialkontrolle unterzogen
+							 * LZ-Datum empfangen. Dieses wird nicht einer
+							 * Differentialkontrolle unterzogen
 							 */
 							weiterzuleitendeResultate.add(resultat);
-						}						
-					}else{
+						}
+					} else {
 						weiterzuleitendeResultate.add(resultat);
 					}
 				}
 			}
-			
-			if(this.knoten != null && !weiterzuleitendeResultate.isEmpty()){
-				this.knoten.aktualisiereDaten(weiterzuleitendeResultate.toArray(new ResultData[0]));
+
+			if (this.knoten != null && !weiterzuleitendeResultate.isEmpty()) {
+				this.knoten.aktualisiereDaten(weiterzuleitendeResultate
+						.toArray(new ResultData[0]));
 			}
 		}
 	}
@@ -144,7 +151,7 @@ extends AbstraktBearbeitungsKnotenAdapter{
 	 * {@inheritDoc}
 	 */
 	public void aktualisierePublikation(IDatenFlussSteuerung dfs) {
-		// hier wird nicht publiziert		
+		// hier wird nicht publiziert
 	}
 
 }

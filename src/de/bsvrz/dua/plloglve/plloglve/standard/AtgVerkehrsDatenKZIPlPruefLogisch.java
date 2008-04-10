@@ -31,53 +31,70 @@ import de.bsvrz.dua.plloglve.plloglve.typen.OptionenPlausibilitaetsPruefungLogis
 
 /**
  * Repräsentiert die DAV-ATG
- * <code>atg.verkehrsDatenKurzZeitIntervallPlausibilitätsPrüfungLogisch</code>
+ * <code>atg.verkehrsDatenKurzZeitIntervallPlausibilitätsPrüfungLogisch</code>.
  * 
  * @author BitCtrl Systems GmbH, Thierfelder
- *
+ * 
+ * @version $Id$
  */
-public class AtgVerkehrsDatenKZIPlPruefLogisch 
-extends AbstraktAtgPLLogischLVEParameter{
+public class AtgVerkehrsDatenKZIPlPruefLogisch extends
+		AbstraktAtgPLLogischLVEParameter {
 
-	
 	/**
-	 * Standardkonstruktor
+	 * Standardkonstruktor.
 	 * 
-	 * @param data initialisierendes DAV-Datum
+	 * @param data
+	 *            initialisierendes DAV-Datum
 	 */
-	public AtgVerkehrsDatenKZIPlPruefLogisch(final Data data){
-		if(data == null){
+	public AtgVerkehrsDatenKZIPlPruefLogisch(final Data data) {
+		if (data == null) {
 			throw new NullPointerException("Uebergebenes Datum ist <<null>>"); //$NON-NLS-1$
 		}
 		this.vKfzGrenz = data.getUnscaledValue("vKfzGrenz").longValue(); //$NON-NLS-1$
 		this.bGrenz = data.getUnscaledValue("bGrenz").longValue(); //$NON-NLS-1$
-		this.optionen = OptionenPlausibilitaetsPruefungLogischVerkehr.getZustand(data.getUnscaledValue("Optionen").intValue()); //$NON-NLS-1$
-		this.qKfzBereichMin = data.getItem("qKfzBereich").getUnscaledValue("Min").longValue();  //$NON-NLS-1$//$NON-NLS-2$
-		this.qKfzBereichMax = data.getItem("qKfzBereich").getUnscaledValue("Max").longValue();  //$NON-NLS-1$//$NON-NLS-2$
-		this.qLkwBereichMin = data.getItem("qLkwBereich").getUnscaledValue("Min").longValue();  //$NON-NLS-1$//$NON-NLS-2$
-		this.qLkwBereichMax = data.getItem("qLkwBereich").getUnscaledValue("Max").longValue();  //$NON-NLS-1$//$NON-NLS-2$
-		this.qPkwBereichMin = data.getItem("qPkwBereich").getUnscaledValue("Min").longValue();  //$NON-NLS-1$//$NON-NLS-2$
-		this.qPkwBereichMax = data.getItem("qPkwBereich").getUnscaledValue("Max").longValue();  //$NON-NLS-1$//$NON-NLS-2$
-		this.vKfzBereichMin = data.getItem("vKfzBereich").getUnscaledValue("Min").longValue();  //$NON-NLS-1$//$NON-NLS-2$
-		this.vKfzBereichMax = data.getItem("vKfzBereich").getUnscaledValue("Max").longValue();  //$NON-NLS-1$//$NON-NLS-2$
-		this.vLkwBereichMin = data.getItem("vLkwBereich").getUnscaledValue("Min").longValue();  //$NON-NLS-1$//$NON-NLS-2$
-		this.vLkwBereichMax = data.getItem("vLkwBereich").getUnscaledValue("Max").longValue();  //$NON-NLS-1$//$NON-NLS-2$
-		this.vPkwBereichMin = data.getItem("vPkwBereich").getUnscaledValue("Min").longValue();  //$NON-NLS-1$//$NON-NLS-2$
-		this.vPkwBereichMax = data.getItem("vPkwBereich").getUnscaledValue("Max").longValue();  //$NON-NLS-1$//$NON-NLS-2$
-		this.vgKfzBereichMin = data.getItem("vgKfzBereich").getUnscaledValue("Min").longValue();  //$NON-NLS-1$//$NON-NLS-2$
-		this.vgKfzBereichMax = data.getItem("vgKfzBereich").getUnscaledValue("Max").longValue(); //$NON-NLS-1$//$NON-NLS-2$
-		this.belegungBereichMin = data.getItem("BelegungBereich").getUnscaledValue("Min").longValue();  //$NON-NLS-1$//$NON-NLS-2$
-		this.belegungBereichMax = data.getItem("BelegungBereich").getUnscaledValue("Max").longValue();  //$NON-NLS-1$//$NON-NLS-2$
+		this.optionen = OptionenPlausibilitaetsPruefungLogischVerkehr
+				.getZustand(data.getUnscaledValue("Optionen").intValue()); //$NON-NLS-1$
+		this.qKfzBereichMin = data
+				.getItem("qKfzBereich").getUnscaledValue("Min").longValue(); //$NON-NLS-1$//$NON-NLS-2$
+		this.qKfzBereichMax = data
+				.getItem("qKfzBereich").getUnscaledValue("Max").longValue(); //$NON-NLS-1$//$NON-NLS-2$
+		this.qLkwBereichMin = data
+				.getItem("qLkwBereich").getUnscaledValue("Min").longValue(); //$NON-NLS-1$//$NON-NLS-2$
+		this.qLkwBereichMax = data
+				.getItem("qLkwBereich").getUnscaledValue("Max").longValue(); //$NON-NLS-1$//$NON-NLS-2$
+		this.qPkwBereichMin = data
+				.getItem("qPkwBereich").getUnscaledValue("Min").longValue(); //$NON-NLS-1$//$NON-NLS-2$
+		this.qPkwBereichMax = data
+				.getItem("qPkwBereich").getUnscaledValue("Max").longValue(); //$NON-NLS-1$//$NON-NLS-2$
+		this.vKfzBereichMin = data
+				.getItem("vKfzBereich").getUnscaledValue("Min").longValue(); //$NON-NLS-1$//$NON-NLS-2$
+		this.vKfzBereichMax = data
+				.getItem("vKfzBereich").getUnscaledValue("Max").longValue(); //$NON-NLS-1$//$NON-NLS-2$
+		this.vLkwBereichMin = data
+				.getItem("vLkwBereich").getUnscaledValue("Min").longValue(); //$NON-NLS-1$//$NON-NLS-2$
+		this.vLkwBereichMax = data
+				.getItem("vLkwBereich").getUnscaledValue("Max").longValue(); //$NON-NLS-1$//$NON-NLS-2$
+		this.vPkwBereichMin = data
+				.getItem("vPkwBereich").getUnscaledValue("Min").longValue(); //$NON-NLS-1$//$NON-NLS-2$
+		this.vPkwBereichMax = data
+				.getItem("vPkwBereich").getUnscaledValue("Max").longValue(); //$NON-NLS-1$//$NON-NLS-2$
+		this.vgKfzBereichMin = data
+				.getItem("vgKfzBereich").getUnscaledValue("Min").longValue(); //$NON-NLS-1$//$NON-NLS-2$
+		this.vgKfzBereichMax = data
+				.getItem("vgKfzBereich").getUnscaledValue("Max").longValue(); //$NON-NLS-1$//$NON-NLS-2$
+		this.belegungBereichMin = data
+				.getItem("BelegungBereich").getUnscaledValue("Min").longValue(); //$NON-NLS-1$//$NON-NLS-2$
+		this.belegungBereichMax = data
+				.getItem("BelegungBereich").getUnscaledValue("Max").longValue(); //$NON-NLS-1$//$NON-NLS-2$
 	}
 
-	
 	/**
-	 * Erfragt die PID dieser Attributgruppe
+	 * Erfragt die PID dieser Attributgruppe.
 	 * 
 	 * @return die PID dieser Attributgruppe
 	 */
-	public static final String getPid(){
+	public static final String getPid() {
 		return "atg.verkehrsDatenKurzZeitIntervallPlausibilitätsPrüfungLogisch"; //$NON-NLS-1$
 	}
-	
+
 }

@@ -1,4 +1,4 @@
-/**
+/** 
  * Segment 4 Datenübernahme und Aufbereitung (DUA), SWE 4.2 Pl-Prüfung logisch LVE
  * Copyright (C) 2007 BitCtrl Systems GmbH 
  * 
@@ -24,6 +24,7 @@
  * mailto: info@bitctrl.de
  */
 
+
 package de.bsvrz.dua.plloglve.vew;
 
 import de.bsvrz.sys.funclib.bitctrl.dua.DUAInitialisierungsException;
@@ -32,27 +33,28 @@ import de.bsvrz.sys.funclib.bitctrl.dua.StandardAspekteVersorger;
 import de.bsvrz.sys.funclib.bitctrl.dua.schnittstellen.IVerwaltung;
 
 /**
- * Diese Klasse repräsentiert die Versorgung des Moduls
- * Pl-Prüfung logisch LVE (innerhalb der SWE Pl-Prüfung logisch LVE)
- * mit Standard-Publikationsinformationen (Zuordnung von
- * Objekt-Datenbeschreibung-Kombination zu Standard-
- * Publikationsaspekt).
+ * Diese Klasse repräsentiert die Versorgung des Moduls Pl-Prüfung logisch LVE
+ * (innerhalb der SWE Pl-Prüfung logisch LVE) mit
+ * Standard-Publikationsinformationen (Zuordnung von
+ * Objekt-Datenbeschreibung-Kombination zu Standard- Publikationsaspekt).
  * 
  * @author BitCtrl Systems GmbH, Thierfelder
- *
+ * 
+ * @version $Id$
  */
-public class PlLogLVEStandardAspekteVersorger 
-extends StandardAspekteVersorger{
+public class PlLogLVEStandardAspekteVersorger extends StandardAspekteVersorger {
 
 	/**
-	 * Standardkonstruktor
+	 * Standardkonstruktor.
 	 * 
-	 * @param verwaltung Verbindung zum Verwaltungsmodul
-	 * @throws DUAInitialisierungsException wenn die Initialisierung nicht
-	 * vollstaendig durchgefuehrt werden kann
+	 * @param verwaltung
+	 *            Verbindung zum Verwaltungsmodul
+	 * @throws DUAInitialisierungsException
+	 *             wenn die Initialisierung nicht vollstaendig durchgefuehrt
+	 *             werden kann
 	 */
 	public PlLogLVEStandardAspekteVersorger(IVerwaltung verwaltung)
-	throws DUAInitialisierungsException {
+			throws DUAInitialisierungsException {
 		super(verwaltung);
 	}
 
@@ -60,8 +62,7 @@ extends StandardAspekteVersorger{
 	 * {@inheritDoc}
 	 */
 	@Override
-	protected void init()
-	throws DUAInitialisierungsException{
+	protected void init() throws DUAInitialisierungsException {
 
 		this.standardAspekte = new StandardAspekteAdapter(
 				new StandardPublikationsZuordnung[] {
@@ -75,6 +76,6 @@ extends StandardAspekteVersorger{
 								DUAKonstanten.ATG_LZD,
 								DUAKonstanten.ASP_EXTERNE_ERFASSUNG,
 								DUAKonstanten.ASP_PL_PRUEFUNG_LOGISCH) });
-					
-	}	
+
+	}
 }

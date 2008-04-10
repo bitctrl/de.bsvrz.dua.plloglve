@@ -32,36 +32,42 @@ import de.bsvrz.sys.funclib.bitctrl.dua.intpuf.IntervallPufferElementAdapter;
 
 /**
  * Speichert fuer ein finales DAV-Attribut des Datensatzes
- * <code>atg.verkehrsDatenKurzZeitIntervall</code>, ob dieses
- * (im Sinne der Vertrauensbereichspruefung) ausgefallen ist
- * oder nicht. Ein Datum gilt als ausgefallen, wenn es als
- * <code>fehlerhaft</code> bzw. <code>implausibel</code>
- * gekennzeichnet ist.
+ * <code>atg.verkehrsDatenKurzZeitIntervall</code>, ob dieses (im Sinne der
+ * Vertrauensbereichspruefung) ausgefallen ist oder nicht. Ein Datum gilt als
+ * ausgefallen, wenn es als <code>fehlerhaft</code> bzw.
+ * <code>implausibel</code> gekennzeichnet ist.
  * 
  * @author BitCtrl Systems GmbH, Thierfelder
- *
+ * 
+ * @version $Id$
  */
-public class VertrauensEinzelDatum 
-extends IntervallPufferElementAdapter<VertrauensDatum>{
+public class VertrauensEinzelDatum extends
+		IntervallPufferElementAdapter<VertrauensDatum> {
 
 	/**
-	 * Standardkonstruktor
+	 * Standardkonstruktor.
 	 * 
-	 * @param name der Name dieses Datums
+	 * @param name
+	 *            der Name dieses Datums
+	 * @param originalDatum das empfangene (unveraenderte) Originaldatum
 	 */
-	protected VertrauensEinzelDatum(final String name, final ResultData originalDatum){
-		super(originalDatum.getDataTime(), 
-				originalDatum.getDataTime() + originalDatum.getData().getTimeValue("T").getMillis()); //$NON-NLS-1$
-		
+	protected VertrauensEinzelDatum(final String name,
+			final ResultData originalDatum) {
+		super(originalDatum.getDataTime(), originalDatum.getDataTime()
+				+ originalDatum.getData().getTimeValue("T").getMillis()); //$NON-NLS-1$
+
 		/**
-		 * ein Datum gilt als ausgefallen, wenn
-		 * es als fehlerhaft bzw. implausibel 
-		 * gekennzeichnet ist
+		 * ein Datum gilt als ausgefallen, wenn es als fehlerhaft bzw.
+		 * implausibel gekennzeichnet ist
 		 */
-		this.inhalt = new VertrauensDatum( 
-			originalDatum.getData().getItem(name).getUnscaledValue("Wert").longValue() == DUAKonstanten.FEHLERHAFT || //$NON-NLS-1$
-			originalDatum.getData().getItem(name).getItem("Status").getItem("MessWertErsetzung").   //$NON-NLS-1$//$NON-NLS-2$
-					getUnscaledValue("Implausibel").longValue() == DUAKonstanten.JA);   //$NON-NLS-1$
+		this.inhalt = new VertrauensDatum(
+				originalDatum.getData().getItem(name)
+						.getUnscaledValue("Wert").longValue() == DUAKonstanten.FEHLERHAFT || //$NON-NLS-1$
+						originalDatum
+								.getData()
+								.getItem(name)
+								.getItem("Status").getItem("MessWertErsetzung").
+								getUnscaledValue("Implausibel").longValue() == DUAKonstanten.JA); //$NON-NLS-1$
 	}
-	
+
 }

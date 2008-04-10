@@ -23,126 +23,125 @@
  * Phone: +49 341-490670<br>
  * mailto: info@bitctrl.de
  */
+
 package de.bsvrz.dua.plloglve.vew;
 
 import de.bsvrz.sys.funclib.debug.Debug;
 
 /**
- * Klasse mit allen Testflags
+ * Klasse mit allen Testflags.
  * 
  * @author BitCtrl Systems GmbH, Thierfelder
- *
+ * 
+ * @version $Id$
  */
 public class TestParameter {
-	
+
 	/**
-	 * Debug-Logger
+	 * Debug-Logger.
 	 */
 	private static final Debug LOGGER = Debug.getLogger();
-	
+
 	/**
 	 * Erfassungsintervalldauer im Testbetrieb (bzw. Laenge einer Minute)
 	 */
 	public static final long INTERVALL_VB = 100L;
-	
+
 	/**
-	 * einzige statische Instanz dieser Klasse
+	 * einzige statische Instanz dieser Klasse.
 	 */
-	private static TestParameter INSTANZ = null;
-	
+	private static TestParameter instanz = null;
+
 	/**
-	 * Ist dieses Flag gesetzt, so laeuft die Applikation im Testbetrieb fuer das Modul
-	 * Vertrauensbereich. Ein Tag ist dann für dieses Modul genau 144s lang!
+	 * Ist dieses Flag gesetzt, so laeuft die Applikation im Testbetrieb fuer
+	 * das Modul Vertrauensbereich. Ein Tag ist dann für dieses Modul genau 144s
+	 * lang!
 	 */
 	private boolean testVertrauen = false;
-	
+
 	/**
-	 * Ist dieses Flag gesetzt, so laeuft die Applikation im Testbetrieb fuer das Modul
-	 * Ausfallhaeufigkeit. Ein Tag ist dann für dieses Modul genau 144s lang!
+	 * Ist dieses Flag gesetzt, so laeuft die Applikation im Testbetrieb fuer
+	 * das Modul Ausfallhaeufigkeit. Ein Tag ist dann für dieses Modul genau
+	 * 144s lang!
 	 */
 	private boolean testAusfall = false;
-	
-	
+
 	/**
-	 * Dummy-Konstruktor
+	 * Dummy-Konstruktor.
 	 */
-	private TestParameter(){
-		INSTANZ = this;
+	private TestParameter() {
+		instanz = this;
 	}
-	
-	
+
 	/**
-	 * Standardkonstruktor
+	 * Standardkonstruktor.
 	 * 
-	 * @param testParameter der Kommandozeilenparameter <code>-test=</code>
+	 * @param testParameter
+	 *            der Kommandozeilenparameter <code>-test=</code>
 	 */
-	protected TestParameter(final String testParameter){
-		if(INSTANZ == null){
-			if(testParameter.toLowerCase().equals("ausfall")){
+	protected TestParameter(final String testParameter) {
+		if (instanz == null) {
+			if (testParameter.toLowerCase().equals("ausfall")) {
 				this.testAusfall = true;
-			}else
-			if(testParameter.toLowerCase().equals("vertrauen")){
+			} else if (testParameter.toLowerCase().equals("vertrauen")) {
 				this.testVertrauen = true;
 			}
 			LOGGER.info("!!! " + this + " !!!");
-			INSTANZ = this;
-		}else{
-			LOGGER.warning("Testparameter wurden bereits initialisiert mit:\n" + INSTANZ);
+			instanz = this;
+		} else {
+			LOGGER.warning("Testparameter wurden bereits initialisiert mit:\n"
+					+ instanz);
 		}
 	}
-	
-	
+
 	/**
-	 * Erfragt die statische Instanz dieser Klasse
+	 * Erfragt die statische Instanz dieser Klasse.
 	 * 
 	 * @return die statische Instanz dieser Klasse
 	 */
-	public static final TestParameter getInstanz(){
-		if(INSTANZ == null){
-			INSTANZ = new TestParameter();
+	public static final TestParameter getInstanz() {
+		if (instanz == null) {
+			instanz = new TestParameter();
 		}
-		return INSTANZ;
+		return instanz;
 	}
-	
-	
+
 	/**
 	 * Erfragt, ob die Applikation im Testbetrieb fuer das Modul
-	 * Vertrauensbereich laeuft. Ein Tag ist dann für dieses Modul genau 
-	 * 144s lang!
+	 * Vertrauensbereich laeuft. Ein Tag ist dann für dieses Modul genau 144s
+	 * lang!
 	 * 
 	 * @return ob die Applikation im Testbetrieb fuer das Modul
-	 * Vertrauensbereich laeuft
+	 *         Vertrauensbereich laeuft
 	 */
 	public final boolean isTestVertrauen() {
 		return testVertrauen;
 	}
 
-
 	/**
 	 * Erfragt, ob die Applikation im Testbetrieb fuer das Modul
-	 * Ausfallhaeufigkeit laeuft. Ein Tag ist dann für dieses Modul genau 
-	 * 144s lang!
+	 * Ausfallhaeufigkeit laeuft. Ein Tag ist dann für dieses Modul genau 144s
+	 * lang!
 	 * 
 	 * @return ob die Applikation im Testbetrieb fuer das Modul
-	 * Ausfallhaeufigkeit laeuft
+	 *         Ausfallhaeufigkeit laeuft
 	 */
 	public final boolean isTestAusfall() {
 		return testAusfall;
 	}
-
 
 	/**
 	 * {@inheritDoc}
 	 */
 	@Override
 	public String toString() {
-		if(testAusfall){
+		if (testAusfall) {
 			return "Test des Moduls Ausfallueberwachung";
 		}
-		if(testVertrauen){
+		if (testVertrauen) {
 			return "Test des Moduls Vertrauensbereich";
 		}
-		return "Kein Test (Normalbetrieb)"; 
+		return "Kein Test (Normalbetrieb)";
 	}
 
 }

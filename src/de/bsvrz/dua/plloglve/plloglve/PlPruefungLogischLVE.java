@@ -40,98 +40,96 @@ import de.bsvrz.sys.funclib.bitctrl.dua.schnittstellen.IStandardAspekte;
 import de.bsvrz.sys.funclib.bitctrl.dua.schnittstellen.IVerwaltung;
 
 /**
- * Implementierung des Moduls Pl-Prüfung logisch LVE der SWE Pl-Prüfung logisch LVE.
- * Dieses Modul leitet nur die empfangenen Daten an seine Submudole weiter, welche
- * die eigentliche Plausibilisierung durchführen 
+ * Implementierung des Moduls Pl-Prüfung logisch LVE der SWE Pl-Prüfung logisch
+ * LVE. Dieses Modul leitet nur die empfangenen Daten an seine Submudole weiter,
+ * welche die eigentliche Plausibilisierung durchführen
  * 
  * @author BitCtrl Systems GmbH, Thierfelder
- *
+ * 
+ * @version $Id$
  */
-public class PlPruefungLogischLVE
-extends AbstraktBearbeitungsKnotenAdapter{
-	
+public class PlPruefungLogischLVE extends AbstraktBearbeitungsKnotenAdapter {
+
 	/**
-	 * Startzeit des Moduls Pl-Prüfung logisch LVE
+	 * Startzeit des Moduls Pl-Prüfung logisch LVE.
 	 */
 	public static final long START_ZEIT = System.currentTimeMillis();
 
 	/**
-	 * Submodul Pl-Prüfung logisch LVE standard
+	 * Submodul Pl-Prüfung logisch LVE standard.
 	 */
 	private PlLogischLVEStandard standard = new PlLogischLVEStandard();
 
 	/**
-	 * Submodul Differenzial-Kontrolle
+	 * Submodul Differenzial-Kontrolle.
 	 */
 	private DifferenzialKontrolle diff = new DifferenzialKontrolle();
-	
-	/**
-	 * Submodul Ausfallhaeufigkeit
-	 */
-	private Ausfallhaeufigkeit ausfall = new Ausfallhaeufigkeit();
-	
-	/**
-	 * Submodul Vertrauensbereich
-	 */	
-	private Vertrauensbereich vb = null;
-	
-	/**
-	 * Datenverteiler-ID der KZD-Attributgruppe
-	 */
-	public static long ATG_KZD_ID = -1;
 
 	/**
-	 * Datenverteiler-ID der LZD-Attributgruppe
+	 * Submodul Ausfallhaeufigkeit.
 	 */
-	public static long ATG_LZD_ID = -1;
-	
-	
+	private Ausfallhaeufigkeit ausfall = new Ausfallhaeufigkeit();
+
 	/**
-	 * Standardkonstruktor
-	 * 
-	 * @param stdAspekte Informationen zu den
-	 * Standardpublikationsaspekten für diese
-	 * Instanz des Moduls Pl-Prüfung logisch LVE
+	 * Submodul Vertrauensbereich.
 	 */
-	public PlPruefungLogischLVE(final IStandardAspekte stdAspekte){
+	private Vertrauensbereich vb = null;
+
+	/**
+	 * Datenverteiler-ID der KZD-Attributgruppe.
+	 */
+	public static long atgKzdId = -1;
+
+	/**
+	 * Datenverteiler-ID der LZD-Attributgruppe.
+	 */
+	public static long atgLzdId = -1;
+
+	/**
+	 * Standardkonstruktor.
+	 * 
+	 * @param stdAspekte
+	 *            Informationen zu den Standardpublikationsaspekten für diese
+	 *            Instanz des Moduls Pl-Prüfung logisch LVE
+	 */
+	public PlPruefungLogischLVE(final IStandardAspekte stdAspekte) {
 		this.standardAspekte = stdAspekte;
 	}
-	
-	
+
 	/**
 	 * {@inheritDoc}
 	 */
 	@Override
 	public void initialisiere(IVerwaltung dieVerwaltung)
-	throws DUAInitialisierungsException {
+			throws DUAInitialisierungsException {
 		super.initialisiere(dieVerwaltung);
-		ATG_KZD_ID = dieVerwaltung.getVerbindung().getDataModel().getAttributeGroup(DUAKonstanten.ATG_KZD).getId();
-		ATG_LZD_ID = dieVerwaltung.getVerbindung().getDataModel().getAttributeGroup(DUAKonstanten.ATG_LZD).getId();
-		
+		atgKzdId = dieVerwaltung.getVerbindung().getDataModel()
+				.getAttributeGroup(DUAKonstanten.ATG_KZD).getId();
+		atgLzdId = dieVerwaltung.getVerbindung().getDataModel()
+				.getAttributeGroup(DUAKonstanten.ATG_LZD).getId();
+
 		this.vb = new Vertrauensbereich(this.standardAspekte);
-	
+
 		this.standard.initialisiere(dieVerwaltung);
 		this.standard.setNaechstenBearbeitungsKnoten(this.diff);
-		
+
 		this.diff.initialisiere(dieVerwaltung);
 		this.diff.setNaechstenBearbeitungsKnoten(this.ausfall);
-				
+
 		this.ausfall.initialisiere(dieVerwaltung);
 		this.ausfall.setNaechstenBearbeitungsKnoten(this.vb);
-		
+
 		this.vb.setPublikation(this.publizieren);
 		this.vb.initialisiere(dieVerwaltung);
 		this.vb.setNaechstenBearbeitungsKnoten(this.knoten);
 	}
-	
-	
+
 	/**
 	 * {@inheritDoc}
 	 */
 	public ModulTyp getModulTyp() {
 		return null;
 	}
-	
 
 	/**
 	 * {@inheritDoc}
@@ -139,7 +137,6 @@ extends AbstraktBearbeitungsKnotenAdapter{
 	public void aktualisiereDaten(ResultData[] resultate) {
 		this.standard.aktualisiereDaten(resultate);
 	}
-	
 
 	/**
 	 * {@inheritDoc}
@@ -148,5 +145,5 @@ extends AbstraktBearbeitungsKnotenAdapter{
 		// wird hier nicht benötigt, da die Publikation erst im letzten Submodul
 		// "Vertrauensbereich" stattfindet
 	}
-	
+
 }

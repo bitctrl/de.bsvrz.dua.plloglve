@@ -1,5 +1,5 @@
-/**
- * Segment 4 Datenübernahme und Aufbereitung (DUA), SWE 4.2 Pl-Pruefung LVE
+/** 
+ * Segment 4 Datenübernahme und Aufbereitung (DUA), SWE 4.2 Pl-Prüfung logisch LVE
  * Copyright (C) 2007 BitCtrl Systems GmbH 
  * 
  * This program is free software; you can redistribute it and/or modify it under
@@ -27,40 +27,49 @@
 package de.bsvrz.dua.plloglve.test;
 
 /**
- * Speichert die Verbindungsdaten
+ * Speichert die Verbindungsdaten.
  * 
  * @author BitCtrl Systems GmbH, Thierfelder
- *
+ * 
+ * @version $Id$
  */
-public class Verbindung {
-	
+public final class Verbindung {
+
 	/**
-	 * Verbindungsdaten
+	 * Verbindungsdaten.
 	 */
 	private static final String[] CON_DATA = new String[] {
-			"-datenverteiler=localhost:8083",   //$NON-NLS-1$
-			"-benutzer=Tester",  //$NON-NLS-1$
-			"-authentifizierung=c:\\passwd",  //$NON-NLS-1$
+			"-datenverteiler=localhost:8083", //$NON-NLS-1$
+			"-benutzer=Tester", //$NON-NLS-1$
+			"-authentifizierung=c:\\passwd", //$NON-NLS-1$
 			"-debugLevelStdErrText=INFO", //$NON-NLS-1$
 			"-debugLevelFileText=INFO" }; //$NON-NLS-1$
-	
-	
+
 	/**
-	 * Verzeichnis, in dem sich die CSV-Dateien mit den Testdaten befinden
+	 * Verzeichnis, in dem sich die CSV-Dateien mit den Testdaten befinden.
 	 */
 	public static final String TEST_DATEN_VERZ = ".\\testDaten\\V_2.8(09.04.08)\\"; //$NON-NLS-1$
 
 	
 	/**
-	 * Erfragt eine Kopie der Verbindungsdaten
+	 * Dummy-Konstruktor.
+	 */
+	private Verbindung() {
+		
+	}
+	
+	/**
+	 * Erfragt eine Kopie der Verbindungsdaten.
 	 * 
 	 * @return eine Kopie der Verbindungsdaten
 	 */
-	protected static final String[] getConData(){
+	protected static String[] getConData() {
 		String[] conDataKopie = new String[CON_DATA.length];
-		
-		for(int i = 0; i < conDataKopie.length; i++)conDataKopie[i] = CON_DATA[i];
-		
+
+		for (int i = 0; i < conDataKopie.length; i++) {
+			conDataKopie[i] = CON_DATA[i];
+		}
+
 		return conDataKopie;
 	}
 

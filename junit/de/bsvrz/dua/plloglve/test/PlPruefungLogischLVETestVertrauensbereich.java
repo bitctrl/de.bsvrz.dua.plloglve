@@ -1,5 +1,5 @@
-/**
- * Segment 4 Datenübernahme und Aufbereitung (DUA), SWE 4.2 Pl-Pruefung LVE
+/** 
+ * Segment 4 Datenübernahme und Aufbereitung (DUA), SWE 4.2 Pl-Prüfung logisch LVE
  * Copyright (C) 2007 BitCtrl Systems GmbH 
  * 
  * This program is free software; you can redistribute it and/or modify it under
@@ -35,51 +35,53 @@ import de.bsvrz.sys.funclib.bitctrl.dua.test.DAVTest;
 import de.bsvrz.sys.funclib.commandLineArgs.ArgumentList;
 
 /**
- * Automatisierter Test nach Pruefspezifikation für SWE Pl-Prüfung logisch LVE
+ * Automatisierter Test nach Pruefspezifikation für SWE Pl-Prüfung logisch LVE.
  * 
  * @author BitCtrl Systems GmbH, Thierfelder
- *
+ * 
+ * @version $Id$
  */
 public class PlPruefungLogischLVETestVertrauensbereich {
 
 	/**
-	 * Datenverteiler-Verbindung
+	 * Datenverteiler-Verbindung.
 	 */
 	private ClientDavInterface dav = null;
-	
+
 	/**
-	 * Loggerargument
+	 * Loggerargument.
 	 * 
 	 * Pfadangabe mit Argument: -debugFilePath=[Pfad]
 	 */
-	private String[] argumente = new String[] {"-debugLevelFileText=ALL"}; //$NON-NLS-1$
-	
+	private String[] argumente = new String[] { "-debugLevelFileText=ALL" }; //$NON-NLS-1$
+
 	/**
-	 * Argumentliste
+	 * Argumentliste.
 	 */
 	private ArgumentList alLogger = new ArgumentList(argumente);
-	
-	
+
 	/**
-	 * Vorbereitungen (DAV-Anmeldung)
+	 * Vorbereitungen (DAV-Anmeldung).
+	 * 
+	 * @throws Exception wird weitergereicht
 	 */
 	@Before
 	public void setUp() throws Exception {
-		this.dav = DAVTest.getDav(Verbindung.getConData());	
+		this.dav = DAVTest.getDav(Verbindung.getConData());
 	}
 
-	
 	/**
-	 * Vertrauensbereichstest nach Prüfspezifikation
+	 * Vertrauensbereichstest nach Prüfspezifikation.
+	 * 
+	 * @throws Exception wird weitergereicht
 	 */
 	@Test
-	public void testVB()
-	throws Exception{
-		PlPruefungVertrauensbereich pruefVertrB = 
-			new PlPruefungVertrauensbereich(dav,Verbindung.TEST_DATEN_VERZ, alLogger);
+	public void testVB() throws Exception {
+		PlPruefungVertrauensbereich pruefVertrB = new PlPruefungVertrauensbereich(
+				dav, Verbindung.TEST_DATEN_VERZ, alLogger);
 		pruefVertrB.benutzeAssert(true);
 		pruefVertrB.setMeldungHysterese(3);
 		pruefVertrB.pruefe();
 	}
-	
+
 }

@@ -23,38 +23,39 @@
  * Phone: +49 341-490670<br>
  * mailto: info@bitctrl.de
  */
+
 package de.bsvrz.dua.plloglve.plloglve.ausfall;
 
 import de.bsvrz.sys.funclib.bitctrl.dua.intpuf.IntervallPuffer;
 
 /**
- * Repraesentiert einen zeitlichen Puffer, dessen einzelne Elemente
- * sich inhaltlich nur in der Eigenschaft <code>isAusgefallen</code>
- * unterscheiden
+ * Repraesentiert einen zeitlichen Puffer, dessen einzelne Elemente sich
+ * inhaltlich nur in der Eigenschaft <code>isAusgefallen</code> unterscheiden.
  * 
  * @author BitCtrl Systems GmbH, Thierfelder
- *
+ * 
+ * @version $Id$
  */
-public class AusfallPuffer
-extends IntervallPuffer<AusfallDatum>{
+public class AusfallPuffer extends IntervallPuffer<AusfallDatum> {
 
 	/**
-	 * Erfragt die gesamte Ausfallzeit aller im Puffer gespeicherten Daten
+	 * Erfragt die gesamte Ausfallzeit aller im Puffer gespeicherten Daten.
 	 * 
 	 * @return die gesamte Ausfallzeit aller im Puffer gespeicherten Daten
 	 */
-	public final long getAusfallZeit(){
+	public final long getAusfallZeit() {
 		long ausfall = 0;
-		
+
 		synchronized (this.puffer) {
-			for(Intervall<AusfallDatum> intervall:this.puffer.values()){
-				if(intervall.getInhalt().isAusgefallen()){
-					ausfall += intervall.getIntervallEnde() - intervall.getIntervallStart();
+			for (Intervall<AusfallDatum> intervall : this.puffer.values()) {
+				if (intervall.getInhalt().isAusgefallen()) {
+					ausfall += intervall.getIntervallEnde()
+							- intervall.getIntervallStart();
 				}
-			}			
+			}
 		}
-		
+
 		return ausfall;
 	}
-	
+
 }

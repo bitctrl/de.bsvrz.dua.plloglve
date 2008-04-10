@@ -31,77 +31,87 @@ import de.bsvrz.sys.funclib.bitctrl.dua.AllgemeinerDatenContainer;
 
 /**
  * Repräsentiert aktuelle Daten der DAV-ATG
- * <code>atg.verkehrsDatenDifferenzialKontrolleFs</code>
+ * <code>atg.verkehrsDatenDifferenzialKontrolleFs</code>.
  * 
  * @author BitCtrl Systems GmbH, Thierfelder
- *
+ * 
+ * @version $Id$
  */
-public class AtgVerkehrsDatenDifferenzialKontrolleFs
-extends AllgemeinerDatenContainer{
+public class AtgVerkehrsDatenDifferenzialKontrolleFs extends
+		AllgemeinerDatenContainer {
 
 	/**
-	 * Maximal zulässige Anzahl von Intervallen mit Ergebniskonstanz für qKfz
+	 * Maximal zulässige Anzahl von Intervallen mit Ergebniskonstanz für qKfz.
 	 */
 	private long maxAnzKonstanzqKfz;
-	
+
 	/**
-	 * Maximal zulässige Anzahl von Intervallen mit Ergebniskonstanz für qLkw
+	 * Maximal zulässige Anzahl von Intervallen mit Ergebniskonstanz für qLkw.
 	 */
 	private long maxAnzKonstanzqLkw;
-	
+
 	/**
-	 * Maximal zulässige Anzahl von Intervallen mit Ergebniskonstanz für qPkw
+	 * Maximal zulässige Anzahl von Intervallen mit Ergebniskonstanz für qPkw.
 	 */
 	private long maxAnzKonstanzqPkw;
-	
+
 	/**
-	 * Maximal zulässige Anzahl von Intervallen mit Ergebniskonstanz für vKfz
+	 * Maximal zulässige Anzahl von Intervallen mit Ergebniskonstanz für vKfz.
 	 */
 	private long maxAnzKonstanzvKfz;
-	
+
 	/**
-	 * Maximal zulässige Anzahl von Intervallen mit Ergebniskonstanz für vLkw
+	 * Maximal zulässige Anzahl von Intervallen mit Ergebniskonstanz für vLkw.
 	 */
 	private long maxAnzKonstanzvLkw;
-	
+
 	/**
-	 * Maximal zulässige Anzahl von Intervallen mit Ergebniskonstanz für vPkw
+	 * Maximal zulässige Anzahl von Intervallen mit Ergebniskonstanz für vPkw.
 	 */
 	private long maxAnzKonstanzvPkw;
-	
+
 	/**
-	 * Maximal zulässige Anzahl von Intervallen mit Ergebniskonstanz für die Streung S
+	 * Maximal zulässige Anzahl von Intervallen mit Ergebniskonstanz für die
+	 * Streung S.
 	 */
 	private long maxAnzKonstanzStreung;
-	
+
 	/**
-	 * Maximal zulässige Anzahl von Intervallen mit Ergebniskonstanz für die Belegung b
+	 * Maximal zulässige Anzahl von Intervallen mit Ergebniskonstanz für die
+	 * Belegung b.
 	 */
-	private long maxAnzKonstanzBelegung;  
-
+	private long maxAnzKonstanzBelegung;
 
 	/**
-	 * Standardkonstruktor
+	 * Standardkonstruktor.
 	 * 
-	 * @param data initialisierendes DAV-Datum
+	 * @param data
+	 *            initialisierendes DAV-Datum
 	 */
-	public AtgVerkehrsDatenDifferenzialKontrolleFs(final Data data){
-		if(data == null){
+	public AtgVerkehrsDatenDifferenzialKontrolleFs(final Data data) {
+		if (data == null) {
 			throw new NullPointerException("Uebergebenes Datum ist <<null>>"); //$NON-NLS-1$
 		}
-		this.maxAnzKonstanzqKfz = data.getUnscaledValue("maxAnzKonstanzqKfz").longValue(); //$NON-NLS-1$
-		this.maxAnzKonstanzqLkw = data.getUnscaledValue("maxAnzKonstanzqLkw").longValue(); //$NON-NLS-1$
-		this.maxAnzKonstanzqPkw = data.getUnscaledValue("maxAnzKonstanzqPkw").longValue(); //$NON-NLS-1$
-		this.maxAnzKonstanzvKfz = data.getUnscaledValue("maxAnzKonstanzvKfz").longValue(); //$NON-NLS-1$
-		this.maxAnzKonstanzvLkw = data.getUnscaledValue("maxAnzKonstanzvLkw").longValue(); //$NON-NLS-1$
-		this.maxAnzKonstanzvPkw = data.getUnscaledValue("maxAnzKonstanzvPkw").longValue(); //$NON-NLS-1$
-		this.maxAnzKonstanzStreung = data.getUnscaledValue("maxAnzKonstanzStreung").longValue(); //$NON-NLS-1$
-		this.maxAnzKonstanzBelegung = data.getUnscaledValue("maxAnzKonstanzBelegung").longValue(); //$NON-NLS-1$
+		this.maxAnzKonstanzqKfz = data
+				.getUnscaledValue("maxAnzKonstanzqKfz").longValue(); //$NON-NLS-1$
+		this.maxAnzKonstanzqLkw = data
+				.getUnscaledValue("maxAnzKonstanzqLkw").longValue(); //$NON-NLS-1$
+		this.maxAnzKonstanzqPkw = data
+				.getUnscaledValue("maxAnzKonstanzqPkw").longValue(); //$NON-NLS-1$
+		this.maxAnzKonstanzvKfz = data
+				.getUnscaledValue("maxAnzKonstanzvKfz").longValue(); //$NON-NLS-1$
+		this.maxAnzKonstanzvLkw = data
+				.getUnscaledValue("maxAnzKonstanzvLkw").longValue(); //$NON-NLS-1$
+		this.maxAnzKonstanzvPkw = data
+				.getUnscaledValue("maxAnzKonstanzvPkw").longValue(); //$NON-NLS-1$
+		this.maxAnzKonstanzStreung = data.getUnscaledValue(
+				"maxAnzKonstanzStreung").longValue(); //$NON-NLS-1$
+		this.maxAnzKonstanzBelegung = data.getUnscaledValue(
+				"maxAnzKonstanzBelegung").longValue(); //$NON-NLS-1$
 	}
 
-
 	/**
-	 * Erfragt maxAnzKonstanzBelegung
+	 * Erfragt maxAnzKonstanzBelegung.
 	 * 
 	 * @return maxAnzKonstanzBelegung
 	 */
@@ -109,9 +119,8 @@ extends AllgemeinerDatenContainer{
 		return maxAnzKonstanzBelegung;
 	}
 
-
 	/**
-	 * Erfragt maxAnzKonstanzqKfz
+	 * Erfragt maxAnzKonstanzqKfz.
 	 * 
 	 * @return maxAnzKonstanzqKfz
 	 */
@@ -119,9 +128,8 @@ extends AllgemeinerDatenContainer{
 		return maxAnzKonstanzqKfz;
 	}
 
-
 	/**
-	 * Erfragt maxAnzKonstanzqLkw
+	 * Erfragt maxAnzKonstanzqLkw.
 	 * 
 	 * @return maxAnzKonstanzqLkw
 	 */
@@ -129,9 +137,8 @@ extends AllgemeinerDatenContainer{
 		return maxAnzKonstanzqLkw;
 	}
 
-
 	/**
-	 * Erfragt maxAnzKonstanzqPkw
+	 * Erfragt maxAnzKonstanzqPkw.
 	 * 
 	 * @return maxAnzKonstanzqPkw
 	 */
@@ -139,9 +146,8 @@ extends AllgemeinerDatenContainer{
 		return maxAnzKonstanzqPkw;
 	}
 
-
 	/**
-	 * Erfragt maxAnzKonstanzStreung
+	 * Erfragt maxAnzKonstanzStreung.
 	 * 
 	 * @return maxAnzKonstanzStreung
 	 */
@@ -149,9 +155,8 @@ extends AllgemeinerDatenContainer{
 		return maxAnzKonstanzStreung;
 	}
 
-
 	/**
-	 * Erfragt maxAnzKonstanzvKfz
+	 * Erfragt maxAnzKonstanzvKfz.
 	 * 
 	 * @return maxAnzKonstanzvKfz
 	 */
@@ -159,9 +164,8 @@ extends AllgemeinerDatenContainer{
 		return maxAnzKonstanzvKfz;
 	}
 
-
 	/**
-	 * Erfragt maxAnzKonstanzvLkw
+	 * Erfragt maxAnzKonstanzvLkw.
 	 * 
 	 * @return maxAnzKonstanzvLkw
 	 */
@@ -169,9 +173,8 @@ extends AllgemeinerDatenContainer{
 		return maxAnzKonstanzvLkw;
 	}
 
-
 	/**
-	 * Erfragt maxAnzKonstanzvPkw
+	 * Erfragt maxAnzKonstanzvPkw.
 	 * 
 	 * @return maxAnzKonstanzvPkw
 	 */
