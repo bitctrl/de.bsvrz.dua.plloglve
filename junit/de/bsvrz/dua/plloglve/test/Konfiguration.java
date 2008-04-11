@@ -51,86 +51,86 @@ public final class Konfiguration {
 	public static final String TEST_DATEN_VERZ = ".\\testDaten\\V_2.8(09.04.08)\\"; //$NON-NLS-1$
 
 	/**
-	 * Die CSV-Datei mit Paramterdaten
+	 * Die CSV-Datei mit Paramterdaten.
 	 */
 	public static final String DATENCSV_PARAMETER = "Parameter";
 	
 	
 	/**
-	 * Die CSV-Datei mit Daten des FS1
+	 * Die CSV-Datei mit Daten des FS1.
 	 */
 	public static final String DATENCSV_FS1 = "Fahrstreifen1";
 	
 	/**
-	 * Die CSV-Datei mit Daten des FS2
+	 * Die CSV-Datei mit Daten des FS2.
 	 */
 	public static final String DATENCSV_FS2 = "Fahrstreifen2";
 	
 	/**
-	 * Die CSV-Datei mit Daten des FS3
+	 * Die CSV-Datei mit Daten des FS3.
 	 */
 	public static final String DATENCSV_FS3 = "Fahrstreifen3";
 	
 	
 	/**
-	 * Die CSV-Datei mit Daten der Standardprüfung KZD TLS
+	 * Die CSV-Datei mit Daten der Standardprüfung KZD TLS.
 	 */
 	public static final String DATENCSV_LVE_TLS = "PL-Pruef_LVE_TLS";
 	
 	/**
-	 * Die CSV-Datei mit Daten der Standardprüfung KZD Grenzwerte
+	 * Die CSV-Datei mit Daten der Standardprüfung KZD Grenzwerte.
 	 */
 	public static final String DATENCSV_LVE_GRENZ = "PL-Pruef_LVE_Grenz";
 	
 	/**
-	 * Die CSV-Datei mit Daten der Standardprüfung LZD Grenzwerte
+	 * Die CSV-Datei mit Daten der Standardprüfung LZD Grenzwerte.
 	 */
 	public static final String DATENCSV_LZD = "PL-Pruefung_LZD";
 	
 	/**
-	 * Die CSV-Datei mit Daten der Differenzialkontrolle
+	 * Die CSV-Datei mit Daten der Differenzialkontrolle.
 	 */
-	public static final String DATENCSV_Diff = "Fahrstreifen_Diff";
+	public static final String DATEN_CSV_DIFF = "Fahrstreifen_Diff";
 	
 	/**
-	 * Die CSV-Datei mit Fehlerdaten eines FS
+	 * Die CSV-Datei mit Fehlerdaten eines FS.
 	 */
 	public static final String DATENCSV_FS_FEHLER = "Fahrstreifen_Fehler";
 	
 	/**
-	 * Die CSV-Datei mit OK-Daten eines FS
+	 * Die CSV-Datei mit OK-Daten eines FS.
 	 */
 	public static final String DATENCSV_FS_OK = "Fahrstreifen_OK";
 	
 	
 	/**
-	 * Die PID des ersten KZD Testfahrstreifens
+	 * Die PID des ersten KZD Testfahrstreifens.
 	 */
 	public static final String PID_TESTFS1_KZD = "AAA.Test.fs.kzd.1";
 	
 	/**
-	 * Die PID des zweiten KZD Testfahrstreifens
+	 * Die PID des zweiten KZD Testfahrstreifens.
 	 */
 	public static final String PID_TESTFS2_KZD = "AAA.Test.fs.kzd.2";
 	
 	/**
-	 * Die PID des dritten KZD Testfahrstreifens
+	 * Die PID des dritten KZD Testfahrstreifens.
 	 */
 	public static final String PID_TESTFS3_KZD = "AAA.Test.fs.kzd.3";
 	
 	
 	/**
-	 * Die PID des ersten LZD Testfahrstreifens
+	 * Die PID des ersten LZD Testfahrstreifens.
 	 */
 	public static final String PID_TESTFS1_LZD = "AAA.Test.fs.lzd.1";
 	
 	/**
-	 * Die PID des zweiten LZD Testfahrstreifens
+	 * Die PID des zweiten LZD Testfahrstreifens.
 	 */
 	public static final String PID_TESTFS2_LZD = "AAA.Test.fs.lzd.2";
 	
 	/**
-	 * Die PID des dritten LZD Testfahrstreifens
+	 * Die PID des dritten LZD Testfahrstreifens.
 	 */
 	public static final String PID_TESTFS3_LZD = "AAA.Test.fs.lzd.3";
 	

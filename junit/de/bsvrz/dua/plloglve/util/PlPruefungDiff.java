@@ -61,17 +61,17 @@ public class PlPruefungDiff implements ClientSenderInterface,
 	private boolean useAssert = true;
 
 	/**
-	 * Debug-Logger
+	 * Debug-Logger.
 	 */
 	private static final Debug LOGGER = Debug.getLogger();
 
 	/**
-	 * Testfahrstreifen KZD
+	 * Testfahrstreifen KZD.
 	 */
 	public static SystemObject FS = null;
 
 	/**
-	 * KZD Importer
+	 * KZD Importer.
 	 */
 	private ParaKZDLogImport kzdImport;
 
@@ -140,7 +140,7 @@ public class PlPruefungDiff implements ClientSenderInterface,
 		 */
 		TestFahrstreifenImporter fsImpFSDiff = null;
 		fsImpFSDiff = new TestFahrstreifenImporter(this.dav, Konfiguration.TEST_DATEN_VERZ
-				+ Konfiguration.DATENCSV_Diff); //$NON-NLS-1$
+				+ Konfiguration.DATEN_CSV_DIFF); //$NON-NLS-1$
 
 		/*
 		 * Die zu sendenden Daten

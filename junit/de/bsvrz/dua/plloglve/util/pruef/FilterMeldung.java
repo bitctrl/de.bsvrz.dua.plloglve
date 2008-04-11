@@ -95,14 +95,20 @@ public class FilterMeldung implements IBmListener {
 	private boolean anzahlEingehalten = false;
 
 	/**
-	 * Initialisiert und Konfiguriert den Meldungsfilter
+	 * Initialisiert und Konfiguriert den Meldungsfilter.
 	 * 
-	 * @param caller Die aufrufende Klasse
-	 * @param dav Die Datenverteilerverbindung
-	 * @param filter Der anzuwendende Filter
-	 * @param erfAnz Die erwartete Anzahl erfasster Meldungen
-	 * @param anzHyst Hystereseparameter
-	 * @throws Exception wird weitergereicht
+	 * @param caller
+	 *            Die aufrufende Klasse
+	 * @param dav
+	 *            Die Datenverteilerverbindung
+	 * @param filter
+	 *            Der anzuwendende Filter
+	 * @param erfAnz
+	 *            Die erwartete Anzahl erfasster Meldungen
+	 * @param anzHyst
+	 *            Hystereseparameter
+	 * @throws Exception
+	 *             wird weitergereicht
 	 */
 	public FilterMeldung(PlPruefungInterface caller, ClientDavInterface dav,
 			String filter, int erfAnz, int anzHyst) throws Exception {
