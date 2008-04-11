@@ -36,6 +36,7 @@ import de.bsvrz.dav.daf.main.ResultData;
 import de.bsvrz.dav.daf.main.SenderRole;
 import de.bsvrz.dav.daf.main.config.SystemObject;
 import de.bsvrz.dua.plloglve.plloglve.typen.OptionenPlausibilitaetsPruefungLogischVerkehr;
+import de.bsvrz.dua.plloglve.test.Konfiguration;
 import de.bsvrz.dua.plloglve.util.para.ParaKZDLogImport;
 import de.bsvrz.dua.plloglve.util.para.ParaLZDLogImport;
 import de.bsvrz.dua.plloglve.util.pruef.PruefeDatenLogisch;
@@ -44,7 +45,7 @@ import de.bsvrz.sys.funclib.commandLineArgs.ArgumentList;
 import de.bsvrz.sys.funclib.debug.Debug;
 
 /**
- * 
+ * Standardtest (TLS und Grenzwerte) für KZD und LZD 
  * @author BitCtrl Systems GmbH, Görlitz
  *
  * @version $Id$
@@ -67,11 +68,6 @@ public class PlPruefungLogisch implements ClientSenderInterface {
 	protected static final Debug LOGGER = Debug.getLogger();
 
 	/**
-	 * Verzeichnis, in dem sich die CSV-Dateien mit den Testdaten befinden
-	 */
-	private String TEST_DATEN_VERZ = null;
-
-	/**
 	 * Die zur Prüfung zu verwendende CSV Datei mit Testdaten
 	 */
 	private String csvPruefDatei = null;
@@ -82,17 +78,33 @@ public class PlPruefungLogisch implements ClientSenderInterface {
 	private boolean tlsPruefung = false;
 
 	/**
-	 * Testfahrstreifen KZD FS1, FS2, FS3
+	 * Testfahrstreifen KZD FS1
 	 */
 	public static SystemObject FS1 = null;
+	
+	/**
+	 * Testfahrstreifen KZD FS2
+	 */
 	public static SystemObject FS2 = null;
+	
+	/**
+	 * Testfahrstreifen KZD FS3
+	 */
 	public static SystemObject FS3 = null;
 
 	/**
-	 * Testfahrstreifen LZD FS1_LZD, FS2_LZD, FS3_LZD
+	 * Testfahrstreifen LZD FS1_LZD
 	 */
 	public static SystemObject FS1_LZ = null;
+	
+	/**
+	 * Testfahrstreifen LZD FS2_LZD
+	 */
 	public static SystemObject FS2_LZ = null;
+	
+	/**
+	 * Testfahrstreifen LZD FS3_LZD
+	 */
 	public static SystemObject FS3_LZ = null;
 
 	/**
@@ -106,17 +118,33 @@ public class PlPruefungLogisch implements ClientSenderInterface {
 	public static DataDescription DD_KZD_SEND = null;
 
 	/**
-	 * Importer für die Parameter der KZD-FS
+	 * Importer für die Parameter der KZD-FS1
 	 */
 	private ParaKZDLogImport kzdImport1;
+	
+	/**
+	 * Importer für die Parameter der KZD-FS2
+	 */
 	private ParaKZDLogImport kzdImport2;
+	
+	/**
+	 * Importer für die Parameter der KZD-FS3
+	 */
 	private ParaKZDLogImport kzdImport3;
 
 	/**
-	 * Importer für die Parameter der LZD-FS
+	 * Importer für die Parameter der LZD-FS1
 	 */
 	private ParaLZDLogImport lzdImport1;
+	
+	/**
+	 * Importer für die Parameter der LZD-FS2
+	 */
 	private ParaLZDLogImport lzdImport2;
+	
+	/**
+	 * Importer für die Parameter der LZD-FS3
+	 */
 	private ParaLZDLogImport lzdImport3;
 
 	/**
@@ -124,30 +152,27 @@ public class PlPruefungLogisch implements ClientSenderInterface {
 	 */
 	private ClientDavInterface dav = null;
 
+
 	/**
-	 * Sendet Testdaten und vergleicht plausibilisierte Daten auf SOLL-Werte
-	 * 
-	 * @param dav
-	 *            Datenteilerverbindung
-	 * @param TEST_DATEN_VERZ
-	 *            Verzeichnis mit Testdaten
+	 * Initialisiert Standardtest
+	 * @param dav Die Datenverteilerverbindung
+	 * @param TEST_DATEN_VERZ Das Testdatenverzeichnis
+	 * @param alLogger Die Loggerattribute
 	 */
-	public PlPruefungLogisch(ClientDavInterface dav, String TEST_DATEN_VERZ,
-			ArgumentList alLogger) {
+	public PlPruefungLogisch(ClientDavInterface dav, ArgumentList alLogger) {
 		this.dav = dav;
-		this.TEST_DATEN_VERZ = TEST_DATEN_VERZ;
 		this.alLogger = alLogger;
 
 		/*
 		 * Meldet Sender für KZD und LZD unter dem Aspekt Externe Erfassung an
 		 */
-		FS1 = this.dav.getDataModel().getObject("AAA.Test.fs.kzd.1"); //$NON-NLS-1$
-		FS2 = this.dav.getDataModel().getObject("AAA.Test.fs.kzd.2"); //$NON-NLS-1$
-		FS3 = this.dav.getDataModel().getObject("AAA.Test.fs.kzd.3"); //$NON-NLS-1$
+		FS1 = this.dav.getDataModel().getObject(Konfiguration.PID_TESTFS1_KZD);
+		FS2 = this.dav.getDataModel().getObject(Konfiguration.PID_TESTFS2_KZD);
+		FS3 = this.dav.getDataModel().getObject(Konfiguration.PID_TESTFS3_KZD);
 
-		FS1_LZ = this.dav.getDataModel().getObject("AAA.Test.fs.lzd.1"); //$NON-NLS-1$
-		FS2_LZ = this.dav.getDataModel().getObject("AAA.Test.fs.lzd.2"); //$NON-NLS-1$
-		FS3_LZ = this.dav.getDataModel().getObject("AAA.Test.fs.lzd.3"); //$NON-NLS-1$
+		FS1_LZ = this.dav.getDataModel().getObject(Konfiguration.PID_TESTFS1_LZD);
+		FS2_LZ = this.dav.getDataModel().getObject(Konfiguration.PID_TESTFS2_LZD);
+		FS3_LZ = this.dav.getDataModel().getObject(Konfiguration.PID_TESTFS3_LZD);
 
 		DD_KZD_SEND = new DataDescription(this.dav.getDataModel()
 				.getAttributeGroup(DUAKonstanten.ATG_KZD), this.dav
@@ -161,14 +186,17 @@ public class PlPruefungLogisch implements ClientSenderInterface {
 	}
 
 	/**
-	 * Konfiguriert Klasse für die Prüfung von KZD TLS, sendet Testdaten und
-	 * führt Prüfung durch
-	 * 
+	 * Konfiguriert Klasse für die Prüfung von KZD TLS, sendet Testdaten über
+	 * den parametrierten Bereich und führt Prüfung durch
+	 * @param bereiche Die Bereiche, über die Testdaten gesendet und geprüft werden
 	 * @throws Exception
 	 */
 	public void pruefeKZDTLS(final int[][] bereiche) throws Exception {
-		this.csvPruefDatei = "PL-Pruef_LVE_TLS"; //$NON-NLS-1$
+		this.csvPruefDatei = Konfiguration.DATENCSV_LVE_TLS;
 
+		/*
+		 * Es handelt sich um eine TLS- und KEINE Grenzwertprüfung
+		 */
 		this.tlsPruefung = true;
 
 		/*
@@ -181,24 +209,27 @@ public class PlPruefungLogisch implements ClientSenderInterface {
 		/*
 		 * Importiere KZD TLS Parameter
 		 */
-		kzdImport1 = new ParaKZDLogImport(dav, FS1, TEST_DATEN_VERZ
-				+ "Parameter"); //$NON-NLS-1$
-		kzdImport2 = new ParaKZDLogImport(dav, FS2, TEST_DATEN_VERZ
-				+ "Parameter"); //$NON-NLS-1$
-		kzdImport3 = new ParaKZDLogImport(dav, FS3, TEST_DATEN_VERZ
-				+ "Parameter"); //$NON-NLS-1$
+		kzdImport1 = new ParaKZDLogImport(dav, FS1, Konfiguration.TEST_DATEN_VERZ
+				+ Konfiguration.DATENCSV_PARAMETER);
+		kzdImport2 = new ParaKZDLogImport(dav, FS2, Konfiguration.TEST_DATEN_VERZ
+				+ Konfiguration.DATENCSV_PARAMETER);
+		kzdImport3 = new ParaKZDLogImport(dav, FS3, Konfiguration.TEST_DATEN_VERZ
+				+ Konfiguration.DATENCSV_PARAMETER);
 
+		/*
+		 * Starte den Test
+		 */
 		doPruefeKZD(bereiche);
 	}
 
 	/**
-	 * Konfiguriert Klasse für die Prüfung von KZD auf Grenzwerte, sendet
-	 * Testdaten und führt Prüfung durch
-	 * 
+	 * Konfiguriert Klasse für die Prüfung von KZD Grenzwerte, sendet Testdaten über
+	 * den parametrierten Bereich und führt Prüfung durch
+	 * @param bereiche Die Bereiche, über die Testdaten gesendet und geprüft werden
 	 * @throws Exception
 	 */
 	public void pruefeKZDGrenz(final int[][] bereiche) throws Exception {
-		this.csvPruefDatei = "PL-Pruef_LVE_Grenz";
+		this.csvPruefDatei = Konfiguration.DATENCSV_LVE_GRENZ;
 
 		/*
 		 * Initialisiere Logger
@@ -210,25 +241,32 @@ public class PlPruefungLogisch implements ClientSenderInterface {
 		/*
 		 * Importiere KZD Grenzwert Parameter
 		 */
-		kzdImport1 = new ParaKZDLogImport(dav, FS1, TEST_DATEN_VERZ
-				+ "Parameter");
-		kzdImport2 = new ParaKZDLogImport(dav, FS2, TEST_DATEN_VERZ
-				+ "Parameter");
-		kzdImport3 = new ParaKZDLogImport(dav, FS3, TEST_DATEN_VERZ
-				+ "Parameter");
+		kzdImport1 = new ParaKZDLogImport(dav, FS1, Konfiguration.TEST_DATEN_VERZ
+				+ Konfiguration.DATENCSV_PARAMETER);
+		kzdImport2 = new ParaKZDLogImport(dav, FS2, Konfiguration.TEST_DATEN_VERZ
+				+ Konfiguration.DATENCSV_PARAMETER);
+		kzdImport3 = new ParaKZDLogImport(dav, FS3, Konfiguration.TEST_DATEN_VERZ
+				+ Konfiguration.DATENCSV_PARAMETER);
 
+		/*
+		 * Beginne im ersten fünftel mit "nur Max"-Prüfung
+		 */
 		importOptionenKZD(OptionenPlausibilitaetsPruefungLogischVerkehr.SETZE_MAX);
+		
+		/*
+		 * Starte Test
+		 */
 		doPruefeKZD(bereiche);
 	}
 
 	/**
-	 * Konfiguriert Klasse für die Prüfung von LZD auf Grenzwerte, sendet
-	 * Testdaten und führt Prüfung durch
-	 * 
+	 * Konfiguriert Klasse für die Prüfung von LZD Grenzwerte, sendet Testdaten über
+	 * den parametrierten Bereich und führt Prüfung durch
+	 * @param bereiche Die Bereiche, über die Testdaten gesendet und geprüft werden
 	 * @throws Exception
 	 */
 	public void pruefeLZDGrenz(final int[][] bereiche) throws Exception {
-		this.csvPruefDatei = "PL-Pruefung_LZD";
+		this.csvPruefDatei = Konfiguration.DATENCSV_LZD;
 
 		/*
 		 * Initialisiere Logger
@@ -240,21 +278,28 @@ public class PlPruefungLogisch implements ClientSenderInterface {
 		/*
 		 * Importiere LZD Grenzwert Parameter
 		 */
-		lzdImport1 = new ParaLZDLogImport(dav, FS1_LZ, TEST_DATEN_VERZ
-				+ "Parameter");
-		lzdImport2 = new ParaLZDLogImport(dav, FS2_LZ, TEST_DATEN_VERZ
-				+ "Parameter");
-		lzdImport3 = new ParaLZDLogImport(dav, FS3_LZ, TEST_DATEN_VERZ
-				+ "Parameter");
+		lzdImport1 = new ParaLZDLogImport(dav, FS1_LZ, Konfiguration.TEST_DATEN_VERZ
+				+ Konfiguration.DATENCSV_PARAMETER);
+		lzdImport2 = new ParaLZDLogImport(dav, FS2_LZ, Konfiguration.TEST_DATEN_VERZ
+				+ Konfiguration.DATENCSV_PARAMETER);
+		lzdImport3 = new ParaLZDLogImport(dav, FS3_LZ, Konfiguration.TEST_DATEN_VERZ
+				+ Konfiguration.DATENCSV_PARAMETER);
 
+		/*
+		 * Beginne im ersten fünftel mit "nur Max"-Prüfung
+		 */
 		importOptionenLZD(OptionenPlausibilitaetsPruefungLogischVerkehr.SETZE_MAX);
+		
+		/*
+		 * Starte Test
+		 */
 		doPruefeLZD(bereiche);
 	}
 
 	/**
-	 * Sendet Testdaten und führt KZD Prüfung entsprechend der Konfiguration
-	 * durch
-	 * 
+	 * Sendet Testdaten über den übergebenen Bereich und führt KZD Prüfung
+	 * (TLS- oder Grenzwertprüfung entsprechend der Konfiguration) durch
+	 * @param bereiche Die Bereiche, über die Testdaten gesendet und geprüft werden
 	 * @throws Exception
 	 */
 	private void doPruefeKZD(final int[][] bereiche) throws Exception {
@@ -266,24 +311,24 @@ public class PlPruefungLogisch implements ClientSenderInterface {
 				DD_KZD_SEND, SenderRole.source());
 
 		/*
-		 * Initialisiere Testfahrstreifen-Datenimporter
+		 * Initialisiere Testfahrstreifen-Datenimporter für FS1-FS3
 		 */
 		TestFahrstreifenImporter fsImpFS1 = null;
 		TestFahrstreifenImporter fsImpFS2 = null;
 		TestFahrstreifenImporter fsImpFS3 = null;
 
-		fsImpFS1 = new TestFahrstreifenImporter(this.dav, TEST_DATEN_VERZ
-				+ "fahrstreifen1"); //$NON-NLS-1$
-		fsImpFS2 = new TestFahrstreifenImporter(this.dav, TEST_DATEN_VERZ
-				+ "fahrstreifen2"); //$NON-NLS-1$
-		fsImpFS3 = new TestFahrstreifenImporter(this.dav, TEST_DATEN_VERZ
-				+ "fahrstreifen3"); //$NON-NLS-1$
+		fsImpFS1 = new TestFahrstreifenImporter(this.dav, Konfiguration.TEST_DATEN_VERZ
+				+ Konfiguration.DATENCSV_FS1);
+		fsImpFS2 = new TestFahrstreifenImporter(this.dav, Konfiguration.TEST_DATEN_VERZ
+				+ Konfiguration.DATENCSV_FS2);
+		fsImpFS3 = new TestFahrstreifenImporter(this.dav, Konfiguration.TEST_DATEN_VERZ
+				+ Konfiguration.DATENCSV_FS3);
 
 		/*
-		 * Initialisiert Testerobjekt für den SOLL-IST-Vergleich
+		 * Initialisiert FS-Testerobjekt für den SOLL-IST-Vergleich
 		 */
 		PruefeDatenLogisch fsPruefer = new PruefeDatenLogisch(this, dav,
-				new SystemObject[] { FS1, FS2, FS3 }, TEST_DATEN_VERZ
+				new SystemObject[] { FS1, FS2, FS3 }, Konfiguration.TEST_DATEN_VERZ
 						+ csvPruefDatei);
 		fsPruefer.benutzeAssert(useAssert);
 
@@ -320,14 +365,14 @@ public class PlPruefungLogisch implements ClientSenderInterface {
 
 		while (csvDatenVorhanden) {
 			/*
-			 * Übergebe CSV-Offset und zu prüfenden Zeitstempel an Testerobjekt
+			 * Übergebe CSV-Offset und zu prüfenden Zeitstempel an FS-Testerobjekt
 			 */
 			LOGGER
 					.info("Setze CSV-Zeile und Zeitstempel fuer Prüfer -> Zeile:" + (csvIndex + 2) + " Zeit:" + aktZeit); //$NON-NLS-1$ //$NON-NLS-2$
 			fsPruefer.listen(csvIndex, aktZeit);
 
 			/*
-			 * Sende Testdaten für FS1, FS2, FS3
+			 * Lese Testdaten für FS1, FS2, FS3 ein
 			 */
 			if ((zeileFS1 = fsImpFS1.getNaechstenDatensatz(DD_KZD_SEND
 					.getAttributeGroup())) != null) {
@@ -361,14 +406,21 @@ public class PlPruefungLogisch implements ClientSenderInterface {
 				csvDatenVorhanden = false;
 				LOGGER.info("Keine Daten mehr vorhanedn. Beende Prüfung..."); //$NON-NLS-1$
 			} else {
+				/*
+				 * Liegen noch Testdaten in dem konfigurierten Bereich vor
+				 * so werden diese versendet
+				 */
 				for (int[] bereich : bereiche) {
 					if (csvIndex >= (bereich[0] - 2)
 							&& csvIndex <= (bereich[1] - 2)) {
 						LOGGER
 								.info("Warte auf SOLL-IST-Vergleich (CSV-Zeile " + (csvIndex + 1) + ")..."); //$NON-NLS-1$//$NON-NLS-2$
-						this.dav.sendData(new ResultData[] { resultat1,
-								resultat2, resultat3 });
-						doWait(); // Warte auf Ueberpruefung der FS1-FS3
+						
+						synchronized(this) {
+							this.dav.sendData(new ResultData[] { resultat1,
+									resultat2, resultat3 });
+							doWait(); // Warte auf Ueberpruefung der FS1-FS3
+						}
 					}
 				}
 			}
@@ -376,8 +428,7 @@ public class PlPruefungLogisch implements ClientSenderInterface {
 			csvIndex++;
 
 			/*
-			 * Wechselt die Reaktionsart bei Grenzwertüberschreitung des
-			 * nächsten DS
+			 * Prüft und wechselt ggf. die Reaktionsart auf Grenzwerüberschreitung
 			 */
 			if (!tlsPruefung)
 				wechselReaktionKZD(csvIndex);
@@ -386,7 +437,7 @@ public class PlPruefungLogisch implements ClientSenderInterface {
 		}
 
 		/*
-		 * Fehlerausgabe
+		 * Fehlerausgabe des FS-Testerobjektes 
 		 */
 		reportFehler(fsPruefer);
 
@@ -398,9 +449,9 @@ public class PlPruefungLogisch implements ClientSenderInterface {
 	}
 
 	/**
-	 * Sendet Testdaten und führt LZD Prüfung entsprechend der Konfiguration
-	 * durch
-	 * 
+	 * Sendet Testdaten über den übergebenen Bereich und führt KZD Prüfung
+	 * (TLS- oder Grenzwertprüfung entsprechend der Konfiguration) durch
+	 * @param bereiche Die Bereiche, über die Testdaten gesendet und geprüft werden
 	 * @throws Exception
 	 */
 	private void doPruefeLZD(final int[][] bereiche) throws Exception {
@@ -411,24 +462,24 @@ public class PlPruefungLogisch implements ClientSenderInterface {
 				FS3_LZ }, DD_LZD_SEND, SenderRole.source());
 
 		/*
-		 * Initialisiere Testfahrstreifen-Datenimporter
+		 * Initialisiere Testfahrstreifen-Datenimporter für FS1-FS3
 		 */
 		TestFahrstreifenImporter fsImpFS1 = null;
 		TestFahrstreifenImporter fsImpFS2 = null;
 		TestFahrstreifenImporter fsImpFS3 = null;
 
-		fsImpFS1 = new TestFahrstreifenImporter(this.dav, TEST_DATEN_VERZ
-				+ "fahrstreifen1"); //$NON-NLS-1$
-		fsImpFS2 = new TestFahrstreifenImporter(this.dav, TEST_DATEN_VERZ
-				+ "fahrstreifen2"); //$NON-NLS-1$
-		fsImpFS3 = new TestFahrstreifenImporter(this.dav, TEST_DATEN_VERZ
-				+ "fahrstreifen3"); //$NON-NLS-1$
+		fsImpFS1 = new TestFahrstreifenImporter(this.dav, Konfiguration.TEST_DATEN_VERZ
+				+ Konfiguration.DATENCSV_FS1);
+		fsImpFS2 = new TestFahrstreifenImporter(this.dav, Konfiguration.TEST_DATEN_VERZ
+				+ Konfiguration.DATENCSV_FS2);
+		fsImpFS3 = new TestFahrstreifenImporter(this.dav, Konfiguration.TEST_DATEN_VERZ
+				+ Konfiguration.DATENCSV_FS3);
 
 		/*
-		 * Initialisiert Testerobjekt für den SOLL-IST-Vergleich
+		 * Initialisiert FS-Testerobjekt für den SOLL-IST-Vergleich
 		 */
 		PruefeDatenLogisch fsPruefer = new PruefeDatenLogisch(this, dav,
-				new SystemObject[] { FS1_LZ, FS2_LZ, FS3_LZ }, TEST_DATEN_VERZ
+				new SystemObject[] { FS1_LZ, FS2_LZ, FS3_LZ }, Konfiguration.TEST_DATEN_VERZ
 						+ csvPruefDatei);
 		fsPruefer.benutzeAssert(useAssert);
 
@@ -466,14 +517,14 @@ public class PlPruefungLogisch implements ClientSenderInterface {
 
 		while (csvDatenVorhanden) {
 			/*
-			 * Übergebe CSV-Offset und zu prüfenden Zeitstempel an Testerobjekt
+			 * Übergebe CSV-Offset und zu prüfenden Zeitstempel an FS-Testerobjekt
 			 */
 			LOGGER.info("Setze CSV-Zeile und Zeitstempel für Pruefer -> Zeile:"
 					+ (csvIndex + 2) + " Zeit:" + aktZeit);
 			fsPruefer.listen(csvIndex, aktZeit);
 
 			/*
-			 * Sende Testdaten für FS1, FS2, FS3
+			 * Lese Testdaten für FS1, FS2, FS3 ein
 			 */
 			if ((zeileFS1 = fsImpFS1.getNaechstenDatensatz(DD_LZD_SEND
 					.getAttributeGroup())) != null) {
@@ -509,14 +560,21 @@ public class PlPruefungLogisch implements ClientSenderInterface {
 				csvDatenVorhanden = false;
 				LOGGER.info("Keine Daten mehr vorhanedn. Beende Prüfung...");
 			} else {
+				/*
+				 * Liegen noch Testdaten in dem konfigurierten Bereich vor
+				 * so werden diese versendet
+				 */
 				for (int[] bereich : bereiche) {
 					if (csvIndex >= (bereich[0] - 2)
 							&& csvIndex <= (bereich[1] - 2)) {
 						LOGGER.info("Warte auf SOLL-IST-Vergleich (CSV-Zeile "
 								+ (csvIndex + 1) + ")...");
-						this.dav.sendData(new ResultData[] { resultat1,
-								resultat2, resultat3 });
-						doWait(); // Warte auf Ueberpruefung der FS1-FS3
+						
+						synchronized(this) {
+							this.dav.sendData(new ResultData[] { resultat1,
+									resultat2, resultat3 });
+							doWait(); // Warte auf Ueberpruefung der FS1-FS3
+						}
 					}
 				}
 			}
@@ -524,8 +582,7 @@ public class PlPruefungLogisch implements ClientSenderInterface {
 			csvIndex++;
 
 			/*
-			 * Wechselt die Reaktionsart bei Grenzwertüberschreitung des
-			 * nächsten DS
+			 * Prüft und wechselt ggf. die Reaktionsart auf Grenzwerüberschreitung
 			 */
 			wechselReaktionLZD(csvIndex);
 
@@ -533,7 +590,7 @@ public class PlPruefungLogisch implements ClientSenderInterface {
 		}
 
 		/*
-		 * Fehlerausgabe
+		 * Fehlerausgabe des FS-Testerobjekts
 		 */
 		reportFehler(fsPruefer);
 
@@ -585,8 +642,10 @@ public class PlPruefungLogisch implements ClientSenderInterface {
 	}
 
 	/**
-	 * Wechselt die Reaktionsart auf Grenzwertüberschreitung bei KZD Ausgegangen
-	 * wird von 100 Datensätzen -> Wechsel alle 20 Datensätze
+	 * Wechselt die Reaktionsart auf Grenzwertüberschreitung bei KZD.
+	 * Ausgegangen wird von 100 Datensätzen -> Wechsel alle 20 Datensätze.
+	 * Im Falle eier Grenzwertprüfung muss die Option auf "nur Max"-Prüfung
+	 * vorher gesetzt werden da diese hier nicht gesetzt wird
 	 * 
 	 * @param csvIndex
 	 *            Der DS-Index
@@ -614,8 +673,10 @@ public class PlPruefungLogisch implements ClientSenderInterface {
 	}
 
 	/**
-	 * Wechselt die Reaktionsart auf Grenzwertüberschreitung bei LZD Ausgegangen
-	 * wird von 100 Datensätzen -> Wechsel alle 20 Datensätze
+	 * Wechselt die Reaktionsart auf Grenzwertüberschreitung bei LZD.
+	 * Ausgegangen wird von 100 Datensätzen -> Wechsel alle 20 Datensätze.
+	 * Im Falle eier Grenzwertprüfung muss die Option auf "nur Max"-Prüfung
+	 * vorher gesetzt werden da diese hier nicht gesetzt wird
 	 * 
 	 * @param csvIndex
 	 *            Der DS-Index
@@ -660,7 +721,6 @@ public class PlPruefungLogisch implements ClientSenderInterface {
 				this.wait();
 			} catch (Exception e) {
 			}
-			;
 		}
 	}
 
@@ -683,12 +743,17 @@ public class PlPruefungLogisch implements ClientSenderInterface {
 	/**
 	 * Soll Assert zur Fehlermeldung genutzt werden?
 	 * 
-	 * @param useAssert
+	 * @param useAssert <code>True</code> wenn Asserts benutzt werden sollen,
+	 * sonst <code>False</code>
 	 */
 	public void benutzeAssert(final boolean useAssert) {
 		this.useAssert = useAssert;
 	}
 
+	/**
+	 * Gibt die Fehler des FS-Testerobjektes aus
+	 * @param fsPruefer Das FS-Testerobjekt dessen Fehler ausgegeben werden sollen
+	 */
 	private void reportFehler(PruefeDatenLogisch fsPruefer) {
 		/*
 		 * Fehlerausgabe FehlerAlles

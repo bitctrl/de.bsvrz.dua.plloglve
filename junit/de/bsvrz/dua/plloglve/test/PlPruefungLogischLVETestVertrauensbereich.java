@@ -67,7 +67,7 @@ public class PlPruefungLogischLVETestVertrauensbereich {
 	 */
 	@Before
 	public void setUp() throws Exception {
-		this.dav = DAVTest.getDav(Verbindung.getConData());
+		this.dav = DAVTest.getDav(Konfiguration.getConData());
 	}
 
 	/**
@@ -78,7 +78,7 @@ public class PlPruefungLogischLVETestVertrauensbereich {
 	@Test
 	public void testVB() throws Exception {
 		PlPruefungVertrauensbereich pruefVertrB = new PlPruefungVertrauensbereich(
-				dav, Verbindung.TEST_DATEN_VERZ, alLogger);
+				dav, alLogger);
 		pruefVertrB.benutzeAssert(true);
 		pruefVertrB.setMeldungHysterese(3);
 		pruefVertrB.pruefe();

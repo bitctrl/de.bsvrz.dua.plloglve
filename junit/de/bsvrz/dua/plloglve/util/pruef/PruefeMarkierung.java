@@ -92,18 +92,38 @@ public class PruefeMarkierung implements ClientReceiverInterface {
 	private String pruefeAttr;
 
 	/**
-	 * Gibt an, auf was für Markierungen getestet werden soll
+	 * Gibt an, auf welchen Wert getestet werden soll
 	 */
 	private long sollWert;
+	
+	/**
+	 * Gibt an, auf welchen Implausibelzustand getestet werden soll
+	 */
 	private int sollImplausibel;
+	
+	/**
+	 * Der repräsentative Wert um die Prüfung des Wertes abzuschalten
+	 */
 	private static int SOLL_WERT_KEINE_PRUEFUNG = 0;
+	
+	/**
+	 * Der repräsentative Wert für die Prüfung auf einen fehlerfreien Wert
+	 */
 	private static int SOLL_WERT_KEIN_FEHLER = 1;
+	
+	/**
+	 * Der repräsentative Wert um die Prüfung des Implausibelzustandes abzuschalten 
+	 */
 	private static int SOLL_IMPLAUSIBEL_KEINE_PRUEFUNG = -1;
 
 	/**
-	 * Empfange-Datenbeschreibung für KZD und LZD
+	 * Empfange-Datenbeschreibung für KZD
 	 */
 	public static DataDescription DD_KZD_EMPF = null;
+	
+	/**
+	 * Empfange-Datenbeschreibung für LZD
+	 */
 	public static DataDescription DD_LZD_EMPF = null;
 
 	/**
@@ -458,7 +478,8 @@ public class PruefeMarkierung implements ClientReceiverInterface {
 	/**
 	 * Soll Assert zur Fehlermeldung genutzt werden?
 	 * 
-	 * @param useAssert
+	 * @param useAssert <code>True</code> wenn Asserts verwendet werden sollen,
+	 * sonst <code>False</code>
 	 */
 	public void benutzeAssert(final boolean useAssert) {
 		this.useAssert = useAssert;

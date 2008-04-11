@@ -95,12 +95,12 @@ public class FilterMeldung implements IBmListener {
 	private boolean anzahlEingehalten = false;
 
 	/**
-	 * Standardkonstruktor.
+	 * Initialisiert und Konfiguriert den Meldungsfilter
 	 * 
-	 * @param caller der
-	 * @param dav der
-	 * @param filter der
-	 * @param erfAnz der
+	 * @param caller Die aufrufende Klasse
+	 * @param dav Die Datenverteilerverbindung
+	 * @param filter Der anzuwendende Filter
+	 * @param erfAnz Die erwartete Anzahl erfasster Meldungen
 	 * @param anzHyst Hystereseparameter
 	 * @throws Exception wird weitergereicht
 	 */

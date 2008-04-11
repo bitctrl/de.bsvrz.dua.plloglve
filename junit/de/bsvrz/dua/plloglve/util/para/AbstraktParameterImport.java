@@ -222,8 +222,10 @@ public abstract class AbstraktParameterImport extends CSVImporter implements
 	/**
 	 * Setzt Standard-Attribute zurück.
 	 * 
-	 * @param optionen Optioens-Parameter
-	 * @throws Exception wird weitergereicht
+	 * @param optionen
+	 *            Optioens-Parameter
+	 * @throws Exception
+	 *             wird weitergereicht
 	 */
 	private void deaktiviereParaStandard(
 			final OptionenPlausibilitaetsPruefungLogischVerkehr optionen)
@@ -279,7 +281,8 @@ public abstract class AbstraktParameterImport extends CSVImporter implements
 	 * Setzt Attribute der Differentialkontrolle entsprechend den PrSpez
 	 * (5.1.3.10.2).
 	 * 
-	 * @throws Exception wird weitergereicht
+	 * @throws Exception
+	 *             wird weitergereicht
 	 */
 	public final void importParaDiff() throws Exception {
 		sDav.subscribeSender(this, objekt, ddDiff, SenderRole.sender());
@@ -314,7 +317,8 @@ public abstract class AbstraktParameterImport extends CSVImporter implements
 	/**
 	 * Setzt Attribute der Differentialkontrolle zurück.
 	 * 
-	 * @throws Exception wird weitergereicht
+	 * @throws Exception
+	 *             wird weitergereicht
 	 */
 	private void deaktiviereParaDiff() throws Exception {
 		Data parameter = sDav.createData(diffFs);
@@ -343,9 +347,11 @@ public abstract class AbstraktParameterImport extends CSVImporter implements
 	}
 
 	/**
-	 * Setzt Attribute der Ausfallkontrolle entsprechend den PrSpez (5.1.3.10.2).
+	 * Setzt Attribute der Ausfallkontrolle entsprechend den PrSpez
+	 * (5.1.3.10.2).
 	 * 
-	 * @throws Exception wird weitergereicht
+	 * @throws Exception
+	 *             wird weitergereicht
 	 */
 	public final void importParaAusfall() throws Exception {
 		sDav.subscribeSender(this, objekt, ddAusfall, SenderRole.sender());
@@ -366,7 +372,8 @@ public abstract class AbstraktParameterImport extends CSVImporter implements
 	/**
 	 * Setzt Attribute der Ausfallkontrolle zurück.
 	 * 
-	 * @throws Exception wird weitergereicht
+	 * @throws Exception
+	 *             wird weitergereicht
 	 */
 	private void deaktiviereParaAusfall() throws Exception {
 		Data parameter = sDav.createData(ausfallHFs);
@@ -384,7 +391,8 @@ public abstract class AbstraktParameterImport extends CSVImporter implements
 	 * Setzt Attribute des Vertrauensbereich entsprechend den PrSpez
 	 * (5.1.3.10.2).
 	 * 
-	 * @throws Exception wird weitergereicht
+	 * @throws Exception
+	 *             wird weitergereicht
 	 */
 	public final void importParaVertrauensbereich() throws Exception {
 		sDav.subscribeSender(this, objekt, ddVertrauensBereich, SenderRole
@@ -410,7 +418,8 @@ public abstract class AbstraktParameterImport extends CSVImporter implements
 	/**
 	 * Setzt Attribute des Vertrauensbereich zurück.
 	 * 
-	 * @throws Exception wird weitergereicht
+	 * @throws Exception
+	 *             wird weitergereicht
 	 */
 	private void deaktiviereParaVertrauensbereich() throws Exception {
 		Data parameter = sDav.createData(vertrauensbereichFs);

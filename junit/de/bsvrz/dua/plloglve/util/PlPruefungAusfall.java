@@ -37,6 +37,7 @@ import de.bsvrz.dav.daf.main.DataDescription;
 import de.bsvrz.dav.daf.main.ResultData;
 import de.bsvrz.dav.daf.main.SenderRole;
 import de.bsvrz.dav.daf.main.config.SystemObject;
+import de.bsvrz.dua.plloglve.test.Konfiguration;
 import de.bsvrz.dua.plloglve.util.para.ParaKZDLogImport;
 import de.bsvrz.dua.plloglve.util.pruef.FilterMeldung;
 import de.bsvrz.sys.funclib.bitctrl.dua.DUAKonstanten;
@@ -69,11 +70,6 @@ public class PlPruefungAusfall implements ClientSenderInterface,
 	protected Debug LOGGER;
 
 	/**
-	 * Verzeichnis, in dem sich die CSV-Dateien mit den Testdaten befinden
-	 */
-	private String TEST_DATEN_VERZ = null;
-
-	/**
 	 * Testfahrstreifen KZD
 	 */
 	public static SystemObject FS = null;
@@ -96,13 +92,7 @@ public class PlPruefungAusfall implements ClientSenderInterface,
 	/**
 	 * Intervalllänge in Millisekunden
 	 */
-	// static long INTERVALL = Konstante.MINUTE_IN_MS;
 	static long INTERVALL = 100L;
-
-	// /**
-	// * Filter-Timout
-	// */
-	// private boolean filterTimeout = true;
 
 	/**
 	 * Abweichung zur erwarteten Anzahl von Meldungen
@@ -117,10 +107,8 @@ public class PlPruefungAusfall implements ClientSenderInterface,
 	 * @param TEST_DATEN_VERZ
 	 *            Testdatenverzeichnis
 	 */
-	public PlPruefungAusfall(ClientDavInterface dav, String TEST_DATEN_VERZ,
-			ArgumentList alLogger) {
+	public PlPruefungAusfall(ClientDavInterface dav, ArgumentList alLogger) {
 		this.dav = dav;
-		this.TEST_DATEN_VERZ = TEST_DATEN_VERZ;
 
 		/*
 		 * Initialisiere Logger
@@ -131,7 +119,7 @@ public class PlPruefungAusfall implements ClientSenderInterface,
 		/*
 		 * Melde Sender für FS an
 		 */
-		FS = this.dav.getDataModel().getObject("AAA.Test.fs.kzd.1"); //$NON-NLS-1$
+		FS = this.dav.getDataModel().getObject(Konfiguration.PID_TESTFS1_KZD); //$NON-NLS-1$
 
 		DD_KZD_SEND = new DataDescription(this.dav.getDataModel()
 				.getAttributeGroup(DUAKonstanten.ATG_KZD), this.dav
@@ -139,8 +127,8 @@ public class PlPruefungAusfall implements ClientSenderInterface,
 				(short) 0);
 
 		try {
-			kzdImport = new ParaKZDLogImport(dav, FS, TEST_DATEN_VERZ
-					+ "Parameter");
+			kzdImport = new ParaKZDLogImport(dav, FS, Konfiguration.TEST_DATEN_VERZ
+					+ Konfiguration.DATENCSV_PARAMETER);
 			kzdImport.importParaAusfall();
 		} catch (Exception e) {
 			LOGGER.error("Kann Test nicht konfigurieren: " + e);
@@ -164,10 +152,10 @@ public class PlPruefungAusfall implements ClientSenderInterface,
 		TestFahrstreifenImporter paraImpFSOK = null;
 		TestFahrstreifenImporter paraImpFSFehler = null;
 
-		paraImpFSOK = new TestFahrstreifenImporter(this.dav, TEST_DATEN_VERZ
-				+ "fahrstreifen_OK"); //$NON-NLS-1$
-		paraImpFSFehler = new TestFahrstreifenImporter(this.dav,
-				TEST_DATEN_VERZ + "fahrstreifen_Fehler"); //$NON-NLS-1$
+		paraImpFSOK = new TestFahrstreifenImporter(this.dav, Konfiguration.TEST_DATEN_VERZ
+				+ Konfiguration.DATENCSV_FS_OK);
+		paraImpFSFehler = new TestFahrstreifenImporter(this.dav, Konfiguration.TEST_DATEN_VERZ
+				+ Konfiguration.DATENCSV_FS_FEHLER);
 
 		/*
 		 * Setze Intervallparameter
@@ -176,6 +164,7 @@ public class PlPruefungAusfall implements ClientSenderInterface,
 		// paraImpFSFehler.setT(INTERVALL);
 		// paraImpFSOK.setT(60000L);
 		// paraImpFSFehler.setT(60000L);
+		
 		/*
 		 * Aktuelle fehlerfreie und fehlerhafte Fahrstreifen-DS
 		 */

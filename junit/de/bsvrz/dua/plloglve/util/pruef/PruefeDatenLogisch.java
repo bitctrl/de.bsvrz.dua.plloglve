@@ -71,7 +71,7 @@ public class PruefeDatenLogisch implements ClientReceiverInterface {
 	 */
 	private PlPruefungLogisch caller;
 
-	/*
+	/**
 	 * CSV-Importer.
 	 */
 	private CSVImporter csvImp;
@@ -82,16 +82,38 @@ public class PruefeDatenLogisch implements ClientReceiverInterface {
 	private int csvOffset;
 
 	/**
-	 * Speichert die eingelesenen CSV Daten.
+	 * Speichert die eingelesenen CSV Daten des FS1
 	 */
 	private ArrayList<HashMap<String, Integer>> csvZeilenFS1 = new ArrayList<HashMap<String, Integer>>();
+	
+	/**
+	 * Speichert die eingelesenen CSV Daten des FS2
+	 */
 	private ArrayList<HashMap<String, Integer>> csvZeilenFS2 = new ArrayList<HashMap<String, Integer>>();
+	
+	/**
+	 * Speichert die eingelesenen CSV Daten des FS3
+	 */
 	private ArrayList<HashMap<String, Integer>> csvZeilenFS3 = new ArrayList<HashMap<String, Integer>>();
 
+	/**
+	 * Der aktuelle CSV-Nettowert
+	 */
 	private Long csvWerttNetto;
 
+	/**
+	 * Speichert die eingelesenen CSV Nettowerte des FS1
+	 */
 	private ArrayList<Long> alCSVWerttNettoFS1 = new ArrayList<Long>();
+	
+	/**
+	 * Speichert die eingelesenen CSV Nettowerte des FS2
+	 */
 	private ArrayList<Long> alCSVWerttNettoFS2 = new ArrayList<Long>();
+	
+	/**
+	 * Speichert die eingelesenen CSV Nettowerte des FS3
+	 */
 	private ArrayList<Long> alCSVWerttNettoFS3 = new ArrayList<Long>();
 
 	/**
@@ -100,23 +122,43 @@ public class PruefeDatenLogisch implements ClientReceiverInterface {
 	private long pruefZeitstempel;
 
 	/**
-	 * Gibt an, ob die jeweilige Fahrstreifenpruefung erfolgt ist
+	 * Gibt an, ob die Fahrstreifenpruefung für FS1 erfolgt ist
 	 */
 	private boolean pruefungFS1Fertig = false;
+	
+	/**
+	 * Gibt an, ob die Fahrstreifenpruefung für FS2 erfolgt ist
+	 */
 	private boolean pruefungFS2Fertig = false;
+	
+	/**
+	 * Gibt an, ob die Fahrstreifenpruefung für FS3 erfolgt ist
+	 */
 	private boolean pruefungFS3Fertig = false;
 
 	/**
-	 * Vergleicherthreads für FS 1-3
+	 * Vergleicherthread für FS1 
 	 */
 	private VergleicheDaten vergleicheFS1;
+	
+	/**
+	 * Vergleicherthread für FS2 
+	 */
 	private VergleicheDaten vergleicheFS2;
+	
+	/**
+	 * Vergleicherthread für FS3 
+	 */
 	private VergleicheDaten vergleicheFS3;
 
 	/**
-	 * Empfange-Datenbeschreibung für KZD und LZD
+	 * Empfange-Datenbeschreibung für KZD
 	 */
 	public static DataDescription DD_KZD_EMPF = null;
+	
+	/**
+	 * Empfange-Datenbeschreibung für LZD
+	 */
 	public static DataDescription DD_LZD_EMPF = null;
 
 	/**
@@ -561,7 +603,15 @@ class VergleicheDaten extends Thread {
 	 * Logger
 	 */
 	protected Debug LOGGER = Debug.getLogger();
+	
+	/**
+	 * Hält die aktuelle Loggerausgabe
+	 */
 	private String pruefLog;
+	
+	/**
+	 * Hält den aktuellen Warntext
+	 */
 	private String warnung;
 
 	/**
@@ -575,10 +625,18 @@ class VergleicheDaten extends Thread {
 	private Data daten;
 
 	/**
-	 * tNetto werte der Ergebnisdaten
+	 * tNetto werte der Ergebnisdaten für FS1
 	 */
 	private long resultWerttNettoFS1;
+	
+	/**
+	 * tNetto werte der Ergebnisdaten für FS2
+	 */
 	private long resultWerttNettoFS2;
+	
+	/**
+	 * tNetto werte der Ergebnisdaten für FS3
+	 */
 	private long resultWerttNettoFS3;
 
 	/**
@@ -612,12 +670,27 @@ class VergleicheDaten extends Thread {
 	int csvOffset;
 
 	/**
-	 * Fehleranzahl
+	 * Fehleranzahl der Tabelle mit erwarteten Werten
+	 * Wert der linken Spalte eines Attributes stimmt nicht mit dem
+	 * entsprechenden gelieferten Wert der SWE überein
 	 */
 	protected int anzFehlerLinks = 0;
+	
+	/**
+	 * Fehleranzahl der Tabelle mit erwarteten Werten
+	 * Wert der rechten Spalte (Statusflags) eines Attributes stimmt
+	 * nicht mit dem entsprechenden gelieferten Wert der SWE überein
+	 */
 	protected int anzFehlerRechts = 0;
+	
+	/**
+	 * Fehleranzahl der Tabelle mit erwarteten Werten
+	 * Wert der linken und rechten Spalte (Statusflags) eines Attributes
+	 * stimmt nicht mit dem entsprechenden gelieferten Wert der SWE überein
+	 */
 	protected int anzFehlerAlles = 0;
 
+	
 	/**
 	 * Erstellt einen Prüfthread welcher Soll-Werte und Ergebniswerte vergleicht
 	 * und das Ergebnis ausgibt
@@ -1017,7 +1090,8 @@ class VergleicheDaten extends Thread {
 	/**
 	 * Soll Assert zur Fehlermeldung genutzt werden?
 	 * 
-	 * @param useAssert
+	 * @param useAssert <code>True</code> wenn Asserts verwendet werden sollen,
+	 * sonst <code>False</code>
 	 */
 	public void benutzeAssert(final boolean useAssert) {
 		this.useAssert = useAssert;

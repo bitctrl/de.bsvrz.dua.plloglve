@@ -37,6 +37,7 @@ import de.bsvrz.dav.daf.main.ResultData;
 import de.bsvrz.dav.daf.main.SenderRole;
 import de.bsvrz.dav.daf.main.config.SystemObject;
 import de.bsvrz.dua.plloglve.plloglve.typen.OptionenPlausibilitaetsPruefungLogischVerkehr;
+import de.bsvrz.dua.plloglve.test.Konfiguration;
 import de.bsvrz.dua.plloglve.util.para.ParaKZDLogImport;
 import de.bsvrz.dua.plloglve.util.pruef.FilterMeldung;
 import de.bsvrz.dua.plloglve.util.pruef.PruefeMarkierung;
@@ -71,11 +72,6 @@ public class PlPruefungVertrauensbereich implements ClientSenderInterface,
 	protected Debug LOGGER = Debug.getLogger();
 
 	/**
-	 * Verzeichnis, in dem sich die CSV-Dateien mit den Testdaten befinden
-	 */
-	private String TEST_DATEN_VERZ = null;
-
-	/**
 	 * Testfahrstreifen KZD
 	 */
 	public static SystemObject FS = null;
@@ -98,7 +94,6 @@ public class PlPruefungVertrauensbereich implements ClientSenderInterface,
 	/**
 	 * Intervalllänge in Millisekunden
 	 */
-	// static long INTERVALL = Konstante.MINUTE_IN_MS;
 	static long INTERVALL = TestParameter.INTERVALL_VB;
 
 	/**
@@ -112,17 +107,15 @@ public class PlPruefungVertrauensbereich implements ClientSenderInterface,
 	private int meldungHyst = 0;
 
 	/**
-	 * Sendet Testdaten und prüft Ausfallkontrolle
+	 * Initialisiert Vertrauensbereichstest
 	 * 
 	 * @param dav
 	 *            Datenverteilerverbindung
 	 * @param TEST_DATEN_VERZ
 	 *            Testdatenverzeichnis
 	 */
-	public PlPruefungVertrauensbereich(ClientDavInterface dav,
-			String TEST_DATEN_VERZ, ArgumentList alLogger) {
+	public PlPruefungVertrauensbereich(ClientDavInterface dav, ArgumentList alLogger) {
 		this.dav = dav;
-		this.TEST_DATEN_VERZ = TEST_DATEN_VERZ;
 
 		/*
 		 * Initialisiere Logger
@@ -133,7 +126,7 @@ public class PlPruefungVertrauensbereich implements ClientSenderInterface,
 		/*
 		 * Melde Sender für FS an
 		 */
-		FS = this.dav.getDataModel().getObject("AAA.Test.fs.kzd.1"); //$NON-NLS-1$
+		FS = this.dav.getDataModel().getObject(Konfiguration.PID_TESTFS1_KZD); //$NON-NLS-1$
 
 		DD_KZD_SEND = new DataDescription(this.dav.getDataModel()
 				.getAttributeGroup(DUAKonstanten.ATG_KZD), this.dav
@@ -141,10 +134,9 @@ public class PlPruefungVertrauensbereich implements ClientSenderInterface,
 				(short) 0);
 
 		try {
-			kzdImport = new ParaKZDLogImport(dav, FS, TEST_DATEN_VERZ
-					+ "Parameter");
-			kzdImport
-					.setOptionen(OptionenPlausibilitaetsPruefungLogischVerkehr.KEINE_PRUEFUNG);
+			kzdImport = new ParaKZDLogImport(dav, FS, Konfiguration.TEST_DATEN_VERZ
+					+ Konfiguration.DATENCSV_PARAMETER);
+			kzdImport.setOptionen(OptionenPlausibilitaetsPruefungLogischVerkehr.KEINE_PRUEFUNG);
 			kzdImport.importiereParameter(1);
 			kzdImport.importParaVertrauensbereich();
 		} catch (Exception e) {
@@ -154,7 +146,7 @@ public class PlPruefungVertrauensbereich implements ClientSenderInterface,
 		try {
 			TestFahrstreifenImporter paraImpFSFehler = null;
 			paraImpFSFehler = new TestFahrstreifenImporter(this.dav,
-					TEST_DATEN_VERZ + "fahrstreifen_Fehler"); //$NON-NLS-1$
+					Konfiguration.TEST_DATEN_VERZ + Konfiguration.DATENCSV_FS_FEHLER); //$NON-NLS-1$
 			TestFahrstreifenImporter.setT(TestParameter.INTERVALL_VB);
 			zFSFehlB2 = paraImpFSFehler.getNaechstenDatensatz(DD_KZD_SEND
 					.getAttributeGroup());
@@ -165,7 +157,7 @@ public class PlPruefungVertrauensbereich implements ClientSenderInterface,
 	}
 
 	/**
-	 * Prüfung der Ausfallkontrolle
+	 * Startet den Vertrauensbereichstest
 	 * 
 	 * @throws Exception
 	 */
@@ -179,8 +171,8 @@ public class PlPruefungVertrauensbereich implements ClientSenderInterface,
 		 * Initialisiere Parameter Importer für fehlerfreie DS
 		 */
 		TestFahrstreifenImporter paraImpFSOK = null;
-		paraImpFSOK = new TestFahrstreifenImporter(this.dav, TEST_DATEN_VERZ
-				+ "fahrstreifen_OK"); //$NON-NLS-1$
+		paraImpFSOK = new TestFahrstreifenImporter(this.dav, Konfiguration.TEST_DATEN_VERZ
+				+ Konfiguration.DATENCSV_FS_OK); //$NON-NLS-1$
 
 		/*
 		 * Setze Intervall auf 100MS
@@ -428,7 +420,6 @@ public class PlPruefungVertrauensbereich implements ClientSenderInterface,
 				this.wait();
 			} catch (Exception e) {
 			}
-			;
 		}
 	}
 
@@ -451,7 +442,8 @@ public class PlPruefungVertrauensbereich implements ClientSenderInterface,
 	/**
 	 * Soll Assert zur Fehlermeldung genutzt werden?
 	 * 
-	 * @param useAssert
+	 * @param useAssert <code>True</code> wenn Asserts verwendet werden sollen,
+	 * sonst <code>False</code>
 	 */
 	public void benutzeAssert(final boolean useAssert) {
 		this.useAssert = useAssert;
@@ -460,7 +452,7 @@ public class PlPruefungVertrauensbereich implements ClientSenderInterface,
 	/**
 	 * Setzt die erlaubte Abweichung zur erwarteten Anzahl an Betriebsmeldungen.
 	 * 
-	 * @param meldungHyst
+	 * @param meldungHyst Die erlaubte Abweichung zur erwarteten Anzahl an Betriebsmeldungen.
 	 */
 	public void setMeldungHysterese(final int meldungHyst) {
 		this.meldungHyst = meldungHyst;

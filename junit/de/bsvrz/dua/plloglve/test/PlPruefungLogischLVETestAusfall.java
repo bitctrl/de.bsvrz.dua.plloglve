@@ -67,7 +67,7 @@ public class PlPruefungLogischLVETestAusfall {
 	 */
 	@Before
 	public void setUp() throws Exception {
-		this.dav = DAVTest.getDav(Verbindung.getConData());
+		this.dav = DAVTest.getDav(Konfiguration.getConData());
 	}
 
 	/**
@@ -77,8 +77,7 @@ public class PlPruefungLogischLVETestAusfall {
 	 */
 	@Test
 	public void testAusfall() throws Exception {
-		PlPruefungAusfall pruefAusfall = new PlPruefungAusfall(dav,
-				Verbindung.TEST_DATEN_VERZ, alLogger);
+		PlPruefungAusfall pruefAusfall = new PlPruefungAusfall(dav, alLogger);
 		pruefAusfall.benutzeAssert(true);
 		pruefAusfall.setMeldungHysterese(2);
 		pruefAusfall.pruefe();
