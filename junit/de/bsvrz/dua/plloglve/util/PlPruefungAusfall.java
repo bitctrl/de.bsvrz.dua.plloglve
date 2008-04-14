@@ -47,15 +47,15 @@ import de.bsvrz.sys.funclib.debug.Debug;
 /**
  * 
  * @author BitCtrl Systems GmbH, Görlitz
- *
- *
+ * 
+ * 
  * @version $Id$
  */
 public class PlPruefungAusfall implements ClientSenderInterface,
 		PlPruefungInterface {
 
 	/**
-	 * Zufallsgenerator
+	 * Zufallsgenerator.
 	 */
 	private static final Random R = new Random(System.currentTimeMillis());
 
@@ -65,12 +65,12 @@ public class PlPruefungAusfall implements ClientSenderInterface,
 	private boolean useAssert = true;
 
 	/**
-	 * Logger
+	 * Logger.
 	 */
 	protected Debug LOGGER;
 
 	/**
-	 * Testfahrstreifen KZD
+	 * Testfahrstreifen KZD.
 	 */
 	public static SystemObject FS = null;
 
@@ -80,27 +80,27 @@ public class PlPruefungAusfall implements ClientSenderInterface,
 	private ParaKZDLogImport kzdImport;
 
 	/**
-	 * Sende-Datenbeschreibung für KZD
+	 * Sende-Datenbeschreibung für KZD.
 	 */
 	public static DataDescription DD_KZD_SEND = null;
 
 	/**
-	 * Datenverteiler-Verbindung
+	 * Datenverteiler-Verbindung.
 	 */
 	private ClientDavInterface dav = null;
 
 	/**
-	 * Intervalllänge in Millisekunden
+	 * Intervalllänge in Millisekunden.
 	 */
 	static long INTERVALL = 100L;
 
 	/**
-	 * Abweichung zur erwarteten Anzahl von Meldungen
+	 * Abweichung zur erwarteten Anzahl von Meldungen.
 	 */
 	private int meldungHyst = 0;
 
 	/**
-	 * Sendet Testdaten und prüft Ausfallkontrolle
+	 * Sendet Testdaten und prüft Ausfallkontrolle.
 	 * 
 	 * @param dav
 	 *            Datenverteilerverbindung
@@ -127,8 +127,9 @@ public class PlPruefungAusfall implements ClientSenderInterface,
 				(short) 0);
 
 		try {
-			kzdImport = new ParaKZDLogImport(dav, FS, Konfiguration.TEST_DATEN_VERZ
-					+ Konfiguration.DATENCSV_PARAMETER);
+			kzdImport = new ParaKZDLogImport(dav, FS,
+					Konfiguration.TEST_DATEN_VERZ
+							+ Konfiguration.DATENCSV_PARAMETER);
 			kzdImport.importParaAusfall();
 		} catch (Exception e) {
 			LOGGER.error("Kann Test nicht konfigurieren: " + e);
@@ -136,7 +137,7 @@ public class PlPruefungAusfall implements ClientSenderInterface,
 	}
 
 	/**
-	 * Prüfung der Ausfallkontrolle
+	 * Prüfung der Ausfallkontrolle.
 	 * 
 	 * @throws Exception
 	 */
@@ -152,10 +153,11 @@ public class PlPruefungAusfall implements ClientSenderInterface,
 		TestFahrstreifenImporter paraImpFSOK = null;
 		TestFahrstreifenImporter paraImpFSFehler = null;
 
-		paraImpFSOK = new TestFahrstreifenImporter(this.dav, Konfiguration.TEST_DATEN_VERZ
-				+ Konfiguration.DATENCSV_FS_OK);
-		paraImpFSFehler = new TestFahrstreifenImporter(this.dav, Konfiguration.TEST_DATEN_VERZ
-				+ Konfiguration.DATENCSV_FS_FEHLER);
+		paraImpFSOK = new TestFahrstreifenImporter(this.dav,
+				Konfiguration.TEST_DATEN_VERZ + Konfiguration.DATENCSV_FS_OK);
+		paraImpFSFehler = new TestFahrstreifenImporter(this.dav,
+				Konfiguration.TEST_DATEN_VERZ
+						+ Konfiguration.DATENCSV_FS_FEHLER);
 
 		/*
 		 * Setze Intervallparameter
@@ -164,7 +166,6 @@ public class PlPruefungAusfall implements ClientSenderInterface,
 		// paraImpFSFehler.setT(INTERVALL);
 		// paraImpFSOK.setT(60000L);
 		// paraImpFSFehler.setT(60000L);
-		
 		/*
 		 * Aktuelle fehlerfreie und fehlerhafte Fahrstreifen-DS
 		 */
@@ -200,6 +201,7 @@ public class PlPruefungAusfall implements ClientSenderInterface,
 				try {
 					Thread.sleep(pruefZeit - aktZeit);
 				} catch (InterruptedException ex) {
+					//
 				}
 			}
 		}
@@ -230,6 +232,7 @@ public class PlPruefungAusfall implements ClientSenderInterface,
 			 * Für die restlichen Intervalle werden fehlerfreie Daten gesendet
 			 */
 			if (i >= 929 && i <= 1032) {
+
 				if ((zeileFSFehler = paraImpFSFehler
 						.getNaechstenDatensatz(DD_KZD_SEND.getAttributeGroup())) == null) {
 					paraImpFSFehler.reset();

@@ -34,6 +34,7 @@ import de.bsvrz.dav.daf.main.ResultData;
 import de.bsvrz.dua.plloglve.plloglve.PlPruefungLogischLVE;
 import de.bsvrz.dua.plloglve.vew.TestParameter;
 import de.bsvrz.sys.funclib.bitctrl.dua.DUAKonstanten;
+import de.bsvrz.sys.funclib.bitctrl.dua.DUAUtensilien;
 import de.bsvrz.sys.funclib.bitctrl.dua.intpuf.IntervallPufferException;
 import de.bsvrz.sys.funclib.bitctrl.dua.schnittstellen.IVerwaltung;
 import de.bsvrz.sys.funclib.debug.Debug;
@@ -229,7 +230,11 @@ public class BezugsZeitraum {
 						+ parameter.getBezugsZeitraum()
 						+ " Stunde(n)) implausible Fahrstreifenwerte für den Wert " + //$NON-NLS-1$ //$NON-NLS-2$
 						this.name
-						+ " am Fahrstreifen " + originalDatum.getObject() + " von " + ausfallInProzent + "% (> " + //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+						+ " am Fahrstreifen "
+						+ originalDatum.getObject()
+						+ " von "
+						+ DUAUtensilien.runde(ausfallInProzent, 1)
+						+ "% (> " + //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 						parameter.getMaxAusfallProBezugsZeitraumEin()
 						+ "%) entspricht Ausfall von " + stunden + " Stunde(n) " + //$NON-NLS-1$ //$NON-NLS-2$
 						minuten

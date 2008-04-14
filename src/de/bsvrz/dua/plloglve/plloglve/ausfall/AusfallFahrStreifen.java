@@ -41,6 +41,7 @@ import de.bsvrz.dua.plloglve.plloglve.PlPruefungLogischLVE;
 import de.bsvrz.dua.plloglve.vew.TestParameter;
 import de.bsvrz.sys.funclib.bitctrl.daf.DaVKonstanten;
 import de.bsvrz.sys.funclib.bitctrl.dua.DUAKonstanten;
+import de.bsvrz.sys.funclib.bitctrl.dua.DUAUtensilien;
 import de.bsvrz.sys.funclib.bitctrl.dua.intpuf.IntervallPufferException;
 import de.bsvrz.sys.funclib.bitctrl.dua.schnittstellen.IVerwaltung;
 import de.bsvrz.sys.funclib.bitctrl.modell.AbstractSystemObjekt;
@@ -160,7 +161,8 @@ public class AusfallFahrStreifen extends AbstractSystemObjekt implements
 	 * Erreichnet den Ausfall dieses Fahrstreifens und gibt ggf. eine
 	 * Betriebsmeldung aus.
 	 * 
-	 * @param letztesAusfallDatum das letzte ausgefallene Datum
+	 * @param letztesAusfallDatum
+	 *            das letzte ausgefallene Datum
 	 */
 	private void testAufAusfall(AusfallDatumKomplett letztesAusfallDatum) {
 		long ausfallZeit = 0;
@@ -194,7 +196,8 @@ public class AusfallFahrStreifen extends AbstractSystemObjekt implements
 
 					double ausfallInProzent;
 					if (TestParameter.getInstanz().isTestAusfall()) {
-						ausfallInProzent = (((double) ausfallZeit / (double) 144000L) * 100.0);
+						ausfallInProzent = (((double) ausfallZeit / (double)
+								144000L) * 100.0);
 					} else {
 						ausfallInProzent = (((double) ausfallZeit / (double) Constants.MILLIS_PER_DAY) * 100.0);
 					}
@@ -213,7 +216,9 @@ public class AusfallFahrStreifen extends AbstractSystemObjekt implements
 										.currentTimeMillis()))
 								+ " Uhr (1 Tag) implausible Fahrstreifenwerte am Fahrstreifen " + //$NON-NLS-1$
 								this.getSystemObject()
-								+ " von " + ausfallInProzent + "% (> " + this.maxAusfallProTag + //$NON-NLS-1$//$NON-NLS-2$
+								+ " von "
+								+ DUAUtensilien.runde(ausfallInProzent, 1)
+								+ "% (> " + this.maxAusfallProTag + //$NON-NLS-1$//$NON-NLS-2$
 								"%) entspricht Ausfall von "
 								+ stunden
 								+ " Stunde(n) " + minuten + " Minute(n)."; //$NON-NLS-1$ //$NON-NLS-2$//$NON-NLS-3$
