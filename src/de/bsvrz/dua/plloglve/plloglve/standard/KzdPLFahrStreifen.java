@@ -81,19 +81,53 @@ public class KzdPLFahrStreifen extends AbstraktPLFahrStreifen {
 	 *            sein)
 	 */
 	protected void setAllesImplausibel(Data veraenderbaresDatum) {
-		veraenderbaresDatum
+		int qKfz = veraenderbaresDatum
+				.getItem("qKfz").getUnscaledValue("Wert").intValue(); //$NON-NLS-1$ //$NON-NLS-2$
+		if(qKfz == DUAKonstanten.NICHT_ERMITTELBAR) {
+			veraenderbaresDatum
+				.getItem("qKfz").getUnscaledValue("Wert").set(DUAKonstanten.NICHT_ERMITTELBAR_BZW_FEHLERHAFT); //$NON-NLS-1$ //$NON-NLS-2$
+		} else {
+			veraenderbaresDatum
 				.getItem("qKfz").getUnscaledValue("Wert").set(DUAKonstanten.FEHLERHAFT); //$NON-NLS-1$ //$NON-NLS-2$
-		veraenderbaresDatum
+		}
+		
+		int qLkw = veraenderbaresDatum
+			.getItem("qLkw").getUnscaledValue("Wert").intValue(); //$NON-NLS-1$ //$NON-NLS-2$
+		if(qLkw == DUAKonstanten.NICHT_ERMITTELBAR) {
+			veraenderbaresDatum
+				.getItem("qLkw").getUnscaledValue("Wert").set(DUAKonstanten.NICHT_ERMITTELBAR_BZW_FEHLERHAFT); //$NON-NLS-1$ //$NON-NLS-2$
+		} else {
+			veraenderbaresDatum
 				.getItem("qLkw").getUnscaledValue("Wert").set(DUAKonstanten.FEHLERHAFT); //$NON-NLS-1$ //$NON-NLS-2$
+		}
+		
 		veraenderbaresDatum
-				.getItem("qPkw").getUnscaledValue("Wert").set(DUAKonstanten.FEHLERHAFT); //$NON-NLS-1$ //$NON-NLS-2$
+				.getItem("qPkw").getUnscaledValue("Wert").set(DUAKonstanten.NICHT_ERMITTELBAR_BZW_FEHLERHAFT); //$NON-NLS-1$ //$NON-NLS-2$
 
+		
 		veraenderbaresDatum
-				.getItem("vKfz").getUnscaledValue("Wert").set(DUAKonstanten.FEHLERHAFT); //$NON-NLS-1$ //$NON-NLS-2$
-		veraenderbaresDatum
-				.getItem("vLkw").getUnscaledValue("Wert").set(DUAKonstanten.FEHLERHAFT); //$NON-NLS-1$ //$NON-NLS-2$
-		veraenderbaresDatum
+				.getItem("vKfz").getUnscaledValue("Wert").set(DUAKonstanten.NICHT_ERMITTELBAR_BZW_FEHLERHAFT); //$NON-NLS-1$ //$NON-NLS-2$
+				
+		int vLkw = veraenderbaresDatum
+			.getItem("vLkw").getUnscaledValue("Wert").intValue(); //$NON-NLS-1$ //$NON-NLS-2$
+		if(vLkw == DUAKonstanten.NICHT_ERMITTELBAR) {
+			veraenderbaresDatum
+				.getItem("vLkw").getUnscaledValue("Wert").set(DUAKonstanten.NICHT_ERMITTELBAR_BZW_FEHLERHAFT); //$NON-NLS-1$ //$NON-NLS-2$
+		} else {
+			veraenderbaresDatum
+				.getItem("vLkw").getUnscaledValue("Wert").set(DUAKonstanten.FEHLERHAFT); //$NON-NLS-1$ //$NON-NLS-2$	
+		}
+		
+		int vPkw = veraenderbaresDatum
+			.getItem("vPkw").getUnscaledValue("Wert").intValue(); //$NON-NLS-1$ //$NON-NLS-2$
+		if(vPkw == DUAKonstanten.NICHT_ERMITTELBAR) {
+			veraenderbaresDatum
+				.getItem("vPkw").getUnscaledValue("Wert").set(DUAKonstanten.NICHT_ERMITTELBAR_BZW_FEHLERHAFT); //$NON-NLS-1$ //$NON-NLS-2$
+		} else {
+			veraenderbaresDatum
 				.getItem("vPkw").getUnscaledValue("Wert").set(DUAKonstanten.FEHLERHAFT); //$NON-NLS-1$ //$NON-NLS-2$
+		}
+			
 
 		veraenderbaresDatum
 				.getItem("qKfz").getItem("Status").getItem("MessWertErsetzung").
@@ -115,15 +149,48 @@ public class KzdPLFahrStreifen extends AbstraktPLFahrStreifen {
 				.getItem("vPkw").getItem("Status").getItem("MessWertErsetzung").
 				getUnscaledValue("Implausibel").set(DUAKonstanten.JA); //$NON-NLS-1$
 
-		veraenderbaresDatum
+		
+		int b = veraenderbaresDatum
+			.getItem("b").getUnscaledValue("Wert").intValue(); //$NON-NLS-1$ //$NON-NLS-2$
+		if(b == DUAKonstanten.NICHT_ERMITTELBAR) {
+			veraenderbaresDatum
+				.getItem("b").getUnscaledValue("Wert").set(DUAKonstanten.NICHT_ERMITTELBAR_BZW_FEHLERHAFT); //$NON-NLS-1$ //$NON-NLS-2$
+		} else {
+			veraenderbaresDatum
 				.getItem("b").getUnscaledValue("Wert").set(DUAKonstanten.FEHLERHAFT); //$NON-NLS-1$ //$NON-NLS-2$
-		veraenderbaresDatum
+		}
+		
+		long tNetto = veraenderbaresDatum
+			.getItem("tNetto").getUnscaledValue("Wert").longValue(); //$NON-NLS-1$ //$NON-NLS-2$
+		if(tNetto == DUAKonstanten.NICHT_ERMITTELBAR) {
+			veraenderbaresDatum
+				.getItem("tNetto").getUnscaledValue("Wert").set(DUAKonstanten.NICHT_ERMITTELBAR_BZW_FEHLERHAFT); //$NON-NLS-1$ //$NON-NLS-2$
+		} else {
+			veraenderbaresDatum
 				.getItem("tNetto").getUnscaledValue("Wert").set(DUAKonstanten.FEHLERHAFT); //$NON-NLS-1$ //$NON-NLS-2$
-		veraenderbaresDatum
+		}
+		
+		int sKfz = veraenderbaresDatum
+			.getItem("sKfz").getUnscaledValue("Wert").intValue(); //$NON-NLS-1$ //$NON-NLS-2$
+		if(sKfz == DUAKonstanten.NICHT_ERMITTELBAR) {
+			veraenderbaresDatum
+				.getItem("sKfz").getUnscaledValue("Wert").set(DUAKonstanten.NICHT_ERMITTELBAR_BZW_FEHLERHAFT); //$NON-NLS-1$ //$NON-NLS-2$
+		} else {
+			veraenderbaresDatum
 				.getItem("sKfz").getUnscaledValue("Wert").set(DUAKonstanten.FEHLERHAFT); //$NON-NLS-1$ //$NON-NLS-2$
-		veraenderbaresDatum
+		}
+		
+		int vgKfz = veraenderbaresDatum
+			.getItem("vgKfz").getUnscaledValue("Wert").intValue(); //$NON-NLS-1$ //$NON-NLS-2$
+		if(vgKfz == DUAKonstanten.NICHT_ERMITTELBAR) {
+			veraenderbaresDatum
+				.getItem("vgKfz").getUnscaledValue("Wert").set(DUAKonstanten.NICHT_ERMITTELBAR_BZW_FEHLERHAFT); //$NON-NLS-1$ //$NON-NLS-2$
+		} else {
+			veraenderbaresDatum
 				.getItem("vgKfz").getUnscaledValue("Wert").set(DUAKonstanten.FEHLERHAFT); //$NON-NLS-1$ //$NON-NLS-2$
+		}
 
+		
 		veraenderbaresDatum
 				.getItem("b").getItem("Status").getItem("MessWertErsetzung").
 				getUnscaledValue("Implausibel").set(DUAKonstanten.JA); //$NON-NLS-1$
