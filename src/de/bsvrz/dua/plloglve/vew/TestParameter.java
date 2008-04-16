@@ -38,11 +38,6 @@ import de.bsvrz.sys.funclib.debug.Debug;
 public class TestParameter {
 
 	/**
-	 * Debug-Logger.
-	 */
-	private static final Debug LOGGER = Debug.getLogger();
-
-	/**
 	 * Erfassungsintervalldauer im Testbetrieb (bzw. Laenge einer Minute)
 	 */
 	public static final long INTERVALL_VB = 100L;
@@ -86,10 +81,10 @@ public class TestParameter {
 			} else if (testParameter.toLowerCase().equals("vertrauen")) {
 				this.testVertrauen = true;
 			}
-			LOGGER.info("!!! " + this + " !!!");
+			Debug.getLogger().info("!!! " + this + " !!!");
 			instanz = this;
 		} else {
-			LOGGER.warning("Testparameter wurden bereits initialisiert mit:\n"
+			Debug.getLogger().warning("Testparameter wurden bereits initialisiert mit:\n"
 					+ instanz);
 		}
 	}

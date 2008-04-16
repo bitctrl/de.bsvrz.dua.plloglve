@@ -72,11 +72,6 @@ public class VertrauensFahrStreifen extends AbstractSystemObjekt implements
 			"vgKfz" }; //$NON-NLS-1$
 
 	/**
-	 * Debug-Logger.
-	 */
-	private static final Debug LOGGER = Debug.getLogger();
-
-	/**
 	 * ID von SystemObjekt ATG KZD.
 	 */
 	private static long atgKzdId = -1;
@@ -292,7 +287,7 @@ public class VertrauensFahrStreifen extends AbstractSystemObjekt implements
 
 					this.vertrauenVerletztAllgemein = verletztAktuell;
 				} else {
-					LOGGER
+					Debug.getLogger()
 							.config("Datum kann nicht plausibilisiert werden, da keine" + //$NON-NLS-1$
 									" (oder nicht verwertbare) Parameter vorliegen: " //$NON-NLS-1$
 									+ this);

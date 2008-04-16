@@ -45,11 +45,6 @@ import de.bsvrz.sys.funclib.debug.Debug;
 public class FilterMeldung implements IBmListener {
 
 	/**
-	 * Logger.
-	 */
-	protected static final Debug LOGGER = Debug.getLogger();
-
-	/**
 	 * Aufrufende Klasse.
 	 */
 	PlPruefungInterface caller;
@@ -118,7 +113,7 @@ public class FilterMeldung implements IBmListener {
 		this.anzHyst = anzHyst;
 		this.caller = caller;
 
-		LOGGER
+		Debug.getLogger()
 				.info("Filtere Betriebsmeldungen nach \"" + filter + "\" - Erwarte " + erfAnz + " gefilterte Meldungen"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 
 		/*
@@ -139,15 +134,15 @@ public class FilterMeldung implements IBmListener {
 			String text) {
 		if (text.contains(filter)) {
 			meldAnzahl++;
-			LOGGER.info(meldAnzahl + ". Meldung empfangen\n\r" + text); //$NON-NLS-1$
+			Debug.getLogger().info(meldAnzahl + ". Meldung empfangen\n\r" + text); //$NON-NLS-1$
 
 			if (meldAnzahl == erfAnz) {
-				LOGGER.info("Erforderliche Anzahl an Meldungen erhalten"); //$NON-NLS-1$
+				Debug.getLogger().info("Erforderliche Anzahl an Meldungen erhalten"); //$NON-NLS-1$
 				anzahlEingehalten = true;
 				caller.doNotify();
 			} else if (meldAnzahl > (erfAnz + anzHyst)) {
 				anzahlEingehalten = false;
-				LOGGER.warning("Mehr Meldungen gefiltert als erwartet"); //$NON-NLS-1$	
+				Debug.getLogger().warning("Mehr Meldungen gefiltert als erwartet"); //$NON-NLS-1$	
 			}
 		}
 	}

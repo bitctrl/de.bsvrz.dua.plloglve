@@ -42,6 +42,7 @@ import de.bsvrz.sys.funclib.bitctrl.dua.DUAKonstanten;
 import de.bsvrz.sys.funclib.bitctrl.dua.DUAUtensilien;
 import de.bsvrz.sys.funclib.bitctrl.dua.adapter.AbstraktVerwaltungsAdapterMitGuete;
 import de.bsvrz.sys.funclib.bitctrl.dua.dfs.typen.SWETyp;
+import de.bsvrz.sys.funclib.debug.Debug;
 
 /**
  * Implementierung des Moduls Verwaltung der SWE Pl-Prüfung logisch LVE. Dieses
@@ -98,7 +99,7 @@ public class VerwaltungPlPruefungLogischLVE extends
 		for (SystemObject obj : this.objekte) {
 			infoStr += obj + "\n"; //$NON-NLS-1$
 		}
-		LOGGER.config("---\nBetrachtete Objekte:\n" + infoStr + "---\n"); //$NON-NLS-1$ //$NON-NLS-2$
+		Debug.getLogger().config("---\nBetrachtete Objekte:\n" + infoStr + "---\n"); //$NON-NLS-1$ //$NON-NLS-2$
 
 		this.plPruefungFormal = new PlPruefungFormal(
 				new PPFStandardAspekteVersorger(this).getStandardPubInfos());
@@ -151,16 +152,6 @@ public class VerwaltungPlPruefungLogischLVE extends
 	 *            Argumente der Kommandozeile
 	 */
 	public static void main(String[] argumente) {
-		Thread
-				.setDefaultUncaughtExceptionHandler(new Thread.UncaughtExceptionHandler() {
-					public void uncaughtException(@SuppressWarnings("unused")
-					Thread t, Throwable e) {
-						e.printStackTrace();
-						LOGGER.error("Applikation wird wegen" + //$NON-NLS-1$
-								" unerwartetem Fehler beendet", e); //$NON-NLS-1$
-						Runtime.getRuntime().exit(0);
-					}
-				});
 		StandardApplicationRunner.run(new VerwaltungPlPruefungLogischLVE(),
 				argumente);
 	}

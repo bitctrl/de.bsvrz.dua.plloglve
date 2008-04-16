@@ -67,11 +67,6 @@ public class PlPruefungVertrauensbereich implements ClientSenderInterface,
 	private boolean useAssert = true;
 
 	/**
-	 * Logger.
-	 */
-	protected static final Debug LOGGER = Debug.getLogger();
-
-	/**
 	 * Testfahrstreifen KZD.
 	 */
 	public static SystemObject fs = null;
@@ -111,17 +106,12 @@ public class PlPruefungVertrauensbereich implements ClientSenderInterface,
 	 * 
 	 * @param dav
 	 *            Datenverteilerverbindung
-	 * @param alLogger
+	 * @param alDebug.getLogger()
 	 *            Testdatenverzeichnis
 	 */
 	public PlPruefungVertrauensbereich(ClientDavInterface dav,
 			ArgumentList alLogger) {
 		this.dav = dav;
-
-		/*
-		 * Initialisiere Logger
-		 */
-		Debug.init("PlPruefungVertrauensbereich", alLogger); //$NON-NLS-1$
 
 		/*
 		 * Melde Sender für FS an
@@ -142,7 +132,7 @@ public class PlPruefungVertrauensbereich implements ClientSenderInterface,
 			kzdImport.importiereParameter(1);
 			kzdImport.importParaVertrauensbereich();
 		} catch (Exception e) {
-			LOGGER.error("Kann Test nicht konfigurieren: " + e);
+			Debug.getLogger().error("Kann Test nicht konfigurieren: " + e);
 		}
 
 		try {
@@ -154,7 +144,7 @@ public class PlPruefungVertrauensbereich implements ClientSenderInterface,
 			zFSFehlB2 = paraImpFSFehler.getNaechstenDatensatz(ddKzdSend
 					.getAttributeGroup());
 		} catch (Exception e) {
-			LOGGER.error("Kann Fehlerdatensätze nicht importieren: " + e);
+			Debug.getLogger().error("Kann Fehlerdatensätze nicht importieren: " + e);
 		}
 
 	}
@@ -193,7 +183,7 @@ public class PlPruefungVertrauensbereich implements ClientSenderInterface,
 		/*
 		 * Prüfung
 		 */
-		LOGGER.info("Beginne Prüfung");
+		Debug.getLogger().info("Beginne Prüfung");
 
 		/*
 		 * Warte auf 371 Meldungen 36 x 4 (qKfz, qPkw, qLkw, vPkw) 37 (b) 39 x 4
@@ -201,13 +191,13 @@ public class PlPruefungVertrauensbereich implements ClientSenderInterface,
 		 */
 		FilterMeldung meldFilter = new FilterMeldung(this, dav,
 				"Vertrauensbereichs", 352, meldungHyst);
-		LOGGER
+		Debug.getLogger()
 				.info("Meldungsfilter initialisiert: Erwarte 352 Meldungen mit \"Vertrauensbereichs\"");
 
 		/*
 		 * Sendet fehlerfreie DS für eine Stunde
 		 */
-		LOGGER.info("Sende fehlerfreie DS für 1 Stunde (60)");
+		Debug.getLogger().info("Sende fehlerfreie DS für 1 Stunde (60)");
 		/*
 		 * Testerobjekt
 		 */
@@ -249,7 +239,7 @@ public class PlPruefungVertrauensbereich implements ClientSenderInterface,
 			 */
 			if ((i >= 29 && i < 72) || (i >= 511 && i < 552)) {
 				markPruefer.listenImpl(pruefZeit);
-				LOGGER.info("Intervall " + i
+				Debug.getLogger().info("Intervall " + i
 						+ ": Erwarte alle Attribute als Implausiebel");
 			} else {
 				markPruefer.listenOK(pruefZeit);
@@ -330,7 +320,7 @@ public class PlPruefungVertrauensbereich implements ClientSenderInterface,
 			}
 		}
 
-		LOGGER.info("Warte auf Meldungsfilter");
+		Debug.getLogger().info("Warte auf Meldungsfilter");
 
 		// Warte 30s auf Filterung der Betriebsmeldungen
 		try {
@@ -346,13 +336,13 @@ public class PlPruefungVertrauensbereich implements ClientSenderInterface,
 			if (useAssert) {
 				Assert.assertTrue(warnung, false);
 			} else {
-				LOGGER.warning(warnung);
+				Debug.getLogger().warning(warnung);
 			}
 		} else {
-			LOGGER.info(warnung);
+			Debug.getLogger().info(warnung);
 		}
 
-		LOGGER.info("Prüfung erfolgreich abgeschlossen");
+		Debug.getLogger().info("Prüfung erfolgreich abgeschlossen");
 
 		/*
 		 * Sender abmelden

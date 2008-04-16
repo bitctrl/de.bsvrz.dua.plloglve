@@ -59,11 +59,6 @@ import de.bsvrz.sys.funclib.debug.Debug;
 public class Vertrauensbereich extends AbstraktBearbeitungsKnotenAdapter {
 
 	/**
-	 * Debug-Logger.
-	 */
-	private static final Debug LOGGER = Debug.getLogger();
-
-	/**
 	 * Map von Systemobjekten auf Fahrstreifenobjekte mit Informationen zu den
 	 * jeweiligen Vertrauensbereichsverletzungen.
 	 */
@@ -123,7 +118,7 @@ public class Vertrauensbereich extends AbstraktBearbeitungsKnotenAdapter {
 								if (fs != null) {
 									datum = fs.plausibilisiere(resultat);
 								} else {
-									LOGGER
+									Debug.getLogger()
 											.warning("Datum fuer nicht identifizierbaren Fahrstreifen empfangen: " + //$NON-NLS-1$
 													resultat.getObject());
 								}

@@ -56,11 +56,6 @@ import de.bsvrz.sys.funclib.debug.Debug;
 public class PruefeDatenLogisch implements ClientReceiverInterface {
 
 	/**
-	 * Logger.
-	 */
-	protected static final Debug LOGGER = Debug.getLogger();
-
-	/**
 	 * Datenverteilerverbindung von der aufrufenden Klasse.
 	 */
 	private ClientDavInterface dav;
@@ -166,12 +161,14 @@ public class PruefeDatenLogisch implements ClientReceiverInterface {
 	 * 
 	 * @param caller
 	 *            Die aufrufende Klasse
-	 * @param dav1 Datenverteiler-Verbindung
+	 * @param dav1
+	 *            Datenverteiler-Verbindung
 	 * @param fs
 	 *            Die zu überwachenden Fahrstreifenobjekte
 	 * @param csvQuelle
 	 *            Die Quell CSV-Datei mit Soll-Werten
-	 * @throws Exception wird weitergereicht
+	 * @throws Exception
+	 *             wird weitergereicht
 	 */
 	public PruefeDatenLogisch(PlPruefungLogisch caller,
 			ClientDavInterface dav1, SystemObject[] fs, String csvQuelle)
@@ -201,8 +198,10 @@ public class PruefeDatenLogisch implements ClientReceiverInterface {
 			// CSV Importer initialisieren
 			this.csvImp = new CSVImporter(csvQuelle);
 		} catch (Exception e) {
-			LOGGER
-					.error("Fehler beim öffnen der CSV Datei (" + csvQuelle + "): " + e); //$NON-NLS-1$ //$NON-NLS-2$
+			Debug
+					.getLogger()
+					.error(
+							"Fehler beim öffnen der CSV Datei (" + csvQuelle + "): " + e); //$NON-NLS-1$ //$NON-NLS-2$
 		}
 		csvImp.getNaechsteZeile(); // Tabellenkopf in CSV ueberspringen
 		csvEinlesen(); // CSV einlesen
@@ -249,7 +248,7 @@ public class PruefeDatenLogisch implements ClientReceiverInterface {
 				}
 			}
 		} catch (Exception e) {
-			LOGGER.error("Fehler beim einlesen der CSV Datei: " + e); //$NON-NLS-1$
+			Debug.getLogger().error("Fehler beim einlesen der CSV Datei: " + e); //$NON-NLS-1$
 		}
 	}
 
@@ -261,7 +260,8 @@ public class PruefeDatenLogisch implements ClientReceiverInterface {
 	 * @param fsIndex
 	 *            Der zu verwendende Fahrstreifen
 	 * @return Fahrstreifen-Soll-Daten (AttributPfad,Wert)
-	 * @throws Exception wird weitergereicht
+	 * @throws Exception
+	 *             wird weitergereicht
 	 */
 	private HashMap<String, Integer> csvLeseZeile(String[] aktZeile, int fsIndex)
 			throws Exception {
@@ -514,8 +514,8 @@ public class PruefeDatenLogisch implements ClientReceiverInterface {
 					//
 				}
 
-				LOGGER
-						.info("Zu prüfendes Datum empfangen. Warte auf Prüfung..."); //$NON-NLS-1$
+				Debug.getLogger().info(
+						"Zu prüfendes Datum empfangen. Warte auf Prüfung..."); //$NON-NLS-1$
 			}
 		}
 	}
@@ -525,8 +525,10 @@ public class PruefeDatenLogisch implements ClientReceiverInterface {
 	 */
 	private void pruefungFertig() {
 		if (pruefungFS1Fertig && pruefungFS2Fertig && pruefungFS3Fertig) {
-			LOGGER
-					.info("Prüfung aller Fahrstreifen für diesen Intervall abgeschlossen"); //$NON-NLS-1$
+			Debug
+					.getLogger()
+					.info(
+							"Prüfung aller Fahrstreifen für diesen Intervall abgeschlossen"); //$NON-NLS-1$
 			caller.doNotify(); // Benachrichtige aufrufende Klasse
 		}
 	}
@@ -534,7 +536,8 @@ public class PruefeDatenLogisch implements ClientReceiverInterface {
 	/**
 	 * Diesen Thread wecken.
 	 * 
-	 * @param fs der Fahrstreifenindex
+	 * @param fs
+	 *            der Fahrstreifenindex
 	 */
 	public void doNotify(int fs) {
 		switch (fs) {
@@ -555,7 +558,8 @@ public class PruefeDatenLogisch implements ClientReceiverInterface {
 	/**
 	 * Soll Assert zur Fehlermeldung genutzt werden?
 	 * 
-	 * @param useAssert solllen die Assert-Statements benutzte werden
+	 * @param useAssert
+	 *            solllen die Assert-Statements benutzte werden
 	 */
 	public void benutzeAssert(final boolean useAssert) {
 		vergleicheFS1.benutzeAssert(useAssert);
@@ -612,12 +616,7 @@ class VergleicheDaten extends Thread {
 	private boolean useAssert = true;
 
 	/**
-	 * Logger.
-	 */
-	protected static final Debug LOGGER = Debug.getLogger();
-
-	/**
-	 * Hält die aktuelle Loggerausgabe.
+	 * Hält die aktuelle Debug.getLogger()ausgabe.
 	 */
 	private String pruefLog;
 
@@ -682,23 +681,23 @@ class VergleicheDaten extends Thread {
 	int csvOffset;
 
 	/**
-	 * Fehleranzahl der Tabelle mit erwarteten Werten
-	 * Wert der linken Spalte eines Attributes stimmt nicht mit dem
-	 * entsprechenden gelieferten Wert der SWE überein.
+	 * Fehleranzahl der Tabelle mit erwarteten Werten Wert der linken Spalte
+	 * eines Attributes stimmt nicht mit dem entsprechenden gelieferten Wert der
+	 * SWE überein.
 	 */
 	protected int anzFehlerLinks = 0;
 
 	/**
-	 * Fehleranzahl der Tabelle mit erwarteten Werten
-	 * Wert der rechten Spalte (Statusflags) eines Attributes stimmt.
-	 * nicht mit dem entsprechenden gelieferten Wert der SWE überein
+	 * Fehleranzahl der Tabelle mit erwarteten Werten Wert der rechten Spalte
+	 * (Statusflags) eines Attributes stimmt. nicht mit dem entsprechenden
+	 * gelieferten Wert der SWE überein
 	 */
 	protected int anzFehlerRechts = 0;
 
 	/**
-	 * Fehleranzahl der Tabelle mit erwarteten Werten
-	 * Wert der linken und rechten Spalte (Statusflags) eines Attributes
-	 * stimmt nicht mit dem entsprechenden gelieferten Wert der SWE überein.
+	 * Fehleranzahl der Tabelle mit erwarteten Werten Wert der linken und
+	 * rechten Spalte (Statusflags) eines Attributes stimmt nicht mit dem
+	 * entsprechenden gelieferten Wert der SWE überein.
 	 */
 	protected int anzFehlerAlles = 0;
 
@@ -787,8 +786,9 @@ class VergleicheDaten extends Thread {
 	/**
 	 * Lese Ergebnisdaten.
 	 * 
-	 * @param fsIndex1 der FS-Index
-	 * @return ergebnis 
+	 * @param fsIndex1
+	 *            der FS-Index
+	 * @return ergebnis
 	 */
 	private HashMap<String, Integer> ergebnisLesen(int fsIndex1) {
 		HashMap<String, Integer> hmResult = new HashMap<String, Integer>();
@@ -829,13 +829,14 @@ class VergleicheDaten extends Thread {
 	/**
 	 * prüfe Daten.
 	 * 
-	 * @throws Exception wird weitergereicht
+	 * @throws Exception
+	 *             wird weitergereicht
 	 */
 	private void doVergleiche() throws Exception {
 		String ident = "[FS:" + fsIndex + "-Z:" + (csvOffset + 2) + "] "; // FS +
 		// CSV
 		// Index
-		LOGGER.info("Pruefe Fahrstreifendatum " + ident);
+		Debug.getLogger().info("Pruefe Fahrstreifendatum " + ident);
 
 		HashMap<String, Integer> hmCSV = csvZeilen.get(csvOffset);
 		HashMap<String, Integer> hmResult = ergebnisLesen(fsIndex);
@@ -867,7 +868,8 @@ class VergleicheDaten extends Thread {
 		boolean fehlerLinks = false;
 		boolean fehlerRechts = false;
 
-		// LOGGER.info(ident+"HashMap Groesse: CSV("+(hmCSV.size()-8)+") <>
+		// Debug.getLogger().info(ident+"HashMap Groesse:
+		// CSV("+(hmCSV.size()-8)+") <>
 		// Results("+hmResult.size()+")");
 
 		pruefLog = "";
@@ -956,7 +958,7 @@ class VergleicheDaten extends Thread {
 							if (useAssert) {
 								Assert.assertTrue(warnung, false);
 							} else {
-								LOGGER.warning(warnung);
+								Debug.getLogger().warning(warnung);
 							}
 
 							pruefLog += ident + "DIFF (" + attribut + "):"
@@ -1011,7 +1013,7 @@ class VergleicheDaten extends Thread {
 							if (useAssert) {
 								Assert.assertTrue(warnung, false);
 							} else {
-								LOGGER.warning(warnung);
+								Debug.getLogger().warning(warnung);
 							}
 
 							pruefLog += ident + "DIFF (" + attribut + "):"
@@ -1041,10 +1043,11 @@ class VergleicheDaten extends Thread {
 									+ " (SOLL)<>(IST) " + resultWerttNetto
 									+ istWertErl, false);
 						} else {
-							LOGGER.error(ident + "DIFF (" + attribut + "):"
-									+ csvWerttNetto + sollWertErl
-									+ " (SOLL)<>(IST) " + resultWerttNetto
-									+ istWertErl);
+							Debug.getLogger().error(
+									ident + "DIFF (" + attribut + "):"
+											+ csvWerttNetto + sollWertErl
+											+ " (SOLL)<>(IST) "
+											+ resultWerttNetto + istWertErl);
 						}
 						pruefLog += ident + "DIFF (" + attribut + "):"
 								+ csvWerttNetto + sollWertErl
@@ -1062,24 +1065,29 @@ class VergleicheDaten extends Thread {
 				 * Fehlerausgabe
 				 */
 				if (fehlerLinks && fehlerRechts) {
-					LOGGER.warning("ERR:Fehler Alles @ " + ident + " ("
-							+ attribut + ")");
+					Debug.getLogger().warning(
+							"ERR:Fehler Alles @ " + ident + " (" + attribut
+									+ ")");
 					anzFehlerAlles++;
 				} else if (fehlerLinks) {
-					LOGGER.warning("ERR:Fehler Links @ " + ident + " ("
-							+ attribut + ")");
+					Debug.getLogger().warning(
+							"ERR:Fehler Links @ " + ident + " (" + attribut
+									+ ")");
 					anzFehlerLinks++;
 				} else if (fehlerRechts) {
-					LOGGER.warning("ERR:Fehler Rechts @ " + ident + " ("
-							+ attribut + ")");
+					Debug.getLogger().warning(
+							"ERR:Fehler Rechts @ " + ident + " (" + attribut
+									+ ")");
 					anzFehlerRechts++;
 				}
 			}
 		}
 
-		// LOGGER.info(pruefLog);
-		LOGGER
-				.info("Prüfung der Fahrstreifendaten für diesen Intervall abgeschlossen");
+		// Debug.getLogger().info(pruefLog);
+		Debug
+				.getLogger()
+				.info(
+						"Prüfung der Fahrstreifendaten für diesen Intervall abgeschlossen");
 		caller.doNotify(fsIndex); // Benachrichtige aufrufende Klasse
 	}
 
@@ -1105,8 +1113,9 @@ class VergleicheDaten extends Thread {
 	/**
 	 * Soll Assert zur Fehlermeldung genutzt werden?
 	 * 
-	 * @param useAssert1 <code>True</code> wenn Asserts verwendet werden sollen,
-	 * sonst <code>False</code>
+	 * @param useAssert1
+	 *            <code>True</code> wenn Asserts verwendet werden sollen,
+	 *            sonst <code>False</code>
 	 */
 	public void benutzeAssert(final boolean useAssert1) {
 		this.useAssert = useAssert1;

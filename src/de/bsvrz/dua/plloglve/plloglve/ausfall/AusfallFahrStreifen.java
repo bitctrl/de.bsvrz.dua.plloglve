@@ -63,11 +63,6 @@ public class AusfallFahrStreifen extends AbstractSystemObjekt implements
 		ClientReceiverInterface {
 
 	/**
-	 * Debug-Logger.
-	 */
-	private static final Debug LOGGER = Debug.getLogger();
-
-	/**
 	 * Format der Zeitangabe innerhalb der Betriebsmeldung.
 	 */
 	private static final SimpleDateFormat FORMAT = new SimpleDateFormat(
@@ -148,7 +143,7 @@ public class AusfallFahrStreifen extends AbstractSystemObjekt implements
 					try {
 						this.gleitenderTag.add(ausfallDatum);
 					} catch (IntervallPufferException e) {
-						LOGGER.error(Constants.EMPTY_STRING, e);
+						Debug.getLogger().error(Constants.EMPTY_STRING, e);
 						e.printStackTrace();
 					}
 				}
@@ -185,7 +180,7 @@ public class AusfallFahrStreifen extends AbstractSystemObjekt implements
 				}
 				ausfallZeit = this.gleitenderTag.getAusfallZeit();
 			} catch (IntervallPufferException e) {
-				LOGGER.error(Constants.EMPTY_STRING, e);
+				Debug.getLogger().error(Constants.EMPTY_STRING, e);
 				e.printStackTrace();
 			}
 		}

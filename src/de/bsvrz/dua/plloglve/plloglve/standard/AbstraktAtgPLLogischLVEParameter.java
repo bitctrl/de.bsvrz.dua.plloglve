@@ -42,11 +42,6 @@ import de.bsvrz.sys.funclib.debug.Debug;
 public class AbstraktAtgPLLogischLVEParameter extends AllgemeinerDatenContainer {
 
 	/**
-	 * Debug-Logger.
-	 */
-	protected static final Debug LOGGER = Debug.getLogger();
-
-	/**
 	 * Legt das Verhalten für den Umgang mit geprüften Werten nach der
 	 * Wertebereichsprüfung fest.
 	 */
@@ -175,7 +170,7 @@ public class AbstraktAtgPLLogischLVEParameter extends AllgemeinerDatenContainer 
 					dummy = new AtgVerkehrsDatenLZIPlPruefLogisch(resultat
 							.getData());
 				} else {
-					LOGGER.warning("Unbekannter Datensatz übergeben:\n" + //$NON-NLS-1$
+					Debug.getLogger().warning("Unbekannter Datensatz übergeben:\n" + //$NON-NLS-1$
 							resultat.getDataDescription().getAttributeGroup());
 				}
 			}

@@ -65,11 +65,6 @@ public class PlPruefungAusfall implements ClientSenderInterface,
 	private boolean useAssert = true;
 
 	/**
-	 * Logger.
-	 */
-	protected Debug LOGGER;
-
-	/**
 	 * Testfahrstreifen KZD.
 	 */
 	public static SystemObject FS = null;
@@ -111,12 +106,6 @@ public class PlPruefungAusfall implements ClientSenderInterface,
 		this.dav = dav;
 
 		/*
-		 * Initialisiere Logger
-		 */
-		Debug.init("PlPruefungAusfall", alLogger); //$NON-NLS-1$
-		LOGGER = Debug.getLogger();
-
-		/*
 		 * Melde Sender für FS an
 		 */
 		FS = this.dav.getDataModel().getObject(Konfiguration.PID_TESTFS1_KZD); //$NON-NLS-1$
@@ -132,7 +121,7 @@ public class PlPruefungAusfall implements ClientSenderInterface,
 							+ Konfiguration.DATENCSV_PARAMETER);
 			kzdImport.importParaAusfall();
 		} catch (Exception e) {
-			LOGGER.error("Kann Test nicht konfigurieren: " + e);
+			Debug.getLogger().error("Kann Test nicht konfigurieren: " + e);
 		}
 	}
 
@@ -178,7 +167,7 @@ public class PlPruefungAusfall implements ClientSenderInterface,
 		/*
 		 * Sendet fehlerfreie DS für einen Tag
 		 */
-		LOGGER.info("Sende fehlerfreie DS für 1 Tag (1440)");
+		Debug.getLogger().info("Sende fehlerfreie DS für 1 Tag (1440)");
 		for (int i = 1; i <= 1440; i++) {
 
 			if ((zeileFSOK = paraImpFSOK.getNaechstenDatensatz(DD_KZD_SEND
@@ -209,14 +198,14 @@ public class PlPruefungAusfall implements ClientSenderInterface,
 		/*
 		 * Prüfung
 		 */
-		LOGGER.info("Beginne Prüfung");
+		Debug.getLogger().info("Beginne Prüfung");
 
 		/*
 		 * Initialisiert Meldungsfilter
 		 */
 		FilterMeldung meldFilter = new FilterMeldung(this, dav,
 				"Ausfallhäufigkeit", 1457, meldungHyst);
-		LOGGER
+		Debug.getLogger()
 				.info("Meldungsfilter initialisiert: Erwarte 1457 Meldungen mit \"Ausfallhäufigkeit\"");
 
 		/*
@@ -299,7 +288,7 @@ public class PlPruefungAusfall implements ClientSenderInterface,
 			}
 		}
 
-		LOGGER.info("Warte auf Meldungsfilter");
+		Debug.getLogger().info("Warte auf Meldungsfilter");
 
 		try {
 			Thread.sleep(30000L);
@@ -313,13 +302,13 @@ public class PlPruefungAusfall implements ClientSenderInterface,
 			if (useAssert) {
 				Assert.assertTrue(warnung, false);
 			} else {
-				LOGGER.warning(warnung);
+				Debug.getLogger().warning(warnung);
 			}
 		} else {
-			LOGGER.info(warnung);
+			Debug.getLogger().info(warnung);
 		}
 
-		LOGGER.info("Prüfung erfolgreich abgeschlossen");
+		Debug.getLogger().info("Prüfung erfolgreich abgeschlossen");
 
 		/*
 		 * Sender abmelden

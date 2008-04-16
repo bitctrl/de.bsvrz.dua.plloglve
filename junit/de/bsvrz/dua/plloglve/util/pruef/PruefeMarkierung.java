@@ -60,11 +60,6 @@ public class PruefeMarkierung implements ClientReceiverInterface {
 	private boolean useAssert = true;
 
 	/**
-	 * Logger.
-	 */
-	protected Debug LOGGER = Debug.getLogger();
-
-	/**
 	 * Datenverteilerverbindung von der aufrufenden Klasse.
 	 */
 	private ClientDavInterface dav;
@@ -167,7 +162,7 @@ public class PruefeMarkierung implements ClientReceiverInterface {
 	public void listenOK(String pruefeAttr, long pruefZeitstempel) {
 		pruefeAlleAttr = false;
 		paramOK(pruefeAttr, pruefZeitstempel);
-		LOGGER.info("Prüfe Datum auf fehlerfreies Attribut: " + pruefeAttr); //$NON-NLS-1$
+		Debug.getLogger().info("Prüfe Datum auf fehlerfreies Attribut: " + pruefeAttr); //$NON-NLS-1$
 	}
 
 	/**
@@ -180,7 +175,7 @@ public class PruefeMarkierung implements ClientReceiverInterface {
 	public void listenOK(long pruefZeitstempel) {
 		pruefeAlleAttr = true;
 		paramOK("alle", pruefZeitstempel); //$NON-NLS-1$
-		LOGGER.info("Prüfe alle Attribute des Datums auf fehlerfreiheit"); //$NON-NLS-1$
+		Debug.getLogger().info("Prüfe alle Attribute des Datums auf fehlerfreiheit"); //$NON-NLS-1$
 	}
 
 	/**
@@ -211,7 +206,7 @@ public class PruefeMarkierung implements ClientReceiverInterface {
 	public void listenFehl(String pruefeAttr, long pruefZeitstempel) {
 		pruefeAlleAttr = false;
 		paramFehl(pruefeAttr, pruefZeitstempel);
-		LOGGER
+		Debug.getLogger()
 				.info("Prüfe Datum auf Fehlerhaft-Markierung des Attributes: " + pruefeAttr); //$NON-NLS-1$
 	}
 
@@ -225,7 +220,7 @@ public class PruefeMarkierung implements ClientReceiverInterface {
 	public void listenFehl(long pruefZeitstempel) {
 		pruefeAlleAttr = true;
 		paramFehl("alle", pruefZeitstempel); //$NON-NLS-1$
-		LOGGER.info("Prüfe Datum auf Fehlerhaft-Markierung aller Attribute"); //$NON-NLS-1$
+		Debug.getLogger().info("Prüfe Datum auf Fehlerhaft-Markierung aller Attribute"); //$NON-NLS-1$
 	}
 
 	/**
@@ -256,7 +251,7 @@ public class PruefeMarkierung implements ClientReceiverInterface {
 	public void listenImpl(String pruefeAttr, long pruefZeitstempel) {
 		pruefeAlleAttr = false;
 		paramImpl(pruefeAttr, pruefZeitstempel);
-		LOGGER
+		Debug.getLogger()
 				.info("Prüfe Datum auf Implausibel-Markierung des Attributes: " + pruefeAttr); //$NON-NLS-1$
 	}
 
@@ -270,7 +265,7 @@ public class PruefeMarkierung implements ClientReceiverInterface {
 	public void listenImpl(long pruefZeitstempel) {
 		pruefeAlleAttr = true;
 		paramImpl("alle", pruefZeitstempel); //$NON-NLS-1$
-		LOGGER.info("Prüfe Datum auf Implausibel-Markierung aller Attribute"); //$NON-NLS-1$
+		Debug.getLogger().info("Prüfe Datum auf Implausibel-Markierung aller Attribute"); //$NON-NLS-1$
 	}
 
 	/**
@@ -301,7 +296,7 @@ public class PruefeMarkierung implements ClientReceiverInterface {
 	public void listenFehlImpl(String pruefeAttr, long pruefZeitstempel) {
 		pruefeAlleAttr = false;
 		paramFehlImpl(pruefeAttr, pruefZeitstempel);
-		LOGGER
+		Debug.getLogger()
 				.info("Prüfe Datum auf Fehlerhaft- und Implausibel-Markierung des Attributes: " + pruefeAttr); //$NON-NLS-1$
 	}
 
@@ -315,7 +310,7 @@ public class PruefeMarkierung implements ClientReceiverInterface {
 	public void listenFehlImpl(long pruefZeitstempel) {
 		pruefeAlleAttr = true;
 		paramFehlImpl("alle", pruefZeitstempel); //$NON-NLS-1$
-		LOGGER
+		Debug.getLogger()
 				.info("Prüfe Datum auf Fehlerhaft- und Implausibel-Markierung aller Attribute"); //$NON-NLS-1$
 	}
 

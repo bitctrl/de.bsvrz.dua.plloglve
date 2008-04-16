@@ -65,11 +65,6 @@ public abstract class AbstraktPLFahrStreifen extends AbstractSystemObjekt
 		implements ClientReceiverInterface {
 
 	/**
-	 * Debug-Logger.
-	 */
-	protected static final Debug LOGGER = Debug.getLogger();
-
-	/**
 	 * Standard-Verfahren der Gueteberechnung.
 	 */
 	protected static final IGuete G = GueteVerfahren.STANDARD
@@ -192,7 +187,7 @@ public abstract class AbstraktPLFahrStreifen extends AbstractSystemObjekt
 						qPkwGuete = GueteVerfahren.differenz(qKfzG, qLkwG);
 					} catch (GueteException e) {
 						e.printStackTrace();
-						LOGGER
+						Debug.getLogger()
 								.error(
 										"Berechnung der Guete von qPkw fehlgeschlagen", e); //$NON-NLS-1$
 					}
@@ -251,7 +246,7 @@ public abstract class AbstraktPLFahrStreifen extends AbstractSystemObjekt
 
 			} catch (GueteException e) {
 				e.printStackTrace();
-				LOGGER.error("Berechnung der Guete von vKfz fehlgeschlagen", e); //$NON-NLS-1$
+				Debug.getLogger().error("Berechnung der Guete von vKfz fehlgeschlagen", e); //$NON-NLS-1$
 			}
 		}
 
@@ -462,7 +457,7 @@ public abstract class AbstraktPLFahrStreifen extends AbstractSystemObjekt
 								neueGuete = GueteVerfahren.produkt(guete,
 										sweGuete);
 							} catch (GueteException e1) {
-								LOGGER
+								Debug.getLogger()
 										.error("Guete von " + wertName + " konnte nicht aktualisiert werden in " + resultat); //$NON-NLS-1$ //$NON-NLS-2$
 								e1.printStackTrace();
 							}
@@ -503,7 +498,7 @@ public abstract class AbstraktPLFahrStreifen extends AbstractSystemObjekt
 													.produkt(sweGuete,
 															qPkwGueteNeu);
 										} catch (GueteException e) {
-											LOGGER
+											Debug.getLogger()
 													.error("Guete von qPkw konnte nicht aktualisiert werden in " + resultat); //$NON-NLS-1$
 											e.printStackTrace();
 										}
@@ -545,7 +540,7 @@ public abstract class AbstraktPLFahrStreifen extends AbstractSystemObjekt
 										qKfzGueteNeu = GueteVerfahren.produkt(
 												qKfzGuete, sweGuete);
 									} catch (GueteException e) {
-										LOGGER
+										Debug.getLogger()
 												.error("Guete von qKfz konnte nicht aktualisiert werden in " + resultat); //$NON-NLS-1$
 										e.printStackTrace();
 									}
@@ -572,7 +567,7 @@ public abstract class AbstraktPLFahrStreifen extends AbstractSystemObjekt
 										qLkwGueteNeu = GueteVerfahren.produkt(
 												qLkwGuete, sweGuete);
 									} catch (GueteException e) {
-										LOGGER
+										Debug.getLogger()
 												.error("Guete von qLkw konnte nicht aktualisiert werden in " + resultat); //$NON-NLS-1$
 										e.printStackTrace();
 									}
@@ -623,7 +618,7 @@ public abstract class AbstraktPLFahrStreifen extends AbstractSystemObjekt
 													.produkt(qPkwGuete,
 															sweGuete);
 										} catch (GueteException e) {
-											LOGGER
+											Debug.getLogger()
 													.error("Guete von qPkw konnte nicht aktualisiert werden in " + resultat); //$NON-NLS-1$
 											e.printStackTrace();
 										}
@@ -669,7 +664,7 @@ public abstract class AbstraktPLFahrStreifen extends AbstractSystemObjekt
 				this.ueberpruefe(copy, resultat);
 				this.passeGueteAn(copy);
 			} catch (IllegalStateException e) {
-				LOGGER.error(
+				Debug.getLogger().error(
 						"Es konnte keine Kopie von Datensatz erzeugt werden:\n" //$NON-NLS-1$
 								+ resultat, e);
 			}

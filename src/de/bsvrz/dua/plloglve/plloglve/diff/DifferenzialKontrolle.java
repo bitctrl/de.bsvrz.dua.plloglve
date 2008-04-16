@@ -55,11 +55,6 @@ import de.bsvrz.sys.funclib.debug.Debug;
 public class DifferenzialKontrolle extends AbstraktBearbeitungsKnotenAdapter {
 
 	/**
-	 * Debug-Logger.
-	 */
-	private static final Debug LOGGER = Debug.getLogger();
-
-	/**
 	 * Map von Fahrtreifen-Systemobjekten auf Objekte mit Konstanzzählern.
 	 */
 	private Map<SystemObject, DiffFahrStreifen> fahrStreifen = new HashMap<SystemObject, DiffFahrStreifen>();
@@ -103,7 +98,7 @@ public class DifferenzialKontrolle extends AbstraktBearbeitungsKnotenAdapter {
 								if (fs != null) {
 									data = fs.plausibilisiere(resultat);
 								} else {
-									LOGGER
+									Debug.getLogger()
 											.error("Fahrstreifen zu Datensatz konnte nicht identifiziert werden:\n" + //$NON-NLS-1$
 													resultat);
 								}

@@ -54,11 +54,6 @@ import de.bsvrz.sys.funclib.operatingMessage.MessageType;
 public class BezugsZeitraum {
 
 	/**
-	 * Debug-Logger.
-	 */
-	private static final Debug LOGGER = Debug.getLogger();
-
-	/**
 	 * Verbindung zum Verwaltungsmodul.
 	 */
 	private static IVerwaltung dieVerwaltung = null;
@@ -133,7 +128,7 @@ public class BezugsZeitraum {
 		try {
 			ausgefalleneDaten.add(neuesAusfallEinzelDatum);
 		} catch (IntervallPufferException e) {
-			LOGGER.error("Fehler beim Erweitern des Ausfallpuffers", e); //$NON-NLS-1$
+			Debug.getLogger().error("Fehler beim Erweitern des Ausfallpuffers", e); //$NON-NLS-1$
 			e.printStackTrace();
 		}
 
@@ -155,7 +150,7 @@ public class BezugsZeitraum {
 								- (parameter.getBezugsZeitraum() * Constants.MILLIS_PER_HOUR));
 			}
 		} catch (IntervallPufferException e) {
-			LOGGER.error("Fehler beim Verkleinern des Ausfallpuffers", e); //$NON-NLS-1$
+			Debug.getLogger().error("Fehler beim Verkleinern des Ausfallpuffers", e); //$NON-NLS-1$
 			e.printStackTrace();
 		}
 

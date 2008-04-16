@@ -59,11 +59,6 @@ import de.bsvrz.sys.funclib.debug.Debug;
 public class PlLogischLVEStandard extends AbstraktBearbeitungsKnotenAdapter {
 
 	/**
-	 * Debug-Logger.
-	 */
-	private static final Debug LOGGER = Debug.getLogger();
-
-	/**
 	 * Mapt alle FS-Systemobjekte auf für die Standardplausbibilisierung für LZD
 	 * parametrierte Fahrstreifenobjekte.
 	 */
@@ -148,7 +143,7 @@ public class PlLogischLVEStandard extends AbstraktBearbeitungsKnotenAdapter {
 						if (fahrStreifen != null) {
 							pData = fahrStreifen.plausibilisiere(resultat);
 						} else {
-							LOGGER
+							Debug.getLogger()
 									.warning("Fahrstreifen " + resultat.getObject() + //$NON-NLS-1$
 											" konnte nicht identifiziert werden"); //$NON-NLS-1$
 						}

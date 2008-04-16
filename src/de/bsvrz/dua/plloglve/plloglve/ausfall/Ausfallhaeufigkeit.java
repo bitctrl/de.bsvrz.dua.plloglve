@@ -53,11 +53,6 @@ import de.bsvrz.sys.funclib.debug.Debug;
 public class Ausfallhaeufigkeit extends AbstraktBearbeitungsKnotenAdapter {
 
 	/**
-	 * Debug-Logger.
-	 */
-	private static final Debug LOGGER = Debug.getLogger();
-
-	/**
 	 * Mapt FS-Systemobjekte auf Fahrstreifenobjekte mit den für dieses Submodul
 	 * notwendigen Informationen.
 	 */
@@ -97,7 +92,7 @@ public class Ausfallhaeufigkeit extends AbstraktBearbeitungsKnotenAdapter {
 							if (fs != null) {
 								fs.plausibilisiere(resultat);
 							} else {
-								LOGGER
+								Debug.getLogger()
 										.error("Konnte Fahrstreifen zu Datensatz nicht identifizieren:\n" //$NON-NLS-1$
 												+ resultat);
 							}

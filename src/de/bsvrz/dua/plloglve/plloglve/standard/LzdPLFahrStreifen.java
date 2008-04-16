@@ -38,6 +38,7 @@ import de.bsvrz.dua.plloglve.plloglve.typen.OptionenPlausibilitaetsPruefungLogis
 import de.bsvrz.sys.funclib.bitctrl.dua.DUAKonstanten;
 import de.bsvrz.sys.funclib.bitctrl.dua.GanzZahl;
 import de.bsvrz.sys.funclib.bitctrl.dua.schnittstellen.IVerwaltungMitGuete;
+import de.bsvrz.sys.funclib.debug.Debug;
 
 /**
  * Klasse zum Durchführen der speziellen Standardplausibilisierung LVE für KZD.
@@ -161,7 +162,7 @@ public class LzdPLFahrStreifen extends KzdPLFahrStreifen {
 				this.ueberpruefe(copy, resultat);
 				this.passeGueteAn(copy);
 			} catch (IllegalStateException e) {
-				LOGGER.error(
+				Debug.getLogger().error(
 						"Es konnte keine Kopie von Datensatz erzeugt werden:\n" //$NON-NLS-1$
 								+ resultat, e);
 			}
@@ -342,7 +343,7 @@ public class LzdPLFahrStreifen extends KzdPLFahrStreifen {
 								neueGuete = GueteVerfahren.produkt(guete,
 										sweGuete);
 							} catch (GueteException e1) {
-								LOGGER
+								Debug.getLogger()
 										.error("Guete von " + wertName + " konnte nicht aktualisiert werden in " + resultat); //$NON-NLS-1$ //$NON-NLS-2$
 								e1.printStackTrace();
 							}

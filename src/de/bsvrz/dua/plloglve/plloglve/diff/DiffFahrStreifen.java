@@ -62,11 +62,6 @@ public class DiffFahrStreifen extends AbstractSystemObjekt implements
 		ClientReceiverInterface {
 
 	/**
-	 * Debug-Logger.
-	 */
-	private static final Debug LOGGER = Debug.getLogger();
-
-	/**
 	 * Standard-Betriebsmeldungs-ID.
 	 */
 	private static final String MELDUNGS_ID = "Differenzialkontrolle"; //$NON-NLS-1$
@@ -275,7 +270,7 @@ public class DiffFahrStreifen extends AbstractSystemObjekt implements
 						}
 					}
 				} else {
-					LOGGER
+					Debug.getLogger()
 							.warning("Fuer Fahrstreifen " + this + //$NON-NLS-1$
 									" wurden noch keine Parameter für die Differenzialkontrolle empfangen"); //$NON-NLS-1$
 				}
