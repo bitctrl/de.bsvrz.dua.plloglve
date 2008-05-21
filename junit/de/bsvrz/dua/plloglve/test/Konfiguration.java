@@ -48,7 +48,7 @@ public final class Konfiguration {
 	/**
 	 * Verzeichnis, in dem sich die CSV-Dateien mit den Testdaten befinden.
 	 */
-	public static final String TEST_DATEN_VERZ = ".\\testDaten\\V_2.9.1(19.05.08)\\"; //$NON-NLS-1$
+	public static final String TEST_DATEN_VERZ = ".\\testDaten\\V_2.9.2(20.05.08)\\"; //$NON-NLS-1$
 
 	/**
 	 * Die CSV-Datei mit Paramterdaten.
