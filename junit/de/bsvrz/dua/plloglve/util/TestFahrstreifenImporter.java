@@ -57,7 +57,7 @@ public class TestFahrstreifenImporter extends CSVImporter {
 	/**
 	 * T.
 	 */
-	protected static long intervall = 100L;//Constants.MILLIS_PER_MINUTE;
+	protected static long intervall = Constants.MILLIS_PER_MINUTE;
 
 	/**
 	 * Standardkonstruktor.
