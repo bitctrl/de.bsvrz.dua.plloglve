@@ -78,10 +78,10 @@ public class PlPruefungLogischLVETestStandardDiff {
 	 */
 	@Test
 	public void testKZDTLS() throws Exception {
-//		PlPruefungLogisch pruefLogisch = new PlPruefungLogisch(dav, alLogger);
-//		pruefLogisch.benutzeAssert(true);
-//		int[][] bereiche = { { 2, 101 } };
-//		pruefLogisch.pruefeKZDTLS(bereiche);
+		PlPruefungLogisch pruefLogisch = new PlPruefungLogisch(dav, alLogger);
+		pruefLogisch.benutzeAssert(true);
+		int[][] bereiche = { { 2, 101 } };
+		pruefLogisch.pruefeKZDTLS(bereiche);
 	}
 
 	/**
@@ -91,11 +91,11 @@ public class PlPruefungLogischLVETestStandardDiff {
 	 */
 	@Test
 	public void testKZDGrenz() throws Exception {
-//		 PlPruefungLogisch pruefLogisch = new
-//		 	PlPruefungLogisch(dav, alLogger);
-//		 pruefLogisch.benutzeAssert(true);
-//		 int[][] bereiche = {{2, 21}};
-//		 pruefLogisch.pruefeKZDGrenz(bereiche);
+		 PlPruefungLogisch pruefLogisch = new
+		 	PlPruefungLogisch(dav, alLogger);
+		 pruefLogisch.benutzeAssert(true);
+		 int[][] bereiche = {{2, 21}};
+		 pruefLogisch.pruefeKZDGrenz(bereiche);
 	}
 
 	/**
@@ -105,11 +105,11 @@ public class PlPruefungLogischLVETestStandardDiff {
 	 */
 	@Test
 	public void testLZDTLS() throws Exception {
-//		 PlPruefungLogisch pruefLogisch = new
-//		 	PlPruefungLogisch(dav, alLogger);
-//		 pruefLogisch.benutzeAssert(true);
-//		 int[][] bereiche = {{2, 21}};
-//		 pruefLogisch.pruefeLZDGrenz(bereiche);
+		 PlPruefungLogisch pruefLogisch = new
+		 	PlPruefungLogisch(dav, alLogger);
+		 pruefLogisch.benutzeAssert(true);
+		 int[][] bereiche = {{2, 21}};
+		 pruefLogisch.pruefeLZDGrenz(bereiche);
 	}
 
 	/**
