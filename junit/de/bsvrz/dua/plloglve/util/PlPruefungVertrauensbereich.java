@@ -183,7 +183,7 @@ public class PlPruefungVertrauensbereich implements ClientSenderInterface,
 		/*
 		 * Prüfung
 		 */
-		Debug.getLogger().info("Beginne Prüfung");
+		System.out.println("Beginne Prüfung");
 
 		/*
 		 * Warte auf 371 Meldungen 36 x 4 (qKfz, qPkw, qLkw, vPkw) 37 (b) 39 x 4
@@ -197,7 +197,7 @@ public class PlPruefungVertrauensbereich implements ClientSenderInterface,
 		/*
 		 * Sendet fehlerfreie DS für eine Stunde
 		 */
-		Debug.getLogger().info("Sende fehlerfreie DS für 1 Stunde (60)");
+		System.out.println("Sende fehlerfreie DS für 1 Stunde (60)");
 		/*
 		 * Testerobjekt
 		 */
@@ -320,7 +320,7 @@ public class PlPruefungVertrauensbereich implements ClientSenderInterface,
 			}
 		}
 
-		Debug.getLogger().info("Warte auf Meldungsfilter");
+		System.out.println("Warte auf Meldungsfilter");
 
 		// Warte 30s auf Filterung der Betriebsmeldungen
 		try {
@@ -336,13 +336,13 @@ public class PlPruefungVertrauensbereich implements ClientSenderInterface,
 			if (useAssert) {
 				Assert.assertTrue(warnung, false);
 			} else {
-				Debug.getLogger().warning(warnung);
+				System.out.println(warnung);
 			}
 		} else {
-			Debug.getLogger().info(warnung);
+			System.out.println(warnung);
 		}
 
-		Debug.getLogger().info("Prüfung erfolgreich abgeschlossen");
+		System.out.println("Prüfung erfolgreich abgeschlossen");
 
 		/*
 		 * Sender abmelden

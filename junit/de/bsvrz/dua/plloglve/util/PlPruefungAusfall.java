@@ -27,7 +27,7 @@
 package de.bsvrz.dua.plloglve.util;
 
 import java.util.Date;
-import java.util.Random;
+//import java.util.Random;
 
 import junit.framework.Assert;
 import de.bsvrz.dav.daf.main.ClientDavInterface;
@@ -40,6 +40,7 @@ import de.bsvrz.dav.daf.main.config.SystemObject;
 import de.bsvrz.dua.plloglve.test.Konfiguration;
 import de.bsvrz.dua.plloglve.util.para.ParaKZDLogImport;
 import de.bsvrz.dua.plloglve.util.pruef.FilterMeldung;
+import de.bsvrz.dua.plloglve.vew.TestParameter;
 import de.bsvrz.sys.funclib.bitctrl.dua.DUAKonstanten;
 import de.bsvrz.sys.funclib.commandLineArgs.ArgumentList;
 import de.bsvrz.sys.funclib.debug.Debug;
@@ -57,7 +58,7 @@ public class PlPruefungAusfall implements ClientSenderInterface,
 	/**
 	 * Zufallsgenerator.
 	 */
-	private static final Random R = new Random(System.currentTimeMillis());
+	//private static final Random R = new Random(System.currentTimeMillis());
 
 	/**
 	 * Assert-Statements benutzen?
@@ -151,8 +152,9 @@ public class PlPruefungAusfall implements ClientSenderInterface,
 		/*
 		 * Setze Intervallparameter
 		 */
-		// paraImpFSOK.setT(INTERVALL);
-		// paraImpFSFehler.setT(INTERVALL);
+		TestFahrstreifenImporter.setT(TestParameter.INTERVALL_VB);
+		//paraImpFSOK.setT(INTERVALL);
+		//paraImpFSFehler.setT(INTERVALL);
 		// paraImpFSOK.setT(60000L);
 		// paraImpFSFehler.setT(60000L);
 		/*
@@ -167,7 +169,7 @@ public class PlPruefungAusfall implements ClientSenderInterface,
 		/*
 		 * Sendet fehlerfreie DS für einen Tag
 		 */
-		Debug.getLogger().info("Sende fehlerfreie DS für 1 Tag (1440)");
+		System.out.println("Sende fehlerfreie DS für 1 Tag (1440)");
 		for (int i = 1; i <= 1440; i++) {
 
 			if ((zeileFSOK = paraImpFSOK.getNaechstenDatensatz(DD_KZD_SEND
@@ -198,7 +200,7 @@ public class PlPruefungAusfall implements ClientSenderInterface,
 		/*
 		 * Prüfung
 		 */
-		Debug.getLogger().info("Beginne Prüfung");
+		System.out.println("Beginne Prüfung");
 
 		/*
 		 * Initialisiert Meldungsfilter
@@ -232,7 +234,7 @@ public class PlPruefungAusfall implements ClientSenderInterface,
 				}
 
 				Data dummy = zeileFSFehler.createModifiableCopy();
-				boolean set = false;
+				//boolean set = false;
 				for (String attribut : new String[] { "qKfz", "qLkw", "qPkw",
 						"vKfz", "vLkw", "vPkw", "b" }) {
 					// if(R.nextBoolean()){
@@ -288,7 +290,7 @@ public class PlPruefungAusfall implements ClientSenderInterface,
 			}
 		}
 
-		Debug.getLogger().info("Warte auf Meldungsfilter");
+		System.out.println("Warte auf Meldungsfilter");
 
 		try {
 			Thread.sleep(30000L);
@@ -302,13 +304,13 @@ public class PlPruefungAusfall implements ClientSenderInterface,
 			if (useAssert) {
 				Assert.assertTrue(warnung, false);
 			} else {
-				Debug.getLogger().warning(warnung);
+				System.out.println(warnung);
 			}
 		} else {
-			Debug.getLogger().info(warnung);
+			System.out.println(warnung);
 		}
-
-		Debug.getLogger().info("Prüfung erfolgreich abgeschlossen");
+		
+		System.out.println("Prüfung erfolgreich abgeschlossen");
 
 		/*
 		 * Sender abmelden
