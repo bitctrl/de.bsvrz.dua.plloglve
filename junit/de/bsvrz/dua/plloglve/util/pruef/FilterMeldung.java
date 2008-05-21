@@ -134,7 +134,7 @@ public class FilterMeldung implements IBmListener {
 			String text) {
 		if (text.contains(filter)) {
 			meldAnzahl++;
-			Debug.getLogger().info(meldAnzahl + ". Meldung empfangen\n\r" + text); //$NON-NLS-1$
+			System.out.println(meldAnzahl + ". Meldung empfangen: " + text); //$NON-NLS-1$
 
 			if (meldAnzahl == erfAnz) {
 				Debug.getLogger().info("Erforderliche Anzahl an Meldungen erhalten"); //$NON-NLS-1$
