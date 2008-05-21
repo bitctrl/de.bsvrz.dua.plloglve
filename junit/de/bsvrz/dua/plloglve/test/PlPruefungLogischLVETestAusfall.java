@@ -37,6 +37,9 @@ import de.bsvrz.sys.funclib.commandLineArgs.ArgumentList;
 /**
  * Automatisierter Test nach Prüfspezifikation für SWE Pl-Prüfung logisch LVE.
  * 
+ * ! Achtung: Die Applikation Pl-Prüfung logisch LVE ist mit dem Parameter test=ausfall
+ * ! zu starten.
+ * 
  * @author BitCtrl Systems GmbH, Thierfelder
  * 
  * @version $Id$
