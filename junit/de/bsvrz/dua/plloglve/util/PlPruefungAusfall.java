@@ -26,8 +26,7 @@
 
 package de.bsvrz.dua.plloglve.util;
 
-import java.util.Date;
-//import java.util.Random;
+import java.util.Date; // import java.util.Random;
 
 import junit.framework.Assert;
 import de.bsvrz.dav.daf.main.ClientDavInterface;
@@ -58,8 +57,7 @@ public class PlPruefungAusfall implements ClientSenderInterface,
 	/**
 	 * Zufallsgenerator.
 	 */
-	//private static final Random R = new Random(System.currentTimeMillis());
-
+	// private static final Random R = new Random(System.currentTimeMillis());
 	/**
 	 * Assert-Statements benutzen?
 	 */
@@ -93,7 +91,7 @@ public class PlPruefungAusfall implements ClientSenderInterface,
 	/**
 	 * Abweichung zur erwarteten Anzahl von Meldungen.
 	 */
-	private int meldungHyst = 0;
+	private int meldungHyst = 3;
 
 	/**
 	 * Sendet Testdaten und prüft Ausfallkontrolle.
@@ -153,8 +151,8 @@ public class PlPruefungAusfall implements ClientSenderInterface,
 		 * Setze Intervallparameter
 		 */
 		TestFahrstreifenImporter.setT(TestParameter.INTERVALL_VB);
-		//paraImpFSOK.setT(INTERVALL);
-		//paraImpFSFehler.setT(INTERVALL);
+		// paraImpFSOK.setT(INTERVALL);
+		// paraImpFSFehler.setT(INTERVALL);
 		// paraImpFSOK.setT(60000L);
 		// paraImpFSFehler.setT(60000L);
 		/*
@@ -207,8 +205,10 @@ public class PlPruefungAusfall implements ClientSenderInterface,
 		 */
 		FilterMeldung meldFilter = new FilterMeldung(this, dav,
 				"Ausfallhäufigkeit", 1457, meldungHyst);
-		Debug.getLogger()
-				.info("Meldungsfilter initialisiert: Erwarte 1457 Meldungen mit \"Ausfallhäufigkeit\"");
+		Debug
+				.getLogger()
+				.info(
+						"Meldungsfilter initialisiert: Erwarte 1457 Meldungen mit \"Ausfallhäufigkeit\"");
 
 		/*
 		 * Sende 2500 Datensätze
@@ -234,7 +234,7 @@ public class PlPruefungAusfall implements ClientSenderInterface,
 				}
 
 				Data dummy = zeileFSFehler.createModifiableCopy();
-				//boolean set = false;
+				// boolean set = false;
 				for (String attribut : new String[] { "qKfz", "qLkw", "qPkw",
 						"vKfz", "vLkw", "vPkw", "b" }) {
 					// if(R.nextBoolean()){
@@ -293,13 +293,12 @@ public class PlPruefungAusfall implements ClientSenderInterface,
 		System.out.println("Warte auf Meldungsfilter");
 
 		try {
-			Thread.sleep(30000L);
+			Thread.sleep(5000L);
 		} catch (InterruptedException e) {
 		}
 
-		String warnung = meldFilter.getAnzahlErhaltenerMeldungen() + " von "
-				+ meldFilter.getErwarteteAnzahlMeldungen() + " (Hysterese:"
-				+ meldungHyst + ") Betriebsmeldungen erhalten";
+		String warnung = meldFilter.getErwarteteAnzahlMeldungen()
+				+ " Betriebsmeldungen erhalten";
 		if (!meldFilter.wurdeAnzahlEingehalten()) {
 			if (useAssert) {
 				Assert.assertTrue(warnung, false);
@@ -309,7 +308,7 @@ public class PlPruefungAusfall implements ClientSenderInterface,
 		} else {
 			System.out.println(warnung);
 		}
-		
+
 		System.out.println("Prüfung erfolgreich abgeschlossen");
 
 		/*

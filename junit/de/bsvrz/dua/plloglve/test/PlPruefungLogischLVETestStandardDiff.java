@@ -122,7 +122,7 @@ public class PlPruefungLogischLVETestStandardDiff {
 		 PlPruefungDiff plPruefDiff = new
 		 	PlPruefungDiff(dav, alLogger);
 		 plPruefDiff.benutzeAssert(true);
-		 plPruefDiff.setMeldungHysterese(0);
+		 plPruefDiff.setMeldungHysterese(3);
 		 plPruefDiff.pruefe();
 	}
 }

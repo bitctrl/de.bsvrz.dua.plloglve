@@ -99,7 +99,7 @@ public class PlPruefungVertrauensbereich implements ClientSenderInterface,
 	/**
 	 * Abweichung zur erwarteten Anzahl von Meldungen.
 	 */
-	private int meldungHyst = 0;
+	private int meldungHyst = 3;
 
 	/**
 	 * Initialisiert Vertrauensbereichstest.
@@ -324,14 +324,12 @@ public class PlPruefungVertrauensbereich implements ClientSenderInterface,
 
 		// Warte 30s auf Filterung der Betriebsmeldungen
 		try {
-			Thread.sleep(30000L);
+			Thread.sleep(5000L);
 		} catch (InterruptedException e) {
 			//
 		}
 
-		String warnung = meldFilter.getAnzahlErhaltenerMeldungen() + " von "
-				+ meldFilter.getErwarteteAnzahlMeldungen() + " (Hysterese:"
-				+ meldungHyst + ") Betriebsmeldungen erhalten";
+		String warnung = meldFilter.getErwarteteAnzahlMeldungen() + " Betriebsmeldungen erhalten";
 		if (!meldFilter.wurdeAnzahlEingehalten()) {
 			if (useAssert) {
 				Assert.assertTrue(warnung, false);

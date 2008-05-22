@@ -82,7 +82,7 @@ public class PlPruefungLogischLVETestAusfall {
 	public void testAusfall() throws Exception {
 		PlPruefungAusfall pruefAusfall = new PlPruefungAusfall(dav, alLogger);
 		pruefAusfall.benutzeAssert(true);
-		pruefAusfall.setMeldungHysterese(2);
+		pruefAusfall.setMeldungHysterese(5);
 		pruefAusfall.pruefe();
 	}
 }
