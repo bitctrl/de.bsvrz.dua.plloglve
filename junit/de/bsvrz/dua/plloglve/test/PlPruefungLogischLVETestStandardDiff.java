@@ -81,6 +81,7 @@ public class PlPruefungLogischLVETestStandardDiff {
 		PlPruefungLogisch pruefLogisch = new PlPruefungLogisch(dav, alLogger);
 		pruefLogisch.benutzeAssert(true);
 		int[][] bereiche = { { 2, 101 } };
+		System.out.println("\n\n*** KZD TLS Test nach Prüfspezifikation ***\n");
 		pruefLogisch.pruefeKZDTLS(bereiche);
 	}
 
@@ -95,6 +96,7 @@ public class PlPruefungLogischLVETestStandardDiff {
 		 	PlPruefungLogisch(dav, alLogger);
 		 pruefLogisch.benutzeAssert(true);
 		 int[][] bereiche = {{2, 21}};
+		 System.out.println("\n\n*** KZD Grenz Test nach Prüfspezifikation ***\n");
 		 pruefLogisch.pruefeKZDGrenz(bereiche);
 	}
 
@@ -109,6 +111,7 @@ public class PlPruefungLogischLVETestStandardDiff {
 		 	PlPruefungLogisch(dav, alLogger);
 		 pruefLogisch.benutzeAssert(true);
 		 int[][] bereiche = {{2, 21}};
+		 System.out.println("\n\n*** LZD Grenz Test nach Prüfspezifikation ***\n");
 		 pruefLogisch.pruefeLZDGrenz(bereiche);
 	}
 
@@ -122,7 +125,8 @@ public class PlPruefungLogischLVETestStandardDiff {
 		 PlPruefungDiff plPruefDiff = new
 		 	PlPruefungDiff(dav, alLogger);
 		 plPruefDiff.benutzeAssert(true);
-		 plPruefDiff.setMeldungHysterese(3);
+		 plPruefDiff.setMeldungHysterese(5);
+		 System.out.println("\n\n*** Differentialkontrolle nach Prüfspezifikation ***\n");
 		 plPruefDiff.pruefe();
 	}
 }

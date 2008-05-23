@@ -444,7 +444,7 @@ public class PruefeMarkierung implements ClientReceiverInterface {
 			} else {
 				System.out.println(DUAKonstanten.ZEIT_FORMAT_GENAU
 						.format(new Date(this.pruefZeitstempel))
-						+ " --> OK:\n (Wert >= 0) (SOLL)==(IST) " + wert); //$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$
+						+ " --> OK " + pruefeAttr + " :\n (Wert >= 0) (SOLL)==(IST) " + wert); //$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$
 			}
 		}
 
@@ -464,7 +464,7 @@ public class PruefeMarkierung implements ClientReceiverInterface {
 				System.out
 						.println(DUAKonstanten.ZEIT_FORMAT_GENAU
 								.format(new Date(this.pruefZeitstempel))
-								+ " --> OK (" + sollImplausibel + "):\n" + (impl == 0 ? "nicht implausibel" : "implausibel") + " (SOLL)==(IST) " + (sollImplausibel == 0 ? "nicht implausibel" : "implausibel")); //$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$
+								+ " --> OK " + pruefeAttr + " (" + sollImplausibel + "):\n" + (impl == 0 ? "nicht implausibel" : "implausibel") + " (SOLL)==(IST) " + (sollImplausibel == 0 ? "nicht implausibel" : "implausibel")); //$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$
 			}
 		}
 	}

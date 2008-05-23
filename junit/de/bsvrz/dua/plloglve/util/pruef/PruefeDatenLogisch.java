@@ -917,8 +917,6 @@ class VergleicheDaten extends Thread {
 					 */
 					if (attribut.equals("vKfz.Wert")
 							|| attribut.equals("qPkw.Wert")) {
-						System.out.println(hmCSV.get(attribut) + ", "
-								+ hmResult.get(attribut));
 
 						/*
 						 * Prüfe Fehler links
@@ -967,6 +965,11 @@ class VergleicheDaten extends Thread {
 									+ hmResult.get(attribut) + istWertErl
 									+ "\n\r";
 						} else {
+							System.out.println(ident + " OK  (" + attribut + "):"
+									+ hmCSV.get(attribut) + sollWertErl
+									+ " (SOLL)==(IST) "
+									+ hmResult.get(attribut) + istWertErl);
+							
 							pruefLog += ident + " OK  (" + attribut + "):"
 									+ hmCSV.get(attribut) + sollWertErl
 									+ " (SOLL)==(IST) "

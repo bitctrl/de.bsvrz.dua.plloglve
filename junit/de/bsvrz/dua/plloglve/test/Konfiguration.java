@@ -36,20 +36,31 @@ package de.bsvrz.dua.plloglve.test;
  */
 public final class Konfiguration {
 
+//	/**
+//	 * Verbindungsdaten.
+//	 */
+//	private static final String[] CON_DATA = new String[] {
+//			"-datenverteiler=localhost:8083", //$NON-NLS-1$
+//			"-benutzer=Tester", //$NON-NLS-1$
+//			"-authentifizierung=passwd", //$NON-NLS-1$
+//			"-debugLevelStdErrText=ERROR", //$NON-NLS-1$
+//			"-debugLevelFileText=OFF" }; //$NON-NLS-1$
+
 	/**
 	 * Verbindungsdaten.
 	 */
 	private static final String[] CON_DATA = new String[] {
 			"-datenverteiler=localhost:8083", //$NON-NLS-1$
 			"-benutzer=Tester", //$NON-NLS-1$
-			"-authentifizierung=passwd", //$NON-NLS-1$
+			"-authentifizierung=c:\\passwd", //$NON-NLS-1$
 			"-debugLevelStdErrText=ERROR", //$NON-NLS-1$
 			"-debugLevelFileText=OFF" }; //$NON-NLS-1$
 
 	/**
 	 * Verzeichnis, in dem sich die CSV-Dateien mit den Testdaten befinden.
 	 */
-	public static final String TEST_DATEN_VERZ = "../testDaten/V_2.9.2(20.05.08)/"; //$NON-NLS-1$
+	//public static final String TEST_DATEN_VERZ = "../testDaten/V_2.9.2(20.05.08)/"; //$NON-NLS-1$
+	public static final String TEST_DATEN_VERZ = ".\\extra\\testDaten\\V_2.9.2(20.05.08)\\"; //$NON-NLS-1$
 
 	/**
 	 * Die CSV-Datei mit Paramterdaten.

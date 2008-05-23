@@ -136,11 +136,11 @@ public class FilterMeldung implements IBmListener {
 			meldAnzahl++;
 			System.out.println(meldAnzahl + ". Meldung empfangen: " + text); //$NON-NLS-1$
 
-			if (meldAnzahl == erfAnz) {
+			if (Math.abs(meldAnzahl-erfAnz) < anzHyst) {
 				Debug.getLogger().info("Erforderliche Anzahl an Meldungen erhalten"); //$NON-NLS-1$
 				anzahlEingehalten = true;
 				caller.doNotify();
-			} else if (meldAnzahl > (erfAnz + anzHyst)) {
+			} else {
 				anzahlEingehalten = false;
 				Debug.getLogger().warning("Mehr Meldungen gefiltert als erwartet"); //$NON-NLS-1$	
 			}
