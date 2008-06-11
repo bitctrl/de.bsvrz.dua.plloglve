@@ -26,6 +26,8 @@
 
 package de.bsvrz.dua.plloglve.plloglve.vb;
 
+import de.bsvrz.sys.funclib.bitctrl.dua.DUAUtensilien;
+
 /**
  * Speichert das Ergebnis einer Überprüfung des Vertrauensbereichs für ein
  * bestimmtes Attribut.
@@ -105,7 +107,7 @@ public class BezugsZeitraumAusfall implements Comparable<BezugsZeitraumAusfall> 
 	 */
 	@Override
 	public String toString() {
-		return this.ausfallInProzent
+		return DUAUtensilien.runde(this.ausfallInProzent, 1)
 				+ "% (< " + this.grenze + "%) entspricht Ausfall von " + //$NON-NLS-1$//$NON-NLS-2$
 				this.ausfallInStunden
 				+ " Stunde(n) " + this.ausfallInMinuten + " Minute(n)"; //$NON-NLS-1$ //$NON-NLS-2$

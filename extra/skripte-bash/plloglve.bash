@@ -33,17 +33,7 @@ fi
 ################################################################################
 
 # Applikation starten
-echo $jvmArgs -jar ../de.bsvrz.dua.plloglve-runtime.jar \
-	$dav1 \
-	-KonfigurationsBereichsPid=$kb \
-	-debugLevelStdErrText=ERROR \
-	-debugLevelFileText=INFO \
-	-debugLevelFileXML=OFF \
-	-debugLevelFileExcel=OFF \
-	-debugLevelFileHTML=OFF \
-	&
-
-java $jvmArgs -jar ../de.bsvrz.dua.plloglve-runtime.jar \
+$java $jvmArgs -jar ../de.bsvrz.dua.plloglve-runtime.jar \
 	$dav1 \
 	-KonfigurationsBereichsPid=$kb \
 	-debugLevelStdErrText=ERROR \
