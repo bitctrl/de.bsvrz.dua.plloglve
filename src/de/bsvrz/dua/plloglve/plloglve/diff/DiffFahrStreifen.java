@@ -263,7 +263,7 @@ public class DiffFahrStreifen extends AbstractSystemObjekt implements
 										.getUnscaledValue("Implausibel").set(DUAKonstanten.JA); //$NON-NLS-1$
 								DUAUtensilien.sendeBetriebsmeldung(
 										dieVerwaltung.getVerbindung(),
-										MessageGrade.WARNING, objekt,
+										MessageGrade.WARNING, resultat.getObject(),
 										"Fahrstreifen " + //$NON-NLS-1$
 												this + ": " + wert); //$NON-NLS-1$
 							}

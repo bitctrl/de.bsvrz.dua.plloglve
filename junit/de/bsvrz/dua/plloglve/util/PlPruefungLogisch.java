@@ -59,11 +59,6 @@ public class PlPruefungLogisch implements ClientSenderInterface {
 	private boolean useAssert = true;
 
 	/**
-	 * Logger und Loggerargument.
-	 */
-	private ArgumentList alLogger;
-
-	/**
 	 * Die zur Prüfung zu verwendende CSV Datei mit Testdaten.
 	 */
 	private String csvPruefDatei = null;
@@ -158,7 +153,6 @@ public class PlPruefungLogisch implements ClientSenderInterface {
 	 */
 	public PlPruefungLogisch(ClientDavInterface dav, ArgumentList alLogger) {
 		this.dav = dav;
-		this.alLogger = alLogger;
 
 		/*
 		 * Meldet Sender für KZD und LZD unter dem Aspekt Externe Erfassung an
