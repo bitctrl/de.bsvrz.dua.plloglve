@@ -42,14 +42,13 @@ import de.bsvrz.dav.daf.main.config.SystemObject;
 import de.bsvrz.dua.plloglve.vew.TestParameter;
 import de.bsvrz.sys.funclib.bitctrl.daf.DaVKonstanten;
 import de.bsvrz.sys.funclib.bitctrl.dua.DUAKonstanten;
+import de.bsvrz.sys.funclib.bitctrl.dua.DUAUtensilien;
 import de.bsvrz.sys.funclib.bitctrl.dua.schnittstellen.IVerwaltung;
 import de.bsvrz.sys.funclib.bitctrl.modell.AbstractSystemObjekt;
 import de.bsvrz.sys.funclib.bitctrl.modell.SystemObjekt;
 import de.bsvrz.sys.funclib.bitctrl.modell.SystemObjektTyp;
 import de.bsvrz.sys.funclib.debug.Debug;
 import de.bsvrz.sys.funclib.operatingMessage.MessageGrade;
-import de.bsvrz.sys.funclib.operatingMessage.MessageState;
-import de.bsvrz.sys.funclib.operatingMessage.MessageType;
 
 /**
  * Repräsentiert einen Fahrstreifen mit allen Informationen, die zur Ermittlung
@@ -248,10 +247,9 @@ public class VertrauensFahrStreifen extends AbstractSystemObjekt implements
 						 * einzelnen Wert getan wird
 						 */
 						for (String attribut : ATTRIBUTE) {
-							copy
-									.getItem(attribut)
-									.getItem("Status").getItem("MessWertErsetzung").
-									getUnscaledValue("Implausibel").set(DUAKonstanten.JA); //$NON-NLS-1$
+							copy.getItem(attribut).getItem("Status").getItem(
+									"MessWertErsetzung").getUnscaledValue(
+									"Implausibel").set(DUAKonstanten.JA); //$NON-NLS-1$
 						}
 					} else {
 						if (verletztAlt) {
@@ -276,21 +274,20 @@ public class VertrauensFahrStreifen extends AbstractSystemObjekt implements
 									+ " von " + ausfallErgebnisse.last() + //$NON-NLS-1$ 
 									". Fahrstreifenwerte werden wieder verarbeitet."; //$NON-NLS-1$
 
-							dieVerwaltung.sendeBetriebsMeldung(
-									"Vertrauensbereichsprüfung", //$NON-NLS-1$
-									MessageType.APPLICATION_DOMAIN,
-									Constants.EMPTY_STRING,
-									MessageGrade.WARNING,
-									MessageState.NEW_MESSAGE, nachricht);
+							DUAUtensilien.sendeBetriebsmeldung(dieVerwaltung
+									.getVerbindung(), MessageGrade.WARNING,
+									objekt, nachricht);
 						}
 					}
 
 					this.vertrauenVerletztAllgemein = verletztAktuell;
 				} else {
-					Debug.getLogger()
-							.config("Datum kann nicht plausibilisiert werden, da keine" + //$NON-NLS-1$
-									" (oder nicht verwertbare) Parameter vorliegen: " //$NON-NLS-1$
-									+ this);
+					Debug
+							.getLogger()
+							.config(
+									"Datum kann nicht plausibilisiert werden, da keine" + //$NON-NLS-1$
+											" (oder nicht verwertbare) Parameter vorliegen: " //$NON-NLS-1$
+											+ this);
 				}
 			}
 		}

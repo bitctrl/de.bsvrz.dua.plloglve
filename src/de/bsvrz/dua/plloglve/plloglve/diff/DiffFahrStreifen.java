@@ -29,8 +29,6 @@ package de.bsvrz.dua.plloglve.plloglve.diff;
 import java.util.ArrayList;
 import java.util.Collection;
 
-import com.bitctrl.Constants;
-
 import de.bsvrz.dav.daf.main.ClientReceiverInterface;
 import de.bsvrz.dav.daf.main.Data;
 import de.bsvrz.dav.daf.main.DataDescription;
@@ -40,6 +38,7 @@ import de.bsvrz.dav.daf.main.ResultData;
 import de.bsvrz.dav.daf.main.config.SystemObject;
 import de.bsvrz.sys.funclib.bitctrl.daf.DaVKonstanten;
 import de.bsvrz.sys.funclib.bitctrl.dua.DUAKonstanten;
+import de.bsvrz.sys.funclib.bitctrl.dua.DUAUtensilien;
 import de.bsvrz.sys.funclib.bitctrl.dua.VariableMitKonstanzZaehler;
 import de.bsvrz.sys.funclib.bitctrl.dua.schnittstellen.IVerwaltung;
 import de.bsvrz.sys.funclib.bitctrl.modell.AbstractSystemObjekt;
@@ -47,8 +46,6 @@ import de.bsvrz.sys.funclib.bitctrl.modell.SystemObjekt;
 import de.bsvrz.sys.funclib.bitctrl.modell.SystemObjektTyp;
 import de.bsvrz.sys.funclib.debug.Debug;
 import de.bsvrz.sys.funclib.operatingMessage.MessageGrade;
-import de.bsvrz.sys.funclib.operatingMessage.MessageState;
-import de.bsvrz.sys.funclib.operatingMessage.MessageType;
 
 /**
  * Speichert, wie lange einzelne KZD-Werte eines bestimmten Fahrstreifens in
@@ -60,11 +57,6 @@ import de.bsvrz.sys.funclib.operatingMessage.MessageType;
  */
 public class DiffFahrStreifen extends AbstractSystemObjekt implements
 		ClientReceiverInterface {
-
-	/**
-	 * Standard-Betriebsmeldungs-ID.
-	 */
-	private static final String MELDUNGS_ID = "Differenzialkontrolle"; //$NON-NLS-1$
 
 	/**
 	 * Verbindung zum Verwaltungsmodul.
@@ -216,38 +208,46 @@ public class DiffFahrStreifen extends AbstractSystemObjekt implements
 
 					Collection<VariableMitKonstanzZaehler<Long>> puffer = new ArrayList<VariableMitKonstanzZaehler<Long>>();
 					synchronized (this.parameter) {
-						if (this.qKfzZaehler.getWertIstKonstantSeit() > this.parameter
-								.getMaxAnzKonstanzqKfz()) {
+						if (qKfz > 0
+								&& this.qKfzZaehler.getWertIstKonstantSeit() > this.parameter
+										.getMaxAnzKonstanzqKfz()) {
 							puffer.add(this.qKfzZaehler);
 						}
-						if (this.qLkwZaehler.getWertIstKonstantSeit() > this.parameter
-								.getMaxAnzKonstanzqLkw()) {
+						if (qLkw > 0
+								&& this.qLkwZaehler.getWertIstKonstantSeit() > this.parameter
+										.getMaxAnzKonstanzqLkw()) {
 							puffer.add(this.qLkwZaehler);
 						}
-						if (this.qPkwZaehler.getWertIstKonstantSeit() > this.parameter
-								.getMaxAnzKonstanzqPkw()) {
+						if (qPkw > 0
+								&& this.qPkwZaehler.getWertIstKonstantSeit() > this.parameter
+										.getMaxAnzKonstanzqPkw()) {
 							puffer.add(this.qPkwZaehler);
 						}
 
-						if (this.vKfzZaehler.getWertIstKonstantSeit() > this.parameter
-								.getMaxAnzKonstanzvKfz()) {
+						if (vKfz > 0
+								&& this.vKfzZaehler.getWertIstKonstantSeit() > this.parameter
+										.getMaxAnzKonstanzvKfz()) {
 							puffer.add(this.vKfzZaehler);
 						}
-						if (this.vLkwZaehler.getWertIstKonstantSeit() > this.parameter
-								.getMaxAnzKonstanzvLkw()) {
+						if (vLkw > 0
+								&& this.vLkwZaehler.getWertIstKonstantSeit() > this.parameter
+										.getMaxAnzKonstanzvLkw()) {
 							puffer.add(this.vLkwZaehler);
 						}
-						if (this.vPkwZaehler.getWertIstKonstantSeit() > this.parameter
-								.getMaxAnzKonstanzvPkw()) {
+						if (vPkw > 0
+								&& this.vPkwZaehler.getWertIstKonstantSeit() > this.parameter
+										.getMaxAnzKonstanzvPkw()) {
 							puffer.add(this.vPkwZaehler);
 						}
 
-						if (this.sKfzZaehler.getWertIstKonstantSeit() > this.parameter
-								.getMaxAnzKonstanzStreung()) {
+						if (sKfz > 0
+								&& this.sKfzZaehler.getWertIstKonstantSeit() > this.parameter
+										.getMaxAnzKonstanzStreung()) {
 							puffer.add(this.sKfzZaehler);
 						}
-						if (this.bZaehler.getWertIstKonstantSeit() > this.parameter
-								.getMaxAnzKonstanzBelegung()) {
+						if (b > 0
+								&& this.bZaehler.getWertIstKonstantSeit() > this.parameter
+										.getMaxAnzKonstanzBelegung()) {
 							puffer.add(this.bZaehler);
 						}
 
@@ -258,19 +258,20 @@ public class DiffFahrStreifen extends AbstractSystemObjekt implements
 										"Wert").set(DUAKonstanten.FEHLERHAFT); //$NON-NLS-1$			
 								copy
 										.getItem(wert.getName())
-										.getItem("Status").getItem("MessWertErsetzung").
-										getUnscaledValue("Implausibel").set(DUAKonstanten.JA); //$NON-NLS-1$	
-								dieVerwaltung.sendeBetriebsMeldung(MELDUNGS_ID,
-										MessageType.APPLICATION_DOMAIN,
-										Constants.EMPTY_STRING,
-										MessageGrade.WARNING,
-										MessageState.MESSAGE, "Fahrstreifen " + //$NON-NLS-1$
+										.getItem("Status")
+										.getItem("MessWertErsetzung")
+										.getUnscaledValue("Implausibel").set(DUAKonstanten.JA); //$NON-NLS-1$
+								DUAUtensilien.sendeBetriebsmeldung(
+										dieVerwaltung.getVerbindung(),
+										MessageGrade.WARNING, objekt,
+										"Fahrstreifen " + //$NON-NLS-1$
 												this + ": " + wert); //$NON-NLS-1$
 							}
 						}
 					}
 				} else {
-					Debug.getLogger()
+					Debug
+							.getLogger()
 							.warning("Fuer Fahrstreifen " + this + //$NON-NLS-1$
 									" wurden noch keine Parameter für die Differenzialkontrolle empfangen"); //$NON-NLS-1$
 				}

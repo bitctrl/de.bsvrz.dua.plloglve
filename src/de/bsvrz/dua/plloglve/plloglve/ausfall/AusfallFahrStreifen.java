@@ -49,8 +49,6 @@ import de.bsvrz.sys.funclib.bitctrl.modell.SystemObjekt;
 import de.bsvrz.sys.funclib.bitctrl.modell.SystemObjektTyp;
 import de.bsvrz.sys.funclib.debug.Debug;
 import de.bsvrz.sys.funclib.operatingMessage.MessageGrade;
-import de.bsvrz.sys.funclib.operatingMessage.MessageState;
-import de.bsvrz.sys.funclib.operatingMessage.MessageType;
 
 /**
  * Speichert die Ausfallhäufigkeit eine Fahrstreifens über einem gleitenden Tag.
@@ -72,11 +70,6 @@ public class AusfallFahrStreifen extends AbstractSystemObjekt implements
 	 * IP der ATG KZD.
 	 */
 	private static long atgKzdId = -1;
-
-	/**
-	 * Standard-Betriebsmeldungs-ID dieses Submoduls.
-	 */
-	private static final String MELDUNGS_ID = "Ausfallhaeufigkeit"; //$NON-NLS-1$
 
 	/**
 	 * Verbindung zum Verwaltungsmodul.
@@ -139,13 +132,11 @@ public class AusfallFahrStreifen extends AbstractSystemObjekt implements
 			AusfallDatumKomplett ausfallDatum = AusfallDatumKomplett
 					.getAusfallDatumVon(resultat);
 			if (ausfallDatum != null) {
-				synchronized (this.gleitenderTag) {
-					try {
-						this.gleitenderTag.add(ausfallDatum);
-					} catch (IntervallPufferException e) {
-						Debug.getLogger().error(Constants.EMPTY_STRING, e);
-						e.printStackTrace();
-					}
+				try {
+					this.gleitenderTag.add(ausfallDatum);
+				} catch (IntervallPufferException e) {
+					Debug.getLogger().error(Constants.EMPTY_STRING, e);
+					e.printStackTrace();
 				}
 			}
 			this.testAufAusfall(ausfallDatum);
@@ -162,7 +153,7 @@ public class AusfallFahrStreifen extends AbstractSystemObjekt implements
 	private void testAufAusfall(AusfallDatumKomplett letztesAusfallDatum) {
 		long ausfallZeit = 0;
 
-		synchronized (this.gleitenderTag) {
+		if (programmLaeuftSchonLaengerAlsEinTag()) {
 			try {
 				if (TestParameter.getInstanz().isTestAusfall()) {
 					if (letztesAusfallDatum != null) {
@@ -183,46 +174,38 @@ public class AusfallFahrStreifen extends AbstractSystemObjekt implements
 				Debug.getLogger().error(Constants.EMPTY_STRING, e);
 				e.printStackTrace();
 			}
-		}
 
-		if (programmLaeuftSchonLaengerAlsEinTag()) {
-			synchronized (this) {
-				if (this.maxAusfallProTag >= 0) {
+			if (this.maxAusfallProTag >= 0) {
 
-					double ausfallInProzent;
-					if (TestParameter.getInstanz().isTestAusfall()) {
-						ausfallInProzent = (((double) ausfallZeit / (double)
-								144000L) * 100.0);
-					} else {
-						ausfallInProzent = (((double) ausfallZeit / (double) Constants.MILLIS_PER_DAY) * 100.0);
-					}
+				double ausfallInProzent;
+				if (TestParameter.getInstanz().isTestAusfall()) {
+					ausfallInProzent = (((double) ausfallZeit / (double) 144000L) * 100.0);
+				} else {
+					ausfallInProzent = (((double) ausfallZeit / (double) Constants.MILLIS_PER_DAY) * 100.0);
+				}
 
-					if (ausfallInProzent > this.maxAusfallProTag) {
-						long stunden = ausfallZeit / Constants.MILLIS_PER_HOUR;
-						long minuten = (ausfallZeit - (stunden * Constants.MILLIS_PER_HOUR))
-								/ Constants.MILLIS_PER_MINUTE;
+				if (ausfallInProzent > this.maxAusfallProTag) {
+					long stunden = ausfallZeit / Constants.MILLIS_PER_HOUR;
+					long minuten = (ausfallZeit - (stunden * Constants.MILLIS_PER_HOUR))
+							/ Constants.MILLIS_PER_MINUTE;
 
-						String nachricht = "Ausfallhäufigkeit innerhalb der letzten 24 Stunden überschritten. Im Zeitraum von " + //$NON-NLS-1$
-								FORMAT.format(new Date(System
-										.currentTimeMillis()
-										- Constants.MILLIS_PER_DAY))
-								+ " Uhr bis " + //$NON-NLS-1$
-								FORMAT.format(new Date(System
-										.currentTimeMillis()))
-								+ " Uhr (1 Tag) implausible Fahrstreifenwerte am Fahrstreifen " + //$NON-NLS-1$
-								this.getSystemObject()
-								+ " von "
-								+ DUAUtensilien.runde(ausfallInProzent, 1)
-								+ "% (> " + this.maxAusfallProTag + //$NON-NLS-1$//$NON-NLS-2$
-								"%) entspricht Ausfall von "
-								+ stunden
-								+ " Stunde(n) " + minuten + " Minute(n)."; //$NON-NLS-1$ //$NON-NLS-2$//$NON-NLS-3$
+					String nachricht = "Ausfallhäufigkeit innerhalb der letzten 24 Stunden überschritten. Im Zeitraum von " + //$NON-NLS-1$
+							FORMAT.format(new Date(System.currentTimeMillis()
+									- Constants.MILLIS_PER_DAY))
+							+ " Uhr bis " + //$NON-NLS-1$
+							FORMAT.format(new Date(System.currentTimeMillis()))
+							+ " Uhr (1 Tag) implausible Fahrstreifenwerte am Fahrstreifen " + //$NON-NLS-1$
+							this.getSystemObject()
+							+ " von "
+							+ DUAUtensilien.runde(ausfallInProzent, 1)
+							+ "% (> " + this.maxAusfallProTag + //$NON-NLS-1$//$NON-NLS-2$
+							"%) entspricht Ausfall von "
+							+ stunden
+							+ " Stunde(n) " + minuten + " Minute(n)."; //$NON-NLS-1$ //$NON-NLS-2$//$NON-NLS-3$
 
-						dieVerwaltung.sendeBetriebsMeldung(MELDUNGS_ID,
-								MessageType.APPLICATION_DOMAIN,
-								Constants.EMPTY_STRING, MessageGrade.WARNING,
-								MessageState.MESSAGE, nachricht);
-					}
+					DUAUtensilien.sendeBetriebsmeldung(dieVerwaltung
+							.getVerbindung(), MessageGrade.WARNING, this
+							.getSystemObject(), nachricht);
 				}
 			}
 		}
@@ -235,11 +218,8 @@ public class AusfallFahrStreifen extends AbstractSystemObjekt implements
 		if (davParameterFeld != null) {
 			for (ResultData davParameter : davParameterFeld) {
 				if (davParameter != null && davParameter.getData() != null) {
-					synchronized (this) {
-						this.maxAusfallProTag = davParameter
-								.getData()
-								.getUnscaledValue("maxAusfallProTag").longValue(); //$NON-NLS-1$
-					}
+					this.maxAusfallProTag = davParameter.getData()
+							.getUnscaledValue("maxAusfallProTag").longValue(); //$NON-NLS-1$
 				}
 			}
 		}
