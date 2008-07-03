@@ -31,8 +31,10 @@ import de.bsvrz.dav.daf.main.Data;
 import de.bsvrz.dav.daf.main.ResultData;
 import de.bsvrz.dav.daf.main.config.AttributeGroup;
 import de.bsvrz.dav.daf.main.config.SystemObject;
+import de.bsvrz.dua.plloglve.vew.VerwaltungPlPruefungLogischLVE;
 import de.bsvrz.sys.funclib.bitctrl.dua.DUAKonstanten;
 import de.bsvrz.sys.funclib.bitctrl.dua.schnittstellen.IVerwaltungMitGuete;
+import de.bsvrz.sys.funclib.debug.Debug;
 
 /**
  * Klasse zum Durchführen der speziellen Standardplausibilisierung LVE für LZD.
@@ -237,6 +239,20 @@ public class KzdPLFahrStreifen extends AbstraktPLFahrStreifen {
 		 */
 		if (qKfz == 0) {
 			if (!(qLkw == 0 && qPkw == 0)) {
+				Debug
+						.getLogger()
+						.fine(VerwaltungPlPruefungLogischLVE
+												.getPlLogIdent(resultat)
+										+ "\nSetze ALLES auf implausibel und fehlerhaft weil Regel(1) verletzt:\n"
+										+ "Wenn qKfz == 0 dann muss qLkw == 0 und qPkw == 0 sein. Aber:\nqKfz = "
+										+ VerwaltungPlPruefungLogischLVE
+												.getWertIdent(qKfz)
+										+ "\nqLkw = "
+										+ VerwaltungPlPruefungLogischLVE
+												.getWertIdent(qLkw)
+										+ "\nqPkw = "
+										+ VerwaltungPlPruefungLogischLVE
+												.getWertIdent(qPkw));
 				this.setAllesImplausibel(data);
 				return;
 			}
@@ -250,6 +266,23 @@ public class KzdPLFahrStreifen extends AbstraktPLFahrStreifen {
 			if (qKfz >= 0 && qLkw >= 0) {
 				if (qKfz - qLkw == 0) {
 					if (!(qPkw == 0 && vPkw == DUAKonstanten.NICHT_ERMITTELBAR)) {
+						Debug
+								.getLogger()
+								.fine(VerwaltungPlPruefungLogischLVE
+														.getPlLogIdent(resultat)
+												+ "\nSetze ALLES auf implausibel und fehlerhaft weil Regel(2) verletzt:\n"
+												+ "Wenn (qKfz >= 0 und qLkw >= 0) und (qKfz - qLkw == 0), dann muss qPkw == 0 und vPkw == nicht ermittelbar sein. Aber:\nqKfz = "
+												+ VerwaltungPlPruefungLogischLVE
+														.getWertIdent(qKfz)
+												+ "\nqLkw = "
+												+ VerwaltungPlPruefungLogischLVE
+														.getWertIdent(qLkw)
+												+ "\nqPkw = "
+												+ VerwaltungPlPruefungLogischLVE
+														.getWertIdent(qPkw)
+												+ "\nvPkw = "
+												+ VerwaltungPlPruefungLogischLVE
+														.getWertIdent(vPkw));
 						this.setAllesImplausibel(data);
 						return;
 					}
@@ -261,6 +294,14 @@ public class KzdPLFahrStreifen extends AbstraktPLFahrStreifen {
 			 */
 			if (qLkw == 0) {
 				if (!(vLkw == DUAKonstanten.NICHT_ERMITTELBAR)) {
+					Debug
+					.getLogger()
+					.fine(VerwaltungPlPruefungLogischLVE
+											.getPlLogIdent(resultat)
+									+ "\nSetze ALLES auf implausibel und fehlerhaft weil Regel(3) verletzt:\n"
+									+ "Wenn qLkw == 0, dann muss vLkw auf nicht ermittelbar stehen. Aber:\nvLkw = "
+									+ VerwaltungPlPruefungLogischLVE
+											.getWertIdent(vLkw));
 					this.setAllesImplausibel(data);
 					return;
 				}
@@ -271,6 +312,14 @@ public class KzdPLFahrStreifen extends AbstraktPLFahrStreifen {
 			 */
 			if (qPkw == 0) {
 				if (!(vPkw == DUAKonstanten.NICHT_ERMITTELBAR)) {
+					Debug
+					.getLogger()
+					.fine(VerwaltungPlPruefungLogischLVE
+											.getPlLogIdent(resultat)
+									+ "\nSetze ALLES auf implausibel und fehlerhaft weil Regel(4) verletzt:\n"
+									+ "Wenn qPkw == 0, dann muss vPkw auf nicht ermittelbar stehen. Aber:\nvPkw = "
+									+ VerwaltungPlPruefungLogischLVE
+											.getWertIdent(vPkw));
 					this.setAllesImplausibel(data);
 					return;
 				}
@@ -282,6 +331,15 @@ public class KzdPLFahrStreifen extends AbstraktPLFahrStreifen {
 		 */
 		if (qKfz >= 0 && qLkw >= 0) {
 			if (qKfz < qLkw) {
+				Debug
+				.getLogger()
+				.fine(VerwaltungPlPruefungLogischLVE
+										.getPlLogIdent(resultat)
+								+ "\nSetze ALLES auf implausibel und fehlerhaft weil Regel(5) verletzt:\n"
+								+ "Wenn qKfz >= 0 und qLkw >= 0, dann muss qKfz >= qLkw sein. Aber:\nqKfz = "
+								+ VerwaltungPlPruefungLogischLVE
+										.getWertIdent(qKfz) + "\nqLkw = " + VerwaltungPlPruefungLogischLVE
+										.getWertIdent(qLkw));
 				this.setAllesImplausibel(data);
 				return;
 			}
@@ -294,6 +352,16 @@ public class KzdPLFahrStreifen extends AbstraktPLFahrStreifen {
 			if (qKfz - qLkw > 0) {
 				if (vPkw >= 0) {
 					if (!(0 < vPkw)) {
+						Debug
+						.getLogger()
+						.fine(VerwaltungPlPruefungLogischLVE
+												.getPlLogIdent(resultat)
+										+ "\nSetze ALLES auf implausibel und fehlerhaft weil Regel(6) verletzt:\n"
+										+ "Wenn qKfz >= 0 und qLkw >= 0 und qKfz - qLkw > 0, dann muss vPkw > 0 sein. Aber:\nqKfz = "
+										+ VerwaltungPlPruefungLogischLVE
+												.getWertIdent(qKfz) + "\nqLkw = " + VerwaltungPlPruefungLogischLVE
+												.getWertIdent(qLkw) + "\nvPkw = " + VerwaltungPlPruefungLogischLVE
+												.getWertIdent(vPkw));
 						this.setAllesImplausibel(data);
 						return;
 					}
@@ -307,6 +375,15 @@ public class KzdPLFahrStreifen extends AbstraktPLFahrStreifen {
 		if (qKfz > 0) {
 			if (vKfz >= 0) {
 				if (!(0 < vKfz)) {
+					Debug
+					.getLogger()
+					.fine(VerwaltungPlPruefungLogischLVE
+											.getPlLogIdent(resultat)
+									+ "\nSetze ALLES auf implausibel und fehlerhaft weil Regel(7) verletzt:\n"
+									+ "Wenn qKfz > 0 und vKfz >= 0, dann muss vKfz > 0 sein. Aber:\nqKfz = "
+									+ VerwaltungPlPruefungLogischLVE
+											.getWertIdent(qKfz) + "\nvKfz = " + VerwaltungPlPruefungLogischLVE
+											.getWertIdent(vKfz));
 					this.setAllesImplausibel(data);
 					return;
 				}
@@ -319,6 +396,15 @@ public class KzdPLFahrStreifen extends AbstraktPLFahrStreifen {
 		if (qLkw > 0) {
 			if (vLkw >= 0) {
 				if (!(0 < vLkw)) {
+					Debug
+					.getLogger()
+					.fine(VerwaltungPlPruefungLogischLVE
+											.getPlLogIdent(resultat)
+									+ "\nSetze ALLES auf implausibel und fehlerhaft weil Regel(8) verletzt:\n"
+									+ "Wenn qLkw > 0, dann muss vLkw > 0 sein. Aber:\nqLkw = "
+									+ VerwaltungPlPruefungLogischLVE
+											.getWertIdent(qLkw) + "\nvLkw = " + VerwaltungPlPruefungLogischLVE
+											.getWertIdent(vLkw));
 					this.setAllesImplausibel(data);
 					return;
 				}
@@ -330,6 +416,15 @@ public class KzdPLFahrStreifen extends AbstraktPLFahrStreifen {
 		 */
 		if (tNetto >= 0) {
 			if (!(0 < tNetto && tNetto <= t)) {
+				Debug
+				.getLogger()
+				.fine(VerwaltungPlPruefungLogischLVE
+										.getPlLogIdent(resultat)
+								+ "\nSetze tNetto auf implausibel und fehlerhaft weil Regel(9) verletzt:\n"
+								+ "Wenn tNetto muss im Intervall (0, T] liegen. Aber:\ntNetto = "
+								+ VerwaltungPlPruefungLogischLVE
+										.getWertIdent(tNetto) + "\nT = " + VerwaltungPlPruefungLogischLVE
+										.getWertIdent(t));
 				data
 						.getItem("tNetto").getUnscaledValue("Wert").set(DUAKonstanten.FEHLERHAFT); //$NON-NLS-1$ //$NON-NLS-2$
 				data.getItem("tNetto").getItem("Status").getItem(
@@ -344,6 +439,16 @@ public class KzdPLFahrStreifen extends AbstraktPLFahrStreifen {
 		if (qKfz == 0) {
 			if (vgKfz >= 0 && vgKfzLetztesIntervall >= 0) {
 				if (!(vgKfz == vgKfzLetztesIntervall)) {
+					Debug
+					.getLogger()
+					.fine(VerwaltungPlPruefungLogischLVE
+											.getPlLogIdent(resultat)
+									+ "\nSetze vgKfz auf implausibel und fehlerhaft weil Regel(10) verletzt:\n"
+									+ "Wenn qKfz == 0 und vgKfz(t) >= 0 und vgKfz(T-1) >= 0, dann muss vgKfz(t) >= 0 == vgKfz(T-1) sein. Aber:\nqKfz = "
+									+ VerwaltungPlPruefungLogischLVE
+											.getWertIdent(qKfz) + "\nvgKfz(t) = " + VerwaltungPlPruefungLogischLVE
+											.getWertIdent(vgKfz) + "\nvgKfz(t-T) = " + VerwaltungPlPruefungLogischLVE
+											.getWertIdent(vgKfzLetztesIntervall));
 					data
 							.getItem("vgKfz").getUnscaledValue("Wert").set(DUAKonstanten.FEHLERHAFT); //$NON-NLS-1$ //$NON-NLS-2$
 					data
@@ -364,6 +469,17 @@ public class KzdPLFahrStreifen extends AbstraktPLFahrStreifen {
 					if (vKfz > parameterAtgLog.getVKfzGrenz()) {
 						if (b >= 0 && parameterAtgLog.getBGrenz() >= 0) {
 							if (!(b < parameterAtgLog.getBGrenz())) {
+								Debug
+								.getLogger()
+								.fine(VerwaltungPlPruefungLogischLVE
+														.getPlLogIdent(resultat)
+												+ "\nSetze b auf implausibel und fehlerhaft weil Regel(11) verletzt:\n"
+												+ "Wenn vKfz > vKfzGrenz dann muss b >= bGrenz sein. Aber:\nvKfz = "
+												+ VerwaltungPlPruefungLogischLVE
+														.getWertIdent(vKfz) + "\nvKfzGrenz = " + VerwaltungPlPruefungLogischLVE
+														.getWertIdent(parameterAtgLog.getVKfzGrenz()) + "\nb = " + VerwaltungPlPruefungLogischLVE
+														.getWertIdent(b) + "\nbGrenz = " + VerwaltungPlPruefungLogischLVE
+														.getWertIdent(parameterAtgLog.getBGrenz()));
 								data
 										.getItem("b").getUnscaledValue("Wert").set(DUAKonstanten.FEHLERHAFT); //$NON-NLS-1$ //$NON-NLS-2$
 								data.getItem("b").getItem("Status").getItem(

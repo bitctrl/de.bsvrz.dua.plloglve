@@ -40,6 +40,7 @@ import de.bsvrz.dua.guete.GueteException;
 import de.bsvrz.dua.guete.GueteVerfahren;
 import de.bsvrz.dua.guete.vorschriften.IGuete;
 import de.bsvrz.dua.plloglve.plloglve.typen.OptionenPlausibilitaetsPruefungLogischVerkehr;
+import de.bsvrz.dua.plloglve.vew.VerwaltungPlPruefungLogischLVE;
 import de.bsvrz.sys.funclib.bitctrl.daf.DaVKonstanten;
 import de.bsvrz.sys.funclib.bitctrl.dua.DUAKonstanten;
 import de.bsvrz.sys.funclib.bitctrl.dua.DUAUtensilien;
@@ -106,8 +107,8 @@ public abstract class AbstraktPLFahrStreifen extends AbstractSystemObjekt
 				obj,
 				new DataDescription(this
 						.getPlausibilisierungsParameterAtg(dieVerwaltung
-								.getVerbindung()), dieVerwaltung.getVerbindung()
-						.getDataModel().getAspect(
+								.getVerbindung()), dieVerwaltung
+						.getVerbindung().getDataModel().getAspect(
 								DaVKonstanten.ASP_PARAMETER_SOLL), (short) 0),
 				ReceiveOptions.normal(), ReceiverRole.receiver());
 	}
@@ -157,19 +158,21 @@ public abstract class AbstraktPLFahrStreifen extends AbstractSystemObjekt
 	 * 
 	 * @param data
 	 *            ein KZD (darf nicht <code>null</code> sein)
+	 * @param originalDatum
+	 *            das zum Nutzdatum gehoerende Originaldatum
 	 * @return das um qPkw und vKfz erweiterte KZD
 	 */
-	protected Data berechneQPkwUndVKfz(Data data) {
+	protected Data berechneQPkwUndVKfz(Data data, ResultData originalDatum) {
 		final long qKfz = data
 				.getItem("qKfz").getUnscaledValue("Wert").longValue(); //$NON-NLS-1$ //$NON-NLS-2$
-		final boolean qKfzImplausibel = data
-				.getItem("qKfz").getItem("Status").getItem("MessWertErsetzung").
-				getUnscaledValue("Implausibel").longValue() == DUAKonstanten.JA; //$NON-NLS-1$
+		final boolean qKfzImplausibel = data.getItem("qKfz").getItem("Status")
+				.getItem("MessWertErsetzung")
+				.getUnscaledValue("Implausibel").longValue() == DUAKonstanten.JA; //$NON-NLS-1$
 		final long qLkw = data
 				.getItem("qLkw").getUnscaledValue("Wert").longValue(); //$NON-NLS-1$ //$NON-NLS-2$
-		final boolean qLkwImplausibel = data
-				.getItem("qLkw").getItem("Status").getItem("MessWertErsetzung").
-				getUnscaledValue("Implausibel").longValue() == DUAKonstanten.JA; //$NON-NLS-1$
+		final boolean qLkwImplausibel = data.getItem("qLkw").getItem("Status")
+				.getItem("MessWertErsetzung")
+				.getUnscaledValue("Implausibel").longValue() == DUAKonstanten.JA; //$NON-NLS-1$
 
 		long qPkw = DUAKonstanten.NICHT_ERMITTELBAR;
 		GWert qPkwGuete = GWert.getMaxGueteWert(GueteVerfahren.STANDARD);
@@ -177,6 +180,18 @@ public abstract class AbstraktPLFahrStreifen extends AbstractSystemObjekt
 		if (qKfz >= 0 && !qKfzImplausibel) {
 			if (qLkw >= 0 && !qLkwImplausibel) {
 				if (qLkw > qKfz) {
+					Debug.getLogger().fine(
+							VerwaltungPlPruefungLogischLVE
+									.getPlLogIdent(originalDatum)
+									+ "\nSetze qPkw (eigentlich "
+									+ VerwaltungPlPruefungLogischLVE
+											.getWertIdent(qPkw)
+									+ ") auf nicht ermittelbar da qLkw ("
+									+ VerwaltungPlPruefungLogischLVE
+											.getWertIdent(qLkw)
+									+ ") > qKfz ("
+									+ VerwaltungPlPruefungLogischLVE
+											.getWertIdent(qLkw) + ").");
 					qPkw = DUAKonstanten.NICHT_ERMITTELBAR;
 				} else {
 					qPkw = qKfz - qLkw;
@@ -187,15 +202,24 @@ public abstract class AbstraktPLFahrStreifen extends AbstractSystemObjekt
 						qPkwGuete = GueteVerfahren.differenz(qKfzG, qLkwG);
 					} catch (GueteException e) {
 						e.printStackTrace();
-						Debug.getLogger()
+						Debug
+								.getLogger()
 								.error(
 										"Berechnung der Guete von qPkw fehlgeschlagen", e); //$NON-NLS-1$
 					}
 				}
 			} else {
 				qPkw = qKfz;
-				qPkwGuete = new GWert(data, "qPkw"); //$NON-NLS-1$
+				qPkwGuete = new GWert(data, "qKfz");
 			}
+		} else {
+			Debug.getLogger().fine(
+					VerwaltungPlPruefungLogischLVE.getPlLogIdent(originalDatum)
+							+ "\nSetze qPkw (eigentlich "
+							+ VerwaltungPlPruefungLogischLVE.getWertIdent(qPkw)
+							+ ") auf nicht ermittelbar da qKfz ("
+							+ VerwaltungPlPruefungLogischLVE.getWertIdent(qKfz)
+							+ ") < 0 bzw. implausibel.");
 		}
 
 		if (DUAUtensilien.isWertInWerteBereich(data
@@ -206,8 +230,18 @@ public abstract class AbstraktPLFahrStreifen extends AbstractSystemObjekt
 			data
 					.getItem("qPkw").getUnscaledValue("Wert").set(DUAKonstanten.FEHLERHAFT); //$NON-NLS-1$//$NON-NLS-2$
 			data
-					.getItem("qPkw").getItem("Status").
-					getItem("MessWertErsetzung").getUnscaledValue("Implausibel").set(DUAKonstanten.JA); //$NON-NLS-1$ //$NON-NLS-2$//$NON-NLS-2%
+					.getItem("qPkw")
+					.getItem("Status")
+					.getItem("MessWertErsetzung").getUnscaledValue("Implausibel").set(DUAKonstanten.JA); //$NON-NLS-1$ //$NON-NLS-2$//$NON-NLS-2%
+			Debug
+					.getLogger()
+					.fine(
+							VerwaltungPlPruefungLogischLVE
+									.getPlLogIdent(originalDatum)
+									+ "\nSetze qPkw (eigentlich "
+									+ VerwaltungPlPruefungLogischLVE
+											.getWertIdent(qPkw)
+									+ ") auf impl. und fehlerhaft da ausserhalb des Modell-Wertebereichs.");
 		}
 
 		final long vPkw = data
@@ -246,8 +280,17 @@ public abstract class AbstraktPLFahrStreifen extends AbstractSystemObjekt
 
 			} catch (GueteException e) {
 				e.printStackTrace();
-				Debug.getLogger().error("Berechnung der Guete von vKfz fehlgeschlagen", e); //$NON-NLS-1$
+				Debug.getLogger().error(
+						"Berechnung der Guete von vKfz fehlgeschlagen", e); //$NON-NLS-1$
 			}
+		} else {
+			Debug.getLogger().fine(
+					VerwaltungPlPruefungLogischLVE.getPlLogIdent(originalDatum)
+							+ "\nSetze vKfz (eigentlich "
+							+ VerwaltungPlPruefungLogischLVE.getWertIdent(vKfz)
+							+ ") auf nicht ermittelbar da qKfz ("
+							+ VerwaltungPlPruefungLogischLVE.getWertIdent(qKfz)
+							+ ") <= 0.");
 		}
 
 		if (DUAUtensilien.isWertInWerteBereich(data
@@ -258,134 +301,153 @@ public abstract class AbstraktPLFahrStreifen extends AbstractSystemObjekt
 			data
 					.getItem("vKfz").getUnscaledValue("Wert").set(DUAKonstanten.FEHLERHAFT); //$NON-NLS-1$//$NON-NLS-2$
 			data
-					.getItem("vKfz").getItem("Status").
-					getItem("MessWertErsetzung").getUnscaledValue("Implausibel").set(DUAKonstanten.JA); //$NON-NLS-1$ //$NON-NLS-2$//$NON-NLS-2%
+					.getItem("vKfz")
+					.getItem("Status")
+					.getItem("MessWertErsetzung").getUnscaledValue("Implausibel").set(DUAKonstanten.JA); //$NON-NLS-1$ //$NON-NLS-2$//$NON-NLS-2%
+			Debug
+					.getLogger()
+					.fine(
+							VerwaltungPlPruefungLogischLVE
+									.getPlLogIdent(originalDatum)
+									+ "\nSetze vKfz (eigentlich "
+									+ VerwaltungPlPruefungLogischLVE
+											.getWertIdent(vKfz)
+									+ ") auf impl. und fehlerhaft da ausserhalb des Wertebereichs.");
 		}
 
-		data.getItem("qPkw").getItem("Status").
-				getItem("Erfassung").getUnscaledValue("NichtErfasst").set(DUAKonstanten.JA); //$NON-NLS-1$//$NON-NLS-2$
-		data.getItem("vKfz").getItem("Status").
-				getItem("Erfassung").getUnscaledValue("NichtErfasst").set(DUAKonstanten.JA); //$NON-NLS-1$//$NON-NLS-2$
+		data
+				.getItem("qPkw")
+				.getItem("Status")
+				.getItem("Erfassung").getUnscaledValue("NichtErfasst").set(DUAKonstanten.JA); //$NON-NLS-1$//$NON-NLS-2$
+		data
+				.getItem("vKfz")
+				.getItem("Status")
+				.getItem("Erfassung").getUnscaledValue("NichtErfasst").set(DUAKonstanten.JA); //$NON-NLS-1$//$NON-NLS-2$
 
 		return data;
 	}
 
-	/**
-	 * <b>Nach AFo 4.0</b><br>
-	 * Untersucht den Wertebereich eines Verkehrs-Datums und markiert ggf.
-	 * verletzte Wertebereiche<br>
-	 * <br>
-	 * 
-	 * i. Setze Min: Wenn Wert != -1, -2, -3 UND Wert < Min --> Ersetzung und
-	 * Kennzeichnung mit MIN<br>
-	 * ii. Setze Max: Wenn Wert != -1, -2, -3 UND Wert > Max --> Ersetzung und
-	 * Kennzeichnung mit MAX<br>
-	 * iii. Setze MinMax: Wie Setze Min UND Setze Max<br>
-	 * iv. Nur Prüfung: Wenn Wert != -1, -2, -3 UND !(Min <= Wert <= Max) -->
-	 * Kennzeichnung als Implausibel UND fehlerhaft<br>
-	 * v. Keine Prüfung --> mache nichts<br>
-	 * 
-	 * @param davDatum
-	 *            ein zu veränderndes Verkehrs-Datums (darf nicht
-	 *            <code>null</code> sein)
-	 * @param resultat
-	 *            das Originaldatum
-	 * @param wertName
-	 *            der Name des final Attributs
-	 * @param min
-	 *            untere Grenze des Wertes
-	 * @param max
-	 *            obere Grenze des Wertes
-	 * @return das plaubilisierte (markierte) Datum
-	 */
-	@Deprecated
-	protected final Data untersucheWerteBereich(Data davDatum,
-			final ResultData resultat, final String wertName, final long min,
-			final long max) {
-
-		if (this.parameterAtgLog != null) {
-
-			OptionenPlausibilitaetsPruefungLogischVerkehr optionen = this.parameterAtgLog
-					.getOptionen();
-
-			if (!optionen
-					.equals(OptionenPlausibilitaetsPruefungLogischVerkehr.KEINE_PRUEFUNG)) {
-				long wert = resultat.getData().getItem(wertName)
-						.getUnscaledValue("Wert").longValue(); //$NON-NLS-1$
-
-				/**
-				 * sonst handelt es sich nicht um einen Messwert
-				 */
-				if (wert >= 0) {
-					boolean minVerletzt = wert < min;
-					boolean maxVerletzt = wert > max;
-					boolean gueteNeuBerechnen = false;
-
-					if (minVerletzt) {
-						if (optionen
-								.equals(OptionenPlausibilitaetsPruefungLogischVerkehr.SETZE_MIN)
-								|| optionen
-										.equals(OptionenPlausibilitaetsPruefungLogischVerkehr.SETZE_MIN_MAX)) {
-							davDatum.getItem(wertName)
-									.getUnscaledValue("Wert").set(min); //$NON-NLS-1$
-							davDatum
-									.getItem(wertName)
-									.getItem("Status").
-									getItem("PlLogisch").getUnscaledValue("WertMinLogisch").set(DUAKonstanten.JA); //$NON-NLS-1$ //$NON-NLS-2$
-							gueteNeuBerechnen = true;
-						} else if (optionen
-								.equals(OptionenPlausibilitaetsPruefungLogischVerkehr.NUR_PRUEFUNG)) {
-							davDatum
-									.getItem(wertName)
-									.getUnscaledValue("Wert").set(DUAKonstanten.FEHLERHAFT); //$NON-NLS-1$
-							davDatum
-									.getItem(wertName)
-									.getItem("Status").
-									getItem("MessWertErsetzung").getUnscaledValue("Implausibel").set(DUAKonstanten.JA); //$NON-NLS-1$ //$NON-NLS-2$
-						}
-					}
-					if (maxVerletzt) {
-						if (optionen
-								.equals(OptionenPlausibilitaetsPruefungLogischVerkehr.SETZE_MAX)
-								|| optionen
-										.equals(OptionenPlausibilitaetsPruefungLogischVerkehr.SETZE_MIN_MAX)) {
-							davDatum.getItem(wertName)
-									.getUnscaledValue("Wert").set(max); //$NON-NLS-1$
-							davDatum
-									.getItem(wertName)
-									.getItem("Status").
-									getItem("PlLogisch").getUnscaledValue("WertMaxLogisch").set(DUAKonstanten.JA); //$NON-NLS-1$ //$NON-NLS-2$
-							gueteNeuBerechnen = true;
-						} else if (optionen
-								.equals(OptionenPlausibilitaetsPruefungLogischVerkehr.NUR_PRUEFUNG)) {
-							davDatum
-									.getItem(wertName)
-									.getUnscaledValue("Wert").set(DUAKonstanten.FEHLERHAFT); //$NON-NLS-1$
-							davDatum
-									.getItem(wertName)
-									.getItem("Status").
-									getItem("MessWertErsetzung").getUnscaledValue("Implausibel").set(DUAKonstanten.JA); //$NON-NLS-1$ //$NON-NLS-2$
-						}
-					}
-
-					if (gueteNeuBerechnen) {
-						GanzZahl guete = GanzZahl.getGueteIndex();
-						guete.setWert(davDatum.getItem(wertName)
-								.getItem("Güte").//$NON-NLS-1$
-								getUnscaledValue("Index").longValue()); //$NON-NLS-1$
-						if (!guete.isZustand()) {
-							double gueteIndex = guete.getSkaliertenWert();
-							gueteIndex *= dieVerwaltung.getGueteFaktor();
-							davDatum.getItem(wertName).getItem("Güte").//$NON-NLS-1$
-									getScaledValue("Index").set(gueteIndex); //$NON-NLS-1$
-						}
-					}
-				}
-			}
-		}
-
-		return davDatum;
-	}
+	// /**
+	// * <b>Nach AFo 4.0</b><br>
+	// * Untersucht den Wertebereich eines Verkehrs-Datums und markiert ggf.
+	// * verletzte Wertebereiche<br>
+	// * <br>
+	// *
+	// * i. Setze Min: Wenn Wert != -1, -2, -3 UND Wert < Min --> Ersetzung und
+	// * Kennzeichnung mit MIN<br>
+	// * ii. Setze Max: Wenn Wert != -1, -2, -3 UND Wert > Max --> Ersetzung und
+	// * Kennzeichnung mit MAX<br>
+	// * iii. Setze MinMax: Wie Setze Min UND Setze Max<br>
+	// * iv. Nur Prüfung: Wenn Wert != -1, -2, -3 UND !(Min <= Wert <= Max) -->
+	// * Kennzeichnung als Implausibel UND fehlerhaft<br>
+	// * v. Keine Prüfung --> mache nichts<br>
+	// *
+	// * @param davDatum
+	// * ein zu veränderndes Verkehrs-Datums (darf nicht
+	// * <code>null</code> sein)
+	// * @param resultat
+	// * das Originaldatum
+	// * @param wertName
+	// * der Name des final Attributs
+	// * @param min
+	// * untere Grenze des Wertes
+	// * @param max
+	// * obere Grenze des Wertes
+	// * @return das plaubilisierte (markierte) Datum
+	// */
+	// @Deprecated
+	// protected final Data untersucheWerteBereich(Data davDatum,
+	// final ResultData resultat, final String wertName, final long min,
+	// final long max) {
+	//
+	// if (this.parameterAtgLog != null) {
+	//
+	// OptionenPlausibilitaetsPruefungLogischVerkehr optionen =
+	// this.parameterAtgLog
+	// .getOptionen();
+	//
+	// if (!optionen
+	// .equals(OptionenPlausibilitaetsPruefungLogischVerkehr.KEINE_PRUEFUNG)) {
+	// long wert = resultat.getData().getItem(wertName)
+	// .getUnscaledValue("Wert").longValue(); //$NON-NLS-1$
+	//
+	// /**
+	// * sonst handelt es sich nicht um einen Messwert
+	// */
+	// if (wert >= 0) {
+	// boolean minVerletzt = wert < min;
+	// boolean maxVerletzt = wert > max;
+	// boolean gueteNeuBerechnen = false;
+	//
+	// if (minVerletzt) {
+	// if (optionen
+	// .equals(OptionenPlausibilitaetsPruefungLogischVerkehr.SETZE_MIN)
+	// || optionen
+	// .equals(OptionenPlausibilitaetsPruefungLogischVerkehr.SETZE_MIN_MAX)) {
+	// davDatum.getItem(wertName)
+	// .getUnscaledValue("Wert").set(min); //$NON-NLS-1$
+	// davDatum
+	// .getItem(wertName)
+	// .getItem("Status")
+	// .getItem("PlLogisch").getUnscaledValue("WertMinLogisch").set(DUAKonstanten.JA);
+	// //$NON-NLS-1$ //$NON-NLS-2$
+	// gueteNeuBerechnen = true;
+	// } else if (optionen
+	// .equals(OptionenPlausibilitaetsPruefungLogischVerkehr.NUR_PRUEFUNG)) {
+	// davDatum
+	// .getItem(wertName)
+	// .getUnscaledValue("Wert").set(DUAKonstanten.FEHLERHAFT); //$NON-NLS-1$
+	// davDatum
+	// .getItem(wertName)
+	// .getItem("Status")
+	// .getItem("MessWertErsetzung").getUnscaledValue("Implausibel").set(DUAKonstanten.JA);
+	// //$NON-NLS-1$ //$NON-NLS-2$
+	// }
+	// }
+	// if (maxVerletzt) {
+	// if (optionen
+	// .equals(OptionenPlausibilitaetsPruefungLogischVerkehr.SETZE_MAX)
+	// || optionen
+	// .equals(OptionenPlausibilitaetsPruefungLogischVerkehr.SETZE_MIN_MAX)) {
+	// davDatum.getItem(wertName)
+	// .getUnscaledValue("Wert").set(max); //$NON-NLS-1$
+	// davDatum
+	// .getItem(wertName)
+	// .getItem("Status")
+	// .getItem("PlLogisch").getUnscaledValue("WertMaxLogisch").set(DUAKonstanten.JA);
+	// //$NON-NLS-1$ //$NON-NLS-2$
+	// gueteNeuBerechnen = true;
+	// } else if (optionen
+	// .equals(OptionenPlausibilitaetsPruefungLogischVerkehr.NUR_PRUEFUNG)) {
+	// davDatum
+	// .getItem(wertName)
+	// .getUnscaledValue("Wert").set(DUAKonstanten.FEHLERHAFT); //$NON-NLS-1$
+	// davDatum
+	// .getItem(wertName)
+	// .getItem("Status")
+	// .getItem("MessWertErsetzung").getUnscaledValue("Implausibel").set(DUAKonstanten.JA);
+	// //$NON-NLS-1$ //$NON-NLS-2$
+	// }
+	// }
+	//
+	// if (gueteNeuBerechnen) {
+	// GanzZahl guete = GanzZahl.getGueteIndex();
+	// guete.setWert(davDatum.getItem(wertName)
+	// .getItem("Güte").//$NON-NLS-1$
+	// getUnscaledValue("Index").longValue()); //$NON-NLS-1$
+	// if (!guete.isZustand()) {
+	// double gueteIndex = guete.getSkaliertenWert();
+	// gueteIndex *= dieVerwaltung.getGueteFaktor();
+	// davDatum.getItem(wertName).getItem("Güte").//$NON-NLS-1$
+	// getScaledValue("Index").set(gueteIndex); //$NON-NLS-1$
+	// }
+	// }
+	// }
+	// }
+	// }
+	//
+	// return davDatum;
+	// }
 
 	/**
 	 * <b>Nach Afo 5.2</b><br>
@@ -446,8 +508,21 @@ public abstract class AbstraktPLFahrStreifen extends AbstractSystemObjekt
 									.getUnscaledValue("Wert").set(max); //$NON-NLS-1$
 							davDatum
 									.getItem(wertName)
-									.getItem("Status").
-									getItem("PlLogisch").getUnscaledValue("WertMaxLogisch").set(DUAKonstanten.JA); //$NON-NLS-1$ //$NON-NLS-2$
+									.getItem("Status")
+									.getItem("PlLogisch").getUnscaledValue("WertMaxLogisch").set(DUAKonstanten.JA); //$NON-NLS-1$ //$NON-NLS-2$
+							Debug.getLogger().fine(
+									VerwaltungPlPruefungLogischLVE
+											.getPlLogIdent(resultat)
+											+ "\nSetze "
+											+ wertName
+											+ " ("
+											+ VerwaltungPlPruefungLogischLVE
+													.getWertIdent(wert)
+											+ ") auf "
+											+ max
+											+ " und WertMaxLogisch (max = "
+											+ VerwaltungPlPruefungLogischLVE
+													.getWertIdent(max) + ")");
 
 							GWert guete = new GWert(davDatum, wertName);
 							GWert neueGuete = GWert
@@ -457,8 +532,10 @@ public abstract class AbstraktPLFahrStreifen extends AbstractSystemObjekt
 								neueGuete = GueteVerfahren.produkt(guete,
 										sweGuete);
 							} catch (GueteException e1) {
-								Debug.getLogger()
-										.error("Guete von " + wertName + " konnte nicht aktualisiert werden in " + resultat); //$NON-NLS-1$ //$NON-NLS-2$
+								Debug
+										.getLogger()
+										.error(
+												"Guete von " + wertName + " konnte nicht aktualisiert werden in " + resultat); //$NON-NLS-1$ //$NON-NLS-2$
 								e1.printStackTrace();
 							}
 							davDatum
@@ -498,8 +575,10 @@ public abstract class AbstraktPLFahrStreifen extends AbstractSystemObjekt
 													.produkt(sweGuete,
 															qPkwGueteNeu);
 										} catch (GueteException e) {
-											Debug.getLogger()
-													.error("Guete von qPkw konnte nicht aktualisiert werden in " + resultat); //$NON-NLS-1$
+											Debug
+													.getLogger()
+													.error(
+															"Guete von qPkw konnte nicht aktualisiert werden in " + resultat); //$NON-NLS-1$
 											e.printStackTrace();
 										}
 
@@ -507,6 +586,18 @@ public abstract class AbstraktPLFahrStreifen extends AbstractSystemObjekt
 												.getItem("qPkw").getItem("Güte").//$NON-NLS-1$ //$NON-NLS-2$
 												getUnscaledValue("Index").set(qPkwGueteNeu.getIndexUnskaliert()); //$NON-NLS-1$
 									} else {
+										Debug
+												.getLogger()
+												.fine(
+														VerwaltungPlPruefungLogischLVE
+																.getPlLogIdent(resultat)
+																+ "\nSetze ALLES auf implausibel und fehlerhaft weil max >= qLkw:\n"
+																+ "\nmax = "
+																+ VerwaltungPlPruefungLogischLVE
+																		.getWertIdent(max)
+																+ "\nvLkw = "
+																+ VerwaltungPlPruefungLogischLVE
+																		.getWertIdent(qLkw));
 										this.setAllesImplausibel(davDatum);
 										abbruch = true;
 									}
@@ -540,8 +631,10 @@ public abstract class AbstraktPLFahrStreifen extends AbstractSystemObjekt
 										qKfzGueteNeu = GueteVerfahren.produkt(
 												qKfzGuete, sweGuete);
 									} catch (GueteException e) {
-										Debug.getLogger()
-												.error("Guete von qKfz konnte nicht aktualisiert werden in " + resultat); //$NON-NLS-1$
+										Debug
+												.getLogger()
+												.error(
+														"Guete von qKfz konnte nicht aktualisiert werden in " + resultat); //$NON-NLS-1$
 										e.printStackTrace();
 									}
 
@@ -567,8 +660,10 @@ public abstract class AbstraktPLFahrStreifen extends AbstractSystemObjekt
 										qLkwGueteNeu = GueteVerfahren.produkt(
 												qLkwGuete, sweGuete);
 									} catch (GueteException e) {
-										Debug.getLogger()
-												.error("Guete von qLkw konnte nicht aktualisiert werden in " + resultat); //$NON-NLS-1$
+										Debug
+												.getLogger()
+												.error(
+														"Guete von qLkw konnte nicht aktualisiert werden in " + resultat); //$NON-NLS-1$
 										e.printStackTrace();
 									}
 
@@ -599,6 +694,19 @@ public abstract class AbstraktPLFahrStreifen extends AbstractSystemObjekt
 									long qPkwNeu = qKfz - qLkw;
 
 									if (qPkwNeu > qPkwMax) {
+										Debug
+												.getLogger()
+												.fine(
+														VerwaltungPlPruefungLogischLVE
+																.getPlLogIdent(resultat)
+																+ "\nSetze ALLES auf implausibel und fehlerhaft weil qPkwNeu >= qPkwMax:\n"
+																+ "\nqPkwNeu = "
+																+ VerwaltungPlPruefungLogischLVE
+																		.getWertIdent(qPkwNeu)
+																+ "\nqPkwMax = "
+																+ VerwaltungPlPruefungLogischLVE
+																		.getWertIdent(qPkwMax));
+
 										this.setAllesImplausibel(davDatum);
 										abbruch = true;
 									} else {
@@ -618,8 +726,10 @@ public abstract class AbstraktPLFahrStreifen extends AbstractSystemObjekt
 													.produkt(qPkwGuete,
 															sweGuete);
 										} catch (GueteException e) {
-											Debug.getLogger()
-													.error("Guete von qPkw konnte nicht aktualisiert werden in " + resultat); //$NON-NLS-1$
+											Debug
+													.getLogger()
+													.error(
+															"Guete von qPkw konnte nicht aktualisiert werden in " + resultat); //$NON-NLS-1$
 											e.printStackTrace();
 										}
 
@@ -634,6 +744,23 @@ public abstract class AbstraktPLFahrStreifen extends AbstractSystemObjekt
 							if (wertName.equals("vKfz") || wertName.startsWith("qKfz") || //$NON-NLS-1$ //$NON-NLS-2$
 									wertName.equals("vLkw") || wertName.startsWith("qLkw") || //$NON-NLS-1$ //$NON-NLS-2$
 									wertName.equals("vPkw") || wertName.startsWith("qPkw")) { //$NON-NLS-1$ //$NON-NLS-2$
+								Debug
+										.getLogger()
+										.fine(
+												VerwaltungPlPruefungLogischLVE
+														.getPlLogIdent(resultat)
+														+ "\nSetze wegen "
+														+ wertName
+														+ " > "
+														+ max
+														+ " ALLES auf implausibel und fehlerhaft.\n"
+														+ wertName
+														+ " = "
+														+ VerwaltungPlPruefungLogischLVE
+																.getWertIdent(wert)
+														+ "\nmax = "
+														+ VerwaltungPlPruefungLogischLVE
+																.getWertIdent(max));
 								this.setAllesImplausibel(davDatum);
 								abbruch = true;
 							}
@@ -660,7 +787,7 @@ public abstract class AbstraktPLFahrStreifen extends AbstractSystemObjekt
 		if (resultat.getData() != null) {
 			try {
 				copy = resultat.getData().createModifiableCopy();
-				this.berechneQPkwUndVKfz(copy);
+				this.berechneQPkwUndVKfz(copy, resultat);
 				this.ueberpruefe(copy, resultat);
 				this.passeGueteAn(copy);
 			} catch (IllegalStateException e) {
@@ -722,7 +849,8 @@ public abstract class AbstraktPLFahrStreifen extends AbstractSystemObjekt
 	}
 
 	/**
-	 * Setzt im uebergebenen Datensatz alle Werte auf implausibel und fehlerhaft.
+	 * Setzt im uebergebenen Datensatz alle Werte auf implausibel und
+	 * fehlerhaft.
 	 * 
 	 * @param veraenderbaresDatum
 	 *            ein veraenderbarer LVE-Datensatz (muss <code>!= null</code>

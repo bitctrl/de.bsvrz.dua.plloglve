@@ -27,6 +27,7 @@
 package de.bsvrz.dua.plloglve.vew;
 
 import java.util.Collection;
+import java.util.Date;
 
 import de.bsvrz.dav.daf.main.DataDescription;
 import de.bsvrz.dav.daf.main.ReceiveOptions;
@@ -99,7 +100,8 @@ public class VerwaltungPlPruefungLogischLVE extends
 		for (SystemObject obj : this.objekte) {
 			infoStr += obj + "\n"; //$NON-NLS-1$
 		}
-		Debug.getLogger().config("---\nBetrachtete Objekte:\n" + infoStr + "---\n"); //$NON-NLS-1$ //$NON-NLS-2$
+		Debug.getLogger().config(
+				"---\nBetrachtete Objekte:\n" + infoStr + "---\n"); //$NON-NLS-1$ //$NON-NLS-2$
 
 		this.plPruefungFormal = new PlPruefungFormal(
 				new PPFStandardAspekteVersorger(this).getStandardPubInfos());
@@ -168,6 +170,68 @@ public class VerwaltungPlPruefungLogischLVE extends
 	@Override
 	public double getStandardGueteFaktor() {
 		return 0.9;
+	}
+
+	/**
+	 * Erfragt alle fuer das Logging der Plausibilitaetskontrolle notwendigen
+	 * Informationen einenes Datensatzes als Zeichenkette.
+	 * 
+	 * @param originalDatum
+	 *            das Originaldatum
+	 * @return alle fuer das Logging der Plausibilitaetskontrolle notwendigen
+	 *         Informationen einenes Datensatzes als Zeichenkette
+	 * 
+	 * TODO: in funclib auslagern
+	 */
+	public static final String getPlLogIdent(ResultData originalDatum) {
+		if (originalDatum != null) {
+			String ident = originalDatum.getObject().getPid()
+					+ " (DZ: "
+					+ DUAKonstanten.ZEIT_FORMAT_GENAU.format(new Date(
+							originalDatum.getDataTime()))
+					+ "), ["
+					+ originalDatum.getDataDescription().getAttributeGroup()
+							.getPid() + ", "
+					+ originalDatum.getDataDescription().getAspect().getPid()
+					+ "]: ";
+			if (originalDatum.getData() != null) {
+				ident += "Nutzdaten. ";
+			} else {
+				ident += "!!! keine Nutzdaten !!! ";
+			}
+
+			return ident;
+		} else {
+			return "<<null>> ";
+		}
+	}
+
+	/**
+	 * Erfragt eine Datenkatalog-kompatible Version eines DUA-Wertes als
+	 * Zeichenkette.
+	 * 
+	 * @param wert
+	 *            ein DUA-Wert
+	 * @return eine Datenkatalog-kompatible Version eines DUA-Wertes als
+	 *         Zeichenkette
+	 * 
+	 * TODO: in funclib auslagern
+	 */
+	public static final String getWertIdent(long wert) {
+		if (wert < 0) {
+			if (wert == -1) {
+				return "nicht ermittelbar";
+			}
+			if (wert == -1) {
+				return "fehlerhaft";
+			}
+			if (wert == -1) {
+				return "fehlerhaft bzw. nicht ermittelbar";
+			}
+			return "!!! FEHLER !!!";
+		} else {
+			return new Long(wert).toString();
+		}
 	}
 
 }

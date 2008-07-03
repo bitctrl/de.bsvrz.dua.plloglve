@@ -35,6 +35,7 @@ import de.bsvrz.dua.guete.GWert;
 import de.bsvrz.dua.guete.GueteException;
 import de.bsvrz.dua.guete.GueteVerfahren;
 import de.bsvrz.dua.plloglve.plloglve.typen.OptionenPlausibilitaetsPruefungLogischVerkehr;
+import de.bsvrz.dua.plloglve.vew.VerwaltungPlPruefungLogischLVE;
 import de.bsvrz.sys.funclib.bitctrl.dua.DUAKonstanten;
 import de.bsvrz.sys.funclib.bitctrl.dua.GanzZahl;
 import de.bsvrz.sys.funclib.bitctrl.dua.schnittstellen.IVerwaltungMitGuete;
@@ -160,7 +161,7 @@ public class LzdPLFahrStreifen extends KzdPLFahrStreifen {
 			 * Aenderung Ende:
 			 */
 
-			this.berechneQPkwUndVKfz(copy);
+			this.berechneQPkwUndVKfz(copy, resultat);
 			this.ueberpruefe(copy, resultat);
 			this.passeGueteAn(copy);
 		}
@@ -201,97 +202,97 @@ public class LzdPLFahrStreifen extends KzdPLFahrStreifen {
 				AtgVerkehrsDatenLZIPlPruefLogisch.getPid());
 	}
 
-	/**
-	 * Setzt im uebergebenen Datensatz alle Werte auf implausibel und fehlerhaft.
-	 * 
-	 * @param veraenderbaresDatum
-	 *            ein veraenderbarer LVE-Datensatz (muss <code>!= null</code>
-	 *            sein)
-	 */
-	protected void setAllesImplausibel(Data veraenderbaresDatum) {
-		int qKfz = veraenderbaresDatum
-			.getItem("qKfz").getUnscaledValue("Wert").intValue(); //$NON-NLS-1$ //$NON-NLS-2$
-		if(qKfz == DUAKonstanten.NICHT_ERMITTELBAR) {
-			veraenderbaresDatum
-			.getItem("qKfz").getUnscaledValue("Wert").set(DUAKonstanten.NICHT_ERMITTELBAR_BZW_FEHLERHAFT); //$NON-NLS-1$ //$NON-NLS-2$
-		} else {
-			veraenderbaresDatum
-				.getItem("qKfz").getUnscaledValue("Wert").set(DUAKonstanten.FEHLERHAFT); //$NON-NLS-1$ //$NON-NLS-2$
-		}
-		
-		int qLkw = veraenderbaresDatum
-				.getItem("qLkw").getUnscaledValue("Wert").intValue(); //$NON-NLS-1$ //$NON-NLS-2$
-		if(qLkw == DUAKonstanten.NICHT_ERMITTELBAR) {
-			veraenderbaresDatum
-				.getItem("qLkw").getUnscaledValue("Wert").set(DUAKonstanten.NICHT_ERMITTELBAR_BZW_FEHLERHAFT); //$NON-NLS-1$ //$NON-NLS-2$
-		} else {
-			veraenderbaresDatum
-				.getItem("qLkw").getUnscaledValue("Wert").set(DUAKonstanten.FEHLERHAFT); //$NON-NLS-1$ //$NON-NLS-2$
-		}
-		
-		veraenderbaresDatum
-				.getItem("qPkw").getUnscaledValue("Wert").set(DUAKonstanten.NICHT_ERMITTELBAR_BZW_FEHLERHAFT); //$NON-NLS-1$ //$NON-NLS-2$
-
-		
-		veraenderbaresDatum
-				.getItem("vKfz").getUnscaledValue("Wert").set(DUAKonstanten.NICHT_ERMITTELBAR_BZW_FEHLERHAFT); //$NON-NLS-1$ //$NON-NLS-2$
-		
-		int vLkw = veraenderbaresDatum
-				.getItem("vLkw").getUnscaledValue("Wert").intValue(); //$NON-NLS-1$ //$NON-NLS-2$
-		if(vLkw == DUAKonstanten.NICHT_ERMITTELBAR) {
-			veraenderbaresDatum
-				.getItem("vLkw").getUnscaledValue("Wert").set(DUAKonstanten.NICHT_ERMITTELBAR_BZW_FEHLERHAFT); //$NON-NLS-1$ //$NON-NLS-2$
-		} else {
-			veraenderbaresDatum
-				.getItem("vLkw").getUnscaledValue("Wert").set(DUAKonstanten.FEHLERHAFT); //$NON-NLS-1$ //$NON-NLS-2$
-		}
-		
-		int vPkw = veraenderbaresDatum
-				.getItem("vPkw").getUnscaledValue("Wert").intValue(); //$NON-NLS-1$ //$NON-NLS-2$
-		if(vPkw == DUAKonstanten.NICHT_ERMITTELBAR) {
-			veraenderbaresDatum
-				.getItem("vPkw").getUnscaledValue("Wert").set(DUAKonstanten.NICHT_ERMITTELBAR_BZW_FEHLERHAFT); //$NON-NLS-1$ //$NON-NLS-2$
-		} else {
-			veraenderbaresDatum
-				.getItem("vPkw").getUnscaledValue("Wert").set(DUAKonstanten.FEHLERHAFT); //$NON-NLS-1$ //$NON-NLS-2$
-		}
-
-		
-		veraenderbaresDatum
-				.getItem("qKfz").getItem("Status").getItem("MessWertErsetzung").
-				getUnscaledValue("Implausibel").set(DUAKonstanten.JA); //$NON-NLS-1$
-		veraenderbaresDatum
-				.getItem("qLkw").getItem("Status").getItem("MessWertErsetzung").
-				getUnscaledValue("Implausibel").set(DUAKonstanten.JA); //$NON-NLS-1$
-		veraenderbaresDatum
-				.getItem("qPkw").getItem("Status").getItem("MessWertErsetzung").
-				getUnscaledValue("Implausibel").set(DUAKonstanten.JA); //$NON-NLS-1$
-
-		
-		veraenderbaresDatum
-				.getItem("vKfz").getItem("Status").getItem("MessWertErsetzung").
-				getUnscaledValue("Implausibel").set(DUAKonstanten.JA); //$NON-NLS-1$
-		veraenderbaresDatum
-				.getItem("vLkw").getItem("Status").getItem("MessWertErsetzung").
-				getUnscaledValue("Implausibel").set(DUAKonstanten.JA); //$NON-NLS-1$
-		veraenderbaresDatum
-				.getItem("vPkw").getItem("Status").getItem("MessWertErsetzung").
-				getUnscaledValue("Implausibel").set(DUAKonstanten.JA); //$NON-NLS-1$
-
-		int sKfz = veraenderbaresDatum
-				.getItem("sKfz").getUnscaledValue("Wert").intValue(); //$NON-NLS-1$ //$NON-NLS-2$
-		if(sKfz == DUAKonstanten.NICHT_ERMITTELBAR) {
-			veraenderbaresDatum
-				.getItem("sKfz").getUnscaledValue("Wert").set(DUAKonstanten.NICHT_ERMITTELBAR_BZW_FEHLERHAFT); //$NON-NLS-1$ //$NON-NLS-2$
-		} else {
-			veraenderbaresDatum
-				.getItem("sKfz").getUnscaledValue("Wert").set(DUAKonstanten.FEHLERHAFT); //$NON-NLS-1$ //$NON-NLS-2$
-		}
-
-		veraenderbaresDatum
-				.getItem("sKfz").getItem("Status").getItem("MessWertErsetzung").
-				getUnscaledValue("Implausibel").set(DUAKonstanten.JA); //$NON-NLS-1$
-	}
+//	/**
+//	 * Setzt im uebergebenen Datensatz alle Werte auf implausibel und fehlerhaft.
+//	 * 
+//	 * @param veraenderbaresDatum
+//	 *            ein veraenderbarer LVE-Datensatz (muss <code>!= null</code>
+//	 *            sein)
+//	 */
+//	protected void setAllesImplausibel(Data veraenderbaresDatum) {
+//		int qKfz = veraenderbaresDatum
+//			.getItem("qKfz").getUnscaledValue("Wert").intValue(); //$NON-NLS-1$ //$NON-NLS-2$
+//		if(qKfz == DUAKonstanten.NICHT_ERMITTELBAR) {
+//			veraenderbaresDatum
+//			.getItem("qKfz").getUnscaledValue("Wert").set(DUAKonstanten.NICHT_ERMITTELBAR_BZW_FEHLERHAFT); //$NON-NLS-1$ //$NON-NLS-2$
+//		} else {
+//			veraenderbaresDatum
+//				.getItem("qKfz").getUnscaledValue("Wert").set(DUAKonstanten.FEHLERHAFT); //$NON-NLS-1$ //$NON-NLS-2$
+//		}
+//		
+//		int qLkw = veraenderbaresDatum
+//				.getItem("qLkw").getUnscaledValue("Wert").intValue(); //$NON-NLS-1$ //$NON-NLS-2$
+//		if(qLkw == DUAKonstanten.NICHT_ERMITTELBAR) {
+//			veraenderbaresDatum
+//				.getItem("qLkw").getUnscaledValue("Wert").set(DUAKonstanten.NICHT_ERMITTELBAR_BZW_FEHLERHAFT); //$NON-NLS-1$ //$NON-NLS-2$
+//		} else {
+//			veraenderbaresDatum
+//				.getItem("qLkw").getUnscaledValue("Wert").set(DUAKonstanten.FEHLERHAFT); //$NON-NLS-1$ //$NON-NLS-2$
+//		}
+//		
+//		veraenderbaresDatum
+//				.getItem("qPkw").getUnscaledValue("Wert").set(DUAKonstanten.NICHT_ERMITTELBAR_BZW_FEHLERHAFT); //$NON-NLS-1$ //$NON-NLS-2$
+//
+//		
+//		veraenderbaresDatum
+//				.getItem("vKfz").getUnscaledValue("Wert").set(DUAKonstanten.NICHT_ERMITTELBAR_BZW_FEHLERHAFT); //$NON-NLS-1$ //$NON-NLS-2$
+//		
+//		int vLkw = veraenderbaresDatum
+//				.getItem("vLkw").getUnscaledValue("Wert").intValue(); //$NON-NLS-1$ //$NON-NLS-2$
+//		if(vLkw == DUAKonstanten.NICHT_ERMITTELBAR) {
+//			veraenderbaresDatum
+//				.getItem("vLkw").getUnscaledValue("Wert").set(DUAKonstanten.NICHT_ERMITTELBAR_BZW_FEHLERHAFT); //$NON-NLS-1$ //$NON-NLS-2$
+//		} else {
+//			veraenderbaresDatum
+//				.getItem("vLkw").getUnscaledValue("Wert").set(DUAKonstanten.FEHLERHAFT); //$NON-NLS-1$ //$NON-NLS-2$
+//		}
+//		
+//		int vPkw = veraenderbaresDatum
+//				.getItem("vPkw").getUnscaledValue("Wert").intValue(); //$NON-NLS-1$ //$NON-NLS-2$
+//		if(vPkw == DUAKonstanten.NICHT_ERMITTELBAR) {
+//			veraenderbaresDatum
+//				.getItem("vPkw").getUnscaledValue("Wert").set(DUAKonstanten.NICHT_ERMITTELBAR_BZW_FEHLERHAFT); //$NON-NLS-1$ //$NON-NLS-2$
+//		} else {
+//			veraenderbaresDatum
+//				.getItem("vPkw").getUnscaledValue("Wert").set(DUAKonstanten.FEHLERHAFT); //$NON-NLS-1$ //$NON-NLS-2$
+//		}
+//
+//		
+//		veraenderbaresDatum
+//				.getItem("qKfz").getItem("Status").getItem("MessWertErsetzung").
+//				getUnscaledValue("Implausibel").set(DUAKonstanten.JA); //$NON-NLS-1$
+//		veraenderbaresDatum
+//				.getItem("qLkw").getItem("Status").getItem("MessWertErsetzung").
+//				getUnscaledValue("Implausibel").set(DUAKonstanten.JA); //$NON-NLS-1$
+//		veraenderbaresDatum
+//				.getItem("qPkw").getItem("Status").getItem("MessWertErsetzung").
+//				getUnscaledValue("Implausibel").set(DUAKonstanten.JA); //$NON-NLS-1$
+//
+//		
+//		veraenderbaresDatum
+//				.getItem("vKfz").getItem("Status").getItem("MessWertErsetzung").
+//				getUnscaledValue("Implausibel").set(DUAKonstanten.JA); //$NON-NLS-1$
+//		veraenderbaresDatum
+//				.getItem("vLkw").getItem("Status").getItem("MessWertErsetzung").
+//				getUnscaledValue("Implausibel").set(DUAKonstanten.JA); //$NON-NLS-1$
+//		veraenderbaresDatum
+//				.getItem("vPkw").getItem("Status").getItem("MessWertErsetzung").
+//				getUnscaledValue("Implausibel").set(DUAKonstanten.JA); //$NON-NLS-1$
+//
+//		int sKfz = veraenderbaresDatum
+//				.getItem("sKfz").getUnscaledValue("Wert").intValue(); //$NON-NLS-1$ //$NON-NLS-2$
+//		if(sKfz == DUAKonstanten.NICHT_ERMITTELBAR) {
+//			veraenderbaresDatum
+//				.getItem("sKfz").getUnscaledValue("Wert").set(DUAKonstanten.NICHT_ERMITTELBAR_BZW_FEHLERHAFT); //$NON-NLS-1$ //$NON-NLS-2$
+//		} else {
+//			veraenderbaresDatum
+//				.getItem("sKfz").getUnscaledValue("Wert").set(DUAKonstanten.FEHLERHAFT); //$NON-NLS-1$ //$NON-NLS-2$
+//		}
+//
+//		veraenderbaresDatum
+//				.getItem("sKfz").getItem("Status").getItem("MessWertErsetzung").
+//				getUnscaledValue("Implausibel").set(DUAKonstanten.JA); //$NON-NLS-1$
+//	}
 
 	/**
 	 * {@inheritDoc}
@@ -331,6 +332,7 @@ public class LzdPLFahrStreifen extends KzdPLFahrStreifen {
 									.getItem(wertName)
 									.getItem("Status").
 									getItem("PlLogisch").getUnscaledValue("WertMaxLogisch").set(DUAKonstanten.JA); //$NON-NLS-1$ //$NON-NLS-2$
+							Debug.getLogger().fine(VerwaltungPlPruefungLogischLVE.getPlLogIdent(resultat) + "\nSetze " + wertName + " auf " + max + " und WertMaxLogisch");
 
 							GWert guete = new GWert(davDatum, wertName);
 							GWert neueGuete = GWert
@@ -357,6 +359,7 @@ public class LzdPLFahrStreifen extends KzdPLFahrStreifen {
 										.getItem(wertName)
 										.getItem("Status").
 										getItem("PlLogisch").getUnscaledValue("WertMaxLogisch").set(DUAKonstanten.JA); //$NON-NLS-1$ //$NON-NLS-2$
+								Debug.getLogger().fine(VerwaltungPlPruefungLogischLVE.getPlLogIdent(resultat) + "\nSetze " + wertName + " auf WertMaxLogisch");
 							}
 						}
 					}
