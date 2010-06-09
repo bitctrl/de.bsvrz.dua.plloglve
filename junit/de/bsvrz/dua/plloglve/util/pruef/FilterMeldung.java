@@ -121,8 +121,7 @@ public class FilterMeldung implements IBmListener {
 		 */
 		ddMeldEmpf = new DataDescription(this.dav.getDataModel()
 				.getAttributeGroup("atg.betriebsMeldung"), //$NON-NLS-1$
-				this.dav.getDataModel().getAspect("asp.information"), //$NON-NLS-1$
-				(short) 0);
+				this.dav.getDataModel().getAspect("asp.information")); //$NON-NLS-1$
 
 		BmClient.getInstanz(dav).addListener(this);
 	}

@@ -161,7 +161,7 @@ public class VertrauensFahrStreifen extends AbstractSystemObjekt implements
 					.getDataModel().getAttributeGroup(
 							"atg.verkehrsDatenVertrauensBereichFs"), //$NON-NLS-1$
 					dieVerwaltung.getVerbindung().getDataModel().getAspect(
-							DaVKonstanten.ASP_PARAMETER_SOLL), (short) 0);
+							DaVKonstanten.ASP_PARAMETER_SOLL));
 		}
 
 		datenBezugsZeitraumQKfz = new BezugsZeitraum(dieVerwaltung, "qKfz"); //$NON-NLS-1$

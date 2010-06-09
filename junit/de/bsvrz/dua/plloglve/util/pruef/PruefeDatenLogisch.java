@@ -180,12 +180,12 @@ public class PruefeDatenLogisch implements ClientReceiverInterface {
 		ddKzdEmpf = new DataDescription(this.dav.getDataModel()
 				.getAttributeGroup(DUAKonstanten.ATG_KZD), this.dav
 				.getDataModel()
-				.getAspect(DUAKonstanten.ASP_PL_PRUEFUNG_LOGISCH), (short) 0);
+				.getAspect(DUAKonstanten.ASP_PL_PRUEFUNG_LOGISCH));
 
 		ddLzdEmpf = new DataDescription(this.dav.getDataModel()
 				.getAttributeGroup(DUAKonstanten.ATG_LZD), this.dav
 				.getDataModel()
-				.getAspect(DUAKonstanten.ASP_PL_PRUEFUNG_LOGISCH), (short) 0);
+				.getAspect(DUAKonstanten.ASP_PL_PRUEFUNG_LOGISCH));
 
 		// Empfänger anmelden
 		this.dav.subscribeReceiver(this, fs, ddKzdEmpf,

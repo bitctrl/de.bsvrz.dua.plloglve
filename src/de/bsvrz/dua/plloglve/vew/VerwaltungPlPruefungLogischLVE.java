@@ -120,13 +120,11 @@ public class VerwaltungPlPruefungLogischLVE extends
 		DataDescription anmeldungsBeschreibungKZD = new DataDescription(
 				this.verbindung.getDataModel().getAttributeGroup(
 						DUAKonstanten.ATG_KZD), this.verbindung.getDataModel()
-						.getAspect(DUAKonstanten.ASP_EXTERNE_ERFASSUNG),
-				(short) 0);
+						.getAspect(DUAKonstanten.ASP_EXTERNE_ERFASSUNG));
 		DataDescription anmeldungsBeschreibungLZD = new DataDescription(
 				this.verbindung.getDataModel().getAttributeGroup(
 						DUAKonstanten.ATG_LZD), this.verbindung.getDataModel()
-						.getAspect(DUAKonstanten.ASP_EXTERNE_ERFASSUNG),
-				(short) 0);
+						.getAspect(DUAKonstanten.ASP_EXTERNE_ERFASSUNG));
 
 		this.verbindung.subscribeReceiver(this, this.objekte,
 				anmeldungsBeschreibungKZD, ReceiveOptions.normal(),

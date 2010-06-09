@@ -110,7 +110,7 @@ public class AusfallFahrStreifen extends AbstractSystemObjekt implements
 					.getVerbindung().getDataModel().getAttributeGroup(
 							"atg.verkehrsDatenAusfallHäufigkeitFs"), //$NON-NLS-1$
 					dieVerwaltung.getVerbindung().getDataModel().getAspect(
-							DaVKonstanten.ASP_PARAMETER_SOLL), (short) 0);
+							DaVKonstanten.ASP_PARAMETER_SOLL));
 			atgKzdId = dieVerwaltung.getVerbindung().getDataModel()
 					.getAttributeGroup(DUAKonstanten.ATG_KZD).getId();
 		}

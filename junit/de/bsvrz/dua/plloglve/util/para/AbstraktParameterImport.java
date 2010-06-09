@@ -124,18 +124,16 @@ public abstract class AbstraktParameterImport extends CSVImporter implements
 				"atg.verkehrsDatenVertrauensBereichFs"); //$NON-NLS-1$
 
 		ddLogisch = new DataDescription(this.getParameterAtg(), sDav
-				.getDataModel().getAspect(DaVKonstanten.ASP_PARAMETER_VORGABE),
-				(short) 0);
+				.getDataModel().getAspect(DaVKonstanten.ASP_PARAMETER_VORGABE));
 
 		ddDiff = new DataDescription(diffFs, sDav.getDataModel().getAspect(
-				DaVKonstanten.ASP_PARAMETER_VORGABE), (short) 0);
+				DaVKonstanten.ASP_PARAMETER_VORGABE));
 
 		ddAusfall = new DataDescription(ausfallHFs, sDav.getDataModel()
-				.getAspect(DaVKonstanten.ASP_PARAMETER_VORGABE), (short) 0);
+				.getAspect(DaVKonstanten.ASP_PARAMETER_VORGABE));
 
 		ddVertrauensBereich = new DataDescription(vertrauensbereichFs, sDav
-				.getDataModel().getAspect(DaVKonstanten.ASP_PARAMETER_VORGABE),
-				(short) 0);
+				.getDataModel().getAspect(DaVKonstanten.ASP_PARAMETER_VORGABE));
 
 		this.objekt = objekt;
 
@@ -212,7 +210,7 @@ public abstract class AbstraktParameterImport extends CSVImporter implements
 
 		ResultData resultat = new ResultData(this.objekt, new DataDescription(
 				this.getParameterAtg(), sDav.getDataModel().getAspect(
-						DaVKonstanten.ASP_PARAMETER_VORGABE), (short) 0),
+						DaVKonstanten.ASP_PARAMETER_VORGABE)),
 				System.currentTimeMillis(), this.fuelleRestAttribute(parameter));
 		sDav.sendData(resultat);
 
@@ -272,7 +270,7 @@ public abstract class AbstraktParameterImport extends CSVImporter implements
 
 		ResultData resultat = new ResultData(this.objekt, new DataDescription(
 				this.getParameterAtg(), sDav.getDataModel().getAspect(
-						DaVKonstanten.ASP_PARAMETER_VORGABE), (short) 0),
+						DaVKonstanten.ASP_PARAMETER_VORGABE)),
 				System.currentTimeMillis(), parameter);
 		sDav.sendData(resultat);
 	}
@@ -307,7 +305,7 @@ public abstract class AbstraktParameterImport extends CSVImporter implements
 
 		ResultData resultat = new ResultData(this.objekt, new DataDescription(
 				diffFs, sDav.getDataModel().getAspect(
-						DaVKonstanten.ASP_PARAMETER_VORGABE), (short) 0),
+						DaVKonstanten.ASP_PARAMETER_VORGABE)),
 				System.currentTimeMillis(), parameter);
 		sDav.sendData(resultat);
 
@@ -341,7 +339,7 @@ public abstract class AbstraktParameterImport extends CSVImporter implements
 
 		ResultData resultat = new ResultData(this.objekt, new DataDescription(
 				diffFs, sDav.getDataModel().getAspect(
-						DaVKonstanten.ASP_PARAMETER_VORGABE), (short) 0),
+						DaVKonstanten.ASP_PARAMETER_VORGABE)),
 				System.currentTimeMillis(), parameter);
 		sDav.sendData(resultat);
 	}
@@ -362,7 +360,7 @@ public abstract class AbstraktParameterImport extends CSVImporter implements
 
 		ResultData resultat = new ResultData(this.objekt, new DataDescription(
 				ausfallHFs, sDav.getDataModel().getAspect(
-						DaVKonstanten.ASP_PARAMETER_VORGABE), (short) 0),
+						DaVKonstanten.ASP_PARAMETER_VORGABE)),
 				System.currentTimeMillis(), parameter);
 		sDav.sendData(resultat);
 
@@ -382,7 +380,7 @@ public abstract class AbstraktParameterImport extends CSVImporter implements
 
 		ResultData resultat = new ResultData(this.objekt, new DataDescription(
 				ausfallHFs, sDav.getDataModel().getAspect(
-						DaVKonstanten.ASP_PARAMETER_VORGABE), (short) 0),
+						DaVKonstanten.ASP_PARAMETER_VORGABE)),
 				System.currentTimeMillis(), parameter);
 		sDav.sendData(resultat);
 	}
@@ -408,7 +406,7 @@ public abstract class AbstraktParameterImport extends CSVImporter implements
 				.getAttributDatum("maxAusfallProBezugsZeitraumAus", parameter).asUnscaledValue().set(20); //$NON-NLS-1$
 		ResultData resultat = new ResultData(this.objekt, new DataDescription(
 				vertrauensbereichFs, sDav.getDataModel().getAspect(
-						DaVKonstanten.ASP_PARAMETER_VORGABE), (short) 0),
+						DaVKonstanten.ASP_PARAMETER_VORGABE)),
 				System.currentTimeMillis(), parameter);
 		sDav.sendData(resultat);
 
@@ -432,7 +430,7 @@ public abstract class AbstraktParameterImport extends CSVImporter implements
 				.getAttributDatum("maxAusfallProBezugsZeitraumAus", parameter).asUnscaledValue().set(99); //$NON-NLS-1$
 		ResultData resultat = new ResultData(this.objekt, new DataDescription(
 				vertrauensbereichFs, sDav.getDataModel().getAspect(
-						DaVKonstanten.ASP_PARAMETER_VORGABE), (short) 0),
+						DaVKonstanten.ASP_PARAMETER_VORGABE)),
 				System.currentTimeMillis(), parameter);
 		sDav.sendData(resultat);
 	}

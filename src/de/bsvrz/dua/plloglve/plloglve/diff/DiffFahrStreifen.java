@@ -147,7 +147,7 @@ public class DiffFahrStreifen extends AbstractSystemObjekt implements
 					.getVerbindung().getDataModel().getAttributeGroup(
 							"atg.verkehrsDatenDifferenzialKontrolleFs"), //$NON-NLS-1$
 					dieVerwaltung.getVerbindung().getDataModel().getAspect(
-							DaVKonstanten.ASP_PARAMETER_SOLL), (short) 0);
+							DaVKonstanten.ASP_PARAMETER_SOLL));
 
 		}
 

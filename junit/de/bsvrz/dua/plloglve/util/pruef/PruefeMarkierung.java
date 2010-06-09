@@ -145,7 +145,7 @@ public class PruefeMarkierung implements ClientReceiverInterface {
 		DD_KZD_EMPF = new DataDescription(this.dav.getDataModel()
 				.getAttributeGroup(DUAKonstanten.ATG_KZD), this.dav
 				.getDataModel()
-				.getAspect(DUAKonstanten.ASP_PL_PRUEFUNG_LOGISCH), (short) 0);
+				.getAspect(DUAKonstanten.ASP_PL_PRUEFUNG_LOGISCH));
 
 		this.dav.subscribeReceiver(this, fs, DD_KZD_EMPF, ReceiveOptions
 				.normal(), ReceiverRole.receiver());

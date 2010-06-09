@@ -170,13 +170,11 @@ public class PlPruefungLogisch implements ClientSenderInterface {
 
 		ddKzdSend = new DataDescription(this.dav.getDataModel()
 				.getAttributeGroup(DUAKonstanten.ATG_KZD), this.dav
-				.getDataModel().getAspect(DUAKonstanten.ASP_EXTERNE_ERFASSUNG),
-				(short) 0);
+				.getDataModel().getAspect(DUAKonstanten.ASP_EXTERNE_ERFASSUNG));
 
 		ddLzdSend = new DataDescription(this.dav.getDataModel()
 				.getAttributeGroup(DUAKonstanten.ATG_LZD), this.dav
-				.getDataModel().getAspect(DUAKonstanten.ASP_EXTERNE_ERFASSUNG),
-				(short) 0);
+				.getDataModel().getAspect(DUAKonstanten.ASP_EXTERNE_ERFASSUNG));
 	}
 
 	/**

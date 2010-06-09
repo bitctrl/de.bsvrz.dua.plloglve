@@ -109,7 +109,7 @@ public abstract class AbstraktPLFahrStreifen extends AbstractSystemObjekt
 						.getPlausibilisierungsParameterAtg(dieVerwaltung
 								.getVerbindung()), dieVerwaltung
 						.getVerbindung().getDataModel().getAspect(
-								DaVKonstanten.ASP_PARAMETER_SOLL), (short) 0),
+								DaVKonstanten.ASP_PARAMETER_SOLL)),
 				ReceiveOptions.normal(), ReceiverRole.receiver());
 	}
 

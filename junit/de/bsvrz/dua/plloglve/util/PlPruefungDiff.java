@@ -104,8 +104,7 @@ public class PlPruefungDiff implements ClientSenderInterface,
 
 		DD_KZD_SEND = new DataDescription(this.dav.getDataModel()
 				.getAttributeGroup(DUAKonstanten.ATG_KZD), this.dav
-				.getDataModel().getAspect(DUAKonstanten.ASP_EXTERNE_ERFASSUNG),
-				(short) 0);
+				.getDataModel().getAspect(DUAKonstanten.ASP_EXTERNE_ERFASSUNG));
 
 		try {
 			kzdImport = new ParaKZDLogImport(dav, FS,
