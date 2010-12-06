@@ -49,14 +49,19 @@ import de.bsvrz.sys.funclib.debug.Debug;
  * Das Submodul PL-Prüfung logisch LVE standard führt zunächst eine
  * Wertebereichsprüfung für die empfangenen Datensätzen durch. Diese orientiert
  * sich an den dazu vorgesehenen Parametern. Folgende Attributarten werden
- * untersucht:<br> - Verkehrsstärken,<br> - Mittlere Geschwindigkeiten,<br> -
- * Belegungen,<br> - Standardabweichungen, etc..<br>
+ * untersucht:<br>
+ * - Verkehrsstärken,<br>
+ * - Mittlere Geschwindigkeiten,<br>
+ * - Belegungen,<br>
+ * - Standardabweichungen, etc..<br>
  * 
  * @author BitCtrl Systems GmbH, Thierfelder
  * 
  * @version $Id$
  */
 public class PlLogischLVEStandard extends AbstraktBearbeitungsKnotenAdapter {
+
+	private static boolean baWuePatch = false;
 
 	/**
 	 * Mapt alle FS-Systemobjekte auf für die Standardplausbibilisierung für LZD
@@ -71,14 +76,15 @@ public class PlLogischLVEStandard extends AbstraktBearbeitungsKnotenAdapter {
 	private Map<SystemObject, AbstraktPLFahrStreifen> kzdFahrStreifen = new HashMap<SystemObject, AbstraktPLFahrStreifen>();
 
 	/**
-	 * {@inheritDoc}<br>.
+	 * {@inheritDoc}<br>
+	 * .
 	 * 
 	 * Es wird fuer alle Fahrstreifen (Systemobjekte vom Typ
 	 * <code>typ.fahrStreifen</code>, also insbesondere auch Objekte vom Typ
 	 * <code>typ.fahrStreifenLangZeit</code>) eine Instanz der Klasse
 	 * <code>KzdPLFahrStreifen</code> und fuer alle Langzeitfahrstreifen (nur
-	 * Systemobjekte vom Typ <code>typ.fahrStreifenLangZeit</code>) eine
-	 * Instanz der Klasse <code>LzdPLFahrStreifen</code> <br>
+	 * Systemobjekte vom Typ <code>typ.fahrStreifenLangZeit</code>) eine Instanz
+	 * der Klasse <code>LzdPLFahrStreifen</code> <br>
 	 * <br>
 	 * Objekte der Klasse <code>LzdPLFahrStreifen</code> plausibilisieren
 	 * Langzeitdaten Objekte der Klasse <code>KzdPLFahrStreifen</code>
@@ -106,6 +112,15 @@ public class PlLogischLVEStandard extends AbstraktBearbeitungsKnotenAdapter {
 			kzdFahrStreifen.put(obj, new KzdPLFahrStreifen(verwaltungMitGuete,
 					obj));
 		}
+
+		final String patch = dieVerwaltung.getArgument("altAnlagen");
+		if (patch != null && patch.toLowerCase().equals("ja")) {
+			baWuePatch = true;
+		}
+	}
+
+	public static final boolean isBaWuePatchAktiv() {
+		return baWuePatch;
 	}
 
 	/**
@@ -144,16 +159,17 @@ public class PlLogischLVEStandard extends AbstraktBearbeitungsKnotenAdapter {
 							pData = fahrStreifen.plausibilisiere(resultat);
 						} else {
 							Debug.getLogger()
-									.warning("Fahrstreifen " + resultat.getObject() + //$NON-NLS-1$
-											" konnte nicht identifiziert werden"); //$NON-NLS-1$
+									.warning(
+											"Fahrstreifen " + resultat.getObject() + //$NON-NLS-1$
+													" konnte nicht identifiziert werden"); //$NON-NLS-1$
 						}
 
 						if (pData != null) {
 							ResultData ersetztesResultat = new ResultData(
-									resultat.getObject(), resultat
-											.getDataDescription(), resultat
-											.getDataTime(), pData, resultat
-											.isDelayedData());
+									resultat.getObject(),
+									resultat.getDataDescription(),
+									resultat.getDataTime(), pData,
+									resultat.isDelayedData());
 							weiterzuleitendeResultate.add(ersetztesResultat);
 						} else {
 							weiterzuleitendeResultate.add(resultat);

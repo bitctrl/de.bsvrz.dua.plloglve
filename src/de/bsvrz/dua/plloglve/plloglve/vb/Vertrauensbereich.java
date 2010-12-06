@@ -133,8 +133,7 @@ public class Vertrauensbereich extends AbstraktBearbeitungsKnotenAdapter {
 					ResultData publikationsDatum = new ResultData(resultat
 							.getObject(), new DataDescription(resultat
 							.getDataDescription().getAttributeGroup(),
-							standardAspekte.getStandardAspekt(resultat)),
-							resultat.getDataTime(), datum, resultat
+							standardAspekte.getStandardAspekt(resultat)), resultat.getDataTime(), datum, resultat
 							.isDelayedData());
 					ResultData weiterzuleitendesDatum = new ResultData(resultat
 							.getObject(), resultat.getDataDescription(),

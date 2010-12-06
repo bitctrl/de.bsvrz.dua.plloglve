@@ -23,6 +23,12 @@ einem parametrierbaren Aspekt publiziert.
 
 Versionsgeschichte
 ==================
+1.1.0
+
+  - Neuer Aufrufparameter -altAnlagen=[Ja/Nein] eingebaut. Achtung: Dieser Aufrufparameter 
+    muss in der Regel beim Aufruf der SWE Messwertersetzung LVE angegeben werden, da diese die 
+    SWE Pl-Prüfung logisch LVE logisch automatisch mitstartet.
+
 1.0.2
 
   - FIX: Sämtliche Konstruktoren DataDescription(atg, asp, sim) ersetzt durch

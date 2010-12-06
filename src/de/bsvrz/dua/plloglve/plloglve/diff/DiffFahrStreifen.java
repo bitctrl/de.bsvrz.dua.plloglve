@@ -41,9 +41,6 @@ import de.bsvrz.sys.funclib.bitctrl.dua.DUAKonstanten;
 import de.bsvrz.sys.funclib.bitctrl.dua.DUAUtensilien;
 import de.bsvrz.sys.funclib.bitctrl.dua.VariableMitKonstanzZaehler;
 import de.bsvrz.sys.funclib.bitctrl.dua.schnittstellen.IVerwaltung;
-import de.bsvrz.sys.funclib.bitctrl.modell.AbstractSystemObjekt;
-import de.bsvrz.sys.funclib.bitctrl.modell.SystemObjekt;
-import de.bsvrz.sys.funclib.bitctrl.modell.SystemObjektTyp;
 import de.bsvrz.sys.funclib.debug.Debug;
 import de.bsvrz.sys.funclib.operatingMessage.MessageGrade;
 
@@ -55,8 +52,7 @@ import de.bsvrz.sys.funclib.operatingMessage.MessageGrade;
  * 
  * @version $Id$
  */
-public class DiffFahrStreifen extends AbstractSystemObjekt implements
-		ClientReceiverInterface {
+public class DiffFahrStreifen implements ClientReceiverInterface {
 
 	/**
 	 * Verbindung zum Verwaltungsmodul.
@@ -77,56 +73,56 @@ public class DiffFahrStreifen extends AbstractSystemObjekt implements
 	 * Variable <code>qKfz</code> mit der Information wie lange diese Variable
 	 * schon konstant ist.
 	 */
-	private VariableMitKonstanzZaehler<Long> qKfzZaehler = new VariableMitKonstanzZaehler<Long>(
+	private final VariableMitKonstanzZaehler<Long> qKfzZaehler = new VariableMitKonstanzZaehler<Long>(
 			"qKfz"); //$NON-NLS-1$
 
 	/**
 	 * Variable <code>qLkw</code> mit der Information wie lange diese Variable
 	 * schon konstant ist.
 	 */
-	private VariableMitKonstanzZaehler<Long> qLkwZaehler = new VariableMitKonstanzZaehler<Long>(
+	private final VariableMitKonstanzZaehler<Long> qLkwZaehler = new VariableMitKonstanzZaehler<Long>(
 			"qLkw"); //$NON-NLS-1$
 
 	/**
 	 * Variable <code>qPkw</code> mit der Information wie lange diese Variable
 	 * schon konstant ist..
 	 */
-	private VariableMitKonstanzZaehler<Long> qPkwZaehler = new VariableMitKonstanzZaehler<Long>(
+	private final VariableMitKonstanzZaehler<Long> qPkwZaehler = new VariableMitKonstanzZaehler<Long>(
 			"qPkw"); //$NON-NLS-1$
 
 	/**
 	 * Variable <code>vKfz</code> mit der Information wie lange diese Variable
 	 * schon konstant ist.
 	 */
-	private VariableMitKonstanzZaehler<Long> vKfzZaehler = new VariableMitKonstanzZaehler<Long>(
+	private final VariableMitKonstanzZaehler<Long> vKfzZaehler = new VariableMitKonstanzZaehler<Long>(
 			"vKfz"); //$NON-NLS-1$
 
 	/**
 	 * Variable <code>vLkw</code> mit der Information wie lange diese Variable
 	 * schon konstant ist.
 	 */
-	private VariableMitKonstanzZaehler<Long> vLkwZaehler = new VariableMitKonstanzZaehler<Long>(
+	private final VariableMitKonstanzZaehler<Long> vLkwZaehler = new VariableMitKonstanzZaehler<Long>(
 			"vLkw"); //$NON-NLS-1$
 
 	/**
 	 * Variable <code>vPkw</code> mit der Information wie lange diese Variable
 	 * schon konstant ist.
 	 */
-	private VariableMitKonstanzZaehler<Long> vPkwZaehler = new VariableMitKonstanzZaehler<Long>(
+	private final VariableMitKonstanzZaehler<Long> vPkwZaehler = new VariableMitKonstanzZaehler<Long>(
 			"vPkw"); //$NON-NLS-1$
 
 	/**
 	 * Variable <code>sKfz</code> mit der Information wie lange diese Variable
 	 * schon konstant ist.
 	 */
-	private VariableMitKonstanzZaehler<Long> sKfzZaehler = new VariableMitKonstanzZaehler<Long>(
+	private final VariableMitKonstanzZaehler<Long> sKfzZaehler = new VariableMitKonstanzZaehler<Long>(
 			"sKfz"); //$NON-NLS-1$
 
 	/**
 	 * Variable <code>b</code> mit der Information wie lange diese Variable
 	 * schon konstant ist.
 	 */
-	private VariableMitKonstanzZaehler<Long> bZaehler = new VariableMitKonstanzZaehler<Long>(
+	private final VariableMitKonstanzZaehler<Long> bZaehler = new VariableMitKonstanzZaehler<Long>(
 			"b"); //$NON-NLS-1$
 
 	/**
@@ -139,8 +135,6 @@ public class DiffFahrStreifen extends AbstractSystemObjekt implements
 	 */
 	protected DiffFahrStreifen(final IVerwaltung verwaltung,
 			final SystemObject obj) {
-		super(obj);
-
 		if (dieVerwaltung == null) {
 			dieVerwaltung = verwaltung;
 			diffParaBeschreibung = new DataDescription(dieVerwaltung
@@ -154,6 +148,7 @@ public class DiffFahrStreifen extends AbstractSystemObjekt implements
 		dieVerwaltung.getVerbindung().subscribeReceiver(this, obj,
 				diffParaBeschreibung, ReceiveOptions.normal(),
 				ReceiverRole.receiver());
+
 	}
 
 	/**
@@ -177,9 +172,9 @@ public class DiffFahrStreifen extends AbstractSystemObjekt implements
 		if (resultat != null && resultat.getData() != null) {
 			if (resultat.getDataDescription().getAttributeGroup().getPid()
 					.equals(DUAKonstanten.ATG_KZD)) {
-				Data data = resultat.getData();
+				final Data data = resultat.getData();
 
-				if (this.parameter != null) {
+				if (parameter != null) {
 					final long qKfz = data
 							.getItem("qKfz").getUnscaledValue("Wert").longValue(); //$NON-NLS-1$ //$NON-NLS-2$
 					final long qLkw = data
@@ -197,63 +192,63 @@ public class DiffFahrStreifen extends AbstractSystemObjekt implements
 					final long sKfz = data
 							.getItem("sKfz").getUnscaledValue("Wert").longValue(); //$NON-NLS-1$ //$NON-NLS-2$
 
-					this.qKfzZaehler.aktualisiere(qKfz);
-					this.qLkwZaehler.aktualisiere(qLkw);
-					this.qPkwZaehler.aktualisiere(qPkw);
-					this.vKfzZaehler.aktualisiere(vKfz);
-					this.vLkwZaehler.aktualisiere(vLkw);
-					this.vPkwZaehler.aktualisiere(vPkw);
-					this.sKfzZaehler.aktualisiere(sKfz);
-					this.bZaehler.aktualisiere(b);
+					qKfzZaehler.aktualisiere(qKfz);
+					qLkwZaehler.aktualisiere(qLkw);
+					qPkwZaehler.aktualisiere(qPkw);
+					vKfzZaehler.aktualisiere(vKfz);
+					vLkwZaehler.aktualisiere(vLkw);
+					vPkwZaehler.aktualisiere(vPkw);
+					sKfzZaehler.aktualisiere(sKfz);
+					bZaehler.aktualisiere(b);
 
-					Collection<VariableMitKonstanzZaehler<Long>> puffer = new ArrayList<VariableMitKonstanzZaehler<Long>>();
-					synchronized (this.parameter) {
+					final Collection<VariableMitKonstanzZaehler<Long>> puffer = new ArrayList<VariableMitKonstanzZaehler<Long>>();
+					synchronized (parameter) {
 						if (qKfz > 0
-								&& this.qKfzZaehler.getWertIstKonstantSeit() > this.parameter
+								&& qKfzZaehler.getWertIstKonstantSeit() > parameter
 										.getMaxAnzKonstanzqKfz()) {
-							puffer.add(this.qKfzZaehler);
+							puffer.add(qKfzZaehler);
 						}
 						if (qLkw > 0
-								&& this.qLkwZaehler.getWertIstKonstantSeit() > this.parameter
+								&& qLkwZaehler.getWertIstKonstantSeit() > parameter
 										.getMaxAnzKonstanzqLkw()) {
-							puffer.add(this.qLkwZaehler);
+							puffer.add(qLkwZaehler);
 						}
 						if (qPkw > 0
-								&& this.qPkwZaehler.getWertIstKonstantSeit() > this.parameter
+								&& qPkwZaehler.getWertIstKonstantSeit() > parameter
 										.getMaxAnzKonstanzqPkw()) {
-							puffer.add(this.qPkwZaehler);
+							puffer.add(qPkwZaehler);
 						}
 
 						if (vKfz > 0
-								&& this.vKfzZaehler.getWertIstKonstantSeit() > this.parameter
+								&& vKfzZaehler.getWertIstKonstantSeit() > parameter
 										.getMaxAnzKonstanzvKfz()) {
-							puffer.add(this.vKfzZaehler);
+							puffer.add(vKfzZaehler);
 						}
 						if (vLkw > 0
-								&& this.vLkwZaehler.getWertIstKonstantSeit() > this.parameter
+								&& vLkwZaehler.getWertIstKonstantSeit() > parameter
 										.getMaxAnzKonstanzvLkw()) {
-							puffer.add(this.vLkwZaehler);
+							puffer.add(vLkwZaehler);
 						}
 						if (vPkw > 0
-								&& this.vPkwZaehler.getWertIstKonstantSeit() > this.parameter
+								&& vPkwZaehler.getWertIstKonstantSeit() > parameter
 										.getMaxAnzKonstanzvPkw()) {
-							puffer.add(this.vPkwZaehler);
+							puffer.add(vPkwZaehler);
 						}
 
 						if (sKfz > 0
-								&& this.sKfzZaehler.getWertIstKonstantSeit() > this.parameter
+								&& sKfzZaehler.getWertIstKonstantSeit() > parameter
 										.getMaxAnzKonstanzStreung()) {
-							puffer.add(this.sKfzZaehler);
+							puffer.add(sKfzZaehler);
 						}
 						if (b > 0
-								&& this.bZaehler.getWertIstKonstantSeit() > this.parameter
+								&& bZaehler.getWertIstKonstantSeit() > parameter
 										.getMaxAnzKonstanzBelegung()) {
-							puffer.add(this.bZaehler);
+							puffer.add(bZaehler);
 						}
 
 						if (!puffer.isEmpty()) {
 							copy = data.createModifiableCopy();
-							for (VariableMitKonstanzZaehler<Long> wert : puffer) {
+							for (final VariableMitKonstanzZaehler<Long> wert : puffer) {
 								copy.getItem(wert.getName()).getUnscaledValue(
 										"Wert").set(DUAKonstanten.FEHLERHAFT); //$NON-NLS-1$			
 								copy
@@ -263,8 +258,8 @@ public class DiffFahrStreifen extends AbstractSystemObjekt implements
 										.getUnscaledValue("Implausibel").set(DUAKonstanten.JA); //$NON-NLS-1$
 								DUAUtensilien.sendeBetriebsmeldung(
 										dieVerwaltung.getVerbindung(),
-										MessageGrade.WARNING, resultat.getObject(),
-										"Fahrstreifen " + //$NON-NLS-1$
+										MessageGrade.WARNING, resultat
+												.getObject(), "Fahrstreifen " + //$NON-NLS-1$
 												this + ": " + wert); //$NON-NLS-1$
 							}
 						}
@@ -284,34 +279,17 @@ public class DiffFahrStreifen extends AbstractSystemObjekt implements
 	/**
 	 * {@inheritDoc}
 	 */
-	public void update(ResultData[] davParameterFeld) {
+	public void update(final ResultData[] davParameterFeld) {
 		if (davParameterFeld != null) {
-			for (ResultData davParameter : davParameterFeld) {
+			for (final ResultData davParameter : davParameterFeld) {
 				if (davParameter != null && davParameter.getData() != null) {
 					synchronized (this) {
-						this.parameter = new AtgVerkehrsDatenDifferenzialKontrolleFs(
+						parameter = new AtgVerkehrsDatenDifferenzialKontrolleFs(
 								davParameter.getData());
 					}
 				}
 			}
 		}
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	public SystemObjektTyp getTyp() {
-		return new SystemObjektTyp() {
-
-			public Class<? extends SystemObjekt> getKlasse() {
-				return DiffFahrStreifen.class;
-			}
-
-			public String getPid() {
-				return getSystemObject().getType().getPid();
-			}
-
-		};
 	}
 
 }

@@ -77,15 +77,16 @@ public class TestParameter {
 	protected TestParameter(final String testParameter) {
 		if (instanz == null) {
 			if (testParameter.toLowerCase().equals("ausfall")) {
-				this.testAusfall = true;
+				testAusfall = true;
 			} else if (testParameter.toLowerCase().equals("vertrauen")) {
-				this.testVertrauen = true;
+				testVertrauen = true;
 			}
 			Debug.getLogger().info("!!! " + this + " !!!");
 			instanz = this;
 		} else {
-			Debug.getLogger().warning("Testparameter wurden bereits initialisiert mit:\n"
-					+ instanz);
+			Debug.getLogger().warning(
+					"Testparameter wurden bereits initialisiert mit:\n"
+							+ instanz);
 		}
 	}
 

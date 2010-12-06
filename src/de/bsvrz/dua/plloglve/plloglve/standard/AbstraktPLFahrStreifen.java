@@ -26,6 +26,8 @@
 
 package de.bsvrz.dua.plloglve.plloglve.standard;
 
+import com.bitctrl.Constants;
+
 import de.bsvrz.dav.daf.main.ClientDavInterface;
 import de.bsvrz.dav.daf.main.ClientReceiverInterface;
 import de.bsvrz.dav.daf.main.Data;
@@ -47,9 +49,6 @@ import de.bsvrz.sys.funclib.bitctrl.dua.DUAUtensilien;
 import de.bsvrz.sys.funclib.bitctrl.dua.GanzZahl;
 import de.bsvrz.sys.funclib.bitctrl.dua.MesswertUnskaliert;
 import de.bsvrz.sys.funclib.bitctrl.dua.schnittstellen.IVerwaltungMitGuete;
-import de.bsvrz.sys.funclib.bitctrl.modell.AbstractSystemObjekt;
-import de.bsvrz.sys.funclib.bitctrl.modell.SystemObjekt;
-import de.bsvrz.sys.funclib.bitctrl.modell.SystemObjektTyp;
 import de.bsvrz.sys.funclib.debug.Debug;
 
 /**
@@ -62,8 +61,7 @@ import de.bsvrz.sys.funclib.debug.Debug;
  * 
  * @version $Id$
  */
-public abstract class AbstraktPLFahrStreifen extends AbstractSystemObjekt
-		implements ClientReceiverInterface {
+public abstract class AbstraktPLFahrStreifen implements ClientReceiverInterface {
 
 	/**
 	 * Standard-Verfahren der Gueteberechnung.
@@ -96,7 +94,6 @@ public abstract class AbstraktPLFahrStreifen extends AbstractSystemObjekt
 	 */
 	protected AbstraktPLFahrStreifen(final IVerwaltungMitGuete verwaltung,
 			final SystemObject obj) {
-		super(obj);
 
 		if (dieVerwaltung == null) {
 			dieVerwaltung = verwaltung;
@@ -105,30 +102,29 @@ public abstract class AbstraktPLFahrStreifen extends AbstractSystemObjekt
 		dieVerwaltung.getVerbindung().subscribeReceiver(
 				this,
 				obj,
-				new DataDescription(this
-						.getPlausibilisierungsParameterAtg(dieVerwaltung
+				new DataDescription(
+						getPlausibilisierungsParameterAtg(dieVerwaltung
 								.getVerbindung()), dieVerwaltung
-						.getVerbindung().getDataModel().getAspect(
-								DaVKonstanten.ASP_PARAMETER_SOLL)),
-				ReceiveOptions.normal(), ReceiverRole.receiver());
+								.getVerbindung().getDataModel().getAspect(
+										DaVKonstanten.ASP_PARAMETER_SOLL)), ReceiveOptions.normal(),
+				ReceiverRole.receiver());
 	}
 
 	/**
 	 * {@inheritDoc}
 	 */
-	public void update(ResultData[] parameterFeld) {
+	public void update(final ResultData[] parameterFeld) {
 		if (parameterFeld != null) {
-			for (ResultData parameter : parameterFeld) {
+			for (final ResultData parameter : parameterFeld) {
 				if (parameter != null && parameter.getData() != null) {
 					if (parameter
 							.getDataDescription()
 							.getAttributeGroup()
 							.equals(
-									this
-											.getPlausibilisierungsParameterAtg(dieVerwaltung
-													.getVerbindung()))) {
+									getPlausibilisierungsParameterAtg(dieVerwaltung
+											.getVerbindung()))) {
 						synchronized (this) {
-							this.parameterAtgLog = AbstraktAtgPLLogischLVEParameter
+							parameterAtgLog = AbstraktAtgPLLogischLVEParameter
 									.getInstance(parameter);
 						}
 					}
@@ -162,167 +158,190 @@ public abstract class AbstraktPLFahrStreifen extends AbstractSystemObjekt
 	 *            das zum Nutzdatum gehoerende Originaldatum
 	 * @return das um qPkw und vKfz erweiterte KZD
 	 */
-	protected Data berechneQPkwUndVKfz(Data data, ResultData originalDatum) {
-		final long qKfz = data
-				.getItem("qKfz").getUnscaledValue("Wert").longValue(); //$NON-NLS-1$ //$NON-NLS-2$
-		final boolean qKfzImplausibel = data.getItem("qKfz").getItem("Status")
-				.getItem("MessWertErsetzung")
-				.getUnscaledValue("Implausibel").longValue() == DUAKonstanten.JA; //$NON-NLS-1$
-		final long qLkw = data
-				.getItem("qLkw").getUnscaledValue("Wert").longValue(); //$NON-NLS-1$ //$NON-NLS-2$
-		final boolean qLkwImplausibel = data.getItem("qLkw").getItem("Status")
-				.getItem("MessWertErsetzung")
-				.getUnscaledValue("Implausibel").longValue() == DUAKonstanten.JA; //$NON-NLS-1$
+	protected Data berechneQPkwUndVKfz(final Data data,
+			final ResultData originalDatum) {
 
-		long qPkw = DUAKonstanten.NICHT_ERMITTELBAR;
-		GWert qPkwGuete = GWert.getMaxGueteWert(GueteVerfahren.STANDARD);
-
-		if (qKfz >= 0 && !qKfzImplausibel) {
-			if (qLkw >= 0 && !qLkwImplausibel) {
-				if (qLkw > qKfz) {
-					Debug.getLogger().fine(
-							VerwaltungPlPruefungLogischLVE
-									.getPlLogIdent(originalDatum)
-									+ "\nSetze qPkw (eigentlich "
-									+ VerwaltungPlPruefungLogischLVE
-											.getWertIdent(qPkw)
-									+ ") auf nicht ermittelbar da qLkw ("
-									+ VerwaltungPlPruefungLogischLVE
-											.getWertIdent(qLkw)
-									+ ") > qKfz ("
-									+ VerwaltungPlPruefungLogischLVE
-											.getWertIdent(qLkw) + ").");
-					qPkw = DUAKonstanten.NICHT_ERMITTELBAR;
-				} else {
-					qPkw = qKfz - qLkw;
-
-					try {
-						GWert qKfzG = new GWert(data, "qKfz"); //$NON-NLS-1$
-						GWert qLkwG = new GWert(data, "qLkw"); //$NON-NLS-1$
-						qPkwGuete = GueteVerfahren.differenz(qKfzG, qLkwG);
-					} catch (GueteException e) {
-						e.printStackTrace();
-						Debug
-								.getLogger()
-								.error(
-										"Berechnung der Guete von qPkw fehlgeschlagen", e); //$NON-NLS-1$
-					}
-				}
-			} else {
-				qPkw = qKfz;
-				qPkwGuete = new GWert(data, "qKfz");
-			}
+		final boolean qPkwEmpfangenIstBereitsBerechnet;
+		final boolean vKfzEmpfangenIstBereitsBerechnet;
+		if (originalDatum != null && originalDatum.getData() != null) {
+			qPkwEmpfangenIstBereitsBerechnet = originalDatum.getData().getItem(
+					"qPkw").getUnscaledValue("Wert").longValue() >= 0;
+			vKfzEmpfangenIstBereitsBerechnet = originalDatum.getData().getItem(
+					"vKfz").getUnscaledValue("Wert").longValue() >= 0;
 		} else {
-			Debug.getLogger().fine(
-					VerwaltungPlPruefungLogischLVE.getPlLogIdent(originalDatum)
-							+ "\nSetze qPkw (eigentlich "
-							+ VerwaltungPlPruefungLogischLVE.getWertIdent(qPkw)
-							+ ") auf nicht ermittelbar da qKfz ("
-							+ VerwaltungPlPruefungLogischLVE.getWertIdent(qKfz)
-							+ ") < 0 bzw. implausibel.");
+			qPkwEmpfangenIstBereitsBerechnet = false;
+			vKfzEmpfangenIstBereitsBerechnet = false;
 		}
 
-		if (DUAUtensilien.isWertInWerteBereich(data
-				.getItem("qPkw").getItem("Wert"), qPkw)) { //$NON-NLS-1$ //$NON-NLS-2$
-			data.getItem("qPkw").getUnscaledValue("Wert").set(qPkw); //$NON-NLS-1$ //$NON-NLS-2$
-			qPkwGuete.exportiere(data, "qPkw"); //$NON-NLS-1$
-		} else {
-			data
-					.getItem("qPkw").getUnscaledValue("Wert").set(DUAKonstanten.FEHLERHAFT); //$NON-NLS-1$//$NON-NLS-2$
+		if (!qPkwEmpfangenIstBereitsBerechnet
+				&& !vKfzEmpfangenIstBereitsBerechnet) {
+			final long qKfz = data
+					.getItem("qKfz").getUnscaledValue("Wert").longValue(); //$NON-NLS-1$ //$NON-NLS-2$
+			final boolean qKfzImplausibel = data.getItem("qKfz").getItem(
+					"Status").getItem("MessWertErsetzung").getUnscaledValue(
+					"Implausibel").longValue() == DUAKonstanten.JA; //$NON-NLS-1$
+			final long qLkw = data
+					.getItem("qLkw").getUnscaledValue("Wert").longValue(); //$NON-NLS-1$ //$NON-NLS-2$
+			final boolean qLkwImplausibel = data.getItem("qLkw").getItem(
+					"Status").getItem("MessWertErsetzung").getUnscaledValue(
+					"Implausibel").longValue() == DUAKonstanten.JA; //$NON-NLS-1$
+
+			long qPkw = DUAKonstanten.NICHT_ERMITTELBAR;
+			GWert qPkwGuete = GWert.getMaxGueteWert(GueteVerfahren.STANDARD);
+
+			if (qKfz >= 0 && !qKfzImplausibel) {
+				if (qLkw >= 0 && !qLkwImplausibel) {
+					if (qLkw > qKfz) {
+						Debug.getLogger().fine(
+								VerwaltungPlPruefungLogischLVE
+										.getPlLogIdent(originalDatum)
+										+ "\nSetze qPkw (eigentlich "
+										+ VerwaltungPlPruefungLogischLVE
+												.getWertIdent(qPkw)
+										+ ") auf nicht ermittelbar da qLkw ("
+										+ VerwaltungPlPruefungLogischLVE
+												.getWertIdent(qLkw)
+										+ ") > qKfz ("
+										+ VerwaltungPlPruefungLogischLVE
+												.getWertIdent(qLkw) + ").");
+						qPkw = DUAKonstanten.NICHT_ERMITTELBAR;
+					} else {
+						qPkw = qKfz - qLkw;
+
+						try {
+							final GWert qKfzG = new GWert(data, "qKfz"); //$NON-NLS-1$
+							final GWert qLkwG = new GWert(data, "qLkw"); //$NON-NLS-1$
+							qPkwGuete = GueteVerfahren.differenz(qKfzG, qLkwG);
+						} catch (final GueteException e) {
+							e.printStackTrace();
+							Debug
+									.getLogger()
+									.error(
+											"Berechnung der Guete von qPkw fehlgeschlagen", e); //$NON-NLS-1$
+						}
+					}
+				} else {
+					qPkw = qKfz;
+					qPkwGuete = new GWert(data, "qKfz");
+				}
+			} else {
+				Debug.getLogger().fine(
+						VerwaltungPlPruefungLogischLVE
+								.getPlLogIdent(originalDatum)
+								+ "\nSetze qPkw (eigentlich "
+								+ VerwaltungPlPruefungLogischLVE
+										.getWertIdent(qPkw)
+								+ ") auf nicht ermittelbar da qKfz ("
+								+ VerwaltungPlPruefungLogischLVE
+										.getWertIdent(qKfz)
+								+ ") < 0 bzw. implausibel.");
+			}
+
+			if (DUAUtensilien.isWertInWerteBereich(data
+					.getItem("qPkw").getItem("Wert"), qPkw)) { //$NON-NLS-1$ //$NON-NLS-2$
+				data.getItem("qPkw").getUnscaledValue("Wert").set(qPkw); //$NON-NLS-1$ //$NON-NLS-2$
+				qPkwGuete.exportiere(data, "qPkw"); //$NON-NLS-1$
+			} else {
+				data
+						.getItem("qPkw").getUnscaledValue("Wert").set(DUAKonstanten.FEHLERHAFT); //$NON-NLS-1$//$NON-NLS-2$
+				data
+						.getItem("qPkw")
+						.getItem("Status")
+						.getItem("MessWertErsetzung").getUnscaledValue("Implausibel").set(DUAKonstanten.JA); //$NON-NLS-1$ //$NON-NLS-2$//$NON-NLS-2%
+				Debug
+						.getLogger()
+						.fine(
+								VerwaltungPlPruefungLogischLVE
+										.getPlLogIdent(originalDatum)
+										+ "\nSetze qPkw (eigentlich "
+										+ VerwaltungPlPruefungLogischLVE
+												.getWertIdent(qPkw)
+										+ ") auf impl. und fehlerhaft da ausserhalb des Modell-Wertebereichs.");
+			}
+
+			final long vPkw = data
+					.getItem("vPkw").getUnscaledValue("Wert").longValue(); //$NON-NLS-1$ //$NON-NLS-2$
+			final long vLkw = data
+					.getItem("vLkw").getUnscaledValue("Wert").longValue(); //$NON-NLS-1$ //$NON-NLS-2$
+			long vKfz = DUAKonstanten.NICHT_ERMITTELBAR;
+			GWert vKfzGuete = GWert.getMaxGueteWert(GueteVerfahren.STANDARD);
+
+			if (qKfz > 0 && qPkw >= 0 && vPkw >= 0 && qLkw >= 0 && vLkw >= 0) {
+				final long qPkwDummy = qPkw >= 0 ? qPkw : 0;
+				final long vPkwDummy = vPkw >= 0 ? vPkw : 0;
+				final long qLkwDummy = qLkw >= 0 ? qLkw : 0;
+				final long vLkwDummy = vLkw >= 0 ? vLkw : 0;
+				vKfz = (long) (((double) (qPkwDummy * vPkwDummy + qLkwDummy
+						* vLkwDummy) / (double) qKfz) + 0.5);
+
+				try {
+					final GWert qPkwG = new GWert(data, "qPkw"); //$NON-NLS-1$
+					final GWert vPkwG = new GWert(data, "vPkw"); //$NON-NLS-1$
+					final GWert qLkwG = new GWert(data, "qLkw"); //$NON-NLS-1$
+					final GWert vLkwG = new GWert(data, "vLkw"); //$NON-NLS-1$
+					final GWert qKfzG = new GWert(data, "qKfz"); //$NON-NLS-1$
+
+					if (qPkwDummy * vPkwDummy == 0) {
+						vKfzGuete = GueteVerfahren.quotient(GueteVerfahren
+								.produkt(qLkwG, vLkwG), qKfzG);
+					} else if (qLkwDummy * vLkwDummy == 0) {
+						vKfzGuete = GueteVerfahren.quotient(GueteVerfahren
+								.produkt(qPkwG, vPkwG), qKfzG);
+					} else {
+						vKfzGuete = GueteVerfahren.quotient(GueteVerfahren
+								.summe(GueteVerfahren.produkt(qPkwG, vPkwG),
+										GueteVerfahren.produkt(qLkwG, vLkwG)),
+								qKfzG);
+					}
+
+				} catch (final GueteException e) {
+					e.printStackTrace();
+					Debug.getLogger().error(
+							"Berechnung der Guete von vKfz fehlgeschlagen", e); //$NON-NLS-1$
+				}
+			} else {
+				Debug.getLogger().fine(
+						VerwaltungPlPruefungLogischLVE
+								.getPlLogIdent(originalDatum)
+								+ "\nSetze vKfz (eigentlich "
+								+ VerwaltungPlPruefungLogischLVE
+										.getWertIdent(vKfz)
+								+ ") auf nicht ermittelbar da qKfz ("
+								+ VerwaltungPlPruefungLogischLVE
+										.getWertIdent(qKfz) + ") <= 0.");
+			}
+
+			if (DUAUtensilien.isWertInWerteBereich(data
+					.getItem("vKfz").getItem("Wert"), vKfz)) { //$NON-NLS-1$ //$NON-NLS-2$
+				data.getItem("vKfz").getUnscaledValue("Wert").set(vKfz); //$NON-NLS-1$ //$NON-NLS-2$
+				vKfzGuete.exportiere(data, "vKfz"); //$NON-NLS-1$
+			} else {
+				data
+						.getItem("vKfz").getUnscaledValue("Wert").set(DUAKonstanten.FEHLERHAFT); //$NON-NLS-1$//$NON-NLS-2$
+				data
+						.getItem("vKfz")
+						.getItem("Status")
+						.getItem("MessWertErsetzung").getUnscaledValue("Implausibel").set(DUAKonstanten.JA); //$NON-NLS-1$ //$NON-NLS-2$//$NON-NLS-2%
+				Debug
+						.getLogger()
+						.fine(
+								VerwaltungPlPruefungLogischLVE
+										.getPlLogIdent(originalDatum)
+										+ "\nSetze vKfz (eigentlich "
+										+ VerwaltungPlPruefungLogischLVE
+												.getWertIdent(vKfz)
+										+ ") auf impl. und fehlerhaft da ausserhalb des Wertebereichs.");
+			}
+
 			data
 					.getItem("qPkw")
 					.getItem("Status")
-					.getItem("MessWertErsetzung").getUnscaledValue("Implausibel").set(DUAKonstanten.JA); //$NON-NLS-1$ //$NON-NLS-2$//$NON-NLS-2%
-			Debug
-					.getLogger()
-					.fine(
-							VerwaltungPlPruefungLogischLVE
-									.getPlLogIdent(originalDatum)
-									+ "\nSetze qPkw (eigentlich "
-									+ VerwaltungPlPruefungLogischLVE
-											.getWertIdent(qPkw)
-									+ ") auf impl. und fehlerhaft da ausserhalb des Modell-Wertebereichs.");
-		}
-
-		final long vPkw = data
-				.getItem("vPkw").getUnscaledValue("Wert").longValue(); //$NON-NLS-1$ //$NON-NLS-2$
-		final long vLkw = data
-				.getItem("vLkw").getUnscaledValue("Wert").longValue(); //$NON-NLS-1$ //$NON-NLS-2$
-		long vKfz = DUAKonstanten.NICHT_ERMITTELBAR;
-		GWert vKfzGuete = GWert.getMaxGueteWert(GueteVerfahren.STANDARD);
-
-		if (qKfz > 0) {
-			long qPkwDummy = qPkw >= 0 ? qPkw : 0;
-			long vPkwDummy = vPkw >= 0 ? vPkw : 0;
-			long qLkwDummy = qLkw >= 0 ? qLkw : 0;
-			long vLkwDummy = vLkw >= 0 ? vLkw : 0;
-			vKfz = (long) (((double) (qPkwDummy * vPkwDummy + qLkwDummy
-					* vLkwDummy) / (double) qKfz) + 0.5);
-
-			try {
-				GWert qPkwG = new GWert(data, "qPkw"); //$NON-NLS-1$
-				GWert vPkwG = new GWert(data, "vPkw"); //$NON-NLS-1$
-				GWert qLkwG = new GWert(data, "qLkw"); //$NON-NLS-1$
-				GWert vLkwG = new GWert(data, "vLkw"); //$NON-NLS-1$
-				GWert qKfzG = new GWert(data, "qKfz"); //$NON-NLS-1$
-
-				if (qPkwDummy * vPkwDummy == 0) {
-					vKfzGuete = GueteVerfahren.quotient(GueteVerfahren.produkt(
-							qLkwG, vLkwG), qKfzG);
-				} else if (qLkwDummy * vLkwDummy == 0) {
-					vKfzGuete = GueteVerfahren.quotient(GueteVerfahren.produkt(
-							qPkwG, vPkwG), qKfzG);
-				} else {
-					vKfzGuete = GueteVerfahren.quotient(GueteVerfahren.summe(
-							GueteVerfahren.produkt(qPkwG, vPkwG),
-							GueteVerfahren.produkt(qLkwG, vLkwG)), qKfzG);
-				}
-
-			} catch (GueteException e) {
-				e.printStackTrace();
-				Debug.getLogger().error(
-						"Berechnung der Guete von vKfz fehlgeschlagen", e); //$NON-NLS-1$
-			}
-		} else {
-			Debug.getLogger().fine(
-					VerwaltungPlPruefungLogischLVE.getPlLogIdent(originalDatum)
-							+ "\nSetze vKfz (eigentlich "
-							+ VerwaltungPlPruefungLogischLVE.getWertIdent(vKfz)
-							+ ") auf nicht ermittelbar da qKfz ("
-							+ VerwaltungPlPruefungLogischLVE.getWertIdent(qKfz)
-							+ ") <= 0.");
-		}
-
-		if (DUAUtensilien.isWertInWerteBereich(data
-				.getItem("vKfz").getItem("Wert"), vKfz)) { //$NON-NLS-1$ //$NON-NLS-2$
-			data.getItem("vKfz").getUnscaledValue("Wert").set(vKfz); //$NON-NLS-1$ //$NON-NLS-2$
-			vKfzGuete.exportiere(data, "vKfz"); //$NON-NLS-1$
-		} else {
-			data
-					.getItem("vKfz").getUnscaledValue("Wert").set(DUAKonstanten.FEHLERHAFT); //$NON-NLS-1$//$NON-NLS-2$
+					.getItem("Erfassung").getUnscaledValue("NichtErfasst").set(DUAKonstanten.JA); //$NON-NLS-1$//$NON-NLS-2$
 			data
 					.getItem("vKfz")
 					.getItem("Status")
-					.getItem("MessWertErsetzung").getUnscaledValue("Implausibel").set(DUAKonstanten.JA); //$NON-NLS-1$ //$NON-NLS-2$//$NON-NLS-2%
-			Debug
-					.getLogger()
-					.fine(
-							VerwaltungPlPruefungLogischLVE
-									.getPlLogIdent(originalDatum)
-									+ "\nSetze vKfz (eigentlich "
-									+ VerwaltungPlPruefungLogischLVE
-											.getWertIdent(vKfz)
-									+ ") auf impl. und fehlerhaft da ausserhalb des Wertebereichs.");
+					.getItem("Erfassung").getUnscaledValue("NichtErfasst").set(DUAKonstanten.JA); //$NON-NLS-1$//$NON-NLS-2$
 		}
-
-		data
-				.getItem("qPkw")
-				.getItem("Status")
-				.getItem("Erfassung").getUnscaledValue("NichtErfasst").set(DUAKonstanten.JA); //$NON-NLS-1$//$NON-NLS-2$
-		data
-				.getItem("vKfz")
-				.getItem("Status")
-				.getItem("Erfassung").getUnscaledValue("NichtErfasst").set(DUAKonstanten.JA); //$NON-NLS-1$//$NON-NLS-2$
 
 		return data;
 	}
@@ -474,30 +493,31 @@ public abstract class AbstraktPLFahrStreifen extends AbstractSystemObjekt
 	 *            obere Grenze des Wertes
 	 * @return ob die Pl-Pruefung an dieser Stelle abgebrochen werden soll
 	 */
-	protected boolean untersucheAufMaxVerletzung(Data davDatum,
+	protected boolean untersucheAufMaxVerletzung(final Data davDatum,
 			final ResultData resultat, final String wertName, final long max) {
 		boolean abbruch = false;
 
-		if (this.parameterAtgLog != null) {
+		if (parameterAtgLog != null) {
 
-			OptionenPlausibilitaetsPruefungLogischVerkehr optionen = this.parameterAtgLog
+			final OptionenPlausibilitaetsPruefungLogischVerkehr optionen = parameterAtgLog
 					.getOptionen();
 
 			if (!optionen
 					.equals(OptionenPlausibilitaetsPruefungLogischVerkehr.KEINE_PRUEFUNG)) {
+				
 				final long wert = davDatum.getItem(wertName).getUnscaledValue(
 						"Wert").longValue(); //$NON-NLS-1$
 
-				GanzZahl sweGueteWert = GanzZahl.getGueteIndex();
+				final GanzZahl sweGueteWert = GanzZahl.getGueteIndex();
 				sweGueteWert.setSkaliertenWert(dieVerwaltung.getGueteFaktor());
-				GWert sweGuete = new GWert(sweGueteWert,
+				final GWert sweGuete = new GWert(sweGueteWert,
 						GueteVerfahren.STANDARD, false);
 
 				/**
 				 * sonst handelt es sich nicht um einen Messwert
 				 */
 				if (wert >= 0 && max >= 0) {
-					boolean maxVerletzt = wert > max;
+					final boolean maxVerletzt = wert > max;
 
 					if (maxVerletzt) {
 						if (optionen
@@ -524,14 +544,14 @@ public abstract class AbstraktPLFahrStreifen extends AbstractSystemObjekt
 											+ VerwaltungPlPruefungLogischLVE
 													.getWertIdent(max) + ")");
 
-							GWert guete = new GWert(davDatum, wertName);
+							final GWert guete = new GWert(davDatum, wertName);
 							GWert neueGuete = GWert
 									.getNichtErmittelbareGuete(guete
 											.getVerfahren());
 							try {
 								neueGuete = GueteVerfahren.produkt(guete,
 										sweGuete);
-							} catch (GueteException e1) {
+							} catch (final GueteException e1) {
 								Debug
 										.getLogger()
 										.error(
@@ -556,12 +576,12 @@ public abstract class AbstraktPLFahrStreifen extends AbstractSystemObjekt
 								 * abgebrochen.
 								 */
 
-								long qLkw = davDatum
+								final long qLkw = davDatum
 										.getItem("qLkw").getUnscaledValue("Wert").longValue(); //$NON-NLS-1$ //$NON-NLS-2$
 								if (qLkw >= 0) {
 									if (max >= qLkw) {
-										long qPkw = max - qLkw;
-										MesswertUnskaliert qPkwMW = new MesswertUnskaliert(
+										final long qPkw = max - qLkw;
+										final MesswertUnskaliert qPkwMW = new MesswertUnskaliert(
 												"qPkw", davDatum); //$NON-NLS-1$
 										qPkwMW.setWertUnskaliert(qPkw);
 										qPkwMW.setNichtErfasst(true);
@@ -574,7 +594,7 @@ public abstract class AbstraktPLFahrStreifen extends AbstractSystemObjekt
 											qPkwGueteNeu = GueteVerfahren
 													.produkt(sweGuete,
 															qPkwGueteNeu);
-										} catch (GueteException e) {
+										} catch (final GueteException e) {
 											Debug
 													.getLogger()
 													.error(
@@ -598,7 +618,7 @@ public abstract class AbstraktPLFahrStreifen extends AbstractSystemObjekt
 																+ "\nvLkw = "
 																+ VerwaltungPlPruefungLogischLVE
 																		.getWertIdent(qLkw));
-										this.setAllesImplausibel(davDatum);
+										setAllesImplausibel(davDatum);
 										abbruch = true;
 									}
 								}
@@ -616,21 +636,21 @@ public abstract class AbstraktPLFahrStreifen extends AbstractSystemObjekt
 									/**
 									 * qKfz anpassen
 									 */
-									long qKfzNeu = qKfz - (wert - max);
-									MesswertUnskaliert qKfzMW = new MesswertUnskaliert(
+									final long qKfzNeu = qKfz - (wert - max);
+									final MesswertUnskaliert qKfzMW = new MesswertUnskaliert(
 											"qKfz", davDatum); //$NON-NLS-1$
 									qKfzMW.setWertUnskaliert(qKfzNeu);
 									qKfzMW.setLogischMax(true);
 									qKfzMW.kopiereInhaltNach(davDatum);
 
-									GWert qKfzGuete = new GWert(davDatum,
+									final GWert qKfzGuete = new GWert(davDatum,
 											"qKfz"); //$NON-NLS-1$
 									GWert qKfzGueteNeu = GWert
 											.getNichtErmittelbareGuete(GueteVerfahren.STANDARD);
 									try {
 										qKfzGueteNeu = GueteVerfahren.produkt(
 												qKfzGuete, sweGuete);
-									} catch (GueteException e) {
+									} catch (final GueteException e) {
 										Debug
 												.getLogger()
 												.error(
@@ -645,21 +665,21 @@ public abstract class AbstraktPLFahrStreifen extends AbstractSystemObjekt
 									/**
 									 * qLkw anpassen
 									 */
-									long qLkwNeu = qKfzNeu - max;
-									MesswertUnskaliert qLkwMW = new MesswertUnskaliert(
+									final long qLkwNeu = qKfzNeu - max;
+									final MesswertUnskaliert qLkwMW = new MesswertUnskaliert(
 											"qLkw", davDatum); //$NON-NLS-1$
 									qLkwMW.setWertUnskaliert(qLkwNeu);
 									qLkwMW.setLogischMax(true);
 									qLkwMW.kopiereInhaltNach(davDatum);
 
-									GWert qLkwGuete = new GWert(davDatum,
+									final GWert qLkwGuete = new GWert(davDatum,
 											"qLkw"); //$NON-NLS-1$
 									GWert qLkwGueteNeu = GWert
 											.getNichtErmittelbareGuete(GueteVerfahren.STANDARD);
 									try {
 										qLkwGueteNeu = GueteVerfahren.produkt(
 												qLkwGuete, sweGuete);
-									} catch (GueteException e) {
+									} catch (final GueteException e) {
 										Debug
 												.getLogger()
 												.error(
@@ -689,9 +709,21 @@ public abstract class AbstraktPLFahrStreifen extends AbstractSystemObjekt
 									/**
 									 * qPkw anpassen
 									 */
-									long qPkwMax = this.parameterAtgLog
-											.getQPkwBereichMax();
-									long qPkwNeu = qKfz - qLkw;
+									final long t = davDatum.getTimeValue("T")
+											.getMillis();
+									long qPkwMax;
+									if (resultat.getDataDescription()
+											.getAttributeGroup().getPid()
+											.equals(DUAKonstanten.ATG_LZD)) {
+										qPkwMax = parameterAtgLog
+												.getQPkwBereichMax();
+									} else {
+										qPkwMax = parameterAtgLog
+												.getQPkwBereichMax()
+												* t / Constants.MILLIS_PER_HOUR;
+									}
+
+									final long qPkwNeu = qKfz - qLkw;
 
 									if (qPkwNeu > qPkwMax) {
 										Debug
@@ -707,25 +739,25 @@ public abstract class AbstraktPLFahrStreifen extends AbstractSystemObjekt
 																+ VerwaltungPlPruefungLogischLVE
 																		.getWertIdent(qPkwMax));
 
-										this.setAllesImplausibel(davDatum);
+										setAllesImplausibel(davDatum);
 										abbruch = true;
 									} else {
-										MesswertUnskaliert qPkwMW = new MesswertUnskaliert(
+										final MesswertUnskaliert qPkwMW = new MesswertUnskaliert(
 												"qPkw", davDatum); //$NON-NLS-1$
 										qPkwMW.setWertUnskaliert(qPkwNeu);
 										qPkwMW.setNichtErfasst(true);
 										qPkwMW.setLogischMax(true);
 										qPkwMW.kopiereInhaltNach(davDatum);
 
-										GWert qPkwGuete = new GWert(davDatum,
-												"qPkw"); //$NON-NLS-1$
+										final GWert qPkwGuete = new GWert(
+												davDatum, "qPkw"); //$NON-NLS-1$
 										GWert qPkwGueteNeu = GWert
 												.getNichtErmittelbareGuete(GueteVerfahren.STANDARD);
 										try {
 											qPkwGueteNeu = GueteVerfahren
 													.produkt(qPkwGuete,
 															sweGuete);
-										} catch (GueteException e) {
+										} catch (final GueteException e) {
 											Debug
 													.getLogger()
 													.error(
@@ -744,6 +776,14 @@ public abstract class AbstraktPLFahrStreifen extends AbstractSystemObjekt
 							if (wertName.equals("vKfz") || wertName.startsWith("qKfz") || //$NON-NLS-1$ //$NON-NLS-2$
 									wertName.equals("vLkw") || wertName.startsWith("qLkw") || //$NON-NLS-1$ //$NON-NLS-2$
 									wertName.equals("vPkw") || wertName.startsWith("qPkw")) { //$NON-NLS-1$ //$NON-NLS-2$
+								
+								if(PlLogischLVEStandard.isBaWuePatchAktiv() && wertName.equals("vLkw")) {
+									davDatum
+									.getItem("vLkw").getUnscaledValue("Wert").set((int)max);
+									return false;
+								}
+
+								
 								Debug
 										.getLogger()
 										.fine(
@@ -761,7 +801,8 @@ public abstract class AbstraktPLFahrStreifen extends AbstractSystemObjekt
 														+ "\nmax = "
 														+ VerwaltungPlPruefungLogischLVE
 																.getWertIdent(max));
-								this.setAllesImplausibel(davDatum);
+								
+								setAllesImplausibel(davDatum);
 								abbruch = true;
 							}
 						}
@@ -787,16 +828,16 @@ public abstract class AbstraktPLFahrStreifen extends AbstractSystemObjekt
 		if (resultat.getData() != null) {
 			try {
 				copy = resultat.getData().createModifiableCopy();
-				this.berechneQPkwUndVKfz(copy, resultat);
-				this.ueberpruefe(copy, resultat);
-				this.passeGueteAn(copy);
-			} catch (IllegalStateException e) {
+				berechneQPkwUndVKfz(copy, resultat);
+				ueberpruefe(copy, resultat);
+				passeGueteAn(copy);
+			} catch (final IllegalStateException e) {
 				Debug.getLogger().error(
 						"Es konnte keine Kopie von Datensatz erzeugt werden:\n" //$NON-NLS-1$
 								+ resultat, e);
 			}
 		}
-		this.letztesKZDatum = resultat;
+		letztesKZDatum = resultat;
 
 		return copy;
 	}
@@ -809,9 +850,9 @@ public abstract class AbstraktPLFahrStreifen extends AbstractSystemObjekt
 	 * @param daten
 	 *            ein veraenderbares KZ-Datum
 	 */
-	protected final void passeGueteAn(Data daten) {
-		for (String attributName : getAttributNamen()) {
-			long wert = daten.getItem(attributName)
+	protected final void passeGueteAn(final Data daten) {
+		for (final String attributName : getAttributNamen()) {
+			final long wert = daten.getItem(attributName)
 					.getItem("Wert").asUnscaledValue().longValue(); //$NON-NLS-1$ 
 			if (wert == DUAKonstanten.NICHT_ERMITTELBAR
 					|| wert == DUAKonstanten.FEHLERHAFT
@@ -830,23 +871,6 @@ public abstract class AbstraktPLFahrStreifen extends AbstractSystemObjekt
 	 *         Datensatzes enthalten sind (KZD bzw. LZD)
 	 */
 	protected abstract String[] getAttributNamen();
-
-	/**
-	 * {@inheritDoc}
-	 */
-	public SystemObjektTyp getTyp() {
-		return new SystemObjektTyp() {
-
-			public Class<? extends SystemObjekt> getKlasse() {
-				return KzdPLFahrStreifen.class;
-			}
-
-			public String getPid() {
-				return getSystemObject().getType().getPid();
-			}
-
-		};
-	}
 
 	/**
 	 * Setzt im uebergebenen Datensatz alle Werte auf implausibel und
@@ -872,9 +896,10 @@ public abstract class AbstraktPLFahrStreifen extends AbstractSystemObjekt
 	/**
 	 * Führt eine.
 	 * 
-	 * @param data das Datum
-	 * @param resultat das Resultat
-	 *            der Original-Datensatz
+	 * @param data
+	 *            das Datum
+	 * @param resultat
+	 *            das Resultat der Original-Datensatz
 	 */
 	protected abstract void ueberpruefe(Data data, final ResultData resultat);
 

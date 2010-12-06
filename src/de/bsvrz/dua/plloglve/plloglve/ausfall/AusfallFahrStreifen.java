@@ -44,9 +44,6 @@ import de.bsvrz.sys.funclib.bitctrl.dua.DUAKonstanten;
 import de.bsvrz.sys.funclib.bitctrl.dua.DUAUtensilien;
 import de.bsvrz.sys.funclib.bitctrl.dua.intpuf.IntervallPufferException;
 import de.bsvrz.sys.funclib.bitctrl.dua.schnittstellen.IVerwaltung;
-import de.bsvrz.sys.funclib.bitctrl.modell.AbstractSystemObjekt;
-import de.bsvrz.sys.funclib.bitctrl.modell.SystemObjekt;
-import de.bsvrz.sys.funclib.bitctrl.modell.SystemObjektTyp;
 import de.bsvrz.sys.funclib.debug.Debug;
 import de.bsvrz.sys.funclib.operatingMessage.MessageGrade;
 
@@ -57,8 +54,7 @@ import de.bsvrz.sys.funclib.operatingMessage.MessageGrade;
  * 
  * @version $Id$
  */
-public class AusfallFahrStreifen extends AbstractSystemObjekt implements
-		ClientReceiverInterface {
+public class AusfallFahrStreifen implements ClientReceiverInterface {
 
 	/**
 	 * Format der Zeitangabe innerhalb der Betriebsmeldung.
@@ -90,7 +86,12 @@ public class AusfallFahrStreifen extends AbstractSystemObjekt implements
 	/**
 	 * Datensaetze mit Ausfallinformationen der letzten 24h.
 	 */
-	private AusfallPuffer gleitenderTag = new AusfallPuffer();
+	private final AusfallPuffer gleitenderTag = new AusfallPuffer();
+
+	/**
+	 * das Objekt.
+	 */
+	private final SystemObject objekt;
 
 	/**
 	 * Standardkonstruktor.
@@ -102,7 +103,7 @@ public class AusfallFahrStreifen extends AbstractSystemObjekt implements
 	 */
 	protected AusfallFahrStreifen(final IVerwaltung verwaltung,
 			final SystemObject obj) {
-		super(obj);
+		objekt = obj;
 
 		if (dieVerwaltung == null) {
 			dieVerwaltung = verwaltung;
@@ -129,17 +130,17 @@ public class AusfallFahrStreifen extends AbstractSystemObjekt implements
 	protected final void plausibilisiere(final ResultData resultat) {
 		if (resultat.getDataDescription().getAttributeGroup().getId() == atgKzdId) {
 
-			AusfallDatumKomplett ausfallDatum = AusfallDatumKomplett
+			final AusfallDatumKomplett ausfallDatum = AusfallDatumKomplett
 					.getAusfallDatumVon(resultat);
 			if (ausfallDatum != null) {
 				try {
-					this.gleitenderTag.add(ausfallDatum);
-				} catch (IntervallPufferException e) {
+					gleitenderTag.add(ausfallDatum);
+				} catch (final IntervallPufferException e) {
 					Debug.getLogger().error(Constants.EMPTY_STRING, e);
 					e.printStackTrace();
 				}
 			}
-			this.testAufAusfall(ausfallDatum);
+			testAufAusfall(ausfallDatum);
 		}
 	}
 
@@ -150,32 +151,32 @@ public class AusfallFahrStreifen extends AbstractSystemObjekt implements
 	 * @param letztesAusfallDatum
 	 *            das letzte ausgefallene Datum
 	 */
-	private void testAufAusfall(AusfallDatumKomplett letztesAusfallDatum) {
+	private void testAufAusfall(final AusfallDatumKomplett letztesAusfallDatum) {
 		long ausfallZeit = 0;
 
 		if (programmLaeuftSchonLaengerAlsEinTag()) {
 			try {
 				if (TestParameter.getInstanz().isTestAusfall()) {
 					if (letztesAusfallDatum != null) {
-						this.gleitenderTag
+						gleitenderTag
 								.loescheAllesUnterhalbVon(letztesAusfallDatum
 										.getIntervallEnde() - 144000L);
 					}
 				} else {
 					if (letztesAusfallDatum != null) {
-						this.gleitenderTag
+						gleitenderTag
 								.loescheAllesUnterhalbVon(letztesAusfallDatum
 										.getIntervallEnde()
 										- Constants.MILLIS_PER_DAY);
 					}
 				}
-				ausfallZeit = this.gleitenderTag.getAusfallZeit();
-			} catch (IntervallPufferException e) {
+				ausfallZeit = gleitenderTag.getAusfallZeit();
+			} catch (final IntervallPufferException e) {
 				Debug.getLogger().error(Constants.EMPTY_STRING, e);
 				e.printStackTrace();
 			}
 
-			if (this.maxAusfallProTag >= 0) {
+			if (maxAusfallProTag >= 0) {
 
 				double ausfallInProzent;
 				if (TestParameter.getInstanz().isTestAusfall()) {
@@ -184,28 +185,29 @@ public class AusfallFahrStreifen extends AbstractSystemObjekt implements
 					ausfallInProzent = (((double) ausfallZeit / (double) Constants.MILLIS_PER_DAY) * 100.0);
 				}
 
-				if (ausfallInProzent > this.maxAusfallProTag) {
-					long stunden = ausfallZeit / Constants.MILLIS_PER_HOUR;
-					long minuten = (ausfallZeit - (stunden * Constants.MILLIS_PER_HOUR))
+				if (ausfallInProzent > maxAusfallProTag) {
+					final long stunden = ausfallZeit
+							/ Constants.MILLIS_PER_HOUR;
+					final long minuten = (ausfallZeit - (stunden * Constants.MILLIS_PER_HOUR))
 							/ Constants.MILLIS_PER_MINUTE;
 
-					String nachricht = "Ausfallhäufigkeit innerhalb der letzten 24 Stunden überschritten. Im Zeitraum von " + //$NON-NLS-1$
+					final String nachricht = "Ausfallhäufigkeit innerhalb der letzten 24 Stunden überschritten. Im Zeitraum von " + //$NON-NLS-1$
 							FORMAT.format(new Date(System.currentTimeMillis()
 									- Constants.MILLIS_PER_DAY))
 							+ " Uhr bis " + //$NON-NLS-1$
 							FORMAT.format(new Date(System.currentTimeMillis()))
 							+ " Uhr (1 Tag) implausible Fahrstreifenwerte am Fahrstreifen " + //$NON-NLS-1$
-							this.getSystemObject()
+							objekt
 							+ " von "
 							+ DUAUtensilien.runde(ausfallInProzent, 1)
-							+ "% (> " + this.maxAusfallProTag + //$NON-NLS-1$//$NON-NLS-2$
+							+ "% (> " + maxAusfallProTag + //$NON-NLS-1$
 							"%) entspricht Ausfall von "
 							+ stunden
-							+ " Stunde(n) " + minuten + " Minute(n)."; //$NON-NLS-1$ //$NON-NLS-2$//$NON-NLS-3$
+							+ " Stunde(n) " + minuten + " Minute(n)."; //$NON-NLS-1$ //$NON-NLS-2$
 
 					DUAUtensilien.sendeBetriebsmeldung(dieVerwaltung
-							.getVerbindung(), MessageGrade.WARNING, this
-							.getSystemObject(), nachricht);
+							.getVerbindung(), MessageGrade.WARNING, objekt,
+							nachricht);
 				}
 			}
 		}
@@ -214,32 +216,15 @@ public class AusfallFahrStreifen extends AbstractSystemObjekt implements
 	/**
 	 * {@inheritDoc}
 	 */
-	public void update(ResultData[] davParameterFeld) {
+	public void update(final ResultData[] davParameterFeld) {
 		if (davParameterFeld != null) {
-			for (ResultData davParameter : davParameterFeld) {
+			for (final ResultData davParameter : davParameterFeld) {
 				if (davParameter != null && davParameter.getData() != null) {
-					this.maxAusfallProTag = davParameter.getData()
-							.getUnscaledValue("maxAusfallProTag").longValue(); //$NON-NLS-1$
+					maxAusfallProTag = davParameter.getData().getUnscaledValue(
+							"maxAusfallProTag").longValue(); //$NON-NLS-1$
 				}
 			}
 		}
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	public SystemObjektTyp getTyp() {
-		return new SystemObjektTyp() {
-
-			public Class<? extends SystemObjekt> getKlasse() {
-				return AusfallFahrStreifen.class;
-			}
-
-			public String getPid() {
-				return getSystemObject().getType().getPid();
-			}
-
-		};
 	}
 
 	/**
