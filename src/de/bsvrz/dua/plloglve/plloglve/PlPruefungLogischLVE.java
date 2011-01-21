@@ -103,9 +103,7 @@ public class PlPruefungLogischLVE extends AbstraktBearbeitungsKnotenAdapter {
 	@Override
 	public void initialisiere(IVerwaltung dieVerwaltung)
 			throws DUAInitialisierungsException {
-		super.initialisiere(dieVerwaltung);
-		MessageSender.getInstance().setApplicationLabel("PL-Logisch LVE");
-		
+		super.initialisiere(dieVerwaltung);		
 		atgKzdId = dieVerwaltung.getVerbindung().getDataModel()
 				.getAttributeGroup(DUAKonstanten.ATG_KZD).getId();
 		atgLzdId = dieVerwaltung.getVerbindung().getDataModel()

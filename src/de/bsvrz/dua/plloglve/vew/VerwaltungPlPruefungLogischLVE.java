@@ -44,6 +44,7 @@ import de.bsvrz.sys.funclib.bitctrl.dua.DUAUtensilien;
 import de.bsvrz.sys.funclib.bitctrl.dua.adapter.AbstraktVerwaltungsAdapterMitGuete;
 import de.bsvrz.sys.funclib.bitctrl.dua.dfs.typen.SWETyp;
 import de.bsvrz.sys.funclib.debug.Debug;
+import de.bsvrz.sys.funclib.operatingMessage.MessageSender;
 
 /**
  * Implementierung des Moduls Verwaltung der SWE Pl-Prüfung logisch LVE. Dieses
@@ -81,6 +82,8 @@ public class VerwaltungPlPruefungLogischLVE extends
 	@Override
 	protected void initialisiere() throws DUAInitialisierungsException {
 		super.initialisiere();
+		
+		MessageSender.getInstance().setApplicationLabel("PL-Logisch LVE");
 
 		/**
 		 * Fuer den Start der Applikation im Testmodus
