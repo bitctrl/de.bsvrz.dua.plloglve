@@ -261,7 +261,8 @@ public class DiffFahrStreifen implements ClientReceiverInterface {
 										dieVerwaltung.getVerbindung(),
 										MessageGrade.WARNING, resultat
 												.getObject(), "Fahrstreifen " + //$NON-NLS-1$
-												this + ": " + wert); //$NON-NLS-1$
+												resultat
+												.getObject() + ": " + wert); //$NON-NLS-1$
 							}
 						}
 					}

@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Pl-Prüfung logisch LVE
 Bundle-SymbolicName: de.bsvrz.dua.plloglve
-Bundle-Version: 1.1.0
+Bundle-Version: 1.1.1
 Bundle-Localization: plugin
 Require-Bundle: de.bitctrl.dav.daf,
  de.bitctrl.sys.funclib,
