@@ -47,7 +47,6 @@ import de.bsvrz.sys.funclib.bitctrl.dua.DUAUtensilien;
 import de.bsvrz.sys.funclib.bitctrl.dua.schnittstellen.IVerwaltung;
 import de.bsvrz.sys.funclib.debug.Debug;
 import de.bsvrz.sys.funclib.operatingMessage.MessageGrade;
-import de.bsvrz.sys.funclib.operatingMessage.MessageSender;
 
 /**
  * Repräsentiert einen Fahrstreifen mit allen Informationen, die zur Ermittlung
@@ -160,10 +159,10 @@ public class VertrauensFahrStreifen implements ClientReceiverInterface {
 		if (dieVerwaltung == null) {
 			dieVerwaltung = verwaltung;
 			paraVertrauenDD = new DataDescription(dieVerwaltung.getVerbindung()
-					.getDataModel().getAttributeGroup(
-							"atg.verkehrsDatenVertrauensBereichFs"), //$NON-NLS-1$
-					dieVerwaltung.getVerbindung().getDataModel().getAspect(
-							DaVKonstanten.ASP_PARAMETER_SOLL));
+					.getDataModel()
+					.getAttributeGroup("atg.verkehrsDatenVertrauensBereichFs"), //$NON-NLS-1$
+					dieVerwaltung.getVerbindung().getDataModel()
+							.getAspect(DaVKonstanten.ASP_PARAMETER_SOLL));
 		}
 
 		datenBezugsZeitraumQKfz = new BezugsZeitraum(dieVerwaltung, "qKfz"); //$NON-NLS-1$
@@ -240,17 +239,17 @@ public class VertrauensFahrStreifen implements ClientReceiverInterface {
 					 * dies ggf. schon für jeden einzelnen Wert getan wird
 					 */
 					for (final String attribut : ATTRIBUTE) {
-						copy.getItem(attribut).getItem("Status").getItem(
-								"MessWertErsetzung").getUnscaledValue(
-								"Implausibel").set(DUAKonstanten.JA); //$NON-NLS-1$
+						copy.getItem(attribut)
+								.getItem("Status")
+								.getItem("MessWertErsetzung")
+								.getUnscaledValue("Implausibel").set(DUAKonstanten.JA); //$NON-NLS-1$
 					}
 
 					final long vertrauensBereich = TestParameter.getInstanz()
 
 					.isTestVertrauen() ? parameter.getBezugsZeitraum()
 							* TestParameter.INTERVALL_VB * 60L : parameter
-							.getBezugsZeitraum()
-							* Constants.MILLIS_PER_HOUR;
+							.getBezugsZeitraum() * Constants.MILLIS_PER_HOUR;
 
 					final Date start = new Date(originalDatum.getDataTime()
 							- vertrauensBereich);
@@ -266,7 +265,8 @@ public class VertrauensFahrStreifen implements ClientReceiverInterface {
 					Debug.getLogger().fine(
 							VerwaltungPlPruefungLogischLVE
 									.getPlLogIdent(originalDatum)
-									+ "\n" + nachricht);
+									+ "\n"
+									+ nachricht);
 				} else {
 					if (verletztAlt) {
 						final long vertrauensBereich = TestParameter
@@ -290,9 +290,10 @@ public class VertrauensFahrStreifen implements ClientReceiverInterface {
 								+ " von " + ausfallErgebnisse.last() + //$NON-NLS-1$ 
 								". Fahrstreifenwerte werden wieder verarbeitet."; //$NON-NLS-1$
 
-						DUAUtensilien.sendeBetriebsmeldung(dieVerwaltung
-								.getVerbindung(), MessageGrade.WARNING, objekt,
-								nachricht);
+						DUAUtensilien.sendeBetriebsmeldung(
+								dieVerwaltung.getVerbindung(),
+								dieVerwaltung.getBmvIdKonverter(),
+								MessageGrade.WARNING, objekt, nachricht);
 					}
 				}
 

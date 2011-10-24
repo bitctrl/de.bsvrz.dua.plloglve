@@ -43,7 +43,6 @@ import de.bsvrz.sys.funclib.bitctrl.dua.VariableMitKonstanzZaehler;
 import de.bsvrz.sys.funclib.bitctrl.dua.schnittstellen.IVerwaltung;
 import de.bsvrz.sys.funclib.debug.Debug;
 import de.bsvrz.sys.funclib.operatingMessage.MessageGrade;
-import de.bsvrz.sys.funclib.operatingMessage.MessageSender;
 
 /**
  * Speichert, wie lange einzelne KZD-Werte eines bestimmten Fahrstreifens in
@@ -139,10 +138,12 @@ public class DiffFahrStreifen implements ClientReceiverInterface {
 		if (dieVerwaltung == null) {
 			dieVerwaltung = verwaltung;
 			diffParaBeschreibung = new DataDescription(dieVerwaltung
-					.getVerbindung().getDataModel().getAttributeGroup(
+					.getVerbindung()
+					.getDataModel()
+					.getAttributeGroup(
 							"atg.verkehrsDatenDifferenzialKontrolleFs"), //$NON-NLS-1$
-					dieVerwaltung.getVerbindung().getDataModel().getAspect(
-							DaVKonstanten.ASP_PARAMETER_SOLL));
+					dieVerwaltung.getVerbindung().getDataModel()
+							.getAspect(DaVKonstanten.ASP_PARAMETER_SOLL));
 
 		}
 
@@ -164,8 +165,8 @@ public class DiffFahrStreifen implements ClientReceiverInterface {
 	 * @param resultat
 	 *            ein emfangenes FS-KZ-Datum
 	 * @return eine gekennzeichnete Kopie des originalen Datensatzes oder
-	 *         <code>null</code>, wenn der Datensatz durch die
-	 *         Plausibilisierung nicht beanstandet wurde
+	 *         <code>null</code>, wenn der Datensatz durch die Plausibilisierung
+	 *         nicht beanstandet wurde
 	 */
 	protected Data plausibilisiere(final ResultData resultat) {
 		Data copy = null;
@@ -250,25 +251,25 @@ public class DiffFahrStreifen implements ClientReceiverInterface {
 						if (!puffer.isEmpty()) {
 							copy = data.createModifiableCopy();
 							for (final VariableMitKonstanzZaehler<Long> wert : puffer) {
-								copy.getItem(wert.getName()).getUnscaledValue(
-										"Wert").set(DUAKonstanten.FEHLERHAFT); //$NON-NLS-1$			
-								copy
-										.getItem(wert.getName())
+								copy.getItem(wert.getName())
+										.getUnscaledValue("Wert").set(DUAKonstanten.FEHLERHAFT); //$NON-NLS-1$			
+								copy.getItem(wert.getName())
 										.getItem("Status")
 										.getItem("MessWertErsetzung")
 										.getUnscaledValue("Implausibel").set(DUAKonstanten.JA); //$NON-NLS-1$
+
 								DUAUtensilien.sendeBetriebsmeldung(
 										dieVerwaltung.getVerbindung(),
-										MessageGrade.WARNING, resultat
-												.getObject(), "Fahrstreifen " + //$NON-NLS-1$
-												resultat
-												.getObject() + ": " + wert); //$NON-NLS-1$
+										dieVerwaltung.getBmvIdKonverter(),
+										MessageGrade.WARNING,
+										resultat.getObject(), "Fahrstreifen " + //$NON-NLS-1$
+												resultat.getObject()
+												+ ": " + wert); //$NON-NLS-1$
 							}
 						}
 					}
 				} else {
-					Debug
-							.getLogger()
+					Debug.getLogger()
 							.warning("Fuer Fahrstreifen " + this + //$NON-NLS-1$
 									" wurden noch keine Parameter für die Differenzialkontrolle empfangen"); //$NON-NLS-1$
 				}

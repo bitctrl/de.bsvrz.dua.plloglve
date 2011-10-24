@@ -46,7 +46,6 @@ import de.bsvrz.sys.funclib.bitctrl.dua.intpuf.IntervallPufferException;
 import de.bsvrz.sys.funclib.bitctrl.dua.schnittstellen.IVerwaltung;
 import de.bsvrz.sys.funclib.debug.Debug;
 import de.bsvrz.sys.funclib.operatingMessage.MessageGrade;
-import de.bsvrz.sys.funclib.operatingMessage.MessageSender;
 
 /**
  * Speichert die Ausfallhäufigkeit eine Fahrstreifens über einem gleitenden Tag.
@@ -109,10 +108,10 @@ public class AusfallFahrStreifen implements ClientReceiverInterface {
 		if (dieVerwaltung == null) {
 			dieVerwaltung = verwaltung;
 			ausfallBeschreibung = new DataDescription(dieVerwaltung
-					.getVerbindung().getDataModel().getAttributeGroup(
-							"atg.verkehrsDatenAusfallHäufigkeitFs"), //$NON-NLS-1$
-					dieVerwaltung.getVerbindung().getDataModel().getAspect(
-							DaVKonstanten.ASP_PARAMETER_SOLL));
+					.getVerbindung().getDataModel()
+					.getAttributeGroup("atg.verkehrsDatenAusfallHäufigkeitFs"), //$NON-NLS-1$
+					dieVerwaltung.getVerbindung().getDataModel()
+							.getAspect(DaVKonstanten.ASP_PARAMETER_SOLL));
 			atgKzdId = dieVerwaltung.getVerbindung().getDataModel()
 					.getAttributeGroup(DUAKonstanten.ATG_KZD).getId();
 		}
@@ -206,9 +205,10 @@ public class AusfallFahrStreifen implements ClientReceiverInterface {
 							+ stunden
 							+ " Stunde(n) " + minuten + " Minute(n)."; //$NON-NLS-1$ //$NON-NLS-2$
 
-					DUAUtensilien.sendeBetriebsmeldung(dieVerwaltung
-							.getVerbindung(), MessageGrade.WARNING, objekt,
-							nachricht);
+					DUAUtensilien.sendeBetriebsmeldung(
+							dieVerwaltung.getVerbindung(),
+							dieVerwaltung.getBmvIdKonverter(),
+							MessageGrade.WARNING, objekt, nachricht);
 				}
 			}
 		}
@@ -221,8 +221,8 @@ public class AusfallFahrStreifen implements ClientReceiverInterface {
 		if (davParameterFeld != null) {
 			for (final ResultData davParameter : davParameterFeld) {
 				if (davParameter != null && davParameter.getData() != null) {
-					maxAusfallProTag = davParameter.getData().getUnscaledValue(
-							"maxAusfallProTag").longValue(); //$NON-NLS-1$
+					maxAusfallProTag = davParameter.getData()
+							.getUnscaledValue("maxAusfallProTag").longValue(); //$NON-NLS-1$
 				}
 			}
 		}

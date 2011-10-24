@@ -24,6 +24,11 @@ einem parametrierbaren Aspekt publiziert.
 Versionsgeschichte
 ==================
 
+1.1.2
+
+  - Senden von reinen Betriebsmeldungen in DUA um die Umsetzung von Objekt-PID/ID nach
+    Betriebsmeldungs-ID erweitert.  
+
 1.1.1
 
   - FIX 1588: Bezeichnung von Fahrstreifenobjekten in Betriebsmeldungen ueberarbeitet.

@@ -39,7 +39,6 @@ import de.bsvrz.sys.funclib.bitctrl.dua.intpuf.IntervallPufferException;
 import de.bsvrz.sys.funclib.bitctrl.dua.schnittstellen.IVerwaltung;
 import de.bsvrz.sys.funclib.debug.Debug;
 import de.bsvrz.sys.funclib.operatingMessage.MessageGrade;
-import de.bsvrz.sys.funclib.operatingMessage.MessageSender;
 
 /**
  * Speichert für einen Bezugszeitraum und ein finales DAV-Attribut des
@@ -167,8 +166,7 @@ public class BezugsZeitraum {
 			final long bezugsZeitraumInMillis = TestParameter.getInstanz()
 					.isTestVertrauen() ? parameter.getBezugsZeitraum()
 					* TestParameter.INTERVALL_VB * 60L : parameter
-					.getBezugsZeitraum()
-					* Constants.MILLIS_PER_HOUR;
+					.getBezugsZeitraum() * Constants.MILLIS_PER_HOUR;
 			double ausfallInProzent = 0;
 			if (bezugsZeitraumInMillis > 0) {
 				ausfallInProzent = (double) (((double) ausfallZeit / (double) bezugsZeitraumInMillis) * 100.0);
@@ -208,8 +206,8 @@ public class BezugsZeitraum {
 								.getInstanz().isTestVertrauen() ? TestParameter.INTERVALL_VB * 60L
 								: Constants.MILLIS_PER_HOUR)))
 								/ Constants.MILLIS_PER_MINUTE;
-						ausfall = new BezugsZeitraumAusfall(parameter
-								.getMaxAusfallProBezugsZeitraumAus(),
+						ausfall = new BezugsZeitraumAusfall(
+								parameter.getMaxAusfallProBezugsZeitraumAus(),
 								ausfallInProzent, stunden, minuten);
 					}
 				}
@@ -243,9 +241,11 @@ public class BezugsZeitraum {
 							minuten
 							+ " Minute(n). Fahrstreifenwerte werden auf Implausibel gesetzt."; //$NON-NLS-1$
 
-					DUAUtensilien.sendeBetriebsmeldung(dieVerwaltung
-							.getVerbindung(), MessageGrade.WARNING,
-							originalDatum.getObject(), nachricht);
+					DUAUtensilien.sendeBetriebsmeldung(
+							dieVerwaltung.getVerbindung(),
+							dieVerwaltung.getBmvIdKonverter(),
+							MessageGrade.WARNING, originalDatum.getObject(),
+							nachricht);
 				}
 			}
 		}

@@ -38,7 +38,6 @@ import de.bsvrz.sys.funclib.bitctrl.dua.dfs.schnittstellen.IDatenFlussSteuerung;
 import de.bsvrz.sys.funclib.bitctrl.dua.dfs.typen.ModulTyp;
 import de.bsvrz.sys.funclib.bitctrl.dua.schnittstellen.IStandardAspekte;
 import de.bsvrz.sys.funclib.bitctrl.dua.schnittstellen.IVerwaltung;
-import de.bsvrz.sys.funclib.operatingMessage.MessageSender;
 
 /**
  * Implementierung des Moduls Pl-Prüfung logisch LVE der SWE Pl-Prüfung logisch
