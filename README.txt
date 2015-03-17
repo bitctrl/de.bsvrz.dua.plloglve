@@ -2,7 +2,7 @@
 *  Segment 4 Datenübernahme und Aufbereitung (DUA), SWE 4.2 Pl-Prüfung logisch LVE  *
 *************************************************************************************
 
-Version: @Version@
+Version: 1.2.0
 
 
 Übersicht
@@ -23,6 +23,9 @@ einem parametrierbaren Aspekt publiziert.
 
 Versionsgeschichte
 ==================
+
+1.2.0
+- Umstellung auf Maven-Build
 
 1.1.2
 
