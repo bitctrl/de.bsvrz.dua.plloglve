@@ -33,9 +33,9 @@ import de.bsvrz.sys.funclib.bitctrl.dua.intpuf.IIntervallDatum;
 
 /**
  * Repräsentiert ein ausgefallenes KZ-Datum.
- * 
+ *
  * @author BitCtrl Systems GmbH, Thierfelder
- * 
+ *
  * @version $Id$
  */
 public final class AusfallDatum implements IIntervallDatum<AusfallDatum> {
@@ -47,12 +47,12 @@ public final class AusfallDatum implements IIntervallDatum<AusfallDatum> {
 
 	/**
 	 * Standardkonstruktor.
-	 * 
+	 *
 	 * @param resultat
 	 *            ein KZD-Datum
 	 */
-	private AusfallDatum(ResultData resultat) {
-		Data data = resultat.getData();
+	private AusfallDatum(final ResultData resultat) {
+		final Data data = resultat.getData();
 
 		final long qKfzWert = data
 				.getItem("qKfz").getUnscaledValue("Wert").longValue(); //$NON-NLS-1$ //$NON-NLS-2$
@@ -71,60 +71,60 @@ public final class AusfallDatum implements IIntervallDatum<AusfallDatum> {
 		final long sKfzWert = data
 				.getItem("sKfz").getUnscaledValue("Wert").longValue(); //$NON-NLS-1$ //$NON-NLS-2$
 
-		final long qKfzImpl = data
-				.getItem("qKfz").getItem("Status").getItem("MessWertErsetzung").
-				getUnscaledValue("Implausibel").longValue(); //$NON-NLS-1$	
-		final long qLkwImpl = data
-				.getItem("qLkw").getItem("Status").getItem("MessWertErsetzung").
-				getUnscaledValue("Implausibel").longValue(); //$NON-NLS-1$	
-		final long qPkwImpl = data
-				.getItem("qPkw").getItem("Status").getItem("MessWertErsetzung").
-				getUnscaledValue("Implausibel").longValue(); //$NON-NLS-1$	
-		final long vKfzImpl = data
-				.getItem("vKfz").getItem("Status").getItem("MessWertErsetzung").
-				getUnscaledValue("Implausibel").longValue(); //$NON-NLS-1$	
-		final long vLkwImpl = data
-				.getItem("vLkw").getItem("Status").getItem("MessWertErsetzung").
-				getUnscaledValue("Implausibel").longValue(); //$NON-NLS-1$	
-		final long vPkwImpl = data
-				.getItem("vPkw").getItem("Status").getItem("MessWertErsetzung").
-				getUnscaledValue("Implausibel").longValue(); //$NON-NLS-1$	
-		final long sKfzImpl = data
-				.getItem("sKfz").getItem("Status").getItem("MessWertErsetzung").
-				getUnscaledValue("Implausibel").longValue(); //$NON-NLS-1$	
-		final long bImpl = data
-				.getItem("b").getItem("Status").getItem("MessWertErsetzung").
-				getUnscaledValue("Implausibel").longValue(); //$NON-NLS-1$
+		final long qKfzImpl = data.getItem("qKfz").getItem("Status")
+				.getItem("MessWertErsetzung")
+				.getUnscaledValue("Implausibel").longValue(); //$NON-NLS-1$
+		final long qLkwImpl = data.getItem("qLkw").getItem("Status")
+				.getItem("MessWertErsetzung")
+				.getUnscaledValue("Implausibel").longValue(); //$NON-NLS-1$
+		final long qPkwImpl = data.getItem("qPkw").getItem("Status")
+				.getItem("MessWertErsetzung")
+				.getUnscaledValue("Implausibel").longValue(); //$NON-NLS-1$
+		final long vKfzImpl = data.getItem("vKfz").getItem("Status")
+				.getItem("MessWertErsetzung")
+				.getUnscaledValue("Implausibel").longValue(); //$NON-NLS-1$
+		final long vLkwImpl = data.getItem("vLkw").getItem("Status")
+				.getItem("MessWertErsetzung")
+				.getUnscaledValue("Implausibel").longValue(); //$NON-NLS-1$
+		final long vPkwImpl = data.getItem("vPkw").getItem("Status")
+				.getItem("MessWertErsetzung")
+				.getUnscaledValue("Implausibel").longValue(); //$NON-NLS-1$
+		final long sKfzImpl = data.getItem("sKfz").getItem("Status")
+				.getItem("MessWertErsetzung")
+				.getUnscaledValue("Implausibel").longValue(); //$NON-NLS-1$
+		final long bImpl = data.getItem("b").getItem("Status")
+				.getItem("MessWertErsetzung")
+				.getUnscaledValue("Implausibel").longValue(); //$NON-NLS-1$
 
-		if (qKfzWert == DUAKonstanten.FEHLERHAFT
-				|| qKfzImpl == DUAKonstanten.JA) {
+		if ((qKfzWert == DUAKonstanten.FEHLERHAFT)
+				|| (qKfzImpl == DUAKonstanten.JA)) {
 			this.ausgefallen = true;
 		}
-		if (qLkwWert == DUAKonstanten.FEHLERHAFT
-				|| qLkwImpl == DUAKonstanten.JA) {
+		if ((qLkwWert == DUAKonstanten.FEHLERHAFT)
+				|| (qLkwImpl == DUAKonstanten.JA)) {
 			this.ausgefallen = true;
 		}
-		if (qPkwWert == DUAKonstanten.FEHLERHAFT
-				|| qPkwImpl == DUAKonstanten.JA) {
+		if ((qPkwWert == DUAKonstanten.FEHLERHAFT)
+				|| (qPkwImpl == DUAKonstanten.JA)) {
 			this.ausgefallen = true;
 		}
-		if (vKfzWert == DUAKonstanten.FEHLERHAFT
-				|| vKfzImpl == DUAKonstanten.JA) {
+		if ((vKfzWert == DUAKonstanten.FEHLERHAFT)
+				|| (vKfzImpl == DUAKonstanten.JA)) {
 			this.ausgefallen = true;
 		}
-		if (vLkwWert == DUAKonstanten.FEHLERHAFT
-				|| vLkwImpl == DUAKonstanten.JA) {
+		if ((vLkwWert == DUAKonstanten.FEHLERHAFT)
+				|| (vLkwImpl == DUAKonstanten.JA)) {
 			this.ausgefallen = true;
 		}
-		if (vPkwWert == DUAKonstanten.FEHLERHAFT
-				|| vPkwImpl == DUAKonstanten.JA) {
+		if ((vPkwWert == DUAKonstanten.FEHLERHAFT)
+				|| (vPkwImpl == DUAKonstanten.JA)) {
 			this.ausgefallen = true;
 		}
-		if (sKfzWert == DUAKonstanten.FEHLERHAFT
-				|| sKfzImpl == DUAKonstanten.JA) {
+		if ((sKfzWert == DUAKonstanten.FEHLERHAFT)
+				|| (sKfzImpl == DUAKonstanten.JA)) {
 			this.ausgefallen = true;
 		}
-		if (bWert == DUAKonstanten.FEHLERHAFT || bImpl == DUAKonstanten.JA) {
+		if ((bWert == DUAKonstanten.FEHLERHAFT) || (bImpl == DUAKonstanten.JA)) {
 			this.ausgefallen = true;
 		}
 	}
@@ -133,18 +133,16 @@ public final class AusfallDatum implements IIntervallDatum<AusfallDatum> {
 	 * Gibt nur ein Datum zurueck, wenn es sich um ein Datum handelt, dass auch
 	 * im Sinne der Plausibilisierung ausgewertet werden kann Also z.B. nicht
 	 * <code>keine Quelle</code> oder <code>keine Daten</code>
-	 * 
+	 *
 	 * @param resultat
 	 *            ein Kz-Datum
 	 * @return eine mit dem uebergebenen Datum korrespondierende Instanz dieser
-	 *         Klasse oder <code>null</code> fuer <code>keine Quelle</code>
-	 *         usw.
+	 *         Klasse oder <code>null</code> fuer <code>keine Quelle</code> usw.
 	 */
-	public static AusfallDatum getAusfallDatumVon(
-			final ResultData resultat) {
+	public static AusfallDatum getAusfallDatumVon(final ResultData resultat) {
 		AusfallDatum datum = null;
 
-		if (resultat != null && resultat.getData() != null) {
+		if ((resultat != null) && (resultat.getData() != null)) {
 			datum = new AusfallDatum(resultat);
 		}
 
@@ -153,7 +151,7 @@ public final class AusfallDatum implements IIntervallDatum<AusfallDatum> {
 
 	/**
 	 * Erfragt ob dieses Datum ausgefallen ist.
-	 * 
+	 *
 	 * @return ob dieses Datum ausgefallen ist
 	 */
 	public boolean isAusgefallen() {
@@ -178,11 +176,12 @@ public final class AusfallDatum implements IIntervallDatum<AusfallDatum> {
 
 	/**
 	 * {@inheritDoc}<br>
-	 * 
+	 *
 	 * Zwei Ausfalldaten sind gleich, wenn deren Attribute
 	 * <code>ausgefallen</code> den selben Wert haben.
 	 */
-	public boolean istGleich(AusfallDatum that) {
+	@Override
+	public boolean istGleich(final AusfallDatum that) {
 		return this.isAusgefallen() == that.isAusgefallen();
 	}
 

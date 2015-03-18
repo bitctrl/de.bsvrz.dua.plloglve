@@ -30,23 +30,24 @@ import de.bsvrz.sys.funclib.bitctrl.dua.intpuf.IntervallPuffer;
 
 /**
  * Ein Puffer für Ausfalldaten innerhalb der Vertrauensbereichspruefung.
- * 
+ *
  * @author BitCtrl Systems GmbH, Thierfelder
- * 
+ *
  * @version $Id$
  */
 public class VertrauensPuffer extends IntervallPuffer<VertrauensDatum> {
 
 	/**
 	 * Berechnet den Ausfall in Millisekunden.
-	 * 
+	 *
 	 * @return den Ausfall in Millisekunden
 	 */
 	public final long getAusfall() {
 		long ausfall = 0;
 
 		synchronized (this.puffer) {
-			for (Intervall<VertrauensDatum> intervall : this.puffer.values()) {
+			for (final Intervall<VertrauensDatum> intervall : this.puffer
+					.values()) {
 				if (intervall.getInhalt().isAusgefallen()) {
 					ausfall += intervall.getIntervallEnde()
 							- intervall.getIntervallStart();

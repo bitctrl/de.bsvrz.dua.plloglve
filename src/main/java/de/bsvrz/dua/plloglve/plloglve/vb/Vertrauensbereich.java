@@ -51,22 +51,23 @@ import de.bsvrz.sys.funclib.debug.Debug;
  * Verlassen des Vertrauensbereichs wird eine entsprechende Meldung generiert.
  * Darueber hinaus findet innerhalb dieses Submoduls ggf. die Publikation aller
  * empfangenen Daten statt.
- * 
+ *
  * @author BitCtrl Systems GmbH, Thierfelder
- * 
+ *
  * @version $Id$
  */
 public class Vertrauensbereich extends AbstraktBearbeitungsKnotenAdapter {
 
+	private static final Debug LOGGER = Debug.getLogger();
 	/**
 	 * Map von Systemobjekten auf Fahrstreifenobjekte mit Informationen zu den
 	 * jeweiligen Vertrauensbereichsverletzungen.
 	 */
-	private Map<SystemObject, VertrauensFahrStreifen> fahrStreifenMap = new HashMap<SystemObject, VertrauensFahrStreifen>();
+	private final Map<SystemObject, VertrauensFahrStreifen> fahrStreifenMap = new HashMap<SystemObject, VertrauensFahrStreifen>();
 
 	/**
 	 * Standardkonstruktor.
-	 * 
+	 *
 	 * @param stdAspekte
 	 *            Informationen zu den Standardpublikationsaspekten für dieses
 	 *            Modul
@@ -79,18 +80,18 @@ public class Vertrauensbereich extends AbstraktBearbeitungsKnotenAdapter {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public void initialisiere(IVerwaltung dieVerwaltung)
+	public void initialisiere(final IVerwaltung dieVerwaltung)
 			throws DUAInitialisierungsException {
 		super.initialisiere(dieVerwaltung);
 
 		if (this.publizieren) {
 			this.publikationsAnmeldungen
-					.modifiziereObjektAnmeldung(this.standardAspekte
-							.getStandardAnmeldungen(this.verwaltung
-									.getSystemObjekte()));
+			.modifiziereObjektAnmeldung(this.standardAspekte
+					.getStandardAnmeldungen(this.verwaltung
+							.getSystemObjekte()));
 		}
 
-		for (SystemObject fsObj : dieVerwaltung.getSystemObjekte()) {
+		for (final SystemObject fsObj : dieVerwaltung.getSystemObjekte()) {
 			this.fahrStreifenMap.put(fsObj, new VertrauensFahrStreifen(
 					dieVerwaltung, fsObj));
 		}
@@ -99,12 +100,13 @@ public class Vertrauensbereich extends AbstraktBearbeitungsKnotenAdapter {
 	/**
 	 * {@inheritDoc}
 	 */
-	public void aktualisiereDaten(ResultData[] resultate) {
+	@Override
+	public void aktualisiereDaten(final ResultData[] resultate) {
 		if (resultate != null) {
 
-			List<ResultData> weiterzuleitendeResultate = new ArrayList<ResultData>();
+			final List<ResultData> weiterzuleitendeResultate = new ArrayList<ResultData>();
 
-			for (ResultData resultat : resultate) {
+			for (final ResultData resultat : resultate) {
 				if (resultat != null) {
 					Data datum = null;
 
@@ -112,15 +114,16 @@ public class Vertrauensbereich extends AbstraktBearbeitungsKnotenAdapter {
 						if (resultat.getDataDescription().getAttributeGroup()
 								.getId() == PlPruefungLogischLVE.atgKzdId) {
 							if (resultat.getData() != null) {
-								VertrauensFahrStreifen fs = this.fahrStreifenMap
+								final VertrauensFahrStreifen fs = this.fahrStreifenMap
 										.get(resultat.getObject());
 
 								if (fs != null) {
 									datum = fs.plausibilisiere(resultat);
 								} else {
-									Debug.getLogger()
-											.warning("Datum fuer nicht identifizierbaren Fahrstreifen empfangen: " + //$NON-NLS-1$
-													resultat.getObject());
+									LOGGER
+									.warning(
+													"Datum fuer nicht identifizierbaren Fahrstreifen empfangen: " + //$NON-NLS-1$
+															resultat.getObject());
 								}
 							}
 						} else {
@@ -130,15 +133,18 @@ public class Vertrauensbereich extends AbstraktBearbeitungsKnotenAdapter {
 						datum = resultat.getData();
 					}
 
-					ResultData publikationsDatum = new ResultData(resultat
-							.getObject(), new DataDescription(resultat
-							.getDataDescription().getAttributeGroup(),
-							standardAspekte.getStandardAspekt(resultat)), resultat.getDataTime(), datum, resultat
-							.isDelayedData());
-					ResultData weiterzuleitendesDatum = new ResultData(resultat
-							.getObject(), resultat.getDataDescription(),
-							resultat.getDataTime(), datum, resultat
-									.isDelayedData());
+					final ResultData publikationsDatum = new ResultData(
+							resultat.getObject(),
+							new DataDescription(resultat.getDataDescription()
+									.getAttributeGroup(), standardAspekte
+									.getStandardAspekt(resultat)),
+							resultat.getDataTime(), datum,
+							resultat.isDelayedData());
+					final ResultData weiterzuleitendesDatum = new ResultData(
+							resultat.getObject(),
+							resultat.getDataDescription(),
+							resultat.getDataTime(), datum,
+							resultat.isDelayedData());
 
 					if (this.publizieren) {
 						this.publikationsAnmeldungen.sende(publikationsDatum);
@@ -148,7 +154,7 @@ public class Vertrauensbereich extends AbstraktBearbeitungsKnotenAdapter {
 				}
 			}
 
-			if (this.knoten != null && !weiterzuleitendeResultate.isEmpty()) {
+			if ((this.knoten != null) && !weiterzuleitendeResultate.isEmpty()) {
 				this.knoten.aktualisiereDaten(weiterzuleitendeResultate
 						.toArray(new ResultData[0]));
 			}
@@ -158,6 +164,7 @@ public class Vertrauensbereich extends AbstraktBearbeitungsKnotenAdapter {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public ModulTyp getModulTyp() {
 		return null;
 	}
@@ -165,7 +172,8 @@ public class Vertrauensbereich extends AbstraktBearbeitungsKnotenAdapter {
 	/**
 	 * {@inheritDoc}
 	 */
-	public void aktualisierePublikation(IDatenFlussSteuerung dfs) {
+	@Override
+	public void aktualisierePublikation(final IDatenFlussSteuerung dfs) {
 		// Datenflusssteuerung ist hier nicht dynamisch
 	}
 

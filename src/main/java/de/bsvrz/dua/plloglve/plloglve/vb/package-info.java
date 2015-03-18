@@ -24,8 +24,6 @@
  * mailto: info@bitctrl.de
  */
 
-
-
 /**
  * Alle Klassen des Submoduls Vertrauensbereich
  */

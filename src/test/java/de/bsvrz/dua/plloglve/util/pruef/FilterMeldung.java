@@ -37,12 +37,14 @@ import de.bsvrz.sys.funclib.debug.Debug;
 /**
  * KZD Listener Liest Ergebnis-CSV-Datei Wartet auf gesendete und gepruefte
  * Daten und gibt diese an Vergleicher-Klasse weiter.
- * 
+ *
  * @author BitCtrl Systems GmbH, Görlitz
- * 
+ *
  * @version $Id$
  */
 public class FilterMeldung implements IBmListener {
+
+	private static final Debug LOGGER = Debug.getLogger();
 
 	/**
 	 * Aufrufende Klasse.
@@ -52,7 +54,7 @@ public class FilterMeldung implements IBmListener {
 	/**
 	 * Datenverteilerverbindung von der aufrufenden Klasse.
 	 */
-	private ClientDavInterface dav;
+	private final ClientDavInterface dav;
 
 	/**
 	 * Meldungssystemobjekt.
@@ -72,12 +74,12 @@ public class FilterMeldung implements IBmListener {
 	/**
 	 * Erforderliche Anzahl an gefilterten Meldungen.
 	 */
-	private int erfAnz;
+	private final int erfAnz;
 
 	/**
 	 * Erlaubte Abweichung der Anzahl an gefilterten Meldungen.
 	 */
-	private int anzHyst;
+	private final int anzHyst;
 
 	/**
 	 * Empfange-Datenbeschreibung für KZD und LZD.
@@ -91,7 +93,7 @@ public class FilterMeldung implements IBmListener {
 
 	/**
 	 * Initialisiert und Konfiguriert den Meldungsfilter.
-	 * 
+	 *
 	 * @param caller
 	 *            Die aufrufende Klasse
 	 * @param dav
@@ -105,21 +107,22 @@ public class FilterMeldung implements IBmListener {
 	 * @throws Exception
 	 *             wird weitergereicht
 	 */
-	public FilterMeldung(PlPruefungInterface caller, ClientDavInterface dav,
-			String filter, int erfAnz, int anzHyst) throws Exception {
+	public FilterMeldung(final PlPruefungInterface caller,
+			final ClientDavInterface dav, final String filter,
+			final int erfAnz, final int anzHyst) throws Exception {
 		this.dav = dav;
 		this.filter = filter;
 		this.erfAnz = erfAnz;
 		this.anzHyst = anzHyst;
 		this.caller = caller;
 
-		Debug.getLogger()
-				.info("Filtere Betriebsmeldungen nach \"" + filter + "\" - Erwarte " + erfAnz + " gefilterte Meldungen"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+		LOGGER
+		.info("Filtere Betriebsmeldungen nach \"" + filter + "\" - Erwarte " + erfAnz + " gefilterte Meldungen"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 
 		/*
 		 * Melde Empfänger für Betriebsmeldungen an
 		 */
-		ddMeldEmpf = new DataDescription(this.dav.getDataModel()
+		FilterMeldung.ddMeldEmpf = new DataDescription(this.dav.getDataModel()
 				.getAttributeGroup("atg.betriebsMeldung"), //$NON-NLS-1$
 				this.dav.getDataModel().getAspect("asp.information")); //$NON-NLS-1$
 
@@ -129,26 +132,29 @@ public class FilterMeldung implements IBmListener {
 	/**
 	 * {@inheritDoc}
 	 */
-	public void aktualisiereBetriebsMeldungen(SystemObject obj, long zeit,
-			String text) {
+	@Override
+	public void aktualisiereBetriebsMeldungen(final SystemObject obj,
+			final long zeit, final String text) {
 		if (text.contains(filter)) {
 			meldAnzahl++;
 			System.out.println(meldAnzahl + ". Meldung empfangen: " + text); //$NON-NLS-1$
 
-			if (Math.abs(meldAnzahl-erfAnz) < anzHyst) {
-				Debug.getLogger().info("Erforderliche Anzahl an Meldungen erhalten"); //$NON-NLS-1$
+			if (Math.abs(meldAnzahl - erfAnz) < anzHyst) {
+				LOGGER.info(
+						"Erforderliche Anzahl an Meldungen erhalten"); //$NON-NLS-1$
 				anzahlEingehalten = true;
 				caller.doNotify();
 			} else {
 				anzahlEingehalten = false;
-				Debug.getLogger().warning("Mehr Meldungen gefiltert als erwartet"); //$NON-NLS-1$	
+				LOGGER.warning(
+						"Mehr Meldungen gefiltert als erwartet"); //$NON-NLS-1$
 			}
 		}
 	}
 
 	/**
 	 * Wurde die geforderte Anzahl inklusive Hysterese eingehalten.
-	 * 
+	 *
 	 * @return <code>True</code>, wenn die Anzahl inklusive Hysterese
 	 *         eingehalten wurde, sonst <code>False</code>
 	 */
@@ -158,7 +164,7 @@ public class FilterMeldung implements IBmListener {
 
 	/**
 	 * Liefert die Anzahl erhaltener Meldungen.
-	 * 
+	 *
 	 * @return Anzahl erhaltener Meldungen
 	 */
 	public int getAnzahlErhaltenerMeldungen() {
@@ -167,7 +173,7 @@ public class FilterMeldung implements IBmListener {
 
 	/**
 	 * Liefert die erwartete Anzahl an Meldungen.
-	 * 
+	 *
 	 * @return Erwartete Anzahl an Meldungen
 	 */
 	public int getErwarteteAnzahlMeldungen() {

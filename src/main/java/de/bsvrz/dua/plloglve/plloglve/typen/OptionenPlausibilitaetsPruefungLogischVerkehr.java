@@ -34,13 +34,14 @@ import de.bsvrz.sys.funclib.bitctrl.daf.AbstractDavZustand;
 /**
  * Repräsentiert den DAV-Enumerationstypen
  * <code>att.optionenPlausibilitätsPrüfungLogischVerkehr</code>.
- * 
+ *
  * @author BitCtrl Systems GmbH, Thierfelder
- * 
- * @version $Id$
+ *
+ * @version $Id: OptionenPlausibilitaetsPruefungLogischVerkehr.java 53825
+ *          2015-03-18 09:36:42Z peuker $
  */
 public final class OptionenPlausibilitaetsPruefungLogischVerkehr extends
-		AbstractDavZustand {
+AbstractDavZustand {
 
 	/**
 	 * Der Wertebereich dieses DAV-Enumerationstypen.
@@ -87,26 +88,29 @@ public final class OptionenPlausibilitaetsPruefungLogischVerkehr extends
 
 	/**
 	 * Standardkonstruktor.
-	 * 
+	 *
 	 * @param code
 	 *            der Code
 	 * @param name
 	 *            die Bezeichnung
 	 */
-	private OptionenPlausibilitaetsPruefungLogischVerkehr(String name, int code) {
+	private OptionenPlausibilitaetsPruefungLogischVerkehr(final String name,
+			final int code) {
 		super(code, name);
-		werteBereich.put(code, this);
+		OptionenPlausibilitaetsPruefungLogischVerkehr.werteBereich.put(code,
+				this);
 	}
 
 	/**
 	 * Erfragt den Wert dieses DAV-Enumerationstypen mit dem übergebenen Code.
-	 * 
+	 *
 	 * @param code
 	 *            der Kode des Zustands
 	 * @return der Code des Enumerations-Wertes
 	 */
 	public static OptionenPlausibilitaetsPruefungLogischVerkehr getZustand(
-			int code) {
-		return werteBereich.get(code);
+			final int code) {
+		return OptionenPlausibilitaetsPruefungLogischVerkehr.werteBereich
+				.get(code);
 	}
 }

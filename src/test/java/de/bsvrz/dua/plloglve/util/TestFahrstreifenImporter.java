@@ -37,10 +37,11 @@ import de.bsvrz.sys.funclib.bitctrl.dua.test.CSVImporter;
 
 /**
  * Liest die Ausgangsdaten eines Fahrstreifens ein.
- * 
+ *
  * @author BitCtrl Systems GmbH, Thierfelder
- * 
- * @version $Id$
+ *
+ * @version $Id: TestFahrstreifenImporter.java 53825 2015-03-18 09:36:42Z peuker
+ *          $
  */
 public class TestFahrstreifenImporter extends CSVImporter {
 
@@ -61,7 +62,7 @@ public class TestFahrstreifenImporter extends CSVImporter {
 
 	/**
 	 * Standardkonstruktor.
-	 * 
+	 *
 	 * @param dav
 	 *            Datenverteier-Verbindung
 	 * @param csvQuelle
@@ -73,8 +74,8 @@ public class TestFahrstreifenImporter extends CSVImporter {
 	public TestFahrstreifenImporter(final ClientDavInterface dav,
 			final String csvQuelle) throws Exception {
 		super(csvQuelle);
-		if (sDav == null) {
-			sDav = dav;
+		if (TestFahrstreifenImporter.sDav == null) {
+			TestFahrstreifenImporter.sDav = dav;
 		}
 
 		/**
@@ -85,18 +86,18 @@ public class TestFahrstreifenImporter extends CSVImporter {
 
 	/**
 	 * Setzt Datenintervall.
-	 * 
+	 *
 	 * @param t
 	 *            Datenintervall
 	 */
 	public static final void setT(final long t) {
-		intervall = t;
+		TestFahrstreifenImporter.intervall = t;
 	}
 
 	/**
 	 * Erfragt die nächste Zeile innerhalb der CSV-Datei als einen Datensatz der
 	 * übergebenen Attributgruppe.
-	 * 
+	 *
 	 * @param atg
 	 *            eine Attributgruppe (KZD oder LZD)
 	 * @return ein Datensatz der übergebenen Attributgruppe mit den Daten der
@@ -104,36 +105,45 @@ public class TestFahrstreifenImporter extends CSVImporter {
 	 *         Ende ist
 	 */
 	public final Data getNaechstenDatensatz(final AttributeGroup atg) {
-		Data datensatz = sDav.createData(atg);
+		Data datensatz = TestFahrstreifenImporter.sDav.createData(atg);
 
 		if (datensatz != null) {
-			String[] zeile = this.getNaechsteZeile();
+			final String[] zeile = this.getNaechsteZeile();
 			if (zeile != null) {
 				try {
-					int qKfz = Integer.parseInt(zeile[0 + OFFSET]);
-					int qLkw = Integer.parseInt(zeile[1 + OFFSET]);
-					int vPkw = Integer.parseInt(zeile[2 + OFFSET]);
-					int vLkw = Integer.parseInt(zeile[3 + OFFSET]);
-					int vgKfz = Integer.parseInt(zeile[4 + OFFSET]);
-					int b = Integer.parseInt(zeile[5 + OFFSET]);
-					long tNetto = Long.parseLong(zeile[6 + OFFSET]) * 1000;
-					int sKfz = Integer.parseInt(zeile[7 + OFFSET]);
-					int vKfz = -1;
-					int qPkw = -1;
+					final int qKfz = Integer
+							.parseInt(zeile[0 + TestFahrstreifenImporter.OFFSET]);
+					final int qLkw = Integer
+							.parseInt(zeile[1 + TestFahrstreifenImporter.OFFSET]);
+					final int vPkw = Integer
+							.parseInt(zeile[2 + TestFahrstreifenImporter.OFFSET]);
+					final int vLkw = Integer
+							.parseInt(zeile[3 + TestFahrstreifenImporter.OFFSET]);
+					final int vgKfz = Integer
+							.parseInt(zeile[4 + TestFahrstreifenImporter.OFFSET]);
+					final int b = Integer
+							.parseInt(zeile[5 + TestFahrstreifenImporter.OFFSET]);
+					final long tNetto = Long
+							.parseLong(zeile[6 + TestFahrstreifenImporter.OFFSET]) * 1000;
+					final int sKfz = Integer
+							.parseInt(zeile[7 + TestFahrstreifenImporter.OFFSET]);
+					final int vKfz = -1;
+					final int qPkw = -1;
 
 					if (atg.getPid().equals(DUAKonstanten.ATG_LZD)) {
 						datensatz = setLZDleer(datensatz);
 					}
 
-					datensatz.getTimeValue("T").setMillis(intervall); //$NON-NLS-1$
+					datensatz
+							.getTimeValue("T").setMillis(TestFahrstreifenImporter.intervall); //$NON-NLS-1$
 					datensatz = setAttribut("qKfz", qKfz, datensatz); //$NON-NLS-1$
 					datensatz = setAttribut("qLkw", qLkw, datensatz); //$NON-NLS-1$
 					datensatz = setAttribut("vLkw", vLkw, datensatz); //$NON-NLS-1$
-					datensatz = setAttribut("vPkw", vPkw, datensatz); //$NON-NLS-1$				
+					datensatz = setAttribut("vPkw", vPkw, datensatz); //$NON-NLS-1$
 
 					if (!atg.getPid().equals(DUAKonstanten.ATG_LZD)) {
 						datensatz
-								.getUnscaledValue("ArtMittelwertbildung").set(1); //$NON-NLS-1$					
+						.getUnscaledValue("ArtMittelwertbildung").set(1); //$NON-NLS-1$
 						datensatz = setAttribut("vKfz", vKfz, datensatz); //$NON-NLS-1$
 						datensatz = setAttribut("qPkw", qPkw, datensatz); //$NON-NLS-1$
 						datensatz = setAttribut("vgKfz", vgKfz, datensatz); //$NON-NLS-1$
@@ -142,7 +152,7 @@ public class TestFahrstreifenImporter extends CSVImporter {
 						datensatz = setAttribut("sKfz", sKfz, datensatz); //$NON-NLS-1$
 					}
 
-				} catch (ArrayIndexOutOfBoundsException ex) {
+				} catch (final ArrayIndexOutOfBoundsException ex) {
 					datensatz = null;
 				}
 			} else {
@@ -156,7 +166,7 @@ public class TestFahrstreifenImporter extends CSVImporter {
 
 	/**
 	 * Setzt Attribut in Datensatz.
-	 * 
+	 *
 	 * @param attributName
 	 *            Name des Attributs
 	 * @param wert
@@ -166,59 +176,60 @@ public class TestFahrstreifenImporter extends CSVImporter {
 	 * @return der veränderte Datensatz
 	 */
 	private Data setAttribut(final String attributName, long wert,
-			Data datensatz) {
-		Data data = datensatz;
+			final Data datensatz) {
+		final Data data = datensatz;
 
-		if (attributName.startsWith("v") && wert >= 255) { //$NON-NLS-1$
+		if (attributName.startsWith("v") && (wert >= 255)) { //$NON-NLS-1$
 			wert = -1;
 		}
 
 		DUAUtensilien
-				.getAttributDatum(attributName + ".Wert", data).asUnscaledValue().set(wert); //$NON-NLS-1$
+		.getAttributDatum(attributName + ".Wert", data).asUnscaledValue().set(wert); //$NON-NLS-1$
 		DUAUtensilien
-				.getAttributDatum(
-						attributName + ".Status.Erfassung.NichtErfasst", data).asUnscaledValue().set(DUAKonstanten.NEIN); //$NON-NLS-1$
+		.getAttributDatum(
+				attributName + ".Status.Erfassung.NichtErfasst", data).asUnscaledValue().set(DUAKonstanten.NEIN); //$NON-NLS-1$
 		DUAUtensilien
-				.getAttributDatum(
-						attributName + ".Status.PlFormal.WertMax", data).asUnscaledValue().set(DUAKonstanten.NEIN); //$NON-NLS-1$
+		.getAttributDatum(
+				attributName + ".Status.PlFormal.WertMax", data).asUnscaledValue().set(DUAKonstanten.NEIN); //$NON-NLS-1$
 		DUAUtensilien
-				.getAttributDatum(
-						attributName + ".Status.PlFormal.WertMin", data).asUnscaledValue().set(DUAKonstanten.NEIN); //$NON-NLS-1$
+		.getAttributDatum(
+				attributName + ".Status.PlFormal.WertMin", data).asUnscaledValue().set(DUAKonstanten.NEIN); //$NON-NLS-1$
 		DUAUtensilien
-				.getAttributDatum(
-						attributName + ".Status.PlLogisch.WertMaxLogisch", data).asUnscaledValue().set(DUAKonstanten.NEIN); //$NON-NLS-1$
+		.getAttributDatum(
+				attributName + ".Status.PlLogisch.WertMaxLogisch", data).asUnscaledValue().set(DUAKonstanten.NEIN); //$NON-NLS-1$
 		DUAUtensilien
-				.getAttributDatum(
-						attributName + ".Status.PlLogisch.WertMinLogisch", data).asUnscaledValue().set(DUAKonstanten.NEIN); //$NON-NLS-1$
+		.getAttributDatum(
+				attributName + ".Status.PlLogisch.WertMinLogisch", data).asUnscaledValue().set(DUAKonstanten.NEIN); //$NON-NLS-1$
 		DUAUtensilien
-				.getAttributDatum(
-						attributName + ".Status.MessWertErsetzung.Implausibel", data).asUnscaledValue().set(DUAKonstanten.NEIN); //$NON-NLS-1$
+		.getAttributDatum(
+				attributName + ".Status.MessWertErsetzung.Implausibel", data).asUnscaledValue().set(DUAKonstanten.NEIN); //$NON-NLS-1$
 		DUAUtensilien
-				.getAttributDatum(
-						attributName + ".Status.MessWertErsetzung.Interpoliert", data).asUnscaledValue().set(DUAKonstanten.NEIN); //$NON-NLS-1$
+		.getAttributDatum(
+				attributName + ".Status.MessWertErsetzung.Interpoliert", data).asUnscaledValue().set(DUAKonstanten.NEIN); //$NON-NLS-1$
 		DUAUtensilien
-				.getAttributDatum(attributName + ".Güte.Index", data).asScaledValue().set(1.0); //$NON-NLS-1$
+		.getAttributDatum(attributName + ".Güte.Index", data).asScaledValue().set(1.0); //$NON-NLS-1$
 		DUAUtensilien
-				.getAttributDatum(attributName + ".Güte.Verfahren", data).asUnscaledValue().set(0); //$NON-NLS-1$
+		.getAttributDatum(attributName + ".Güte.Verfahren", data).asUnscaledValue().set(0); //$NON-NLS-1$
 
 		return datensatz;
 	}
 
 	/**
-	 * Setzt alle Attribute auf. 
-	 * 
-	 * @param datensatz ein DAV-Datensatz
+	 * Setzt alle Attribute auf.
+	 *
+	 * @param datensatz
+	 *            ein DAV-Datensatz
 	 * @return der veraenderte DAV-Datensatz
 	 */
 	private Data setLZDleer(Data datensatz) {
-		String[] praefix = new String[] { "q", "v", "s", "v85" }; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
-		String[] aName = new String[] {
+		final String[] praefix = new String[] { "q", "v", "s", "v85" }; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
+		final String[] aName = new String[] {
 				"Kfz", "PkwÄ", "KfzNk", "PkwG", "Pkw", "Krad", "Lfw", "LkwÄ", //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$ //$NON-NLS-6$ //$NON-NLS-7$ //$NON-NLS-8$
 				"PkwA", "Lkw", "Bus", "LkwK", "LkwA", "SattelKfz" }; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$ //$NON-NLS-6$
 
-		for (int i = 0; i < praefix.length; i++) {
-			for (int j = 0; j < aName.length; j++) {
-				datensatz = setAttribut(praefix[i] + aName[j], -1, datensatz);
+		for (final String element : praefix) {
+			for (final String element2 : aName) {
+				datensatz = setAttribut(element + element2, -1, datensatz);
 			}
 		}
 

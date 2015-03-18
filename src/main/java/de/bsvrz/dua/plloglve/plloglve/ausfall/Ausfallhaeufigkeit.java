@@ -45,28 +45,29 @@ import de.bsvrz.sys.funclib.debug.Debug;
 /**
  * Dieses Submodul ueberprueft, ob die parametrierte maximal zulaessige
  * Ausfallhaeufigkeit eines Fahrstreifens pro Tag ueberschritten wurde.
- * 
+ *
  * @author BitCtrl Systems GmbH, Thierfelder
- * 
+ *
  * @version $Id$
  */
 public class Ausfallhaeufigkeit extends AbstraktBearbeitungsKnotenAdapter {
 
+	private static final Debug LOGGER = Debug.getLogger();
 	/**
 	 * Mapt FS-Systemobjekte auf Fahrstreifenobjekte mit den für dieses Submodul
 	 * notwendigen Informationen.
 	 */
-	private Map<SystemObject, AusfallFahrStreifen> fahrStreifen = new HashMap<SystemObject, AusfallFahrStreifen>();
+	private final Map<SystemObject, AusfallFahrStreifen> fahrStreifen = new HashMap<SystemObject, AusfallFahrStreifen>();
 
 	/**
 	 * {@inheritDoc}
 	 */
 	@Override
-	public void initialisiere(IVerwaltung dieVerwaltung)
+	public void initialisiere(final IVerwaltung dieVerwaltung)
 			throws DUAInitialisierungsException {
 		super.initialisiere(dieVerwaltung);
 
-		for (SystemObject obj : dieVerwaltung.getSystemObjekte()) {
+		for (final SystemObject obj : dieVerwaltung.getSystemObjekte()) {
 			this.fahrStreifen.put(obj, new AusfallFahrStreifen(dieVerwaltung,
 					obj));
 		}
@@ -75,26 +76,27 @@ public class Ausfallhaeufigkeit extends AbstraktBearbeitungsKnotenAdapter {
 	/**
 	 * {@inheritDoc}
 	 */
-	public void aktualisiereDaten(ResultData[] resultate) {
+	@Override
+	public void aktualisiereDaten(final ResultData[] resultate) {
 		if (resultate != null) {
-			Collection<ResultData> weiterzuleitendeResultate = new ArrayList<ResultData>();
+			final Collection<ResultData> weiterzuleitendeResultate = new ArrayList<ResultData>();
 
-			for (ResultData resultat : resultate) {
+			for (final ResultData resultat : resultate) {
 				if (resultat != null) {
 
 					if (!TestParameter.getInstanz().isTestVertrauen()) {
-						if (resultat.getDataDescription().getAttributeGroup()
-								.getId() == PlPruefungLogischLVE.atgKzdId
-								&& resultat.getData() != null) {
-							AusfallFahrStreifen fs = this.fahrStreifen
+						if ((resultat.getDataDescription().getAttributeGroup()
+								.getId() == PlPruefungLogischLVE.atgKzdId)
+								&& (resultat.getData() != null)) {
+							final AusfallFahrStreifen fs = this.fahrStreifen
 									.get(resultat.getObject());
 
 							if (fs != null) {
 								fs.plausibilisiere(resultat);
 							} else {
-								Debug.getLogger()
-										.error("Konnte Fahrstreifen zu Datensatz nicht identifizieren:\n" //$NON-NLS-1$
-												+ resultat);
+								LOGGER.error(
+										"Konnte Fahrstreifen zu Datensatz nicht identifizieren:\n" //$NON-NLS-1$
+										+ resultat);
 							}
 						}
 					}
@@ -103,7 +105,7 @@ public class Ausfallhaeufigkeit extends AbstraktBearbeitungsKnotenAdapter {
 				}
 			}
 
-			if (this.knoten != null && !weiterzuleitendeResultate.isEmpty()) {
+			if ((this.knoten != null) && !weiterzuleitendeResultate.isEmpty()) {
 				this.knoten.aktualisiereDaten(weiterzuleitendeResultate
 						.toArray(new ResultData[0]));
 			}
@@ -113,6 +115,7 @@ public class Ausfallhaeufigkeit extends AbstraktBearbeitungsKnotenAdapter {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public ModulTyp getModulTyp() {
 		return null;
 	}
@@ -120,7 +123,8 @@ public class Ausfallhaeufigkeit extends AbstraktBearbeitungsKnotenAdapter {
 	/**
 	 * {@inheritDoc}
 	 */
-	public void aktualisierePublikation(IDatenFlussSteuerung dfs) {
+	@Override
+	public void aktualisierePublikation(final IDatenFlussSteuerung dfs) {
 		// hier wird nicht publiziert
 	}
 

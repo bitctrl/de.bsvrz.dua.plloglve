@@ -24,8 +24,6 @@
  * mailto: info@bitctrl.de
  */
 
-
-
 /**
  * Klassen für Verwaltungsmodul der SWE Pl-Prüfung logisch LVE
  */

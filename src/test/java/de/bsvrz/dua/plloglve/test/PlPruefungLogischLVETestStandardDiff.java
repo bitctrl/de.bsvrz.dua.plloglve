@@ -37,10 +37,11 @@ import de.bsvrz.sys.funclib.commandLineArgs.ArgumentList;
 
 /**
  * Automatisierter Test nach Prüfspezifikation für SWE Pl-Prüfung logisch LVE.
- * 
+ *
  * @author BitCtrl Systems GmbH, Thierfelder
- * 
- * @version $Id$
+ *
+ * @version $Id: PlPruefungLogischLVETestStandardDiff.java 53825 2015-03-18
+ *          09:36:42Z peuker $
  */
 public class PlPruefungLogischLVETestStandardDiff {
 
@@ -51,20 +52,21 @@ public class PlPruefungLogischLVETestStandardDiff {
 
 	/**
 	 * Loggerargument.
-	 * 
+	 *
 	 * Pfadangabe mit Argument: -debugFilePath=[Pfad]
 	 */
-	private String[] argumente = new String[] { "-debugLevelFileText=ALL" };
-	
+	private final String[] argumente = new String[] { "-debugLevelFileText=ALL" };
+
 	/**
 	 * der Logger.
 	 */
-	private ArgumentList alLogger = new ArgumentList(argumente);
+	private final ArgumentList alLogger = new ArgumentList(argumente);
 
 	/**
 	 * Vorbereitungen (DAV-Anmeldung).
-	 * 
-	 * @throws Exception wird weitergereicht
+	 *
+	 * @throws Exception
+	 *             wird weitergereicht
 	 */
 	@Before
 	public void setUp() throws Exception {
@@ -73,60 +75,67 @@ public class PlPruefungLogischLVETestStandardDiff {
 
 	/**
 	 * KZD TLS Test nach Prüfspezifikation.
-	 * 
-	 * @throws Exception wird weitergereicht
+	 *
+	 * @throws Exception
+	 *             wird weitergereicht
 	 */
 	@Test
 	public void testKZDTLS() throws Exception {
-		PlPruefungLogisch pruefLogisch = new PlPruefungLogisch(dav, alLogger);
+		final PlPruefungLogisch pruefLogisch = new PlPruefungLogisch(dav,
+				alLogger);
 		pruefLogisch.benutzeAssert(true);
-		int[][] bereiche = { { 2, 101 } };
+		final int[][] bereiche = { { 2, 101 } };
 		System.out.println("\n\n*** KZD TLS Test nach Prüfspezifikation ***\n");
 		pruefLogisch.pruefeKZDTLS(bereiche);
 	}
 
 	/**
 	 * KZD Grenz Test nach Prüfspezifikation.
-	 * 
-	 * @throws Exception wird weitergereicht
+	 *
+	 * @throws Exception
+	 *             wird weitergereicht
 	 */
 	@Test
 	public void testKZDGrenz() throws Exception {
-		 PlPruefungLogisch pruefLogisch = new
-		 	PlPruefungLogisch(dav, alLogger);
-		 pruefLogisch.benutzeAssert(true);
-		 int[][] bereiche = {{2, 21}};
-		 System.out.println("\n\n*** KZD Grenz Test nach Prüfspezifikation ***\n");
-		 pruefLogisch.pruefeKZDGrenz(bereiche);
+		final PlPruefungLogisch pruefLogisch = new PlPruefungLogisch(dav,
+				alLogger);
+		pruefLogisch.benutzeAssert(true);
+		final int[][] bereiche = { { 2, 21 } };
+		System.out
+				.println("\n\n*** KZD Grenz Test nach Prüfspezifikation ***\n");
+		pruefLogisch.pruefeKZDGrenz(bereiche);
 	}
 
 	/**
 	 * LZD Grenz Test nach Prüfspezifikation.
-	 * 
-	 * @throws Exception wird weitergereicht
+	 *
+	 * @throws Exception
+	 *             wird weitergereicht
 	 */
 	@Test
 	public void testLZDTLS() throws Exception {
-		 PlPruefungLogisch pruefLogisch = new
-		 	PlPruefungLogisch(dav, alLogger);
-		 pruefLogisch.benutzeAssert(true);
-		 int[][] bereiche = {{2, 21}};
-		 System.out.println("\n\n*** LZD Grenz Test nach Prüfspezifikation ***\n");
-		 pruefLogisch.pruefeLZDGrenz(bereiche);
+		final PlPruefungLogisch pruefLogisch = new PlPruefungLogisch(dav,
+				alLogger);
+		pruefLogisch.benutzeAssert(true);
+		final int[][] bereiche = { { 2, 21 } };
+		System.out
+				.println("\n\n*** LZD Grenz Test nach Prüfspezifikation ***\n");
+		pruefLogisch.pruefeLZDGrenz(bereiche);
 	}
 
 	/**
 	 * Differentialkontrolle nach Prüfspezifikation.
-	 * 
-	 * @throws Exception wird weitergereicht
+	 *
+	 * @throws Exception
+	 *             wird weitergereicht
 	 */
 	@Test
 	public void testDiff() throws Exception {
-		 PlPruefungDiff plPruefDiff = new
-		 	PlPruefungDiff(dav, alLogger);
-		 plPruefDiff.benutzeAssert(true);
-		 plPruefDiff.setMeldungHysterese(5);
-		 System.out.println("\n\n*** Differentialkontrolle nach Prüfspezifikation ***\n");
-		 plPruefDiff.pruefe();
+		final PlPruefungDiff plPruefDiff = new PlPruefungDiff(dav, alLogger);
+		plPruefDiff.benutzeAssert(true);
+		plPruefDiff.setMeldungHysterese(5);
+		System.out
+				.println("\n\n*** Differentialkontrolle nach Prüfspezifikation ***\n");
+		plPruefDiff.pruefe();
 	}
 }

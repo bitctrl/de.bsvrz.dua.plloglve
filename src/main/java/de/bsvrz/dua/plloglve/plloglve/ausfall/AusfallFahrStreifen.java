@@ -49,12 +49,14 @@ import de.bsvrz.sys.funclib.operatingMessage.MessageGrade;
 
 /**
  * Speichert die Ausfallhäufigkeit eine Fahrstreifens über einem gleitenden Tag.
- * 
+ *
  * @author BitCtrl Systems GmbH, Thierfelder
- * 
+ *
  * @version $Id$
  */
 public class AusfallFahrStreifen implements ClientReceiverInterface {
+
+	private static final Debug LOGGER = Debug.getLogger();
 
 	/**
 	 * Format der Zeitangabe innerhalb der Betriebsmeldung.
@@ -95,7 +97,7 @@ public class AusfallFahrStreifen implements ClientReceiverInterface {
 
 	/**
 	 * Standardkonstruktor.
-	 * 
+	 *
 	 * @param verwaltung
 	 *            Verbindung zum Verwaltungsmodul
 	 * @param obj
@@ -105,30 +107,35 @@ public class AusfallFahrStreifen implements ClientReceiverInterface {
 			final SystemObject obj) {
 		objekt = obj;
 
-		if (dieVerwaltung == null) {
-			dieVerwaltung = verwaltung;
-			ausfallBeschreibung = new DataDescription(dieVerwaltung
+		if (AusfallFahrStreifen.dieVerwaltung == null) {
+			AusfallFahrStreifen.dieVerwaltung = verwaltung;
+			AusfallFahrStreifen.ausfallBeschreibung = new DataDescription(
+					AusfallFahrStreifen.dieVerwaltung
+							.getVerbindung()
+							.getDataModel()
+							.getAttributeGroup(
+									"atg.verkehrsDatenAusfallHäufigkeitFs"), //$NON-NLS-1$
+					AusfallFahrStreifen.dieVerwaltung.getVerbindung()
+							.getDataModel()
+					.getAspect(DaVKonstanten.ASP_PARAMETER_SOLL));
+			AusfallFahrStreifen.atgKzdId = AusfallFahrStreifen.dieVerwaltung
 					.getVerbindung().getDataModel()
-					.getAttributeGroup("atg.verkehrsDatenAusfallHäufigkeitFs"), //$NON-NLS-1$
-					dieVerwaltung.getVerbindung().getDataModel()
-							.getAspect(DaVKonstanten.ASP_PARAMETER_SOLL));
-			atgKzdId = dieVerwaltung.getVerbindung().getDataModel()
 					.getAttributeGroup(DUAKonstanten.ATG_KZD).getId();
 		}
 
-		dieVerwaltung.getVerbindung().subscribeReceiver(this, obj,
-				ausfallBeschreibung, ReceiveOptions.normal(),
-				ReceiverRole.receiver());
+		AusfallFahrStreifen.dieVerwaltung.getVerbindung().subscribeReceiver(
+				this, obj, AusfallFahrStreifen.ausfallBeschreibung,
+				ReceiveOptions.normal(), ReceiverRole.receiver());
 	}
 
 	/**
 	 * Fuehrt die Plausibilisierung durch. (nur für KZD)
-	 * 
+	 *
 	 * @param resultat
 	 *            ein Fahrstreifendatum (KZD)
 	 */
 	protected final void plausibilisiere(final ResultData resultat) {
-		if (resultat.getDataDescription().getAttributeGroup().getId() == atgKzdId) {
+		if (resultat.getDataDescription().getAttributeGroup().getId() == AusfallFahrStreifen.atgKzdId) {
 
 			final AusfallDatumKomplett ausfallDatum = AusfallDatumKomplett
 					.getAusfallDatumVon(resultat);
@@ -136,7 +143,7 @@ public class AusfallFahrStreifen implements ClientReceiverInterface {
 				try {
 					gleitenderTag.add(ausfallDatum);
 				} catch (final IntervallPufferException e) {
-					Debug.getLogger().error(Constants.EMPTY_STRING, e);
+					LOGGER.error(Constants.EMPTY_STRING, e);
 					e.printStackTrace();
 				}
 			}
@@ -147,32 +154,32 @@ public class AusfallFahrStreifen implements ClientReceiverInterface {
 	/**
 	 * Erreichnet den Ausfall dieses Fahrstreifens und gibt ggf. eine
 	 * Betriebsmeldung aus.
-	 * 
+	 *
 	 * @param letztesAusfallDatum
 	 *            das letzte ausgefallene Datum
 	 */
 	private void testAufAusfall(final AusfallDatumKomplett letztesAusfallDatum) {
 		long ausfallZeit = 0;
 
-		if (programmLaeuftSchonLaengerAlsEinTag()) {
+		if (AusfallFahrStreifen.programmLaeuftSchonLaengerAlsEinTag()) {
 			try {
 				if (TestParameter.getInstanz().isTestAusfall()) {
 					if (letztesAusfallDatum != null) {
 						gleitenderTag
-								.loescheAllesUnterhalbVon(letztesAusfallDatum
-										.getIntervallEnde() - 144000L);
+						.loescheAllesUnterhalbVon(letztesAusfallDatum
+								.getIntervallEnde() - 144000L);
 					}
 				} else {
 					if (letztesAusfallDatum != null) {
 						gleitenderTag
-								.loescheAllesUnterhalbVon(letztesAusfallDatum
-										.getIntervallEnde()
-										- Constants.MILLIS_PER_DAY);
+						.loescheAllesUnterhalbVon(letztesAusfallDatum
+								.getIntervallEnde()
+								- Constants.MILLIS_PER_DAY);
 					}
 				}
 				ausfallZeit = gleitenderTag.getAusfallZeit();
 			} catch (final IntervallPufferException e) {
-				Debug.getLogger().error(Constants.EMPTY_STRING, e);
+				LOGGER.error(Constants.EMPTY_STRING, e);
 				e.printStackTrace();
 			}
 
@@ -192,23 +199,26 @@ public class AusfallFahrStreifen implements ClientReceiverInterface {
 							/ Constants.MILLIS_PER_MINUTE;
 
 					final String nachricht = "Ausfallhäufigkeit innerhalb der letzten 24 Stunden überschritten. Im Zeitraum von " + //$NON-NLS-1$
-							FORMAT.format(new Date(System.currentTimeMillis()
+							AusfallFahrStreifen.FORMAT.format(new Date(System
+									.currentTimeMillis()
 									- Constants.MILLIS_PER_DAY))
-							+ " Uhr bis " + //$NON-NLS-1$
-							FORMAT.format(new Date(System.currentTimeMillis()))
-							+ " Uhr (1 Tag) implausible Fahrstreifenwerte am Fahrstreifen " + //$NON-NLS-1$
-							objekt
-							+ " von "
-							+ DUAUtensilien.runde(ausfallInProzent, 1)
-							+ "% (> " + maxAusfallProTag + //$NON-NLS-1$
-							"%) entspricht Ausfall von "
-							+ stunden
-							+ " Stunde(n) " + minuten + " Minute(n)."; //$NON-NLS-1$ //$NON-NLS-2$
+									+ " Uhr bis " + //$NON-NLS-1$
+									AusfallFahrStreifen.FORMAT.format(new Date(System
+									.currentTimeMillis()))
+									+ " Uhr (1 Tag) implausible Fahrstreifenwerte am Fahrstreifen " + //$NON-NLS-1$
+									objekt
+									+ " von "
+									+ DUAUtensilien.runde(ausfallInProzent, 1)
+									+ "% (> " + maxAusfallProTag + //$NON-NLS-1$
+									"%) entspricht Ausfall von "
+									+ stunden
+									+ " Stunde(n) " + minuten + " Minute(n)."; //$NON-NLS-1$ //$NON-NLS-2$
 
 					DUAUtensilien.sendeBetriebsmeldung(
-							dieVerwaltung.getVerbindung(),
-							dieVerwaltung.getBmvIdKonverter(),
-							MessageGrade.WARNING, objekt, nachricht);
+							AusfallFahrStreifen.dieVerwaltung.getVerbindung(),
+							AusfallFahrStreifen.dieVerwaltung
+									.getBmvIdKonverter(), MessageGrade.WARNING,
+							objekt, nachricht);
 				}
 			}
 		}
@@ -217,10 +227,11 @@ public class AusfallFahrStreifen implements ClientReceiverInterface {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public void update(final ResultData[] davParameterFeld) {
 		if (davParameterFeld != null) {
 			for (final ResultData davParameter : davParameterFeld) {
-				if (davParameter != null && davParameter.getData() != null) {
+				if ((davParameter != null) && (davParameter.getData() != null)) {
 					maxAusfallProTag = davParameter.getData()
 							.getUnscaledValue("maxAusfallProTag").longValue(); //$NON-NLS-1$
 				}
@@ -232,15 +243,15 @@ public class AusfallFahrStreifen implements ClientReceiverInterface {
 	 * Erfragt, ob diese Applikation (eigentlich das Modul Pl-Prüfung logisch
 	 * LVE) schon länger als einen Tag läuft (erst dann solltes Objekt Daten
 	 * markieren bzw. Betriebsmeldungen ausgeben)
-	 * 
+	 *
 	 * @return ob diese Applikation schon länger als einen Tag läuft
 	 */
 	private static boolean programmLaeuftSchonLaengerAlsEinTag() {
 		if (TestParameter.getInstanz().isTestAusfall()) {
-			return PlPruefungLogischLVE.START_ZEIT + 144000L < System
+			return (PlPruefungLogischLVE.START_ZEIT + 144000L) < System
 					.currentTimeMillis();
 		}
-		return PlPruefungLogischLVE.START_ZEIT + Constants.MILLIS_PER_DAY < System
+		return (PlPruefungLogischLVE.START_ZEIT + Constants.MILLIS_PER_DAY) < System
 				.currentTimeMillis();
 	}
 

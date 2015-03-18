@@ -35,9 +35,9 @@ import de.bsvrz.dua.plloglve.plloglve.typen.OptionenPlausibilitaetsPruefungLogis
 
 /**
  * Importiert die Parameter für die Pl-Prüfung logisch KZD.
- * 
+ *
  * @author BitCtrl Systems GmbH, Thierfelder
- * 
+ *
  * @version $Id$
  */
 public class ParaKZDLogImport extends AbstraktParameterImport {
@@ -49,7 +49,7 @@ public class ParaKZDLogImport extends AbstraktParameterImport {
 
 	/**
 	 * Standardkonstruktor.
-	 * 
+	 *
 	 * @param dav
 	 *            Verbindung zum Datenverteiler
 	 * @param objekt
@@ -59,14 +59,14 @@ public class ParaKZDLogImport extends AbstraktParameterImport {
 	 * @throws Exception
 	 *             wenn die Datei nicht geöffnet werden konnte
 	 */
-	public ParaKZDLogImport(ClientDavInterface dav, SystemObject objekt,
-			String csvQuelle) throws Exception {
+	public ParaKZDLogImport(final ClientDavInterface dav,
+			final SystemObject objekt, final String csvQuelle) throws Exception {
 		super(dav, objekt, csvQuelle);
 	}
 
 	/**
 	 * Setzte die Prüf-Optionen.
-	 * 
+	 *
 	 * @param optionen
 	 *            aktuelle Prüf-Optionen
 	 */
@@ -79,14 +79,14 @@ public class ParaKZDLogImport extends AbstraktParameterImport {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public Data fuelleRestAttribute(Data datensatz) {
+	public Data fuelleRestAttribute(final Data datensatz) {
 		try {
 			datensatz
-					.getItem("Urlasser").getReferenceValue("BenutzerReferenz").setSystemObject(null); //$NON-NLS-1$//$NON-NLS-2$
+			.getItem("Urlasser").getReferenceValue("BenutzerReferenz").setSystemObject(null); //$NON-NLS-1$//$NON-NLS-2$
 			datensatz.getItem("Urlasser").getTextValue("Ursache").setText(""); //$NON-NLS-1$//$NON-NLS-2$  //$NON-NLS-3$
 			datensatz
-					.getItem("Urlasser").getTextValue("Veranlasser").setText(""); //$NON-NLS-1$//$NON-NLS-2$  //$NON-NLS-3$
-		} catch (Exception ex) {
+			.getItem("Urlasser").getTextValue("Veranlasser").setText(""); //$NON-NLS-1$//$NON-NLS-2$  //$NON-NLS-3$
+		} catch (final Exception ex) {
 			System.out.println("Kein Urlasser"); //$NON-NLS-1$
 		}
 		datensatz.getUnscaledValue("Optionen").set(this.optionen.getCode()); //$NON-NLS-1$
@@ -97,7 +97,8 @@ public class ParaKZDLogImport extends AbstraktParameterImport {
 	 * {@inheritDoc}
 	 */
 	@Override
-	protected String getAttributPfadVon(String attributInCSVDatei, int index) {
+	protected String getAttributPfadVon(final String attributInCSVDatei,
+			final int index) {
 		if (attributInCSVDatei.equals("vGrenz")) { //$NON-NLS-1$
 			return "vKfzGrenz"; //$NON-NLS-1$
 		}
@@ -106,12 +107,13 @@ public class ParaKZDLogImport extends AbstraktParameterImport {
 		}
 
 		if (attributInCSVDatei.endsWith(")")) { //$NON-NLS-1$
-			String nummerStr = attributInCSVDatei.substring(attributInCSVDatei
-					.length() - 2, attributInCSVDatei.length() - 1);
+			final String nummerStr = attributInCSVDatei.substring(
+					attributInCSVDatei.length() - 2,
+					attributInCSVDatei.length() - 1);
 			int nummer = -1;
 			try {
 				nummer = Integer.parseInt(nummerStr);
-			} catch (Exception ex) {
+			} catch (final Exception ex) {
 				//
 			}
 
@@ -175,7 +177,7 @@ public class ParaKZDLogImport extends AbstraktParameterImport {
 	 */
 	@Override
 	protected AttributeGroup getParameterAtg() {
-		return sDav.getDataModel().getAttributeGroup(
+		return AbstraktParameterImport.sDav.getDataModel().getAttributeGroup(
 				AtgVerkehrsDatenKZIPlPruefLogisch.getPid());
 	}
 

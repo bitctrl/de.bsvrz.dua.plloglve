@@ -54,12 +54,14 @@ import de.bsvrz.sys.funclib.debug.Debug;
  * - Mittlere Geschwindigkeiten,<br>
  * - Belegungen,<br>
  * - Standardabweichungen, etc..<br>
- * 
+ *
  * @author BitCtrl Systems GmbH, Thierfelder
- * 
+ *
  * @version $Id$
  */
 public class PlLogischLVEStandard extends AbstraktBearbeitungsKnotenAdapter {
+
+	private static final Debug LOGGER = Debug.getLogger();
 
 	private static boolean baWuePatch = false;
 
@@ -67,18 +69,18 @@ public class PlLogischLVEStandard extends AbstraktBearbeitungsKnotenAdapter {
 	 * Mapt alle FS-Systemobjekte auf für die Standardplausbibilisierung für LZD
 	 * parametrierte Fahrstreifenobjekte.
 	 */
-	private Map<SystemObject, AbstraktPLFahrStreifen> lzdFahrStreifen = new HashMap<SystemObject, AbstraktPLFahrStreifen>();
+	private final Map<SystemObject, AbstraktPLFahrStreifen> lzdFahrStreifen = new HashMap<SystemObject, AbstraktPLFahrStreifen>();
 
 	/**
 	 * Mapt alle FS-Systemobjekte auf für die Standardplausbibilisierung für KZD
 	 * parametrierte Fahrstreifenobjekte.
 	 */
-	private Map<SystemObject, AbstraktPLFahrStreifen> kzdFahrStreifen = new HashMap<SystemObject, AbstraktPLFahrStreifen>();
+	private final Map<SystemObject, AbstraktPLFahrStreifen> kzdFahrStreifen = new HashMap<SystemObject, AbstraktPLFahrStreifen>();
 
 	/**
 	 * {@inheritDoc}<br>
 	 * .
-	 * 
+	 *
 	 * Es wird fuer alle Fahrstreifen (Systemobjekte vom Typ
 	 * <code>typ.fahrStreifen</code>, also insbesondere auch Objekte vom Typ
 	 * <code>typ.fahrStreifenLangZeit</code>) eine Instanz der Klasse
@@ -91,7 +93,7 @@ public class PlLogischLVEStandard extends AbstraktBearbeitungsKnotenAdapter {
 	 * plausibilisieren Kurzzeitdaten
 	 */
 	@Override
-	public void initialisiere(IVerwaltung dieVerwaltung)
+	public void initialisiere(final IVerwaltung dieVerwaltung)
 			throws DUAInitialisierungsException {
 		super.initialisiere(dieVerwaltung);
 
@@ -103,7 +105,7 @@ public class PlLogischLVEStandard extends AbstraktBearbeitungsKnotenAdapter {
 					" zum Guetefaktor der angeschlossenen SWE"); //$NON-NLS-1$
 		}
 
-		for (SystemObject obj : dieVerwaltung.getSystemObjekte()) {
+		for (final SystemObject obj : dieVerwaltung.getSystemObjekte()) {
 			if (obj.getType().getPid()
 					.equals(DUAKonstanten.TYP_FAHRSTREIFEN_LZ)) {
 				lzdFahrStreifen.put(obj, new LzdPLFahrStreifen(
@@ -114,22 +116,23 @@ public class PlLogischLVEStandard extends AbstraktBearbeitungsKnotenAdapter {
 		}
 
 		final String patch = dieVerwaltung.getArgument("altAnlagen");
-		if (patch != null && patch.toLowerCase().equals("ja")) {
-			baWuePatch = true;
+		if ((patch != null) && patch.toLowerCase().equals("ja")) {
+			PlLogischLVEStandard.baWuePatch = true;
 		}
 	}
 
 	public static final boolean isBaWuePatchAktiv() {
-		return baWuePatch;
+		return PlLogischLVEStandard.baWuePatch;
 	}
 
 	/**
 	 * {@inheritDoc}
 	 */
-	public void aktualisiereDaten(ResultData[] resultate) {
+	@Override
+	public void aktualisiereDaten(final ResultData[] resultate) {
 		if (resultate != null) {
-			Collection<ResultData> weiterzuleitendeResultate = new ArrayList<ResultData>();
-			for (ResultData resultat : resultate) {
+			final Collection<ResultData> weiterzuleitendeResultate = new ArrayList<ResultData>();
+			for (final ResultData resultat : resultate) {
 				if (resultat != null) {
 
 					if (TestParameter.getInstanz().isTestAusfall()
@@ -158,14 +161,14 @@ public class PlLogischLVEStandard extends AbstraktBearbeitungsKnotenAdapter {
 						if (fahrStreifen != null) {
 							pData = fahrStreifen.plausibilisiere(resultat);
 						} else {
-							Debug.getLogger()
-									.warning(
-											"Fahrstreifen " + resultat.getObject() + //$NON-NLS-1$
-													" konnte nicht identifiziert werden"); //$NON-NLS-1$
+							LOGGER
+							.warning(
+									"Fahrstreifen " + resultat.getObject() + //$NON-NLS-1$
+									" konnte nicht identifiziert werden"); //$NON-NLS-1$
 						}
 
 						if (pData != null) {
-							ResultData ersetztesResultat = new ResultData(
+							final ResultData ersetztesResultat = new ResultData(
 									resultat.getObject(),
 									resultat.getDataDescription(),
 									resultat.getDataTime(), pData,
@@ -178,7 +181,7 @@ public class PlLogischLVEStandard extends AbstraktBearbeitungsKnotenAdapter {
 				}
 			}
 
-			if (this.knoten != null && !weiterzuleitendeResultate.isEmpty()) {
+			if ((this.knoten != null) && !weiterzuleitendeResultate.isEmpty()) {
 				this.knoten.aktualisiereDaten(weiterzuleitendeResultate
 						.toArray(new ResultData[0]));
 			}
@@ -188,6 +191,7 @@ public class PlLogischLVEStandard extends AbstraktBearbeitungsKnotenAdapter {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public ModulTyp getModulTyp() {
 		return null;
 	}
@@ -195,7 +199,8 @@ public class PlLogischLVEStandard extends AbstraktBearbeitungsKnotenAdapter {
 	/**
 	 * {@inheritDoc}
 	 */
-	public void aktualisierePublikation(IDatenFlussSteuerung dfs) {
+	@Override
+	public void aktualisierePublikation(final IDatenFlussSteuerung dfs) {
 		// hier findet keine Publikation statt
 	}
 

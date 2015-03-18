@@ -34,12 +34,15 @@ import de.bsvrz.sys.funclib.debug.Debug;
 /**
  * Abstrakte Klasse die alle Parameter halten kann, die innerhalb der
  * Standardplausibilisierung LVE für sowohl LZD als auch KZD benötigt werden.
- * 
+ *
  * @author BitCtrl Systems GmbH, Thierfelder
- * 
- * @version $Id$
+ *
+ * @version $Id: AbstraktAtgPLLogischLVEParameter.java 53825 2015-03-18
+ *          09:36:42Z peuker $
  */
 public class AbstraktAtgPLLogischLVEParameter extends AllgemeinerDatenContainer {
+
+	private static final Debug LOGGER = Debug.getLogger();
 
 	/**
 	 * Legt das Verhalten für den Umgang mit geprüften Werten nach der
@@ -148,8 +151,9 @@ public class AbstraktAtgPLLogischLVEParameter extends AllgemeinerDatenContainer 
 	/**
 	 * Erfragt eine Schnittstelle zu den Parametern der logischen
 	 * Plausibilisierung.
-	 * 
-	 * @param resultat ein Parameter-Resultat
+	 *
+	 * @param resultat
+	 *            ein Parameter-Resultat
 	 * @return eine Schnittstelle zu den Parametern der logischen
 	 *         Plausibilisierung oder <code>null</code>, wenn diese nicht
 	 *         ausgelesen werden konnten
@@ -162,16 +166,18 @@ public class AbstraktAtgPLLogischLVEParameter extends AllgemeinerDatenContainer 
 			if (resultat.getData() != null) {
 				if (resultat.getDataDescription().getAttributeGroup().getPid()
 						.equals(AtgVerkehrsDatenKZIPlPruefLogisch.getPid())) {
-					dummy = new AtgVerkehrsDatenKZIPlPruefLogisch(resultat
-							.getData());
+					dummy = new AtgVerkehrsDatenKZIPlPruefLogisch(
+							resultat.getData());
 				} else if (resultat.getDataDescription().getAttributeGroup()
-						.getPid().equals(
-								AtgVerkehrsDatenLZIPlPruefLogisch.getPid())) {
-					dummy = new AtgVerkehrsDatenLZIPlPruefLogisch(resultat
-							.getData());
+						.getPid()
+						.equals(AtgVerkehrsDatenLZIPlPruefLogisch.getPid())) {
+					dummy = new AtgVerkehrsDatenLZIPlPruefLogisch(
+							resultat.getData());
 				} else {
-					Debug.getLogger().warning("Unbekannter Datensatz übergeben:\n" + //$NON-NLS-1$
-							resultat.getDataDescription().getAttributeGroup());
+					LOGGER.warning(
+							"Unbekannter Datensatz übergeben:\n" + //$NON-NLS-1$
+									resultat.getDataDescription()
+											.getAttributeGroup());
 				}
 			}
 		}
@@ -181,7 +187,7 @@ public class AbstraktAtgPLLogischLVEParameter extends AllgemeinerDatenContainer 
 
 	/**
 	 * Erfragt qKfzBereichMax.
-	 * 
+	 *
 	 * @return qKfzBereichMax
 	 */
 	public final long getQKfzBereichMax() {
@@ -190,7 +196,7 @@ public class AbstraktAtgPLLogischLVEParameter extends AllgemeinerDatenContainer 
 
 	/**
 	 * Erfragt qKfzBereichMin.
-	 * 
+	 *
 	 * @return qKfzBereichMin
 	 */
 	public final long getQKfzBereichMin() {
@@ -199,7 +205,7 @@ public class AbstraktAtgPLLogischLVEParameter extends AllgemeinerDatenContainer 
 
 	/**
 	 * Erfragt qLkwBereichMax.
-	 * 
+	 *
 	 * @return qLkwBereichMax
 	 */
 	public final long getQLkwBereichMax() {
@@ -208,7 +214,7 @@ public class AbstraktAtgPLLogischLVEParameter extends AllgemeinerDatenContainer 
 
 	/**
 	 * Erfragt qLkwBereichMin.
-	 * 
+	 *
 	 * @return qLkwBereichMin
 	 */
 	public final long getQLkwBereichMin() {
@@ -217,7 +223,7 @@ public class AbstraktAtgPLLogischLVEParameter extends AllgemeinerDatenContainer 
 
 	/**
 	 * Erfragt die Optionen.
-	 * 
+	 *
 	 * @return optionen
 	 */
 	public final OptionenPlausibilitaetsPruefungLogischVerkehr getOptionen() {
@@ -226,7 +232,7 @@ public class AbstraktAtgPLLogischLVEParameter extends AllgemeinerDatenContainer 
 
 	/**
 	 * Erfragt BelegungBereichMax.
-	 * 
+	 *
 	 * @return belegungBereichMax
 	 */
 	public final long getBelegungBereichMax() {
@@ -235,7 +241,7 @@ public class AbstraktAtgPLLogischLVEParameter extends AllgemeinerDatenContainer 
 
 	/**
 	 * Erfragt BelegungBereichMin.
-	 * 
+	 *
 	 * @return belegungBereichMin
 	 */
 	public final long getBelegungBereichMin() {
@@ -244,7 +250,7 @@ public class AbstraktAtgPLLogischLVEParameter extends AllgemeinerDatenContainer 
 
 	/**
 	 * Erfragt bGrenz.
-	 * 
+	 *
 	 * @return bGrenz
 	 */
 	public final long getBGrenz() {
@@ -253,7 +259,7 @@ public class AbstraktAtgPLLogischLVEParameter extends AllgemeinerDatenContainer 
 
 	/**
 	 * Erfragt qPkwBereichMax.
-	 * 
+	 *
 	 * @return qPkwBereichMax
 	 */
 	public final long getQPkwBereichMax() {
@@ -262,7 +268,7 @@ public class AbstraktAtgPLLogischLVEParameter extends AllgemeinerDatenContainer 
 
 	/**
 	 * Erfragt qPkwBereichMin.
-	 * 
+	 *
 	 * @return qPkwBereichMin
 	 */
 	public final long getQPkwBereichMin() {
@@ -271,7 +277,7 @@ public class AbstraktAtgPLLogischLVEParameter extends AllgemeinerDatenContainer 
 
 	/**
 	 * Erfragt vgKfzBereichMax.
-	 * 
+	 *
 	 * @return vgKfzBereichMax
 	 */
 	public final long getVgKfzBereichMax() {
@@ -280,7 +286,7 @@ public class AbstraktAtgPLLogischLVEParameter extends AllgemeinerDatenContainer 
 
 	/**
 	 * Erfragt vgKfzBereichMin.
-	 * 
+	 *
 	 * @return vgKfzBereichMin
 	 */
 	public final long getVgKfzBereichMin() {
@@ -289,7 +295,7 @@ public class AbstraktAtgPLLogischLVEParameter extends AllgemeinerDatenContainer 
 
 	/**
 	 * Erfragt vKfzBereichMax.
-	 * 
+	 *
 	 * @return vKfzBereichMax
 	 */
 	public final long getVKfzBereichMax() {
@@ -298,7 +304,7 @@ public class AbstraktAtgPLLogischLVEParameter extends AllgemeinerDatenContainer 
 
 	/**
 	 * Erfragt vKfzBereichMin.
-	 * 
+	 *
 	 * @return vKfzBereichMin
 	 */
 	public final long getVKfzBereichMin() {
@@ -307,7 +313,7 @@ public class AbstraktAtgPLLogischLVEParameter extends AllgemeinerDatenContainer 
 
 	/**
 	 * Erfragt vKfzGrenz.
-	 * 
+	 *
 	 * @return vKfzGrenz
 	 */
 	public final long getVKfzGrenz() {
@@ -316,7 +322,7 @@ public class AbstraktAtgPLLogischLVEParameter extends AllgemeinerDatenContainer 
 
 	/**
 	 * Erfragt vLkwBereichMax.
-	 * 
+	 *
 	 * @return vLkwBereichMax
 	 */
 	public final long getVLkwBereichMax() {
@@ -325,7 +331,7 @@ public class AbstraktAtgPLLogischLVEParameter extends AllgemeinerDatenContainer 
 
 	/**
 	 * Erfragt vLkwBereichMin.
-	 * 
+	 *
 	 * @return vLkwBereichMin
 	 */
 	public final long getVLkwBereichMin() {
@@ -334,7 +340,7 @@ public class AbstraktAtgPLLogischLVEParameter extends AllgemeinerDatenContainer 
 
 	/**
 	 * Erfragt vPkwBereichMax.
-	 * 
+	 *
 	 * @return vPkwBereichMax
 	 */
 	public final long getVPkwBereichMax() {
@@ -343,7 +349,7 @@ public class AbstraktAtgPLLogischLVEParameter extends AllgemeinerDatenContainer 
 
 	/**
 	 * Erfragt vPkwBereichMin.
-	 * 
+	 *
 	 * @return vPkwBereichMin
 	 */
 	public final long getVPkwBereichMin() {

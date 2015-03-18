@@ -30,12 +30,14 @@ import de.bsvrz.sys.funclib.debug.Debug;
 
 /**
  * Klasse mit allen Testflags.
- * 
+ *
  * @author BitCtrl Systems GmbH, Thierfelder
- * 
+ *
  * @version $Id$
  */
 public class TestParameter {
+
+	private static final Debug LOGGER = Debug.getLogger();
 
 	/**
 	 * Erfassungsintervalldauer im Testbetrieb (bzw. Laenge einer Minute)
@@ -65,48 +67,48 @@ public class TestParameter {
 	 * Dummy-Konstruktor.
 	 */
 	private TestParameter() {
-		instanz = this;
+		TestParameter.instanz = this;
 	}
 
 	/**
 	 * Standardkonstruktor.
-	 * 
+	 *
 	 * @param testParameter
 	 *            der Kommandozeilenparameter <code>-test=</code>
 	 */
 	protected TestParameter(final String testParameter) {
-		if (instanz == null) {
+		if (TestParameter.instanz == null) {
 			if (testParameter.toLowerCase().equals("ausfall")) {
 				testAusfall = true;
 			} else if (testParameter.toLowerCase().equals("vertrauen")) {
 				testVertrauen = true;
 			}
-			Debug.getLogger().info("!!! " + this + " !!!");
-			instanz = this;
+			LOGGER.info("!!! " + this + " !!!");
+			TestParameter.instanz = this;
 		} else {
-			Debug.getLogger().warning(
+			LOGGER.warning(
 					"Testparameter wurden bereits initialisiert mit:\n"
-							+ instanz);
+							+ TestParameter.instanz);
 		}
 	}
 
 	/**
 	 * Erfragt die statische Instanz dieser Klasse.
-	 * 
+	 *
 	 * @return die statische Instanz dieser Klasse
 	 */
 	public static final TestParameter getInstanz() {
-		if (instanz == null) {
-			instanz = new TestParameter();
+		if (TestParameter.instanz == null) {
+			TestParameter.instanz = new TestParameter();
 		}
-		return instanz;
+		return TestParameter.instanz;
 	}
 
 	/**
 	 * Erfragt, ob die Applikation im Testbetrieb fuer das Modul
 	 * Vertrauensbereich laeuft. Ein Tag ist dann für dieses Modul genau 144s
 	 * lang!
-	 * 
+	 *
 	 * @return ob die Applikation im Testbetrieb fuer das Modul
 	 *         Vertrauensbereich laeuft
 	 */
@@ -118,7 +120,7 @@ public class TestParameter {
 	 * Erfragt, ob die Applikation im Testbetrieb fuer das Modul
 	 * Ausfallhaeufigkeit laeuft. Ein Tag ist dann für dieses Modul genau 144s
 	 * lang!
-	 * 
+	 *
 	 * @return ob die Applikation im Testbetrieb fuer das Modul
 	 *         Ausfallhaeufigkeit laeuft
 	 */

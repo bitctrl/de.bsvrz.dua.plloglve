@@ -24,8 +24,6 @@
  * mailto: info@bitctrl.de
  */
 
-
-
 /**
  * Klassen für Attribut-Typen innerhalb für die Pl-Prüfung logisch LVE
  */

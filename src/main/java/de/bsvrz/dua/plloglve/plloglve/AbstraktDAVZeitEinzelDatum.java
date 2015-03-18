@@ -26,18 +26,18 @@
 
 package de.bsvrz.dua.plloglve.plloglve;
 
-import de.bsvrz.dua.plloglve.plloglve.ausfall.AusfallDatum;
 
 /**
  * Abstrakter Container für Daten mit den Attributen Zeitstempel und
  * Intervalllänge. Die Objekte sind nach ihrer Datenzeit sortierbar.
- * 
+ *
  * @author BitCtrl Systems GmbH, Thierfelder
- * 
- * @version $Id$
+ *
+ * @version $Id: AbstraktDAVZeitEinzelDatum.java 53825 2015-03-18 09:36:42Z
+ *          peuker $
  */
 public class AbstraktDAVZeitEinzelDatum implements
-		Comparable<AbstraktDAVZeitEinzelDatum> {
+Comparable<AbstraktDAVZeitEinzelDatum> {
 
 	/**
 	 * die Datenzeit des Datums.
@@ -51,7 +51,7 @@ public class AbstraktDAVZeitEinzelDatum implements
 
 	/**
 	 * Erfragt die Intervalllänge des Datums.
-	 * 
+	 *
 	 * @return die Intervalllänge des Datums
 	 */
 	public final long getIntervallLaenge() {
@@ -60,7 +60,7 @@ public class AbstraktDAVZeitEinzelDatum implements
 
 	/**
 	 * Erfragt die Datenzeit des Datums.
-	 * 
+	 *
 	 * @return die Datenzeit des Datums
 	 */
 	public long getDatenZeit() {
@@ -70,23 +70,28 @@ public class AbstraktDAVZeitEinzelDatum implements
 	/**
 	 * {@inheritDoc}
 	 */
-	public int compareTo(AbstraktDAVZeitEinzelDatum that) {
+	@Override
+	public int compareTo(final AbstraktDAVZeitEinzelDatum that) {
 		return new Long(this.getDatenZeit()).compareTo(that.getDatenZeit());
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
-	public boolean equals(Object obj) {
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + (int) (datenZeit ^ (datenZeit >>> 32));
+		return result;
+	}
+
+	@Override
+	public boolean equals(final Object obj) {
 		boolean resultat = false;
 
-		if (obj instanceof AusfallDatum) {
-			AbstraktDAVZeitEinzelDatum that = (AbstraktDAVZeitEinzelDatum) obj;
+		if (obj instanceof AbstraktDAVZeitEinzelDatum) {
+			final AbstraktDAVZeitEinzelDatum that = (AbstraktDAVZeitEinzelDatum) obj;
 			resultat = this.getDatenZeit() == that.getDatenZeit();
 		}
 
 		return resultat;
 	}
-
 }

@@ -30,6 +30,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import org.junit.Assert;
+
 import de.bsvrz.dav.daf.main.ClientDavInterface;
 import de.bsvrz.dav.daf.main.ClientReceiverInterface;
 import de.bsvrz.dav.daf.main.Data;
@@ -48,22 +49,24 @@ import de.bsvrz.sys.funclib.debug.Debug;
 /**
  * KZD Listener Liest Ergebnis-CSV-Datei Wartet auf gesendete und gepruefte
  * Daten und gibt diese an Vergleicher-Klasse weiter.
- * 
+ *
  * @author BitCtrl Systems GmbH, Görlitz
- * 
+ *
  * @version $Id$
  */
 public class PruefeDatenLogisch implements ClientReceiverInterface {
 
+	private static final Debug LOGGER = Debug.getLogger();
+
 	/**
 	 * Datenverteilerverbindung von der aufrufenden Klasse.
 	 */
-	private ClientDavInterface dav;
+	private final ClientDavInterface dav;
 
 	/**
 	 * Aufrunfende Klasse.
 	 */
-	private PlPruefungLogisch caller;
+	private final PlPruefungLogisch caller;
 
 	/**
 	 * CSV-Importer.
@@ -78,17 +81,17 @@ public class PruefeDatenLogisch implements ClientReceiverInterface {
 	/**
 	 * Speichert die eingelesenen CSV Daten des FS1.
 	 */
-	private ArrayList<HashMap<String, Integer>> csvZeilenFS1 = new ArrayList<HashMap<String, Integer>>();
+	private final ArrayList<HashMap<String, Integer>> csvZeilenFS1 = new ArrayList<HashMap<String, Integer>>();
 
 	/**
 	 * Speichert die eingelesenen CSV Daten des FS2.
 	 */
-	private ArrayList<HashMap<String, Integer>> csvZeilenFS2 = new ArrayList<HashMap<String, Integer>>();
+	private final ArrayList<HashMap<String, Integer>> csvZeilenFS2 = new ArrayList<HashMap<String, Integer>>();
 
 	/**
 	 * Speichert die eingelesenen CSV Daten des FS3.
 	 */
-	private ArrayList<HashMap<String, Integer>> csvZeilenFS3 = new ArrayList<HashMap<String, Integer>>();
+	private final ArrayList<HashMap<String, Integer>> csvZeilenFS3 = new ArrayList<HashMap<String, Integer>>();
 
 	/**
 	 * Der aktuelle CSV-Nettowert.
@@ -98,17 +101,17 @@ public class PruefeDatenLogisch implements ClientReceiverInterface {
 	/**
 	 * Speichert die eingelesenen CSV Nettowerte des FS1.
 	 */
-	private ArrayList<Long> alCSVWerttNettoFS1 = new ArrayList<Long>();
+	private final ArrayList<Long> alCSVWerttNettoFS1 = new ArrayList<Long>();
 
 	/**
 	 * Speichert die eingelesenen CSV Nettowerte des FS2.
 	 */
-	private ArrayList<Long> alCSVWerttNettoFS2 = new ArrayList<Long>();
+	private final ArrayList<Long> alCSVWerttNettoFS2 = new ArrayList<Long>();
 
 	/**
 	 * Speichert die eingelesenen CSV Nettowerte des FS3.
 	 */
-	private ArrayList<Long> alCSVWerttNettoFS3 = new ArrayList<Long>();
+	private final ArrayList<Long> alCSVWerttNettoFS3 = new ArrayList<Long>();
 
 	/**
 	 * Zeitstempel der zu pruefenden Daten.
@@ -133,17 +136,17 @@ public class PruefeDatenLogisch implements ClientReceiverInterface {
 	/**
 	 * Vergleicherthread für FS1 .
 	 */
-	private VergleicheDaten vergleicheFS1;
+	private final VergleicheDaten vergleicheFS1;
 
 	/**
 	 * Vergleicherthread für FS2 .
 	 */
-	private VergleicheDaten vergleicheFS2;
+	private final VergleicheDaten vergleicheFS2;
 
 	/**
 	 * Vergleicherthread für FS3 .
 	 */
-	private VergleicheDaten vergleicheFS3;
+	private final VergleicheDaten vergleicheFS3;
 
 	/**
 	 * Empfange-Datenbeschreibung für KZD.
@@ -158,7 +161,7 @@ public class PruefeDatenLogisch implements ClientReceiverInterface {
 	/**
 	 * Listener, der auf ein bestimmtes Ergenis wartet und dann eine Prüfung der
 	 * Ergebnisdaten durchführt.
-	 * 
+	 *
 	 * @param caller
 	 *            Die aufrufende Klasse
 	 * @param dav1
@@ -170,38 +173,36 @@ public class PruefeDatenLogisch implements ClientReceiverInterface {
 	 * @throws Exception
 	 *             wird weitergereicht
 	 */
-	public PruefeDatenLogisch(PlPruefungLogisch caller,
-			ClientDavInterface dav1, SystemObject[] fs, String csvQuelle)
-			throws Exception {
+	public PruefeDatenLogisch(final PlPruefungLogisch caller,
+			final ClientDavInterface dav1, final SystemObject[] fs,
+			final String csvQuelle) throws Exception {
 		this.caller = caller; // aufrufende Klasse uebernehmen
 		this.dav = dav1;
 
 		// Empfangs-Datenbeschreibung
-		ddKzdEmpf = new DataDescription(this.dav.getDataModel()
-				.getAttributeGroup(DUAKonstanten.ATG_KZD), this.dav
-				.getDataModel()
-				.getAspect(DUAKonstanten.ASP_PL_PRUEFUNG_LOGISCH));
+		PruefeDatenLogisch.ddKzdEmpf = new DataDescription(this.dav
+				.getDataModel().getAttributeGroup(DUAKonstanten.ATG_KZD),
+				this.dav.getDataModel().getAspect(
+						DUAKonstanten.ASP_PL_PRUEFUNG_LOGISCH));
 
-		ddLzdEmpf = new DataDescription(this.dav.getDataModel()
-				.getAttributeGroup(DUAKonstanten.ATG_LZD), this.dav
-				.getDataModel()
-				.getAspect(DUAKonstanten.ASP_PL_PRUEFUNG_LOGISCH));
+		PruefeDatenLogisch.ddLzdEmpf = new DataDescription(this.dav
+				.getDataModel().getAttributeGroup(DUAKonstanten.ATG_LZD),
+				this.dav.getDataModel().getAspect(
+						DUAKonstanten.ASP_PL_PRUEFUNG_LOGISCH));
 
 		// Empfänger anmelden
-		this.dav.subscribeReceiver(this, fs, ddKzdEmpf,
+		this.dav.subscribeReceiver(this, fs, PruefeDatenLogisch.ddKzdEmpf,
 				ReceiveOptions.normal(), ReceiverRole.receiver());
 
-		this.dav.subscribeReceiver(this, fs, ddLzdEmpf, ReceiveOptions
-				.delayed(), ReceiverRole.receiver());
+		this.dav.subscribeReceiver(this, fs, PruefeDatenLogisch.ddLzdEmpf,
+				ReceiveOptions.delayed(), ReceiverRole.receiver());
 
 		try {
 			// CSV Importer initialisieren
 			this.csvImp = new CSVImporter(csvQuelle);
-		} catch (Exception e) {
-			Debug
-					.getLogger()
-					.error(
-							"Fehler beim öffnen der CSV Datei (" + csvQuelle + "): " + e); //$NON-NLS-1$ //$NON-NLS-2$
+		} catch (final Exception e) {
+			LOGGER
+			.error("Fehler beim öffnen der CSV Datei (" + csvQuelle + "): " + e); //$NON-NLS-1$ //$NON-NLS-2$
 		}
 		csvImp.getNaechsteZeile(); // Tabellenkopf in CSV ueberspringen
 		csvEinlesen(); // CSV einlesen
@@ -217,13 +218,13 @@ public class PruefeDatenLogisch implements ClientReceiverInterface {
 	/**
 	 * Setzt den zu verwendenden Offset in der CSV-Datei und den Zeitstempel des
 	 * Ergebnisses, auf das gewartet werden soll.
-	 * 
+	 *
 	 * @param csvOffset1
 	 *            Zu verwendender Offset in CSV-Datei
 	 * @param pruefZeitstempel1
 	 *            Ergebniszeitstempel, auf den gewartet wird
 	 */
-	public void listen(int csvOffset1, long pruefZeitstempel1) {
+	public void listen(final int csvOffset1, final long pruefZeitstempel1) {
 		this.csvOffset = csvOffset1; // CSV-Index uebernehmen
 		this.pruefZeitstempel = pruefZeitstempel1; // Zeitstempel uebernehmen
 
@@ -247,14 +248,14 @@ public class PruefeDatenLogisch implements ClientReceiverInterface {
 					csvZeilenFS3.add(csvLeseZeile(aktZeile, 3));
 				}
 			}
-		} catch (Exception e) {
-			Debug.getLogger().error("Fehler beim einlesen der CSV Datei: " + e); //$NON-NLS-1$
+		} catch (final Exception e) {
+			LOGGER.error("Fehler beim einlesen der CSV Datei: " + e); //$NON-NLS-1$
 		}
 	}
 
 	/**
 	 * Gibt eine HashMap mit den Soll-Werten eines Fahrstreifens zurück.
-	 * 
+	 *
 	 * @param aktZeile
 	 *            Der Prüf-CSV Offset
 	 * @param fsIndex
@@ -263,11 +264,11 @@ public class PruefeDatenLogisch implements ClientReceiverInterface {
 	 * @throws Exception
 	 *             wird weitergereicht
 	 */
-	private HashMap<String, Integer> csvLeseZeile(String[] aktZeile, int fsIndex)
-			throws Exception {
-		int verschiebung = (fsIndex - 1) * 2;
+	private HashMap<String, Integer> csvLeseZeile(final String[] aktZeile,
+			final int fsIndex) throws Exception {
+		final int verschiebung = (fsIndex - 1) * 2;
 
-		HashMap<String, Integer> hmCSV = new HashMap<String, Integer>();
+		final HashMap<String, Integer> hmCSV = new HashMap<String, Integer>();
 		int csvPosition = 0 + verschiebung;
 
 		hmCSV.put("qKfz.Wert", Integer.parseInt(aktZeile[csvPosition]));
@@ -332,34 +333,35 @@ public class PruefeDatenLogisch implements ClientReceiverInterface {
 	/**
 	 * Liest ein Statusfeld, extrahiert Daten in eine HashMap und gibt diese
 	 * zurück.
-	 * 
+	 *
 	 * @param status
 	 *            Die Statuszeile. Parameter durch Leerzeichen getrennt
 	 * @param praefix
 	 *            Das Attribut des auszulesenden Status
 	 * @return Statusdaten (Attributpfad,Wert)
 	 */
-	private HashMap<String, Integer> csvLeseStatus(String status, String praefix) {
+	private HashMap<String, Integer> csvLeseStatus(final String status,
+			final String praefix) {
 
-		HashMap<String, Integer> hmCSVStatus = new HashMap<String, Integer>();
+		final HashMap<String, Integer> hmCSVStatus = new HashMap<String, Integer>();
 
-		String[] statusGeteilt = status.split(" ");
+		final String[] statusGeteilt = status.split(" ");
 
 		Float guete = null;
 
 		Integer errCode = 0;
 
-		for (int i = 0; i < statusGeteilt.length; i++) {
+		for (final String element : statusGeteilt) {
 
-			if (statusGeteilt[i].equalsIgnoreCase("Fehl")) {
+			if (element.equalsIgnoreCase("Fehl")) {
 				errCode = errCode - 2;
 			}
 
-			if (statusGeteilt[i].equalsIgnoreCase("nErm")) {
+			if (element.equalsIgnoreCase("nErm")) {
 				errCode = errCode - 1;
 			}
 
-			if (statusGeteilt[i].equalsIgnoreCase("Impl")) {
+			if (element.equalsIgnoreCase("Impl")) {
 				hmCSVStatus.put(praefix
 						+ ".Status.MessWertErsetzung.Implausibel",
 						DUAKonstanten.JA);
@@ -370,7 +372,7 @@ public class PruefeDatenLogisch implements ClientReceiverInterface {
 						DUAKonstanten.NEIN);
 			}
 
-			if (statusGeteilt[i].equalsIgnoreCase("Intp")) {
+			if (element.equalsIgnoreCase("Intp")) {
 				hmCSVStatus.put(praefix
 						+ ".Status.MessWertErsetzung.Interpoliert",
 						DUAKonstanten.JA);
@@ -381,7 +383,7 @@ public class PruefeDatenLogisch implements ClientReceiverInterface {
 						DUAKonstanten.NEIN);
 			}
 
-			if (statusGeteilt[i].equalsIgnoreCase("nErf")) {
+			if (element.equalsIgnoreCase("nErf")) {
 				hmCSVStatus.put(praefix + ".Status.Erfassung.NichtErfasst",
 						DUAKonstanten.JA);
 			} else if (!hmCSVStatus.containsKey(praefix
@@ -390,7 +392,7 @@ public class PruefeDatenLogisch implements ClientReceiverInterface {
 						DUAKonstanten.NEIN);
 			}
 
-			if (statusGeteilt[i].equalsIgnoreCase("wMaL")) {
+			if (element.equalsIgnoreCase("wMaL")) {
 				hmCSVStatus.put(praefix + ".Status.PlLogisch.WertMaxLogisch",
 						DUAKonstanten.JA);
 			} else if (!hmCSVStatus.containsKey(praefix
@@ -399,7 +401,7 @@ public class PruefeDatenLogisch implements ClientReceiverInterface {
 						DUAKonstanten.NEIN);
 			}
 
-			if (statusGeteilt[i].equalsIgnoreCase("wMax")) {
+			if (element.equalsIgnoreCase("wMax")) {
 				hmCSVStatus.put(praefix + ".Status.PlFormal.WertMax",
 						DUAKonstanten.JA);
 			} else if (!hmCSVStatus.containsKey(praefix
@@ -408,7 +410,7 @@ public class PruefeDatenLogisch implements ClientReceiverInterface {
 						DUAKonstanten.NEIN);
 			}
 
-			if (statusGeteilt[i].equalsIgnoreCase("wMiL")) {
+			if (element.equalsIgnoreCase("wMiL")) {
 				hmCSVStatus.put(praefix + ".Status.PlLogisch.WertMinLogisch",
 						DUAKonstanten.JA);
 			} else if (!hmCSVStatus.containsKey(praefix
@@ -417,7 +419,7 @@ public class PruefeDatenLogisch implements ClientReceiverInterface {
 						DUAKonstanten.NEIN);
 			}
 
-			if (statusGeteilt[i].equalsIgnoreCase("wMin")) {
+			if (element.equalsIgnoreCase("wMin")) {
 				hmCSVStatus.put(praefix + ".Status.PlFormal.WertMin",
 						DUAKonstanten.JA);
 			} else if (!hmCSVStatus.containsKey(praefix
@@ -427,9 +429,9 @@ public class PruefeDatenLogisch implements ClientReceiverInterface {
 			}
 
 			try {
-				guete = Float.parseFloat(statusGeteilt[i].replace(",", ".")) * 10000;
+				guete = Float.parseFloat(element.replace(",", ".")) * 10000;
 				hmCSVStatus.put(praefix + ".Güte.Index", guete.intValue());
-			} catch (Exception e) {
+			} catch (final Exception e) {
 				// kein float wert
 			}
 		}
@@ -449,51 +451,53 @@ public class PruefeDatenLogisch implements ClientReceiverInterface {
 
 	/**
 	 * Übergebe CSV-Werte (tNetto) für FS1.
-	 * 
+	 *
 	 * @param csvOffset1
 	 *            DS-Index des zu übergebende DS
 	 * @return Der CSV-Wert tNetto für FS1
 	 */
-	public long getCSVWerttNettoFS1(int csvOffset1) {
+	public long getCSVWerttNettoFS1(final int csvOffset1) {
 		return alCSVWerttNettoFS1.get(csvOffset1);
 	}
 
 	/**
 	 * Übergebe CSV-Werte (tNetto) für FS2.
-	 * 
+	 *
 	 * @param csvOffset1
 	 *            DS-Index des zu übergebende DS
 	 * @return Der CSV-Wert tNetto für FS2
 	 */
-	public long getCSVWerttNettoFS2(int csvOffset1) {
+	public long getCSVWerttNettoFS2(final int csvOffset1) {
 		return alCSVWerttNettoFS2.get(csvOffset1);
 	}
 
 	/**
 	 * Übergebe CSV-Werte (tNetto) für FS3.
-	 * 
+	 *
 	 * @param csvOffset1
 	 *            DS-Index des zu übergebende DS
 	 * @return Der CSV-Wert tNetto für FS3
 	 */
-	public long getCSVWerttNettoFS3(int csvOffset1) {
+	public long getCSVWerttNettoFS3(final int csvOffset1) {
 		return alCSVWerttNettoFS3.get(csvOffset1);
 	}
 
 	/**
 	 * {@inheritDoc}
-	 * 
+	 *
 	 * @param results
 	 *            Ergebnisdatensätze vom DaV
 	 * @throws InvalidArgumentException
 	 */
-	public void update(ResultData[] results) {
-		for (ResultData result : results) {
+	@Override
+	public void update(final ResultData[] results) {
+		for (final ResultData result : results) {
 			// Pruefe Ergebnisdatensatz auf Zeitstempel
-			if ((result.getDataDescription().equals(ddKzdEmpf) || result
-					.getDataDescription().equals(ddLzdEmpf))
-					&& result.getData() != null
-					&& result.getDataTime() == pruefZeitstempel) {
+			if ((result.getDataDescription().equals(
+					PruefeDatenLogisch.ddKzdEmpf) || result
+					.getDataDescription().equals(PruefeDatenLogisch.ddLzdEmpf))
+					&& (result.getData() != null)
+					&& (result.getDataTime() == pruefZeitstempel)) {
 
 				try {
 					// Ermittle FS und pruefe Daten
@@ -510,11 +514,11 @@ public class PruefeDatenLogisch implements ClientReceiverInterface {
 						vergleicheFS3.vergleiche(result, csvZeilenFS3,
 								csvOffset);
 					}
-				} catch (Exception e) {
+				} catch (final Exception e) {
 					//
 				}
 
-				Debug.getLogger().info(
+				LOGGER.info(
 						"Zu prüfendes Datum empfangen. Warte auf Prüfung..."); //$NON-NLS-1$
 			}
 		}
@@ -525,21 +529,19 @@ public class PruefeDatenLogisch implements ClientReceiverInterface {
 	 */
 	private void pruefungFertig() {
 		if (pruefungFS1Fertig && pruefungFS2Fertig && pruefungFS3Fertig) {
-			Debug
-					.getLogger()
-					.info(
-							"Prüfung aller Fahrstreifen für diesen Intervall abgeschlossen"); //$NON-NLS-1$
+			LOGGER
+			.info("Prüfung aller Fahrstreifen für diesen Intervall abgeschlossen"); //$NON-NLS-1$
 			caller.doNotify(); // Benachrichtige aufrufende Klasse
 		}
 	}
 
 	/**
 	 * Diesen Thread wecken.
-	 * 
+	 *
 	 * @param fs
 	 *            der Fahrstreifenindex
 	 */
-	public void doNotify(int fs) {
+	public void doNotify(final int fs) {
 		switch (fs) {
 		case 1:
 			pruefungFS1Fertig = true;
@@ -557,7 +559,7 @@ public class PruefeDatenLogisch implements ClientReceiverInterface {
 
 	/**
 	 * Soll Assert zur Fehlermeldung genutzt werden?
-	 * 
+	 *
 	 * @param useAssert
 	 *            solllen die Assert-Statements benutzte werden
 	 */
@@ -569,33 +571,33 @@ public class PruefeDatenLogisch implements ClientReceiverInterface {
 
 	/**
 	 * Liefert ein Array mit der Anzahl der FehlerAlles aller Fehrstreifen.
-	 * 
+	 *
 	 * @return ein Array mit der Anzahl der FehlerAlles aller Fehrstreifen
 	 */
 	public int[] getFehlerAlles() {
-		int[] fehlerAlles = { vergleicheFS1.anzFehlerAlles,
+		final int[] fehlerAlles = { vergleicheFS1.anzFehlerAlles,
 				vergleicheFS2.anzFehlerAlles, vergleicheFS3.anzFehlerAlles };
 		return fehlerAlles;
 	}
 
 	/**
 	 * Liefert ein Array mit der Anzahl der FehlerLinks aller Fehrstreifen.
-	 * 
+	 *
 	 * @return ein Array mit der Anzahl der FehlerLinks aller Fehrstreifen
 	 */
 	public int[] getFehlerLinks() {
-		int[] fehlerLinks = { vergleicheFS1.anzFehlerLinks,
+		final int[] fehlerLinks = { vergleicheFS1.anzFehlerLinks,
 				vergleicheFS2.anzFehlerLinks, vergleicheFS3.anzFehlerLinks };
 		return fehlerLinks;
 	}
 
 	/**
 	 * Liefert ein Array mit der Anzahl der FehlerRechts aller Fehrstreifen.
-	 * 
+	 *
 	 * @return ein Array mit der Anzahl der FehlerRechts aller Fehrstreifen
 	 */
 	public int[] getFehlerRechts() {
-		int[] fehlerRechts = { vergleicheFS1.anzFehlerRechts,
+		final int[] fehlerRechts = { vergleicheFS1.anzFehlerRechts,
 				vergleicheFS2.anzFehlerRechts, vergleicheFS3.anzFehlerRechts };
 		return fehlerRechts;
 	}
@@ -603,9 +605,9 @@ public class PruefeDatenLogisch implements ClientReceiverInterface {
 
 /**
  * Vergleicht CSV Daten mit Ergebnisdaten.
- * 
+ *
  * @author BitCtrl Systems GmbH, Görlitz
- * 
+ *
  * @version $Id$
  */
 class VergleicheDaten extends Thread {
@@ -628,7 +630,7 @@ class VergleicheDaten extends Thread {
 	/**
 	 * Aufrufende Klasse.
 	 */
-	private PruefeDatenLogisch caller;
+	private final PruefeDatenLogisch caller;
 
 	/**
 	 * Übergebene Ergebnisdaten.
@@ -658,7 +660,7 @@ class VergleicheDaten extends Thread {
 	/**
 	 * Attributnamen.
 	 */
-	private String[] attributNamen = { ".Wert",
+	private final String[] attributNamen = { ".Wert",
 			".Status.Erfassung.NichtErfasst", ".Status.PlFormal.WertMax",
 			".Status.PlFormal.WertMin", ".Status.PlLogisch.WertMaxLogisch",
 			".Status.PlLogisch.WertMinLogisch",
@@ -704,13 +706,13 @@ class VergleicheDaten extends Thread {
 	/**
 	 * Erstellt einen Prüfthread welcher Soll-Werte und Ergebniswerte vergleicht
 	 * und das Ergebnis ausgibt.
-	 * 
+	 *
 	 * @param caller
 	 *            Die aufrufende Klasse
 	 * @param fsIndex
 	 *            Der zu prüfende Fahrstreifen
 	 */
-	public VergleicheDaten(PruefeDatenLogisch caller, int fsIndex) {
+	public VergleicheDaten(final PruefeDatenLogisch caller, final int fsIndex) {
 		this.caller = caller; // uebernehme aufrufende Klasse
 		this.fsIndex = fsIndex; // uebernehme FS-Index
 		this.start(); // starte Thread
@@ -718,11 +720,11 @@ class VergleicheDaten extends Thread {
 
 	/**
 	 * Setze Attributnamen entsprechend der Attributgruppe.
-	 * 
+	 *
 	 * @param atg
 	 *            Zu verwendende Attributgruppe
 	 */
-	private void setzeAttributNamen(String atg) {
+	private void setzeAttributNamen(final String atg) {
 		if (atg.equals(DUAKonstanten.ATG_KZD)) {
 			attributNamenPraefix = new String[] { "qKfz", "qPkw", "qLkw",
 					"vKfz", "vPkw", "vLkw", "vgKfz", "b", "tNetto" };
@@ -735,12 +737,13 @@ class VergleicheDaten extends Thread {
 	/**
 	 * Startet Thread.
 	 */
+	@Override
 	public void run() {
 		while (true) { // Thread läuft immer
 			doWait(); // warte auf trigger
 			try {
 				doVergleiche(); // Pruefe Daten
-			} catch (Exception e) {
+			} catch (final Exception e) {
 				//
 			}
 		}
@@ -748,7 +751,7 @@ class VergleicheDaten extends Thread {
 
 	/**
 	 * Vergleicht IST- und SOLL-Ergebnisse.
-	 * 
+	 *
 	 * @param result
 	 *            Das zu prüfende Ergebnis
 	 * @param csvZeilen1
@@ -756,8 +759,9 @@ class VergleicheDaten extends Thread {
 	 * @param csvOffset1
 	 *            Aktuelle Position in der CSV-Datei
 	 */
-	public void vergleiche(ResultData result,
-			ArrayList<HashMap<String, Integer>> csvZeilen1, int csvOffset1) {
+	public void vergleiche(final ResultData result,
+			final ArrayList<HashMap<String, Integer>> csvZeilen1,
+			final int csvOffset1) {
 		this.csvOffset = csvOffset1; // uebernehme CSV Index
 		this.csvZeilen = csvZeilen1; // uebernehme CSV Daten
 		this.daten = result.getData(); // uebernehme Ergebnisdaten
@@ -770,13 +774,13 @@ class VergleicheDaten extends Thread {
 
 	/**
 	 * Lässt Vergleicherthread warten.
-	 * 
+	 *
 	 */
 	private void doWait() {
 		synchronized (this) {
 			try {
 				this.wait();
-			} catch (Exception e) {
+			} catch (final Exception e) {
 				//
 			}
 		}
@@ -785,38 +789,39 @@ class VergleicheDaten extends Thread {
 
 	/**
 	 * Lese Ergebnisdaten.
-	 * 
+	 *
 	 * @param fsIndex1
 	 *            der FS-Index
 	 * @return ergebnis
 	 */
-	private HashMap<String, Integer> ergebnisLesen(int fsIndex1) {
-		HashMap<String, Integer> hmResult = new HashMap<String, Integer>();
+	private HashMap<String, Integer> ergebnisLesen(final int fsIndex1) {
+		final HashMap<String, Integer> hmResult = new HashMap<String, Integer>();
 		String attribut;
 		int aktuellerWert;
-		for (int i = 0; i < attributNamenPraefix.length; i++) {
-			for (int j = 0; j < attributNamen.length; j++) {
-				attribut = attributNamenPraefix[i] + attributNamen[j];
+		for (final String element : attributNamenPraefix) {
+			for (final String element2 : attributNamen) {
+				attribut = element + element2;
 				if (!attribut.equals("tNetto.Wert")) {
-					aktuellerWert = DUAUtensilien.getAttributDatum(attribut,
-							daten).asUnscaledValue().intValue();
+					aktuellerWert = DUAUtensilien
+							.getAttributDatum(attribut, daten)
+							.asUnscaledValue().intValue();
 					hmResult.put(attribut, aktuellerWert);
 				} else {
 					switch (fsIndex1) {
 					case 1:
-						resultWerttNettoFS1 = DUAUtensilien.getAttributDatum(
-								"tNetto.Wert", daten).asUnscaledValue()
-								.longValue();
+						resultWerttNettoFS1 = DUAUtensilien
+								.getAttributDatum("tNetto.Wert", daten)
+								.asUnscaledValue().longValue();
 						break;
 					case 2:
-						resultWerttNettoFS2 = DUAUtensilien.getAttributDatum(
-								"tNetto.Wert", daten).asUnscaledValue()
-								.longValue();
+						resultWerttNettoFS2 = DUAUtensilien
+								.getAttributDatum("tNetto.Wert", daten)
+								.asUnscaledValue().longValue();
 						break;
 					case 3:
-						resultWerttNettoFS3 = DUAUtensilien.getAttributDatum(
-								"tNetto.Wert", daten).asUnscaledValue()
-								.longValue();
+						resultWerttNettoFS3 = DUAUtensilien
+								.getAttributDatum("tNetto.Wert", daten)
+								.asUnscaledValue().longValue();
 						break;
 					default:
 					}
@@ -828,18 +833,19 @@ class VergleicheDaten extends Thread {
 
 	/**
 	 * prüfe Daten.
-	 * 
+	 *
 	 * @throws Exception
 	 *             wird weitergereicht
 	 */
 	private void doVergleiche() throws Exception {
-		String ident = "[FS:" + fsIndex + "-Z:" + (csvOffset + 2) + "] "; // FS +
+		final String ident = "[FS:" + fsIndex + "-Z:" + (csvOffset + 2) + "] "; // FS
+																				// +
 		// CSV
 		// Index
 		Debug.getLogger().info("Pruefe Fahrstreifendatum " + ident);
 
-		HashMap<String, Integer> hmCSV = csvZeilen.get(csvOffset);
-		HashMap<String, Integer> hmResult = ergebnisLesen(fsIndex);
+		final HashMap<String, Integer> hmCSV = csvZeilen.get(csvOffset);
+		final HashMap<String, Integer> hmResult = ergebnisLesen(fsIndex);
 
 		long csvWerttNetto = -4;
 		long resultWerttNetto = -4;
@@ -873,15 +879,15 @@ class VergleicheDaten extends Thread {
 		// Results("+hmResult.size()+")");
 
 		pruefLog = "";
-		for (int i = 0; i < attributNamenPraefix.length; i++) {
-			for (int j = 0; j < attributNamen.length; j++) {
-				attribut = attributNamenPraefix[i] + attributNamen[j];
+		for (final String element : attributNamenPraefix) {
+			for (final String element2 : attributNamen) {
+				attribut = element + element2;
 				attribWertKopie = attribut;
 
 				fehlerLinks = false;
 				fehlerRechts = false;
 
-				if (attributNamen[j].length() == 5
+				if ((element2.length() == 5)
 						&& attribWertKopie.contains(".Wert")) {
 					attribWertKopie = attribWertKopie.replace(".Wert",
 							".Wert.Kopie");
@@ -889,9 +895,10 @@ class VergleicheDaten extends Thread {
 					 * Eingangsgeschwindigkeitswerte >= 255 werden als
 					 * fehlerhaft interpretiert
 					 */
-					if (attribut.startsWith("v") && hmCSV.get(attribut) >= 255) {
+					if (attribut.startsWith("v")
+							&& (hmCSV.get(attribut) >= 255)) {
 						hmCSV.put(attribut, DUAKonstanten.FEHLERHAFT);
-						hmCSV.put(attributNamenPraefix[i]
+						hmCSV.put(element
 								+ ".Status.MessWertErsetzung.Implausibel",
 								DUAKonstanten.JA);
 					}
@@ -965,11 +972,11 @@ class VergleicheDaten extends Thread {
 									+ hmResult.get(attribut) + istWertErl
 									+ "\n\r";
 						} else {
-							System.out.println(ident + " OK  (" + attribut + "):"
-									+ hmCSV.get(attribut) + sollWertErl
+							System.out.println(ident + " OK  (" + attribut
+									+ "):" + hmCSV.get(attribut) + sollWertErl
 									+ " (SOLL)==(IST) "
 									+ hmResult.get(attribut) + istWertErl);
-							
+
 							pruefLog += ident + " OK  (" + attribut + "):"
 									+ hmCSV.get(attribut) + sollWertErl
 									+ " (SOLL)==(IST) "
@@ -1070,38 +1077,36 @@ class VergleicheDaten extends Thread {
 				if (fehlerLinks && fehlerRechts) {
 					Debug.getLogger().warning(
 							"ERR:Fehler Alles @ " + ident + " (" + attribut
-									+ ")");
+							+ ")");
 					anzFehlerAlles++;
 				} else if (fehlerLinks) {
 					Debug.getLogger().warning(
 							"ERR:Fehler Links @ " + ident + " (" + attribut
-									+ ")");
+							+ ")");
 					anzFehlerLinks++;
 				} else if (fehlerRechts) {
 					Debug.getLogger().warning(
 							"ERR:Fehler Rechts @ " + ident + " (" + attribut
-									+ ")");
+							+ ")");
 					anzFehlerRechts++;
 				}
 			}
 		}
 
 		// Debug.getLogger().info(pruefLog);
-		Debug
-				.getLogger()
-				.info(
-						"Prüfung der Fahrstreifendaten für diesen Intervall abgeschlossen");
+		Debug.getLogger()
+		.info("Prüfung der Fahrstreifendaten für diesen Intervall abgeschlossen");
 		caller.doNotify(fsIndex); // Benachrichtige aufrufende Klasse
 	}
 
 	/**
 	 * Übersetzt negative Werte in entsprechenden String.
-	 * 
+	 *
 	 * @param wert
 	 *            Der zu übersetzende wert
 	 * @return Wertbedeutung als String
 	 */
-	private String wertErl(long wert) {
+	private String wertErl(final long wert) {
 		if (wert == -1) {
 			return " [nicht ermittelbar]";
 		} else if (wert == -2) {
@@ -1115,10 +1120,10 @@ class VergleicheDaten extends Thread {
 
 	/**
 	 * Soll Assert zur Fehlermeldung genutzt werden?
-	 * 
+	 *
 	 * @param useAssert1
-	 *            <code>True</code> wenn Asserts verwendet werden sollen,
-	 *            sonst <code>False</code>
+	 *            <code>True</code> wenn Asserts verwendet werden sollen, sonst
+	 *            <code>False</code>
 	 */
 	public void benutzeAssert(final boolean useAssert1) {
 		this.useAssert = useAssert1;

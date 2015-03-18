@@ -30,9 +30,9 @@ import de.bsvrz.sys.funclib.bitctrl.dua.intpuf.IIntervallDatum;
 
 /**
  * Ein Ausfalldatum eines Verkehrsattributs.
- * 
+ *
  * @author BitCtrl Systems GmbH, Thierfelder
- * 
+ *
  * @version $Id$
  */
 public class VertrauensDatum implements IIntervallDatum<VertrauensDatum> {
@@ -45,19 +45,19 @@ public class VertrauensDatum implements IIntervallDatum<VertrauensDatum> {
 
 	/**
 	 * Standardkonstruktor.
-	 * 
+	 *
 	 * @param ausgefallen
 	 *            ob dieses Datum als ausgefallen im Sinne der
 	 *            Vertrauensbereichskontrolle interpretiert wird
 	 */
-	public VertrauensDatum(boolean ausgefallen) {
+	public VertrauensDatum(final boolean ausgefallen) {
 		this.ausgefallen = ausgefallen;
 	}
 
 	/**
 	 * Erfragt, ob dieses Datum als ausgefallen im Sinne der
 	 * Vertrauensbereichskontrolle interpretiert wird.
-	 * 
+	 *
 	 * @return ob dieses Datum als ausgefallen im Sinne der
 	 *         Vertrauensbereichskontrolle interpretiert wird
 	 */
@@ -68,7 +68,8 @@ public class VertrauensDatum implements IIntervallDatum<VertrauensDatum> {
 	/**
 	 * {@inheritDoc}
 	 */
-	public boolean istGleich(VertrauensDatum that) {
+	@Override
+	public boolean istGleich(final VertrauensDatum that) {
 		return this.isAusgefallen() == that.isAusgefallen();
 	}
 

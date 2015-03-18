@@ -31,9 +31,9 @@ import de.bsvrz.sys.funclib.bitctrl.dua.DUAUtensilien;
 /**
  * Speichert das Ergebnis einer Überprüfung des Vertrauensbereichs für ein
  * bestimmtes Attribut.
- * 
+ *
  * @author BitCtrl Systems GmbH, Thierfelder
- * 
+ *
  * @version $Id$
  */
 public class BezugsZeitraumAusfall implements Comparable<BezugsZeitraumAusfall> {
@@ -60,7 +60,7 @@ public class BezugsZeitraumAusfall implements Comparable<BezugsZeitraumAusfall> 
 
 	/**
 	 * Standardkonstruktor.
-	 * 
+	 *
 	 * @param grenze
 	 *            Ausschaltgrenze
 	 * @param ausfallInProzent
@@ -83,11 +83,11 @@ public class BezugsZeitraumAusfall implements Comparable<BezugsZeitraumAusfall> 
 	 * {@inheritDoc}
 	 */
 	@Override
-	public boolean equals(Object obj) {
+	public boolean equals(final Object obj) {
 		boolean result = false;
 
 		if (obj instanceof BezugsZeitraumAusfall) {
-			BezugsZeitraumAusfall that = (BezugsZeitraumAusfall) obj;
+			final BezugsZeitraumAusfall that = (BezugsZeitraumAusfall) obj;
 			result = this.ausfallInProzent == that.ausfallInProzent;
 		}
 
@@ -97,9 +97,10 @@ public class BezugsZeitraumAusfall implements Comparable<BezugsZeitraumAusfall> 
 	/**
 	 * {@inheritDoc}
 	 */
-	public int compareTo(BezugsZeitraumAusfall that) {
+	@Override
+	public int compareTo(final BezugsZeitraumAusfall that) {
 		return new Double(this.ausfallInProzent)
-				.compareTo(that.ausfallInProzent);
+		.compareTo(that.ausfallInProzent);
 	}
 
 	/**

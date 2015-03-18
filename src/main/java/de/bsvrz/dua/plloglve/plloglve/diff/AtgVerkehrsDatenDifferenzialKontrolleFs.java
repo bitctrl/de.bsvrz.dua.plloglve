@@ -32,59 +32,60 @@ import de.bsvrz.sys.funclib.bitctrl.dua.AllgemeinerDatenContainer;
 /**
  * Repräsentiert aktuelle Daten der DAV-ATG
  * <code>atg.verkehrsDatenDifferenzialKontrolleFs</code>.
- * 
+ *
  * @author BitCtrl Systems GmbH, Thierfelder
- * 
- * @version $Id$
+ *
+ * @version $Id: AtgVerkehrsDatenDifferenzialKontrolleFs.java 53825 2015-03-18
+ *          09:36:42Z peuker $
  */
 public class AtgVerkehrsDatenDifferenzialKontrolleFs extends
-		AllgemeinerDatenContainer {
+AllgemeinerDatenContainer {
 
 	/**
 	 * Maximal zulässige Anzahl von Intervallen mit Ergebniskonstanz für qKfz.
 	 */
-	private long maxAnzKonstanzqKfz;
+	private final long maxAnzKonstanzqKfz;
 
 	/**
 	 * Maximal zulässige Anzahl von Intervallen mit Ergebniskonstanz für qLkw.
 	 */
-	private long maxAnzKonstanzqLkw;
+	private final long maxAnzKonstanzqLkw;
 
 	/**
 	 * Maximal zulässige Anzahl von Intervallen mit Ergebniskonstanz für qPkw.
 	 */
-	private long maxAnzKonstanzqPkw;
+	private final long maxAnzKonstanzqPkw;
 
 	/**
 	 * Maximal zulässige Anzahl von Intervallen mit Ergebniskonstanz für vKfz.
 	 */
-	private long maxAnzKonstanzvKfz;
+	private final long maxAnzKonstanzvKfz;
 
 	/**
 	 * Maximal zulässige Anzahl von Intervallen mit Ergebniskonstanz für vLkw.
 	 */
-	private long maxAnzKonstanzvLkw;
+	private final long maxAnzKonstanzvLkw;
 
 	/**
 	 * Maximal zulässige Anzahl von Intervallen mit Ergebniskonstanz für vPkw.
 	 */
-	private long maxAnzKonstanzvPkw;
+	private final long maxAnzKonstanzvPkw;
 
 	/**
 	 * Maximal zulässige Anzahl von Intervallen mit Ergebniskonstanz für die
 	 * Streung S.
 	 */
-	private long maxAnzKonstanzStreung;
+	private final long maxAnzKonstanzStreung;
 
 	/**
 	 * Maximal zulässige Anzahl von Intervallen mit Ergebniskonstanz für die
 	 * Belegung b.
 	 */
-	private long maxAnzKonstanzBelegung;
+	private final long maxAnzKonstanzBelegung;
 
 	/**
 	 * Standardkonstruktor.
-	 * 
+	 *
 	 * @param data
 	 *            initialisierendes DAV-Datum
 	 */
@@ -112,7 +113,7 @@ public class AtgVerkehrsDatenDifferenzialKontrolleFs extends
 
 	/**
 	 * Erfragt maxAnzKonstanzBelegung.
-	 * 
+	 *
 	 * @return maxAnzKonstanzBelegung
 	 */
 	public final long getMaxAnzKonstanzBelegung() {
@@ -121,7 +122,7 @@ public class AtgVerkehrsDatenDifferenzialKontrolleFs extends
 
 	/**
 	 * Erfragt maxAnzKonstanzqKfz.
-	 * 
+	 *
 	 * @return maxAnzKonstanzqKfz
 	 */
 	public final long getMaxAnzKonstanzqKfz() {
@@ -130,7 +131,7 @@ public class AtgVerkehrsDatenDifferenzialKontrolleFs extends
 
 	/**
 	 * Erfragt maxAnzKonstanzqLkw.
-	 * 
+	 *
 	 * @return maxAnzKonstanzqLkw
 	 */
 	public final long getMaxAnzKonstanzqLkw() {
@@ -139,7 +140,7 @@ public class AtgVerkehrsDatenDifferenzialKontrolleFs extends
 
 	/**
 	 * Erfragt maxAnzKonstanzqPkw.
-	 * 
+	 *
 	 * @return maxAnzKonstanzqPkw
 	 */
 	public final long getMaxAnzKonstanzqPkw() {
@@ -148,7 +149,7 @@ public class AtgVerkehrsDatenDifferenzialKontrolleFs extends
 
 	/**
 	 * Erfragt maxAnzKonstanzStreung.
-	 * 
+	 *
 	 * @return maxAnzKonstanzStreung
 	 */
 	public final long getMaxAnzKonstanzStreung() {
@@ -157,7 +158,7 @@ public class AtgVerkehrsDatenDifferenzialKontrolleFs extends
 
 	/**
 	 * Erfragt maxAnzKonstanzvKfz.
-	 * 
+	 *
 	 * @return maxAnzKonstanzvKfz
 	 */
 	public final long getMaxAnzKonstanzvKfz() {
@@ -166,7 +167,7 @@ public class AtgVerkehrsDatenDifferenzialKontrolleFs extends
 
 	/**
 	 * Erfragt maxAnzKonstanzvLkw.
-	 * 
+	 *
 	 * @return maxAnzKonstanzvLkw
 	 */
 	public final long getMaxAnzKonstanzvLkw() {
@@ -175,7 +176,7 @@ public class AtgVerkehrsDatenDifferenzialKontrolleFs extends
 
 	/**
 	 * Erfragt maxAnzKonstanzvPkw.
-	 * 
+	 *
 	 * @return maxAnzKonstanzvPkw
 	 */
 	public final long getMaxAnzKonstanzvPkw() {

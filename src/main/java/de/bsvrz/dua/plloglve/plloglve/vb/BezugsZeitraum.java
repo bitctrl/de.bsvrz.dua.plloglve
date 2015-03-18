@@ -44,12 +44,14 @@ import de.bsvrz.sys.funclib.operatingMessage.MessageGrade;
  * Speichert für einen Bezugszeitraum und ein finales DAV-Attribut des
  * Datensatzes <code>atg.verkehrsDatenKurzZeitIntervall</code> (z.B.
  * <code>qKfz</code>) die ausgefallenen Werte
- * 
+ *
  * @author BitCtrl Systems GmbH, Thierfelder
- * 
+ *
  * @version $Id$
  */
 public class BezugsZeitraum {
+
+	private static final Debug LOGGER = Debug.getLogger();
 
 	/**
 	 * Verbindung zum Verwaltungsmodul.
@@ -59,7 +61,7 @@ public class BezugsZeitraum {
 	/**
 	 * alle ausgefallenen Datensaetze in diesem Bezugszeitraum.
 	 */
-	private VertrauensPuffer ausgefalleneDaten = new VertrauensPuffer();
+	private final VertrauensPuffer ausgefalleneDaten = new VertrauensPuffer();
 
 	/**
 	 * Name des finalen DAV-Attributs, für den Werte in diesem Bezugszeitraum
@@ -74,7 +76,7 @@ public class BezugsZeitraum {
 
 	/**
 	 * Standardkonstruktor.
-	 * 
+	 *
 	 * @param verwaltung
 	 *            Verbindung zum Verwaltungsmodul
 	 * @param name
@@ -83,8 +85,8 @@ public class BezugsZeitraum {
 	 *            <code>qKfz</code>)
 	 */
 	protected BezugsZeitraum(final IVerwaltung verwaltung, final String name) {
-		if (dieVerwaltung == null) {
-			dieVerwaltung = verwaltung;
+		if (BezugsZeitraum.dieVerwaltung == null) {
+			BezugsZeitraum.dieVerwaltung = verwaltung;
 		}
 		this.name = name;
 	}
@@ -94,7 +96,7 @@ public class BezugsZeitraum {
 	 * Fall, wenn die Einschaltschwelle von einem Datum überschritten, und von
 	 * allen späteren Daten (bis jetzt) die Ausschaltschwelle nicht
 	 * unterschritten wurde.
-	 * 
+	 *
 	 * @return ob im Moment der Vertrauensbereich verletzt ist
 	 */
 	protected final boolean isVertrauensBereichVerletzt() {
@@ -106,7 +108,7 @@ public class BezugsZeitraum {
 	 * den aktuellen Parametern. Errechnet anhand der übergebenen Parameter, ob
 	 * der Vertrauensbereich (immernoch, nicht mehr) verletzt ist und gibt ggf.
 	 * eine Betriebsmeldung aus
-	 * 
+	 *
 	 * @param originalDatum
 	 *            ein KZD eines Fahrstreifens
 	 * @param parameter
@@ -125,15 +127,15 @@ public class BezugsZeitraum {
 		 * errechnet werden koennen
 		 */
 		if (TestParameter.getInstanz().isTestVertrauen()
-				|| (parameter != null && parameter.isAuswertbar() && (System
-						.currentTimeMillis() - parameter.getBezugsZeitraum()) > PlPruefungLogischLVE.START_ZEIT)) {
-			VertrauensEinzelDatum neuesAusfallEinzelDatum = new VertrauensEinzelDatum(
+				|| ((parameter != null) && parameter.isAuswertbar() && ((System
+						.currentTimeMillis() - parameter.getBezugsZeitraum()) > PlPruefungLogischLVE.START_ZEIT))) {
+			final VertrauensEinzelDatum neuesAusfallEinzelDatum = new VertrauensEinzelDatum(
 					this.name, originalDatum);
 
 			try {
 				ausgefalleneDaten.add(neuesAusfallEinzelDatum);
-			} catch (IntervallPufferException e) {
-				Debug.getLogger().error(
+			} catch (final IntervallPufferException e) {
+				LOGGER.error(
 						"Fehler beim Erweitern des Ausfallpuffers", e); //$NON-NLS-1$
 				e.printStackTrace();
 			}
@@ -145,18 +147,18 @@ public class BezugsZeitraum {
 					 * Ein Tag ist jetzt genau 144s lang
 					 */
 					this.ausgefalleneDaten
-							.loescheAllesUnterhalbVon(neuesAusfallEinzelDatum
-									.getIntervallEnde()
-									- (parameter.getBezugsZeitraum()
-											* TestParameter.INTERVALL_VB * 60L));
+					.loescheAllesUnterhalbVon(neuesAusfallEinzelDatum
+							.getIntervallEnde()
+							- (parameter.getBezugsZeitraum()
+									* TestParameter.INTERVALL_VB * 60L));
 				} else {
 					this.ausgefalleneDaten
-							.loescheAllesUnterhalbVon(neuesAusfallEinzelDatum
-									.getIntervallEnde()
-									- (parameter.getBezugsZeitraum() * Constants.MILLIS_PER_HOUR));
+					.loescheAllesUnterhalbVon(neuesAusfallEinzelDatum
+							.getIntervallEnde()
+							- (parameter.getBezugsZeitraum() * Constants.MILLIS_PER_HOUR));
 				}
-			} catch (IntervallPufferException e) {
-				Debug.getLogger().error(
+			} catch (final IntervallPufferException e) {
+				LOGGER.error(
 						"Fehler beim Verkleinern des Ausfallpuffers", e); //$NON-NLS-1$
 				e.printStackTrace();
 			}
@@ -165,89 +167,89 @@ public class BezugsZeitraum {
 
 			final long bezugsZeitraumInMillis = TestParameter.getInstanz()
 					.isTestVertrauen() ? parameter.getBezugsZeitraum()
-					* TestParameter.INTERVALL_VB * 60L : parameter
-					.getBezugsZeitraum() * Constants.MILLIS_PER_HOUR;
-			double ausfallInProzent = 0;
-			if (bezugsZeitraumInMillis > 0) {
-				ausfallInProzent = (double) (((double) ausfallZeit / (double) bezugsZeitraumInMillis) * 100.0);
-			}
-
-			/**
-			 * Lauft das Programm schon länger als der Bezugszeitraum groß ist?
-			 * Nur dann ist eine Vertrauensbereichsprüfung sinnvoll
-			 */
-			if (PlPruefungLogischLVE.START_ZEIT + bezugsZeitraumInMillis < System
-					.currentTimeMillis()) {
-				boolean einschaltSchwelleUEBERschritten = false;
-				boolean ausschaltSchwelleUNTERSchritten = false;
-
-				if (ausfallInProzent > parameter
-						.getMaxAusfallProBezugsZeitraumEin()) {
-					einschaltSchwelleUEBERschritten = true;
-				}
-				if (ausfallInProzent < parameter
-						.getMaxAusfallProBezugsZeitraumAus()) {
-					ausschaltSchwelleUNTERSchritten = true;
-				}
-
-				if (einschaltSchwelleUEBERschritten) {
-					if (!this.vertrauensBereichVerletzt) {
-						this.vertrauensBereichVerletzt = true;
+							* TestParameter.INTERVALL_VB * 60L : parameter
+							.getBezugsZeitraum() * Constants.MILLIS_PER_HOUR;
+					double ausfallInProzent = 0;
+					if (bezugsZeitraumInMillis > 0) {
+						ausfallInProzent = ((double) ausfallZeit / (double) bezugsZeitraumInMillis) * 100.0;
 					}
-				}
 
-				if (ausschaltSchwelleUNTERSchritten) {
-					if (this.vertrauensBereichVerletzt) {
-						this.vertrauensBereichVerletzt = false;
-						long stunden = ausfallZeit
-								/ (TestParameter.getInstanz().isTestVertrauen() ? TestParameter.INTERVALL_VB * 60L
-										: Constants.MILLIS_PER_HOUR);
-						long minuten = (ausfallZeit - (stunden * (TestParameter
-								.getInstanz().isTestVertrauen() ? TestParameter.INTERVALL_VB * 60L
-								: Constants.MILLIS_PER_HOUR)))
-								/ Constants.MILLIS_PER_MINUTE;
-						ausfall = new BezugsZeitraumAusfall(
-								parameter.getMaxAusfallProBezugsZeitraumAus(),
-								ausfallInProzent, stunden, minuten);
+					/**
+					 * Lauft das Programm schon länger als der Bezugszeitraum groß ist?
+					 * Nur dann ist eine Vertrauensbereichsprüfung sinnvoll
+					 */
+					if ((PlPruefungLogischLVE.START_ZEIT + bezugsZeitraumInMillis) < System
+							.currentTimeMillis()) {
+						boolean einschaltSchwelleUEBERschritten = false;
+						boolean ausschaltSchwelleUNTERSchritten = false;
+
+						if (ausfallInProzent > parameter
+								.getMaxAusfallProBezugsZeitraumEin()) {
+							einschaltSchwelleUEBERschritten = true;
+						}
+						if (ausfallInProzent < parameter
+								.getMaxAusfallProBezugsZeitraumAus()) {
+							ausschaltSchwelleUNTERSchritten = true;
+						}
+
+						if (einschaltSchwelleUEBERschritten) {
+							if (!this.vertrauensBereichVerletzt) {
+								this.vertrauensBereichVerletzt = true;
+							}
+						}
+
+						if (ausschaltSchwelleUNTERSchritten) {
+							if (this.vertrauensBereichVerletzt) {
+								this.vertrauensBereichVerletzt = false;
+								final long stunden = ausfallZeit
+										/ (TestParameter.getInstanz().isTestVertrauen() ? TestParameter.INTERVALL_VB * 60L
+												: Constants.MILLIS_PER_HOUR);
+								final long minuten = (ausfallZeit - (stunden * (TestParameter
+										.getInstanz().isTestVertrauen() ? TestParameter.INTERVALL_VB * 60L
+												: Constants.MILLIS_PER_HOUR)))
+												/ Constants.MILLIS_PER_MINUTE;
+								ausfall = new BezugsZeitraumAusfall(
+										parameter.getMaxAusfallProBezugsZeitraumAus(),
+										ausfallInProzent, stunden, minuten);
+							}
+						}
+
+						if (this.vertrauensBereichVerletzt) {
+							final Date start = new Date(originalDatum.getDataTime()
+									- bezugsZeitraumInMillis);
+							final Date ende = new Date(originalDatum.getDataTime());
+							final long stunden = ausfallZeit
+									/ (TestParameter.getInstanz().isTestVertrauen() ? TestParameter.INTERVALL_VB * 60L
+											: Constants.MILLIS_PER_HOUR);
+							final long minuten = (ausfallZeit - (stunden * (TestParameter
+									.getInstanz().isTestVertrauen() ? TestParameter.INTERVALL_VB * 60L
+											: Constants.MILLIS_PER_HOUR)))
+											/ Constants.MILLIS_PER_MINUTE;
+
+							final String nachricht = "Daten außerhalb des Vertrauensbereichs. Im Zeitraum von " + //$NON-NLS-1$
+									DUAKonstanten.BM_ZEIT_FORMAT.format(start)
+									+ " Uhr bis " + DUAKonstanten.BM_ZEIT_FORMAT.format(ende) + //$NON-NLS-1$
+									" ("
+									+ parameter.getBezugsZeitraum()
+									+ " Stunde(n)) implausible Fahrstreifenwerte für den Wert " + //$NON-NLS-1$
+									this.name
+									+ " am Fahrstreifen "
+									+ originalDatum.getObject()
+									+ " von "
+									+ DUAUtensilien.runde(ausfallInProzent, 1)
+									+ "% (> " + //$NON-NLS-1$
+									parameter.getMaxAusfallProBezugsZeitraumEin()
+									+ "%) entspricht Ausfall von " + stunden + " Stunde(n) " + //$NON-NLS-1$ //$NON-NLS-2$
+									minuten
+									+ " Minute(n). Fahrstreifenwerte werden auf Implausibel gesetzt."; //$NON-NLS-1$
+
+							DUAUtensilien.sendeBetriebsmeldung(
+									BezugsZeitraum.dieVerwaltung.getVerbindung(),
+									BezugsZeitraum.dieVerwaltung.getBmvIdKonverter(),
+									MessageGrade.WARNING, originalDatum.getObject(),
+									nachricht);
+						}
 					}
-				}
-
-				if (this.vertrauensBereichVerletzt) {
-					Date start = new Date(originalDatum.getDataTime()
-							- bezugsZeitraumInMillis);
-					Date ende = new Date(originalDatum.getDataTime());
-					long stunden = ausfallZeit
-							/ (TestParameter.getInstanz().isTestVertrauen() ? TestParameter.INTERVALL_VB * 60L
-									: Constants.MILLIS_PER_HOUR);
-					long minuten = (ausfallZeit - (stunden * (TestParameter
-							.getInstanz().isTestVertrauen() ? TestParameter.INTERVALL_VB * 60L
-							: Constants.MILLIS_PER_HOUR)))
-							/ Constants.MILLIS_PER_MINUTE;
-
-					String nachricht = "Daten außerhalb des Vertrauensbereichs. Im Zeitraum von " + //$NON-NLS-1$
-							DUAKonstanten.BM_ZEIT_FORMAT.format(start)
-							+ " Uhr bis " + DUAKonstanten.BM_ZEIT_FORMAT.format(ende) + //$NON-NLS-1$ 
-							" ("
-							+ parameter.getBezugsZeitraum()
-							+ " Stunde(n)) implausible Fahrstreifenwerte für den Wert " + //$NON-NLS-1$ //$NON-NLS-2$
-							this.name
-							+ " am Fahrstreifen "
-							+ originalDatum.getObject()
-							+ " von "
-							+ DUAUtensilien.runde(ausfallInProzent, 1)
-							+ "% (> " + //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-							parameter.getMaxAusfallProBezugsZeitraumEin()
-							+ "%) entspricht Ausfall von " + stunden + " Stunde(n) " + //$NON-NLS-1$ //$NON-NLS-2$
-							minuten
-							+ " Minute(n). Fahrstreifenwerte werden auf Implausibel gesetzt."; //$NON-NLS-1$
-
-					DUAUtensilien.sendeBetriebsmeldung(
-							dieVerwaltung.getVerbindung(),
-							dieVerwaltung.getBmvIdKonverter(),
-							MessageGrade.WARNING, originalDatum.getObject(),
-							nachricht);
-				}
-			}
 		}
 
 		return ausfall;

@@ -47,40 +47,42 @@ import de.bsvrz.sys.funclib.debug.Debug;
  * Submodul Differentialkontrolle. Dieses Submodul überprüft, ob die maximal
  * zulässige Anzahl von Intervallen mit Ergebniskonstanz überschritten wurde und
  * generiert ggf. eine Betriebsmeldung
- * 
+ *
  * @author BitCtrl Systems GmbH, Thierfelder
- * 
+ *
  * @version $Id$
  */
 public class DifferenzialKontrolle extends AbstraktBearbeitungsKnotenAdapter {
 
+	private static final Debug LOGGER = Debug.getLogger();
 	/**
 	 * Map von Fahrtreifen-Systemobjekten auf Objekte mit Konstanzzählern.
 	 */
-	private Map<SystemObject, DiffFahrStreifen> fahrStreifen = new HashMap<SystemObject, DiffFahrStreifen>();
+	private final Map<SystemObject, DiffFahrStreifen> fahrStreifen = new HashMap<SystemObject, DiffFahrStreifen>();
 
 	/**
 	 * {@inheritDoc}
 	 */
 	@Override
-	public void initialisiere(IVerwaltung dieVerwaltung)
+	public void initialisiere(final IVerwaltung dieVerwaltung)
 			throws DUAInitialisierungsException {
 		super.initialisiere(dieVerwaltung);
 
-		for (SystemObject obj : dieVerwaltung.getSystemObjekte()) {
+		for (final SystemObject obj : dieVerwaltung.getSystemObjekte()) {
 			this.fahrStreifen
-					.put(obj, new DiffFahrStreifen(dieVerwaltung, obj));
+			.put(obj, new DiffFahrStreifen(dieVerwaltung, obj));
 		}
 	}
 
 	/**
 	 * {@inheritDoc}
 	 */
-	public void aktualisiereDaten(ResultData[] resultate) {
+	@Override
+	public void aktualisiereDaten(final ResultData[] resultate) {
 		if (resultate != null) {
-			Collection<ResultData> weiterzuleitendeResultate = new ArrayList<ResultData>();
+			final Collection<ResultData> weiterzuleitendeResultate = new ArrayList<ResultData>();
 
-			for (ResultData resultat : resultate) {
+			for (final ResultData resultat : resultate) {
 				if (resultat != null) {
 
 					if (!TestParameter.getInstanz().isTestVertrauen()
@@ -91,24 +93,24 @@ public class DifferenzialKontrolle extends AbstraktBearbeitungsKnotenAdapter {
 							if (resultat.getData() != null) {
 								ResultData resultatNeu = resultat;
 
-								DiffFahrStreifen fs = this.fahrStreifen
+								final DiffFahrStreifen fs = this.fahrStreifen
 										.get(resultat.getObject());
 
 								Data data = null;
 								if (fs != null) {
 									data = fs.plausibilisiere(resultat);
 								} else {
-									Debug.getLogger()
-											.error("Fahrstreifen zu Datensatz konnte nicht identifiziert werden:\n" + //$NON-NLS-1$
-													resultat);
+									LOGGER
+									.error("Fahrstreifen zu Datensatz konnte nicht identifiziert werden:\n" + //$NON-NLS-1$
+											resultat);
 								}
 
 								if (data != null) {
-									resultatNeu = new ResultData(resultat
-											.getObject(), resultat
-											.getDataDescription(), resultat
-											.getDataTime(), data, resultat
-											.isDelayedData());
+									resultatNeu = new ResultData(
+											resultat.getObject(),
+											resultat.getDataDescription(),
+											resultat.getDataTime(), data,
+											resultat.isDelayedData());
 								}
 
 								weiterzuleitendeResultate.add(resultatNeu);
@@ -128,7 +130,7 @@ public class DifferenzialKontrolle extends AbstraktBearbeitungsKnotenAdapter {
 				}
 			}
 
-			if (this.knoten != null && !weiterzuleitendeResultate.isEmpty()) {
+			if ((this.knoten != null) && !weiterzuleitendeResultate.isEmpty()) {
 				this.knoten.aktualisiereDaten(weiterzuleitendeResultate
 						.toArray(new ResultData[0]));
 			}
@@ -138,6 +140,7 @@ public class DifferenzialKontrolle extends AbstraktBearbeitungsKnotenAdapter {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public ModulTyp getModulTyp() {
 		return null;
 	}
@@ -145,7 +148,8 @@ public class DifferenzialKontrolle extends AbstraktBearbeitungsKnotenAdapter {
 	/**
 	 * {@inheritDoc}
 	 */
-	public void aktualisierePublikation(IDatenFlussSteuerung dfs) {
+	@Override
+	public void aktualisierePublikation(final IDatenFlussSteuerung dfs) {
 		// hier wird nicht publiziert
 	}
 

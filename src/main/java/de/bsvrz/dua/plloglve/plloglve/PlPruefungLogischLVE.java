@@ -43,9 +43,9 @@ import de.bsvrz.sys.funclib.bitctrl.dua.schnittstellen.IVerwaltung;
  * Implementierung des Moduls Pl-Prüfung logisch LVE der SWE Pl-Prüfung logisch
  * LVE. Dieses Modul leitet nur die empfangenen Daten an seine Submudole weiter,
  * welche die eigentliche Plausibilisierung durchführen
- * 
+ *
  * @author BitCtrl Systems GmbH, Thierfelder
- * 
+ *
  * @version $Id$
  */
 public class PlPruefungLogischLVE extends AbstraktBearbeitungsKnotenAdapter {
@@ -58,17 +58,17 @@ public class PlPruefungLogischLVE extends AbstraktBearbeitungsKnotenAdapter {
 	/**
 	 * Submodul Pl-Prüfung logisch LVE standard.
 	 */
-	private PlLogischLVEStandard standard = new PlLogischLVEStandard();
+	private final PlLogischLVEStandard standard = new PlLogischLVEStandard();
 
 	/**
 	 * Submodul Differenzial-Kontrolle.
 	 */
-	private DifferenzialKontrolle diff = new DifferenzialKontrolle();
+	private final DifferenzialKontrolle diff = new DifferenzialKontrolle();
 
 	/**
 	 * Submodul Ausfallhaeufigkeit.
 	 */
-	private Ausfallhaeufigkeit ausfall = new Ausfallhaeufigkeit();
+	private final Ausfallhaeufigkeit ausfall = new Ausfallhaeufigkeit();
 
 	/**
 	 * Submodul Vertrauensbereich.
@@ -87,7 +87,7 @@ public class PlPruefungLogischLVE extends AbstraktBearbeitungsKnotenAdapter {
 
 	/**
 	 * Standardkonstruktor.
-	 * 
+	 *
 	 * @param stdAspekte
 	 *            Informationen zu den Standardpublikationsaspekten für diese
 	 *            Instanz des Moduls Pl-Prüfung logisch LVE
@@ -100,13 +100,15 @@ public class PlPruefungLogischLVE extends AbstraktBearbeitungsKnotenAdapter {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public void initialisiere(IVerwaltung dieVerwaltung)
+	public void initialisiere(final IVerwaltung dieVerwaltung)
 			throws DUAInitialisierungsException {
-		super.initialisiere(dieVerwaltung);		
-		atgKzdId = dieVerwaltung.getVerbindung().getDataModel()
-				.getAttributeGroup(DUAKonstanten.ATG_KZD).getId();
-		atgLzdId = dieVerwaltung.getVerbindung().getDataModel()
-				.getAttributeGroup(DUAKonstanten.ATG_LZD).getId();
+		super.initialisiere(dieVerwaltung);
+		PlPruefungLogischLVE.atgKzdId = dieVerwaltung.getVerbindung()
+				.getDataModel().getAttributeGroup(DUAKonstanten.ATG_KZD)
+				.getId();
+		PlPruefungLogischLVE.atgLzdId = dieVerwaltung.getVerbindung()
+				.getDataModel().getAttributeGroup(DUAKonstanten.ATG_LZD)
+				.getId();
 
 		this.vb = new Vertrauensbereich(this.standardAspekte);
 
@@ -127,6 +129,7 @@ public class PlPruefungLogischLVE extends AbstraktBearbeitungsKnotenAdapter {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public ModulTyp getModulTyp() {
 		return null;
 	}
@@ -134,14 +137,16 @@ public class PlPruefungLogischLVE extends AbstraktBearbeitungsKnotenAdapter {
 	/**
 	 * {@inheritDoc}
 	 */
-	public void aktualisiereDaten(ResultData[] resultate) {
+	@Override
+	public void aktualisiereDaten(final ResultData[] resultate) {
 		this.standard.aktualisiereDaten(resultate);
 	}
 
 	/**
 	 * {@inheritDoc}
 	 */
-	public void aktualisierePublikation(IDatenFlussSteuerung dfs) {
+	@Override
+	public void aktualisierePublikation(final IDatenFlussSteuerung dfs) {
 		// wird hier nicht benötigt, da die Publikation erst im letzten Submodul
 		// "Vertrauensbereich" stattfindet
 	}

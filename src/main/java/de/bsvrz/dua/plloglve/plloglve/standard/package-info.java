@@ -24,8 +24,6 @@
  * mailto: info@bitctrl.de
  */
 
-
-
 /**
  * Klassen des Submoduls Pl-Prüfung logisch LVE (standard)
  */

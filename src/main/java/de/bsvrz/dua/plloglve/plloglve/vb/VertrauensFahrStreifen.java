@@ -51,21 +51,23 @@ import de.bsvrz.sys.funclib.operatingMessage.MessageGrade;
 /**
  * Repräsentiert einen Fahrstreifen mit allen Informationen, die zur Ermittlung
  * des Vertrauens in diesen Fahrstreifen notwendig sind.
- * 
+ *
  * @author BitCtrl Systems GmbH, Thierfelder
- * 
+ *
  * @version $Id$
  */
 public class VertrauensFahrStreifen implements ClientReceiverInterface {
+
+	private static final Debug LOGGER = Debug.getLogger();
 
 	/**
 	 * Alle Attribute, die ggf. auf implausibel gesetzt werden müssen
 	 */
 	private static final String[] ATTRIBUTE = new String[] {
-			"qKfz", "qLkw", "qPkw", //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-			"vKfz", "vLkw", "vPkw", //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-			"b", "tNetto", "sKfz", //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ 
-			"vgKfz" }; //$NON-NLS-1$
+		"qKfz", "qLkw", "qPkw", //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+		"vKfz", "vLkw", "vPkw", //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+		"b", "tNetto", "sKfz", //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+	"vgKfz" }; //$NON-NLS-1$
 
 	/**
 	 * Verbindung zum Verwaltungsmodul.
@@ -146,7 +148,7 @@ public class VertrauensFahrStreifen implements ClientReceiverInterface {
 
 	/**
 	 * Standardkonstruktor.
-	 * 
+	 *
 	 * @param verwaltung
 	 *            Verbindung zum Verwaltungsmodul
 	 * @param objekt
@@ -156,33 +158,45 @@ public class VertrauensFahrStreifen implements ClientReceiverInterface {
 			final SystemObject objekt) {
 		this.objekt = objekt;
 
-		if (dieVerwaltung == null) {
-			dieVerwaltung = verwaltung;
-			paraVertrauenDD = new DataDescription(dieVerwaltung.getVerbindung()
-					.getDataModel()
-					.getAttributeGroup("atg.verkehrsDatenVertrauensBereichFs"), //$NON-NLS-1$
-					dieVerwaltung.getVerbindung().getDataModel()
-							.getAspect(DaVKonstanten.ASP_PARAMETER_SOLL));
+		if (VertrauensFahrStreifen.dieVerwaltung == null) {
+			VertrauensFahrStreifen.dieVerwaltung = verwaltung;
+			VertrauensFahrStreifen.paraVertrauenDD = new DataDescription(
+					VertrauensFahrStreifen.dieVerwaltung
+							.getVerbindung()
+							.getDataModel()
+							.getAttributeGroup(
+									"atg.verkehrsDatenVertrauensBereichFs"), //$NON-NLS-1$
+					VertrauensFahrStreifen.dieVerwaltung.getVerbindung()
+							.getDataModel()
+					.getAspect(DaVKonstanten.ASP_PARAMETER_SOLL));
 		}
 
-		datenBezugsZeitraumQKfz = new BezugsZeitraum(dieVerwaltung, "qKfz"); //$NON-NLS-1$
-		datenBezugsZeitraumQLkw = new BezugsZeitraum(dieVerwaltung, "qLkw"); //$NON-NLS-1$
-		datenBezugsZeitraumQPkw = new BezugsZeitraum(dieVerwaltung, "qPkw"); //$NON-NLS-1$
-		datenBezugsZeitraumVKfz = new BezugsZeitraum(dieVerwaltung, "vKfz"); //$NON-NLS-1$
-		datenBezugsZeitraumVLkw = new BezugsZeitraum(dieVerwaltung, "vLkw"); //$NON-NLS-1$
-		datenBezugsZeitraumVPkw = new BezugsZeitraum(dieVerwaltung, "vPkw"); //$NON-NLS-1$
-		datenBezugsZeitraumSKfz = new BezugsZeitraum(dieVerwaltung, "sKfz"); //$NON-NLS-1$
-		datenBezugsZeitraumB = new BezugsZeitraum(dieVerwaltung, "b"); //$NON-NLS-1$
+		datenBezugsZeitraumQKfz = new BezugsZeitraum(
+				VertrauensFahrStreifen.dieVerwaltung, "qKfz"); //$NON-NLS-1$
+		datenBezugsZeitraumQLkw = new BezugsZeitraum(
+				VertrauensFahrStreifen.dieVerwaltung, "qLkw"); //$NON-NLS-1$
+		datenBezugsZeitraumQPkw = new BezugsZeitraum(
+				VertrauensFahrStreifen.dieVerwaltung, "qPkw"); //$NON-NLS-1$
+		datenBezugsZeitraumVKfz = new BezugsZeitraum(
+				VertrauensFahrStreifen.dieVerwaltung, "vKfz"); //$NON-NLS-1$
+		datenBezugsZeitraumVLkw = new BezugsZeitraum(
+				VertrauensFahrStreifen.dieVerwaltung, "vLkw"); //$NON-NLS-1$
+		datenBezugsZeitraumVPkw = new BezugsZeitraum(
+				VertrauensFahrStreifen.dieVerwaltung, "vPkw"); //$NON-NLS-1$
+		datenBezugsZeitraumSKfz = new BezugsZeitraum(
+				VertrauensFahrStreifen.dieVerwaltung, "sKfz"); //$NON-NLS-1$
+		datenBezugsZeitraumB = new BezugsZeitraum(
+				VertrauensFahrStreifen.dieVerwaltung, "b"); //$NON-NLS-1$
 
-		dieVerwaltung.getVerbindung().subscribeReceiver(this, objekt,
-				paraVertrauenDD, ReceiveOptions.normal(),
-				ReceiverRole.receiver());
+		VertrauensFahrStreifen.dieVerwaltung.getVerbindung().subscribeReceiver(
+				this, objekt, VertrauensFahrStreifen.paraVertrauenDD,
+				ReceiveOptions.normal(), ReceiverRole.receiver());
 	}
 
 	/**
 	 * Führt eine Plausibilisierung des übergebenen Originaldatums durch und
 	 * gibt ggf. eine Betriebsmeldung aus
-	 * 
+	 *
 	 * @param originalDatum
 	 *            ein DAV-Originaldatum
 	 * @return das plausibilisierte Datum oder unveränderte Originaldatum, wenn
@@ -192,7 +206,7 @@ public class VertrauensFahrStreifen implements ClientReceiverInterface {
 		Data copy = originalDatum.getData();
 
 		synchronized (this) {
-			if (parameter != null && parameter.isAuswertbar()) {
+			if ((parameter != null) && parameter.isAuswertbar()) {
 
 				final SortedSet<BezugsZeitraumAusfall> ausfallErgebnisse = new TreeSet<BezugsZeitraumAusfall>();
 
@@ -217,17 +231,17 @@ public class VertrauensFahrStreifen implements ClientReceiverInterface {
 				final boolean verletztAktuell = datenBezugsZeitraumQKfz
 						.isVertrauensBereichVerletzt()
 						|| datenBezugsZeitraumQLkw
-								.isVertrauensBereichVerletzt()
+						.isVertrauensBereichVerletzt()
 						|| datenBezugsZeitraumQPkw
-								.isVertrauensBereichVerletzt()
+						.isVertrauensBereichVerletzt()
 						|| datenBezugsZeitraumVKfz
-								.isVertrauensBereichVerletzt()
+						.isVertrauensBereichVerletzt()
 						|| datenBezugsZeitraumVLkw
-								.isVertrauensBereichVerletzt()
+						.isVertrauensBereichVerletzt()
 						|| datenBezugsZeitraumVPkw
-								.isVertrauensBereichVerletzt()
+						.isVertrauensBereichVerletzt()
 						|| datenBezugsZeitraumSKfz
-								.isVertrauensBereichVerletzt()
+						.isVertrauensBereichVerletzt()
 						|| datenBezugsZeitraumB.isVertrauensBereichVerletzt();
 
 				if (verletztAktuell) {
@@ -238,32 +252,32 @@ public class VertrauensFahrStreifen implements ClientReceiverInterface {
 					 * Eine Betriebsmeldung muss nicht ausgegeben werden, da
 					 * dies ggf. schon für jeden einzelnen Wert getan wird
 					 */
-					for (final String attribut : ATTRIBUTE) {
+					for (final String attribut : VertrauensFahrStreifen.ATTRIBUTE) {
 						copy.getItem(attribut)
-								.getItem("Status")
-								.getItem("MessWertErsetzung")
-								.getUnscaledValue("Implausibel").set(DUAKonstanten.JA); //$NON-NLS-1$
+						.getItem("Status")
+						.getItem("MessWertErsetzung")
+						.getUnscaledValue("Implausibel").set(DUAKonstanten.JA); //$NON-NLS-1$
 					}
 
 					final long vertrauensBereich = TestParameter.getInstanz()
 
-					.isTestVertrauen() ? parameter.getBezugsZeitraum()
-							* TestParameter.INTERVALL_VB * 60L : parameter
-							.getBezugsZeitraum() * Constants.MILLIS_PER_HOUR;
+							.isTestVertrauen() ? parameter.getBezugsZeitraum()
+									* TestParameter.INTERVALL_VB * 60L : parameter
+									.getBezugsZeitraum() * Constants.MILLIS_PER_HOUR;
 
-					final Date start = new Date(originalDatum.getDataTime()
-							- vertrauensBereich);
-					final Date ende = new Date(originalDatum.getDataTime());
+							final Date start = new Date(originalDatum.getDataTime()
+									- vertrauensBereich);
+							final Date ende = new Date(originalDatum.getDataTime());
 
-					final String nachricht = "Setzte alles auf implausibel da Vertrauensbereich verletzt [" + //$NON-NLS-1$
-							DUAKonstanten.BM_ZEIT_FORMAT.format(start)
-							+ ", " + DUAKonstanten.BM_ZEIT_FORMAT.format(ende) + //$NON-NLS-1$ 
-							"] ("
-							+ parameter.getBezugsZeitraum()
-							+ " Stunde(n))";
+							final String nachricht = "Setzte alles auf implausibel da Vertrauensbereich verletzt [" + //$NON-NLS-1$
+									DUAKonstanten.BM_ZEIT_FORMAT.format(start)
+									+ ", " + DUAKonstanten.BM_ZEIT_FORMAT.format(ende) + //$NON-NLS-1$
+									"] ("
+									+ parameter.getBezugsZeitraum()
+									+ " Stunde(n))";
 
-					Debug.getLogger().fine(
-							VerwaltungPlPruefungLogischLVE
+							LOGGER.fine(
+									VerwaltungPlPruefungLogischLVE
 									.getPlLogIdent(originalDatum)
 									+ "\n"
 									+ nachricht);
@@ -271,35 +285,37 @@ public class VertrauensFahrStreifen implements ClientReceiverInterface {
 					if (verletztAlt) {
 						final long vertrauensBereich = TestParameter
 								.getInstanz().isTestVertrauen() ? parameter
-								.getBezugsZeitraum()
-								* TestParameter.INTERVALL_VB * 60L : parameter
-								.getBezugsZeitraum()
-								* Constants.MILLIS_PER_HOUR;
+										.getBezugsZeitraum()
+										* TestParameter.INTERVALL_VB * 60L : parameter
+										.getBezugsZeitraum()
+										* Constants.MILLIS_PER_HOUR;
 
-						final Date start = new Date(originalDatum.getDataTime()
-								- vertrauensBereich);
-						final Date ende = new Date(originalDatum.getDataTime());
+										final Date start = new Date(originalDatum.getDataTime()
+												- vertrauensBereich);
+										final Date ende = new Date(originalDatum.getDataTime());
 
-						final String nachricht = "Daten wieder innerhalb des Vertrauensbereichs. Im Zeitraum von " + //$NON-NLS-1$
-								DUAKonstanten.BM_ZEIT_FORMAT.format(start)
-								+ " Uhr bis " + DUAKonstanten.BM_ZEIT_FORMAT.format(ende) + //$NON-NLS-1$ 
-								" ("
-								+ parameter.getBezugsZeitraum()
-								+ " Stunde(n)) implausible Fahrstreifenwerte am Fahrstreifen " + //$NON-NLS-1$
-								originalDatum.getObject()
-								+ " von " + ausfallErgebnisse.last() + //$NON-NLS-1$ 
-								". Fahrstreifenwerte werden wieder verarbeitet."; //$NON-NLS-1$
+										final String nachricht = "Daten wieder innerhalb des Vertrauensbereichs. Im Zeitraum von " + //$NON-NLS-1$
+												DUAKonstanten.BM_ZEIT_FORMAT.format(start)
+												+ " Uhr bis " + DUAKonstanten.BM_ZEIT_FORMAT.format(ende) + //$NON-NLS-1$
+												" ("
+												+ parameter.getBezugsZeitraum()
+												+ " Stunde(n)) implausible Fahrstreifenwerte am Fahrstreifen " + //$NON-NLS-1$
+												originalDatum.getObject()
+												+ " von " + ausfallErgebnisse.last() + //$NON-NLS-1$
+												". Fahrstreifenwerte werden wieder verarbeitet."; //$NON-NLS-1$
 
-						DUAUtensilien.sendeBetriebsmeldung(
-								dieVerwaltung.getVerbindung(),
-								dieVerwaltung.getBmvIdKonverter(),
-								MessageGrade.WARNING, objekt, nachricht);
+										DUAUtensilien.sendeBetriebsmeldung(
+												VertrauensFahrStreifen.dieVerwaltung
+										.getVerbindung(),
+												VertrauensFahrStreifen.dieVerwaltung
+										.getBmvIdKonverter(),
+												MessageGrade.WARNING, objekt, nachricht);
 					}
 				}
 
 				vertrauenVerletztAllgemein = verletztAktuell;
 			} else {
-				Debug.getLogger().config(
+				LOGGER.config(
 						"Datum kann nicht plausibilisiert werden, da keine" + //$NON-NLS-1$
 								" (oder nicht verwertbare) Parameter vorliegen: " //$NON-NLS-1$
 								+ this);
@@ -312,10 +328,11 @@ public class VertrauensFahrStreifen implements ClientReceiverInterface {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public void update(final ResultData[] resultate) {
 		if (resultate != null) {
 			for (final ResultData resultat : resultate) {
-				if (resultat != null && resultat.getData() != null) {
+				if ((resultat != null) && (resultat.getData() != null)) {
 					synchronized (this) {
 						parameter = new AtgVerkehrsDatenVertrauensBereichFs(
 								resultat.getData());

@@ -36,13 +36,14 @@ import de.bsvrz.sys.funclib.commandLineArgs.ArgumentList;
 
 /**
  * Automatisierter Test nach Pruefspezifikation für SWE Pl-Prüfung logisch LVE.
- * 
- * ! Achtung: Die Applikation Pl-Prüfung logisch LVE ist mit dem Parameter test=vertrauen
- * ! zu starten.
- * 
+ *
+ * ! Achtung: Die Applikation Pl-Prüfung logisch LVE ist mit dem Parameter
+ * test=vertrauen ! zu starten.
+ *
  * @author BitCtrl Systems GmbH, Thierfelder
- * 
- * @version $Id$
+ *
+ * @version $Id: PlPruefungLogischLVETestVertrauensbereich.java 53825 2015-03-18
+ *          09:36:42Z peuker $
  */
 public class PlPruefungLogischLVETestVertrauensbereich {
 
@@ -53,20 +54,21 @@ public class PlPruefungLogischLVETestVertrauensbereich {
 
 	/**
 	 * Loggerargument.
-	 * 
+	 *
 	 * Pfadangabe mit Argument: -debugFilePath=[Pfad]
 	 */
-	private String[] argumente = new String[] { "-debugLevelFileText=ALL" }; //$NON-NLS-1$
+	private final String[] argumente = new String[] { "-debugLevelFileText=ALL" }; //$NON-NLS-1$
 
 	/**
 	 * Argumentliste.
 	 */
-	private ArgumentList alLogger = new ArgumentList(argumente);
+	private final ArgumentList alLogger = new ArgumentList(argumente);
 
 	/**
 	 * Vorbereitungen (DAV-Anmeldung).
-	 * 
-	 * @throws Exception wird weitergereicht
+	 *
+	 * @throws Exception
+	 *             wird weitergereicht
 	 */
 	@Before
 	public void setUp() throws Exception {
@@ -75,12 +77,13 @@ public class PlPruefungLogischLVETestVertrauensbereich {
 
 	/**
 	 * Vertrauensbereichstest nach Prüfspezifikation.
-	 * 
-	 * @throws Exception wird weitergereicht
+	 *
+	 * @throws Exception
+	 *             wird weitergereicht
 	 */
 	@Test
 	public void testVB() throws Exception {
-		PlPruefungVertrauensbereich pruefVertrB = new PlPruefungVertrauensbereich(
+		final PlPruefungVertrauensbereich pruefVertrB = new PlPruefungVertrauensbereich(
 				dav, alLogger);
 		pruefVertrB.benutzeAssert(true);
 		pruefVertrB.setMeldungHysterese(3);

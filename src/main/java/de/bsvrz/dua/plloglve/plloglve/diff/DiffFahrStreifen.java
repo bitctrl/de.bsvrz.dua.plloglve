@@ -47,12 +47,14 @@ import de.bsvrz.sys.funclib.operatingMessage.MessageGrade;
 /**
  * Speichert, wie lange einzelne KZD-Werte eines bestimmten Fahrstreifens in
  * folge konstant sind.
- * 
+ *
  * @author BitCtrl Systems GmbH, Thierfelder
- * 
+ *
  * @version $Id$
  */
 public class DiffFahrStreifen implements ClientReceiverInterface {
+
+	private static final Debug LOGGER = Debug.getLogger();
 
 	/**
 	 * Verbindung zum Verwaltungsmodul.
@@ -127,7 +129,7 @@ public class DiffFahrStreifen implements ClientReceiverInterface {
 
 	/**
 	 * Standardkonstruktor.
-	 * 
+	 *
 	 * @param verwaltung
 	 *            Verbindung zum Verwaltungsmodul
 	 * @param obj
@@ -135,21 +137,23 @@ public class DiffFahrStreifen implements ClientReceiverInterface {
 	 */
 	protected DiffFahrStreifen(final IVerwaltung verwaltung,
 			final SystemObject obj) {
-		if (dieVerwaltung == null) {
-			dieVerwaltung = verwaltung;
-			diffParaBeschreibung = new DataDescription(dieVerwaltung
-					.getVerbindung()
-					.getDataModel()
-					.getAttributeGroup(
-							"atg.verkehrsDatenDifferenzialKontrolleFs"), //$NON-NLS-1$
-					dieVerwaltung.getVerbindung().getDataModel()
+		if (DiffFahrStreifen.dieVerwaltung == null) {
+			DiffFahrStreifen.dieVerwaltung = verwaltung;
+			DiffFahrStreifen.diffParaBeschreibung = new DataDescription(
+					DiffFahrStreifen.dieVerwaltung
+							.getVerbindung()
+							.getDataModel()
+							.getAttributeGroup(
+									"atg.verkehrsDatenDifferenzialKontrolleFs"), //$NON-NLS-1$
+							DiffFahrStreifen.dieVerwaltung.getVerbindung()
+							.getDataModel()
 							.getAspect(DaVKonstanten.ASP_PARAMETER_SOLL));
 
 		}
 
-		dieVerwaltung.getVerbindung().subscribeReceiver(this, obj,
-				diffParaBeschreibung, ReceiveOptions.normal(),
-				ReceiverRole.receiver());
+		DiffFahrStreifen.dieVerwaltung.getVerbindung().subscribeReceiver(this,
+				obj, DiffFahrStreifen.diffParaBeschreibung,
+				ReceiveOptions.normal(), ReceiverRole.receiver());
 
 	}
 
@@ -161,7 +165,7 @@ public class DiffFahrStreifen implements ClientReceiverInterface {
 	 * Erfassungsintervallen für einzelne (oder alle Werte) vor, so erfolgt eine
 	 * Kennzeichnung der Werte als Implausibel und Fehlerhaft. Darüber hinaus
 	 * wird eine entsprechende Betriebsmeldung versendet.
-	 * 
+	 *
 	 * @param resultat
 	 *            ein emfangenes FS-KZ-Datum
 	 * @return eine gekennzeichnete Kopie des originalen Datensatzes oder
@@ -171,7 +175,7 @@ public class DiffFahrStreifen implements ClientReceiverInterface {
 	protected Data plausibilisiere(final ResultData resultat) {
 		Data copy = null;
 
-		if (resultat != null && resultat.getData() != null) {
+		if ((resultat != null) && (resultat.getData() != null)) {
 			if (resultat.getDataDescription().getAttributeGroup().getPid()
 					.equals(DUAKonstanten.ATG_KZD)) {
 				final Data data = resultat.getData();
@@ -205,46 +209,46 @@ public class DiffFahrStreifen implements ClientReceiverInterface {
 
 					final Collection<VariableMitKonstanzZaehler<Long>> puffer = new ArrayList<VariableMitKonstanzZaehler<Long>>();
 					synchronized (parameter) {
-						if (qKfz > 0
-								&& qKfzZaehler.getWertIstKonstantSeit() > parameter
-										.getMaxAnzKonstanzqKfz()) {
+						if ((qKfz > 0)
+								&& (qKfzZaehler.getWertIstKonstantSeit() > parameter
+										.getMaxAnzKonstanzqKfz())) {
 							puffer.add(qKfzZaehler);
 						}
-						if (qLkw > 0
-								&& qLkwZaehler.getWertIstKonstantSeit() > parameter
-										.getMaxAnzKonstanzqLkw()) {
+						if ((qLkw > 0)
+								&& (qLkwZaehler.getWertIstKonstantSeit() > parameter
+										.getMaxAnzKonstanzqLkw())) {
 							puffer.add(qLkwZaehler);
 						}
-						if (qPkw > 0
-								&& qPkwZaehler.getWertIstKonstantSeit() > parameter
-										.getMaxAnzKonstanzqPkw()) {
+						if ((qPkw > 0)
+								&& (qPkwZaehler.getWertIstKonstantSeit() > parameter
+										.getMaxAnzKonstanzqPkw())) {
 							puffer.add(qPkwZaehler);
 						}
 
-						if (vKfz > 0
-								&& vKfzZaehler.getWertIstKonstantSeit() > parameter
-										.getMaxAnzKonstanzvKfz()) {
+						if ((vKfz > 0)
+								&& (vKfzZaehler.getWertIstKonstantSeit() > parameter
+										.getMaxAnzKonstanzvKfz())) {
 							puffer.add(vKfzZaehler);
 						}
-						if (vLkw > 0
-								&& vLkwZaehler.getWertIstKonstantSeit() > parameter
-										.getMaxAnzKonstanzvLkw()) {
+						if ((vLkw > 0)
+								&& (vLkwZaehler.getWertIstKonstantSeit() > parameter
+										.getMaxAnzKonstanzvLkw())) {
 							puffer.add(vLkwZaehler);
 						}
-						if (vPkw > 0
-								&& vPkwZaehler.getWertIstKonstantSeit() > parameter
-										.getMaxAnzKonstanzvPkw()) {
+						if ((vPkw > 0)
+								&& (vPkwZaehler.getWertIstKonstantSeit() > parameter
+										.getMaxAnzKonstanzvPkw())) {
 							puffer.add(vPkwZaehler);
 						}
 
-						if (sKfz > 0
-								&& sKfzZaehler.getWertIstKonstantSeit() > parameter
-										.getMaxAnzKonstanzStreung()) {
+						if ((sKfz > 0)
+								&& (sKfzZaehler.getWertIstKonstantSeit() > parameter
+										.getMaxAnzKonstanzStreung())) {
 							puffer.add(sKfzZaehler);
 						}
-						if (b > 0
-								&& bZaehler.getWertIstKonstantSeit() > parameter
-										.getMaxAnzKonstanzBelegung()) {
+						if ((b > 0)
+								&& (bZaehler.getWertIstKonstantSeit() > parameter
+										.getMaxAnzKonstanzBelegung())) {
 							puffer.add(bZaehler);
 						}
 
@@ -252,26 +256,28 @@ public class DiffFahrStreifen implements ClientReceiverInterface {
 							copy = data.createModifiableCopy();
 							for (final VariableMitKonstanzZaehler<Long> wert : puffer) {
 								copy.getItem(wert.getName())
-										.getUnscaledValue("Wert").set(DUAKonstanten.FEHLERHAFT); //$NON-NLS-1$			
+								.getUnscaledValue("Wert").set(DUAKonstanten.FEHLERHAFT); //$NON-NLS-1$
 								copy.getItem(wert.getName())
-										.getItem("Status")
-										.getItem("MessWertErsetzung")
-										.getUnscaledValue("Implausibel").set(DUAKonstanten.JA); //$NON-NLS-1$
+								.getItem("Status")
+								.getItem("MessWertErsetzung")
+								.getUnscaledValue("Implausibel").set(DUAKonstanten.JA); //$NON-NLS-1$
 
 								DUAUtensilien.sendeBetriebsmeldung(
-										dieVerwaltung.getVerbindung(),
-										dieVerwaltung.getBmvIdKonverter(),
-										MessageGrade.WARNING,
-										resultat.getObject(), "Fahrstreifen " + //$NON-NLS-1$
+										DiffFahrStreifen.dieVerwaltung
+												.getVerbindung(),
+										DiffFahrStreifen.dieVerwaltung
+												.getBmvIdKonverter(),
+										MessageGrade.WARNING, resultat
+												.getObject(), "Fahrstreifen " + //$NON-NLS-1$
 												resultat.getObject()
 												+ ": " + wert); //$NON-NLS-1$
 							}
 						}
 					}
 				} else {
-					Debug.getLogger()
-							.warning("Fuer Fahrstreifen " + this + //$NON-NLS-1$
-									" wurden noch keine Parameter für die Differenzialkontrolle empfangen"); //$NON-NLS-1$
+					LOGGER
+					.warning("Fuer Fahrstreifen " + this + //$NON-NLS-1$
+							" wurden noch keine Parameter für die Differenzialkontrolle empfangen"); //$NON-NLS-1$
 				}
 			}
 		}
@@ -282,10 +288,11 @@ public class DiffFahrStreifen implements ClientReceiverInterface {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public void update(final ResultData[] davParameterFeld) {
 		if (davParameterFeld != null) {
 			for (final ResultData davParameter : davParameterFeld) {
-				if (davParameter != null && davParameter.getData() != null) {
+				if ((davParameter != null) && (davParameter.getData() != null)) {
 					synchronized (this) {
 						parameter = new AtgVerkehrsDatenDifferenzialKontrolleFs(
 								davParameter.getData());

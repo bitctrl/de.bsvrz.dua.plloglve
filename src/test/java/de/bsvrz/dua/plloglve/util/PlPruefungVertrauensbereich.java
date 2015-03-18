@@ -29,6 +29,7 @@ package de.bsvrz.dua.plloglve.util;
 import java.util.Random;
 
 import org.junit.Assert;
+
 import de.bsvrz.dav.daf.main.ClientDavInterface;
 import de.bsvrz.dav.daf.main.ClientSenderInterface;
 import de.bsvrz.dav.daf.main.Data;
@@ -48,13 +49,16 @@ import de.bsvrz.sys.funclib.debug.Debug;
 
 /**
  * Testet den Vertrauensbereich.
- * 
+ *
  * @author BitCtrl Systems GmbH, Thierfelder
- * 
- * @version $Id$
+ *
+ * @version $Id: PlPruefungVertrauensbereich.java 53827 2015-03-18 10:04:42Z
+ *          peuker $
  */
 public class PlPruefungVertrauensbereich implements ClientSenderInterface,
-		PlPruefungInterface {
+PlPruefungInterface {
+
+	private static final Debug LOGGER = Debug.getLogger();
 
 	/**
 	 * statischer Zufallsgenerator.
@@ -103,68 +107,75 @@ public class PlPruefungVertrauensbereich implements ClientSenderInterface,
 
 	/**
 	 * Initialisiert Vertrauensbereichstest.
-	 * 
+	 *
 	 * @param dav
 	 *            Datenverteilerverbindung
-	 * @param alDebug.getLogger()
-	 *            Testdatenverzeichnis
+	 * @param alDebug
+	 *            .getLogger() Testdatenverzeichnis
 	 */
-	public PlPruefungVertrauensbereich(ClientDavInterface dav,
-			ArgumentList alLogger) {
+	public PlPruefungVertrauensbereich(final ClientDavInterface dav,
+			final ArgumentList alLogger) {
 		this.dav = dav;
 
 		/*
 		 * Melde Sender für FS an
 		 */
-		fs = this.dav.getDataModel().getObject(Konfiguration.PID_TESTFS1_KZD); //$NON-NLS-1$
+		PlPruefungVertrauensbereich.fs = this.dav.getDataModel().getObject(
+				Konfiguration.PID_TESTFS1_KZD);
 
-		ddKzdSend = new DataDescription(this.dav.getDataModel()
-				.getAttributeGroup(DUAKonstanten.ATG_KZD), this.dav
-				.getDataModel().getAspect(DUAKonstanten.ASP_EXTERNE_ERFASSUNG));
+		PlPruefungVertrauensbereich.ddKzdSend = new DataDescription(this.dav
+				.getDataModel().getAttributeGroup(DUAKonstanten.ATG_KZD),
+				this.dav.getDataModel().getAspect(
+						DUAKonstanten.ASP_EXTERNE_ERFASSUNG));
 
 		try {
-			kzdImport = new ParaKZDLogImport(dav, fs,
+			kzdImport = new ParaKZDLogImport(dav,
+					PlPruefungVertrauensbereich.fs,
 					Konfiguration.TEST_DATEN_VERZ
-							+ Konfiguration.DATENCSV_PARAMETER);
+					+ Konfiguration.DATENCSV_PARAMETER);
 			kzdImport
-					.setOptionen(OptionenPlausibilitaetsPruefungLogischVerkehr.KEINE_PRUEFUNG);
+			.setOptionen(OptionenPlausibilitaetsPruefungLogischVerkehr.KEINE_PRUEFUNG);
 			kzdImport.importiereParameter(1);
 			kzdImport.importParaVertrauensbereich();
-		} catch (Exception e) {
-			Debug.getLogger().error("Kann Test nicht konfigurieren: " + e);
+		} catch (final Exception e) {
+			LOGGER.error("Kann Test nicht konfigurieren: " + e);
 		}
 
 		try {
 			TestFahrstreifenImporter paraImpFSFehler = null;
 			paraImpFSFehler = new TestFahrstreifenImporter(this.dav,
 					Konfiguration.TEST_DATEN_VERZ
-							+ Konfiguration.DATENCSV_FS_FEHLER); //$NON-NLS-1$
+					+ Konfiguration.DATENCSV_FS_FEHLER);
 			TestFahrstreifenImporter.setT(TestParameter.INTERVALL_VB);
-			zFSFehlB2 = paraImpFSFehler.getNaechstenDatensatz(ddKzdSend
-					.getAttributeGroup());
-		} catch (Exception e) {
-			Debug.getLogger().error("Kann Fehlerdatensätze nicht importieren: " + e);
+			zFSFehlB2 = paraImpFSFehler
+					.getNaechstenDatensatz(PlPruefungVertrauensbereich.ddKzdSend
+							.getAttributeGroup());
+		} catch (final Exception e) {
+			LOGGER.error(
+					"Kann Fehlerdatensätze nicht importieren: " + e);
 		}
 
 	}
 
 	/**
 	 * Startet den Vertrauensbereichstest.
-	 * 
-	 * @throws Exception wird weitergereicht
+	 *
+	 * @throws Exception
+	 *             wird weitergereicht
 	 */
 	public void pruefe() throws Exception {
 		/*
 		 * Sender anmelden
 		 */
-		this.dav.subscribeSender(this, fs, ddKzdSend, SenderRole.source());
+		this.dav.subscribeSender(this, PlPruefungVertrauensbereich.fs,
+				PlPruefungVertrauensbereich.ddKzdSend, SenderRole.source());
 
 		/*
 		 * Initialisiere Parameter Importer für fehlerfreie DS
 		 */
 		TestFahrstreifenImporter paraImpFSOK = null;
 		paraImpFSOK = new TestFahrstreifenImporter(this.dav,
-				Konfiguration.TEST_DATEN_VERZ + Konfiguration.DATENCSV_FS_OK); //$NON-NLS-1$
+				Konfiguration.TEST_DATEN_VERZ + Konfiguration.DATENCSV_FS_OK);
 
 		/*
 		 * Setze Intervall auf 100MS
@@ -188,10 +199,10 @@ public class PlPruefungVertrauensbereich implements ClientSenderInterface,
 		 * Warte auf 371 Meldungen 36 x 4 (qKfz, qPkw, qLkw, vPkw) 37 (b) 39 x 4
 		 * (qKfz, qPkw, qLkw, vPkw) 32 (b) 2 (Gutmeldung)
 		 */
-		FilterMeldung meldFilter = new FilterMeldung(this, dav,
+		final FilterMeldung meldFilter = new FilterMeldung(this, dav,
 				"Vertrauensbereichs", 352, meldungHyst);
-		Debug.getLogger()
-				.info("Meldungsfilter initialisiert: Erwarte 352 Meldungen mit \"Vertrauensbereichs\"");
+		LOGGER
+		.info("Meldungsfilter initialisiert: Erwarte 352 Meldungen mit \"Vertrauensbereichs\"");
 
 		/*
 		 * Sendet fehlerfreie DS für eine Stunde
@@ -200,30 +211,34 @@ public class PlPruefungVertrauensbereich implements ClientSenderInterface,
 		/*
 		 * Testerobjekt
 		 */
-		PruefeMarkierung markPruefer = new PruefeMarkierung(this, dav, fs);
+		final PruefeMarkierung markPruefer = new PruefeMarkierung(this, dav,
+				PlPruefungVertrauensbereich.fs);
 
 		for (int i = 1; i <= 60; i++) {
 
-			if ((zeileFSOK = paraImpFSOK.getNaechstenDatensatz(ddKzdSend
-					.getAttributeGroup())) == null) {
+			if ((zeileFSOK = paraImpFSOK
+					.getNaechstenDatensatz(PlPruefungVertrauensbereich.ddKzdSend
+							.getAttributeGroup())) == null) {
 				paraImpFSOK.reset();
 				paraImpFSOK.getNaechsteZeile();
-				zeileFSOK = paraImpFSOK.getNaechstenDatensatz(ddKzdSend
-						.getAttributeGroup());
+				zeileFSOK = paraImpFSOK
+						.getNaechstenDatensatz(PlPruefungVertrauensbereich.ddKzdSend
+								.getAttributeGroup());
 			}
 
-			ResultData resultat1 = new ResultData(fs, ddKzdSend, pruefZeit,
-					zeileFSOK);
+			final ResultData resultat1 = new ResultData(
+					PlPruefungVertrauensbereich.fs,
+					PlPruefungVertrauensbereich.ddKzdSend, pruefZeit, zeileFSOK);
 			this.dav.sendData(resultat1);
 
 			// Sende Datensatz entsprechend Intervall
-			pruefZeit = pruefZeit + intervall;
+			pruefZeit = pruefZeit + PlPruefungVertrauensbereich.intervall;
 
 			// Warte bis Intervallende
 			if ((aktZeit = System.currentTimeMillis()) < pruefZeit) {
 				try {
 					Thread.sleep(pruefZeit - aktZeit);
-				} catch (InterruptedException ex) {
+				} catch (final InterruptedException ex) {
 					//
 				}
 			}
@@ -236,10 +251,11 @@ public class PlPruefungVertrauensbereich implements ClientSenderInterface,
 			/*
 			 * Konfiguriert Testerobjekt Prüfe Markierung der DS als Implausibel
 			 */
-			if ((i >= 29 && i < 72) || (i >= 511 && i < 552)) {
+			if (((i >= 29) && (i < 72)) || ((i >= 511) && (i < 552))) {
 				markPruefer.listenImpl(pruefZeit);
-				Debug.getLogger().info("Intervall " + i
-						+ ": Erwarte alle Attribute als Implausiebel");
+				LOGGER.info(
+						"Intervall " + i
+								+ ": Erwarte alle Attribute als Implausiebel");
 			} else {
 				markPruefer.listenOK(pruefZeit);
 			}
@@ -249,35 +265,35 @@ public class PlPruefungVertrauensbereich implements ClientSenderInterface,
 			 * Innerhalb dieser Bereiche werden alle Werte des FS als
 			 * Implausibel erwartet
 			 */
-			if ((i >= 4 && i <= 9) || (i >= 23 && i <= 29)
-					|| (i >= 490 && i <= 494) || (i >= 501 && i <= 506)
-					|| (i >= 512 && i <= 514)) {
+			if (((i >= 4) && (i <= 9)) || ((i >= 23) && (i <= 29))
+					|| ((i >= 490) && (i <= 494)) || ((i >= 501) && (i <= 506))
+					|| ((i >= 512) && (i <= 514))) {
 				/*
 				 * Es wird ein fehlerhafter DS (qKfz, qPkw, qLkw, vPkw) gesendet
 				 * Dabei wird der VB entsprechend Afo beim 29. DS verlassen
-				 * 
+				 *
 				 * Der prozentuale Ausfall der Attribute liegt ab dem 65. DS
 				 * unter 20% wobei der VB jedoch aufgrund der anderen
 				 * Fehlerdaten weiterhin verlassen bleibt
-				 * 
+				 *
 				 * Für den zweiten Testbereich liegt der prozentuale Ausfall ab
 				 * dem 513. DS über 20% wobei der VB bereits früher durch die
 				 * anderen Fehlerdaten verlassen wird
-				 * 
+				 *
 				 * Ab dem 552. DS liegt der prozentuale Ausfall entsprechend Afo
 				 * wieder im VB
 				 */
 				System.out
-						.println("Intervall "
-								+ i
-								+ ": Sende fehlerhaftes Datum (qKfz, qPkw, qLkw, vPkw)");
+				.println("Intervall "
+						+ i
+						+ ": Sende fehlerhaftes Datum (qKfz, qPkw, qLkw, vPkw)");
 				markPruefer.addIgnore("b");
 				synchronized (this) {
 					sendeFehler2(pruefZeit);
 					doWait();
 				}
-			} else if ((i >= 10 && i <= 16) || (i >= 30 && i <= 36)
-					|| (i >= 482 && i <= 489) || (i >= 507 && i <= 511)) {
+			} else if (((i >= 10) && (i <= 16)) || ((i >= 30) && (i <= 36))
+					|| ((i >= 482) && (i <= 489)) || ((i >= 507) && (i <= 511))) {
 				System.out.println("Intervall " + i
 						+ ": Sende fehlerhaftes Datum (b)");
 				markPruefer.addIgnore("qKfz");
@@ -289,15 +305,19 @@ public class PlPruefungVertrauensbereich implements ClientSenderInterface,
 					doWait();
 				}
 			} else {
-				if ((zeileFSOK = paraImpFSOK.getNaechstenDatensatz(ddKzdSend
-						.getAttributeGroup())) == null) {
+				if ((zeileFSOK = paraImpFSOK
+						.getNaechstenDatensatz(PlPruefungVertrauensbereich.ddKzdSend
+								.getAttributeGroup())) == null) {
 					paraImpFSOK.reset();
 					paraImpFSOK.getNaechsteZeile();
-					zeileFSOK = paraImpFSOK.getNaechstenDatensatz(ddKzdSend
-							.getAttributeGroup());
+					zeileFSOK = paraImpFSOK
+							.getNaechstenDatensatz(PlPruefungVertrauensbereich.ddKzdSend
+									.getAttributeGroup());
 				}
-				ResultData resultat1 = new ResultData(fs, ddKzdSend,
-						pruefZeit, zeileFSOK);
+				final ResultData resultat1 = new ResultData(
+						PlPruefungVertrauensbereich.fs,
+						PlPruefungVertrauensbereich.ddKzdSend, pruefZeit,
+						zeileFSOK);
 				System.out.println("Intervall " + i
 						+ ": Sende fehlerfreies Datum");
 				synchronized (this) {
@@ -307,13 +327,13 @@ public class PlPruefungVertrauensbereich implements ClientSenderInterface,
 			}
 
 			// Sende Datensatz entsprechend Intervall
-			pruefZeit = pruefZeit + intervall;
+			pruefZeit = pruefZeit + PlPruefungVertrauensbereich.intervall;
 
 			// Warte bis Intervallende
 			if ((aktZeit = System.currentTimeMillis()) < pruefZeit) {
 				try {
 					Thread.sleep(pruefZeit - aktZeit);
-				} catch (InterruptedException ex) {
+				} catch (final InterruptedException ex) {
 					//
 				}
 			}
@@ -324,11 +344,12 @@ public class PlPruefungVertrauensbereich implements ClientSenderInterface,
 		// Warte 30s auf Filterung der Betriebsmeldungen
 		try {
 			Thread.sleep(5000L);
-		} catch (InterruptedException e) {
+		} catch (final InterruptedException e) {
 			//
 		}
 
-		String warnung = meldFilter.getErwarteteAnzahlMeldungen() + " Betriebsmeldungen erhalten";
+		final String warnung = meldFilter.getErwarteteAnzahlMeldungen()
+				+ " Betriebsmeldungen erhalten";
 		if (!meldFilter.wurdeAnzahlEingehalten()) {
 			if (useAssert) {
 				Assert.assertTrue(warnung, false);
@@ -344,60 +365,67 @@ public class PlPruefungVertrauensbereich implements ClientSenderInterface,
 		/*
 		 * Sender abmelden
 		 */
-		this.dav.unsubscribeSender(this, fs, ddKzdSend);
+		this.dav.unsubscribeSender(this, PlPruefungVertrauensbereich.fs,
+				PlPruefungVertrauensbereich.ddKzdSend);
 	}
 
 	/**
 	 * Sendet einen fehlerhaften DS Fehlerhafte Attribute: "qKfz", "qPkw",
 	 * "vLkw", "vPkw".
-	 * 
+	 *
 	 * @param pruefZeit
 	 *            Zeitstempel des DS
-	 * @throws Exception wird weitergereicht
+	 * @throws Exception
+	 *             wird weitergereicht
 	 */
-	private void sendeFehler1(long pruefZeit) throws Exception {
+	private void sendeFehler1(final long pruefZeit) throws Exception {
 		ResultData resultat1;
-		Data data = zFSFehlB2.createModifiableCopy();
-		for (String attribut : new String[] { "qKfz", "qPkw", "vLkw", "vPkw" }) {
-			if (R.nextBoolean()) {
-				data.getItem(attribut).getItem("Status").getItem(
-						"MessWertErsetzung").getUnscaledValue("Implausibel")
-						.set(DUAKonstanten.JA);
+		final Data data = zFSFehlB2.createModifiableCopy();
+		for (final String attribut : new String[] { "qKfz", "qPkw", "vLkw",
+				"vPkw" }) {
+			if (PlPruefungVertrauensbereich.R.nextBoolean()) {
+				data.getItem(attribut).getItem("Status")
+						.getItem("MessWertErsetzung")
+						.getUnscaledValue("Implausibel").set(DUAKonstanten.JA);
 			} else {
-				data.getItem(attribut).getUnscaledValue("Wert").set(
-						DUAKonstanten.FEHLERHAFT);
+				data.getItem(attribut).getUnscaledValue("Wert")
+						.set(DUAKonstanten.FEHLERHAFT);
 			}
 		}
-		resultat1 = new ResultData(fs, ddKzdSend, pruefZeit, data);
+		resultat1 = new ResultData(PlPruefungVertrauensbereich.fs,
+				PlPruefungVertrauensbereich.ddKzdSend, pruefZeit, data);
 		this.dav.sendData(resultat1);
 	}
 
 	/**
 	 * Sendet einen fehlerhaften DS Fehlerhaftes Attribut: b.
-	 * 
+	 *
 	 * @param pruefZeit
 	 *            Zeitstempel des DS
-	 * @throws Exception wird weitergereicht
+	 * @throws Exception
+	 *             wird weitergereicht
 	 */
-	private void sendeFehler2(long pruefZeit) throws Exception {
+	private void sendeFehler2(final long pruefZeit) throws Exception {
 		ResultData resultat2;
-		Data data = zFSFehlB2.createModifiableCopy();
-		if (R.nextBoolean()) {
+		final Data data = zFSFehlB2.createModifiableCopy();
+		if (PlPruefungVertrauensbereich.R.nextBoolean()) {
 			data.getItem("b").getItem("Status").getItem("MessWertErsetzung")
-					.getUnscaledValue("Implausibel").set(DUAKonstanten.JA);
+			.getUnscaledValue("Implausibel").set(DUAKonstanten.JA);
 		} else {
-			data.getItem("b").getUnscaledValue("Wert").set(
-					DUAKonstanten.FEHLERHAFT);
+			data.getItem("b").getUnscaledValue("Wert")
+					.set(DUAKonstanten.FEHLERHAFT);
 		}
-		resultat2 = new ResultData(fs, ddKzdSend, pruefZeit, data);
+		resultat2 = new ResultData(PlPruefungVertrauensbereich.fs,
+				PlPruefungVertrauensbereich.ddKzdSend, pruefZeit, data);
 		this.dav.sendData(resultat2);
 	}
 
 	/**
 	 * (Kein Javadoc).
-	 * 
+	 *
 	 * @see de.bsvrz.dua.plloglve.util.PlPruefungInterface#doNotify()
 	 */
+	@Override
 	public void doNotify() {
 		synchronized (this) {
 			this.notify();
@@ -411,7 +439,7 @@ public class PlPruefungVertrauensbereich implements ClientSenderInterface,
 		synchronized (this) {
 			try {
 				this.wait();
-			} catch (Exception e) {
+			} catch (final Exception e) {
 				//
 			}
 		}
@@ -420,25 +448,27 @@ public class PlPruefungVertrauensbereich implements ClientSenderInterface,
 	/**
 	 * {@inheritDoc}
 	 */
-	public void dataRequest(SystemObject object,
-			DataDescription dataDescription, byte state) {
+	@Override
+	public void dataRequest(final SystemObject object,
+			final DataDescription dataDescription, final byte state) {
 		// VOID
 	}
 
 	/**
 	 * {@inheritDoc}
 	 */
-	public boolean isRequestSupported(SystemObject object,
-			DataDescription dataDescription) {
+	@Override
+	public boolean isRequestSupported(final SystemObject object,
+			final DataDescription dataDescription) {
 		return false;
 	}
 
 	/**
 	 * Soll Assert zur Fehlermeldung genutzt werden?
-	 * 
+	 *
 	 * @param useAssert1
-	 *            <code>True</code> wenn Asserts verwendet werden sollen,
-	 *            sonst <code>False</code>
+	 *            <code>True</code> wenn Asserts verwendet werden sollen, sonst
+	 *            <code>False</code>
 	 */
 	public void benutzeAssert(final boolean useAssert1) {
 		this.useAssert = useAssert1;
@@ -446,7 +476,7 @@ public class PlPruefungVertrauensbereich implements ClientSenderInterface,
 
 	/**
 	 * Setzt die erlaubte Abweichung zur erwarteten Anzahl an Betriebsmeldungen.
-	 * 
+	 *
 	 * @param meldungHyst1
 	 *            Die erlaubte Abweichung zur erwarteten Anzahl an
 	 *            Betriebsmeldungen.

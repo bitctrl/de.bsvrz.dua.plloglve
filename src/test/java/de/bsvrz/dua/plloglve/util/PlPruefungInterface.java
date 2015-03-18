@@ -24,12 +24,11 @@
  * mailto: info@bitctrl.de
  */
 
-
 package de.bsvrz.dua.plloglve.util;
 
 /**
- * Pruefschnittstelle. 
- * 
+ * Pruefschnittstelle.
+ *
  * @author BitCtrl Systems GmbH, Görlitz
  *
  *

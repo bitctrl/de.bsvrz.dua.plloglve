@@ -32,17 +32,18 @@ import de.bsvrz.dua.plloglve.plloglve.typen.OptionenPlausibilitaetsPruefungLogis
 /**
  * Repräsentiert die DAV-ATG
  * <code>atg.verkehrsDatenKurzZeitIntervallPlausibilitätsPrüfungLogisch</code>.
- * 
+ *
  * @author BitCtrl Systems GmbH, Thierfelder
- * 
- * @version $Id$
+ *
+ * @version $Id: AtgVerkehrsDatenKZIPlPruefLogisch.java 53825 2015-03-18
+ *          09:36:42Z peuker $
  */
 public class AtgVerkehrsDatenKZIPlPruefLogisch extends
-		AbstraktAtgPLLogischLVEParameter {
+AbstraktAtgPLLogischLVEParameter {
 
 	/**
 	 * Standardkonstruktor.
-	 * 
+	 *
 	 * @param data
 	 *            initialisierendes DAV-Datum
 	 */
@@ -90,7 +91,7 @@ public class AtgVerkehrsDatenKZIPlPruefLogisch extends
 
 	/**
 	 * Erfragt die PID dieser Attributgruppe.
-	 * 
+	 *
 	 * @return die PID dieser Attributgruppe
 	 */
 	public static final String getPid() {

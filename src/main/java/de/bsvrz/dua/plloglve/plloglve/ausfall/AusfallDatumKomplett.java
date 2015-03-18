@@ -37,13 +37,13 @@ import de.bsvrz.sys.funclib.bitctrl.dua.intpuf.IIntervallPufferElement;
 /**
  * Repraesentiert ein in einem temporaeren Puffer speicherbares Element mit der
  * Eigenschaft ausgefallen zu sein oder nicht.
- * 
+ *
  * @author BitCtrl Systems GmbH, Thierfelder
- * 
+ *
  * @version $Id$
  */
 public final class AusfallDatumKomplett implements
-		IIntervallPufferElement<AusfallDatum> {
+IIntervallPufferElement<AusfallDatum> {
 
 	/**
 	 * Intervallanfang.
@@ -62,12 +62,12 @@ public final class AusfallDatumKomplett implements
 
 	/**
 	 * Standardkonstruktor.
-	 * 
+	 *
 	 * @param resultat
 	 *            ein KZD-Datum
 	 */
-	private AusfallDatumKomplett(ResultData resultat) {
-		Data data = resultat.getData();
+	private AusfallDatumKomplett(final ResultData resultat) {
+		final Data data = resultat.getData();
 
 		this.intervallAnfang = resultat.getDataTime();
 		this.intervallEnde = resultat.getDataTime()
@@ -79,7 +79,7 @@ public final class AusfallDatumKomplett implements
 	 * Gibt nur ein Datum zurueck, wenn es sich um ein Datum handelt, dass auch
 	 * im Sinne der Plausibilisierung ausgewertet werden kann. Also ein Datum
 	 * mit Nutzdaten.
-	 * 
+	 *
 	 * @param resultat
 	 *            ein Kz-Datum
 	 * @return eine mit dem uebergebenen Datum korrespondierende Instanz dieser
@@ -89,7 +89,7 @@ public final class AusfallDatumKomplett implements
 			final ResultData resultat) {
 		AusfallDatumKomplett datum = null;
 
-		if (resultat != null && resultat.getData() != null) {
+		if ((resultat != null) && (resultat.getData() != null)) {
 			datum = new AusfallDatumKomplett(resultat);
 		}
 
@@ -101,16 +101,18 @@ public final class AusfallDatumKomplett implements
 	 */
 	@Override
 	public String toString() {
-		final SimpleDateFormat dateFormat = new SimpleDateFormat(DUAKonstanten.ZEIT_FORMAT_GENAU_STR);
-		String s = "Datenzeit: " + dateFormat.format(new Date(this.intervallAnfang)) + //$NON-NLS-1$
+		final SimpleDateFormat dateFormat = new SimpleDateFormat(
+				DUAKonstanten.ZEIT_FORMAT_GENAU_STR);
+		final String s = "Datenzeit: " + dateFormat.format(new Date(this.intervallAnfang)) + //$NON-NLS-1$
 				" (" + (this.intervallEnde - this.intervallAnfang)
-				+ "ms): " + this.inhalt; //$NON-NLS-1$ //$NON-NLS-2$
+				+ "ms): " + this.inhalt; //$NON-NLS-1$
 		return s;
 	}
 
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public long getIntervallEnde() {
 		return this.intervallEnde;
 	}
@@ -118,6 +120,7 @@ public final class AusfallDatumKomplett implements
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public long getIntervallStart() {
 		return this.intervallAnfang;
 	}
@@ -125,6 +128,7 @@ public final class AusfallDatumKomplett implements
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public AusfallDatum getInhalt() {
 		return this.inhalt;
 	}

@@ -36,13 +36,14 @@ import de.bsvrz.sys.funclib.commandLineArgs.ArgumentList;
 
 /**
  * Automatisierter Test nach Prüfspezifikation für SWE Pl-Prüfung logisch LVE.
- * 
- * ! Achtung: Die Applikation Pl-Prüfung logisch LVE ist mit dem Parameter test=ausfall
- * ! zu starten.
- * 
+ *
+ * ! Achtung: Die Applikation Pl-Prüfung logisch LVE ist mit dem Parameter
+ * test=ausfall ! zu starten.
+ *
  * @author BitCtrl Systems GmbH, Thierfelder
- * 
- * @version $Id$
+ *
+ * @version $Id: PlPruefungLogischLVETestAusfall.java 53825 2015-03-18 09:36:42Z
+ *          peuker $
  */
 public class PlPruefungLogischLVETestAusfall {
 
@@ -53,20 +54,21 @@ public class PlPruefungLogischLVETestAusfall {
 
 	/**
 	 * Loggerargument.
-	 * 
+	 *
 	 * Pfadangabe mit Argument: -debugFilePath=[Pfad]
 	 */
-	private String[] argumente = new String[] { "-debugLevelFileText=ALL" };
-	
+	private final String[] argumente = new String[] { "-debugLevelFileText=ALL" };
+
 	/**
 	 * der Logger.
 	 */
-	private ArgumentList alLogger = new ArgumentList(argumente);
+	private final ArgumentList alLogger = new ArgumentList(argumente);
 
 	/**
 	 * Vorbereitungen (DAV-Anmeldung).
-	 * 
-	 * @throws Exception wird weitergereicht
+	 *
+	 * @throws Exception
+	 *             wird weitergereicht
 	 */
 	@Before
 	public void setUp() throws Exception {
@@ -75,12 +77,14 @@ public class PlPruefungLogischLVETestAusfall {
 
 	/**
 	 * Ausfallhäufigkeitstest nach Prüfspezifikation.
-	 * 
-	 * @throws Exception wird weitergereicht
+	 *
+	 * @throws Exception
+	 *             wird weitergereicht
 	 */
 	@Test
 	public void testAusfall() throws Exception {
-		PlPruefungAusfall pruefAusfall = new PlPruefungAusfall(dav, alLogger);
+		final PlPruefungAusfall pruefAusfall = new PlPruefungAusfall(dav,
+				alLogger);
 		pruefAusfall.benutzeAssert(true);
 		pruefAusfall.setMeldungHysterese(5);
 		pruefAusfall.pruefe();

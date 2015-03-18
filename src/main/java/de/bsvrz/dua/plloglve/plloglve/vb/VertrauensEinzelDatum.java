@@ -36,20 +36,21 @@ import de.bsvrz.sys.funclib.bitctrl.dua.intpuf.IntervallPufferElementAdapter;
  * Vertrauensbereichspruefung) ausgefallen ist oder nicht. Ein Datum gilt als
  * ausgefallen, wenn es als <code>fehlerhaft</code> bzw.
  * <code>implausibel</code> gekennzeichnet ist.
- * 
+ *
  * @author BitCtrl Systems GmbH, Thierfelder
- * 
+ *
  * @version $Id$
  */
 public class VertrauensEinzelDatum extends
-		IntervallPufferElementAdapter<VertrauensDatum> {
+IntervallPufferElementAdapter<VertrauensDatum> {
 
 	/**
 	 * Standardkonstruktor.
-	 * 
+	 *
 	 * @param name
 	 *            der Name dieses Datums
-	 * @param originalDatum das empfangene (unveraenderte) Originaldatum
+	 * @param originalDatum
+	 *            das empfangene (unveraenderte) Originaldatum
 	 */
 	protected VertrauensEinzelDatum(final String name,
 			final ResultData originalDatum) {
@@ -61,13 +62,11 @@ public class VertrauensEinzelDatum extends
 		 * implausibel gekennzeichnet ist
 		 */
 		this.inhalt = new VertrauensDatum(
-				originalDatum.getData().getItem(name)
-						.getUnscaledValue("Wert").longValue() == DUAKonstanten.FEHLERHAFT || //$NON-NLS-1$
-						originalDatum
-								.getData()
-								.getItem(name)
-								.getItem("Status").getItem("MessWertErsetzung").
-								getUnscaledValue("Implausibel").longValue() == DUAKonstanten.JA); //$NON-NLS-1$
+				(originalDatum.getData().getItem(name)
+						.getUnscaledValue("Wert").longValue() == DUAKonstanten.FEHLERHAFT) || //$NON-NLS-1$
+						(originalDatum.getData().getItem(name)
+								.getItem("Status").getItem("MessWertErsetzung")
+								.getUnscaledValue("Implausibel").longValue() == DUAKonstanten.JA)); //$NON-NLS-1$
 	}
 
 }

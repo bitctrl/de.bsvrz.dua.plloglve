@@ -31,13 +31,14 @@ import de.bsvrz.sys.funclib.bitctrl.dua.AllgemeinerDatenContainer;
 
 /**
  * Repräsentiert die DAV-ATG <code>atg.verkehrsDatenVertrauensBereichFs</code>.
- * 
+ *
  * @author BitCtrl Systems GmbH, Thierfelder
- * 
- * @version $Id$
+ *
+ * @version $Id: AtgVerkehrsDatenVertrauensBereichFs.java 53825 2015-03-18
+ *          09:36:42Z peuker $
  */
 public class AtgVerkehrsDatenVertrauensBereichFs extends
-		AllgemeinerDatenContainer {
+AllgemeinerDatenContainer {
 
 	/**
 	 * Bezugszeitraum für die Vertrauensbereichsüberprüfung.
@@ -60,7 +61,7 @@ public class AtgVerkehrsDatenVertrauensBereichFs extends
 
 	/**
 	 * Standardkonstruktor.
-	 * 
+	 *
 	 * @param data
 	 *            initialisierendes DAV-Datum
 	 */
@@ -79,18 +80,18 @@ public class AtgVerkehrsDatenVertrauensBereichFs extends
 	/**
 	 * Erfragt, ob sich diese Parameter zur Überprüfung eines Datensatzes
 	 * eignen. Dies ist nur der Fall, wenn alle Parameter >= 0 sind.
-	 * 
+	 *
 	 * @return ob sich diese Parameter zur Überprüfung eines Datensatzes eignen
 	 */
 	public final boolean isAuswertbar() {
-		return this.bezugsZeitraum >= 0
-				&& this.maxAusfallProBezugsZeitraumAus >= 0
-				&& this.maxAusfallProBezugsZeitraumEin >= 0;
+		return (this.bezugsZeitraum >= 0)
+				&& (this.maxAusfallProBezugsZeitraumAus >= 0)
+				&& (this.maxAusfallProBezugsZeitraumEin >= 0);
 	}
 
 	/**
 	 * Erfragt Bezugszeitraum für die Vertrauensbereichsüberprüfung.
-	 * 
+	 *
 	 * @return Bezugszeitraum in Stunden
 	 */
 	public final long getBezugsZeitraum() {
@@ -101,7 +102,7 @@ public class AtgVerkehrsDatenVertrauensBereichFs extends
 	 * Erfragt Ausschaltschwelle für den Vertrauensbereich eines Fahrstreifens
 	 * im Bezugszeitraum Bei Unterschreiten dieses Wertes wird eine
 	 * entsprechende Fehlermeldung zurückgenommen.
-	 * 
+	 *
 	 * @return Ausschaltschwelle für den Vertrauensbereich eines Fahrstreifens
 	 */
 	public final long getMaxAusfallProBezugsZeitraumAus() {
@@ -112,7 +113,7 @@ public class AtgVerkehrsDatenVertrauensBereichFs extends
 	 * Erfragt Einschaltschwelle für den Vertrauensbereich eines Fahrstreifens
 	 * im Bezugszeitraum. Bei Überschreiten dieses Wertes wird eine
 	 * entsprechende Fehlermeldung generiert.
-	 * 
+	 *
 	 * @return Einschaltschwelle für den Vertrauensbereich in %
 	 */
 	public final long getMaxAusfallProBezugsZeitraumEin() {

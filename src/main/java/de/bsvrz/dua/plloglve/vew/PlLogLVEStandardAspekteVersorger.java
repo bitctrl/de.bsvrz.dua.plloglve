@@ -24,7 +24,6 @@
  * mailto: info@bitctrl.de
  */
 
-
 package de.bsvrz.dua.plloglve.vew;
 
 import de.bsvrz.sys.funclib.bitctrl.dua.DUAInitialisierungsException;
@@ -37,23 +36,24 @@ import de.bsvrz.sys.funclib.bitctrl.dua.schnittstellen.IVerwaltung;
  * (innerhalb der SWE Pl-Prüfung logisch LVE) mit
  * Standard-Publikationsinformationen (Zuordnung von
  * Objekt-Datenbeschreibung-Kombination zu Standard- Publikationsaspekt).
- * 
+ *
  * @author BitCtrl Systems GmbH, Thierfelder
- * 
- * @version $Id$
+ *
+ * @version $Id: PlLogLVEStandardAspekteVersorger.java 53825 2015-03-18
+ *          09:36:42Z peuker $
  */
 public class PlLogLVEStandardAspekteVersorger extends StandardAspekteVersorger {
 
 	/**
 	 * Standardkonstruktor.
-	 * 
+	 *
 	 * @param verwaltung
 	 *            Verbindung zum Verwaltungsmodul
 	 * @throws DUAInitialisierungsException
 	 *             wenn die Initialisierung nicht vollstaendig durchgefuehrt
 	 *             werden kann
 	 */
-	public PlLogLVEStandardAspekteVersorger(IVerwaltung verwaltung)
+	public PlLogLVEStandardAspekteVersorger(final IVerwaltung verwaltung)
 			throws DUAInitialisierungsException {
 		super(verwaltung);
 	}
@@ -71,11 +71,11 @@ public class PlLogLVEStandardAspekteVersorger extends StandardAspekteVersorger {
 								DUAKonstanten.ATG_KZD,
 								DUAKonstanten.ASP_EXTERNE_ERFASSUNG,
 								DUAKonstanten.ASP_PL_PRUEFUNG_LOGISCH),
-						new StandardPublikationsZuordnung(
-								DUAKonstanten.TYP_FAHRSTREIFEN,
-								DUAKonstanten.ATG_LZD,
-								DUAKonstanten.ASP_EXTERNE_ERFASSUNG,
-								DUAKonstanten.ASP_PL_PRUEFUNG_LOGISCH) });
+								new StandardPublikationsZuordnung(
+										DUAKonstanten.TYP_FAHRSTREIFEN,
+										DUAKonstanten.ATG_LZD,
+										DUAKonstanten.ASP_EXTERNE_ERFASSUNG,
+										DUAKonstanten.ASP_PL_PRUEFUNG_LOGISCH) });
 
 	}
 }
