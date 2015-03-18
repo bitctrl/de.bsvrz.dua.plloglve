@@ -26,6 +26,7 @@
 
 package de.bsvrz.dua.plloglve.plloglve.ausfall;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import de.bsvrz.dav.daf.main.Data;
@@ -100,7 +101,8 @@ public final class AusfallDatumKomplett implements
 	 */
 	@Override
 	public String toString() {
-		String s = "Datenzeit: " + DUAKonstanten.ZEIT_FORMAT_GENAU.format(new Date(this.intervallAnfang)) + //$NON-NLS-1$
+		final SimpleDateFormat dateFormat = new SimpleDateFormat(DUAKonstanten.ZEIT_FORMAT_GENAU_STR);
+		String s = "Datenzeit: " + dateFormat.format(new Date(this.intervallAnfang)) + //$NON-NLS-1$
 				" (" + (this.intervallEnde - this.intervallAnfang)
 				+ "ms): " + this.inhalt; //$NON-NLS-1$ //$NON-NLS-2$
 		return s;

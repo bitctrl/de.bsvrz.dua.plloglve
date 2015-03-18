@@ -29,7 +29,7 @@ package de.bsvrz.dua.plloglve.util.pruef;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import junit.framework.Assert;
+import org.junit.Assert;
 import de.bsvrz.dav.daf.main.ClientDavInterface;
 import de.bsvrz.dav.daf.main.ClientReceiverInterface;
 import de.bsvrz.dav.daf.main.Data;

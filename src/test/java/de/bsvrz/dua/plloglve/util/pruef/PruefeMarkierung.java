@@ -26,11 +26,13 @@
 
 package de.bsvrz.dua.plloglve.util.pruef;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import junit.framework.Assert;
+import org.junit.Assert;
+
 import de.bsvrz.dav.daf.main.ClientDavInterface;
 import de.bsvrz.dav.daf.main.ClientReceiverInterface;
 import de.bsvrz.dav.daf.main.Data;
@@ -147,8 +149,8 @@ public class PruefeMarkierung implements ClientReceiverInterface {
 				.getDataModel()
 				.getAspect(DUAKonstanten.ASP_PL_PRUEFUNG_LOGISCH));
 
-		this.dav.subscribeReceiver(this, fs, DD_KZD_EMPF, ReceiveOptions
-				.normal(), ReceiverRole.receiver());
+		this.dav.subscribeReceiver(this, fs, DD_KZD_EMPF,
+				ReceiveOptions.normal(), ReceiverRole.receiver());
 	}
 
 	/**
@@ -209,10 +211,8 @@ public class PruefeMarkierung implements ClientReceiverInterface {
 	public void listenFehl(String pruefeAttr, long pruefZeitstempel) {
 		pruefeAlleAttr = false;
 		paramFehl(pruefeAttr, pruefZeitstempel);
-		Debug
-				.getLogger()
-				.info(
-						"Prüfe Datum auf Fehlerhaft-Markierung des Attributes: " + pruefeAttr); //$NON-NLS-1$
+		Debug.getLogger()
+				.info("Prüfe Datum auf Fehlerhaft-Markierung des Attributes: " + pruefeAttr); //$NON-NLS-1$
 	}
 
 	/**
@@ -257,10 +257,8 @@ public class PruefeMarkierung implements ClientReceiverInterface {
 	public void listenImpl(String pruefeAttr, long pruefZeitstempel) {
 		pruefeAlleAttr = false;
 		paramImpl(pruefeAttr, pruefZeitstempel);
-		Debug
-				.getLogger()
-				.info(
-						"Prüfe Datum auf Implausibel-Markierung des Attributes: " + pruefeAttr); //$NON-NLS-1$
+		Debug.getLogger()
+				.info("Prüfe Datum auf Implausibel-Markierung des Attributes: " + pruefeAttr); //$NON-NLS-1$
 	}
 
 	/**
@@ -305,10 +303,8 @@ public class PruefeMarkierung implements ClientReceiverInterface {
 	public void listenFehlImpl(String pruefeAttr, long pruefZeitstempel) {
 		pruefeAlleAttr = false;
 		paramFehlImpl(pruefeAttr, pruefZeitstempel);
-		Debug
-				.getLogger()
-				.info(
-						"Prüfe Datum auf Fehlerhaft- und Implausibel-Markierung des Attributes: " + pruefeAttr); //$NON-NLS-1$
+		Debug.getLogger()
+				.info("Prüfe Datum auf Fehlerhaft- und Implausibel-Markierung des Attributes: " + pruefeAttr); //$NON-NLS-1$
 	}
 
 	/**
@@ -321,10 +317,8 @@ public class PruefeMarkierung implements ClientReceiverInterface {
 	public void listenFehlImpl(long pruefZeitstempel) {
 		pruefeAlleAttr = true;
 		paramFehlImpl("alle", pruefZeitstempel); //$NON-NLS-1$
-		Debug
-				.getLogger()
-				.info(
-						"Prüfe Datum auf Fehlerhaft- und Implausibel-Markierung aller Attribute"); //$NON-NLS-1$
+		Debug.getLogger()
+				.info("Prüfe Datum auf Fehlerhaft- und Implausibel-Markierung aller Attribute"); //$NON-NLS-1$
 	}
 
 	/**
@@ -410,6 +404,8 @@ public class PruefeMarkierung implements ClientReceiverInterface {
 				.getItem(pruefeAttr)
 				.getItem("Status").getItem("MessWertErsetzung").getUnscaledValue("Implausibel").intValue(); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 
+		final SimpleDateFormat dateFormat = new SimpleDateFormat(
+				DUAKonstanten.ZEIT_FORMAT_GENAU_STR);
 		if (sollWert < 0) {
 			if (wert != sollWert) {
 				String fehler = "Fehlerhafter Attributwert (" + pruefeAttr + "): " + sollWert + " (SOLL)<>(IST) " + wert + //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
@@ -419,14 +415,13 @@ public class PruefeMarkierung implements ClientReceiverInterface {
 					// Date(this.pruefZeitstempel)) + " --> FEHLER\n" + fehler);
 					Assert.assertTrue(fehler, false);
 				} else {
-					System.out.println(DUAKonstanten.ZEIT_FORMAT_GENAU
-							.format(new Date(this.pruefZeitstempel))
-							+ " --> FEHLER\n" + fehler);
+					System.out.println(dateFormat.format(new Date(
+							this.pruefZeitstempel)) + " --> FEHLER\n" + fehler);
 				}
 			} else {
 				System.out
-						.println(DUAKonstanten.ZEIT_FORMAT_GENAU
-								.format(new Date(this.pruefZeitstempel))
+						.println(dateFormat.format(new Date(
+								this.pruefZeitstempel))
 								+ " --> OK (" + pruefeAttr + "):\n" + sollWert + " (SOLL)==(IST) " + wert); //$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$
 			}
 		} else if (sollWert == SOLL_WERT_KEIN_FEHLER) {
@@ -437,14 +432,14 @@ public class PruefeMarkierung implements ClientReceiverInterface {
 					// Date(this.pruefZeitstempel)) + " --> FEHLER\n" + fehler);
 					Assert.assertTrue(fehler, false);
 				} else {
-					System.out.println(DUAKonstanten.ZEIT_FORMAT_GENAU
-							.format(new Date(this.pruefZeitstempel))
-							+ " --> FEHLER\n" + fehler);
+					System.out.println(dateFormat.format(new Date(
+							this.pruefZeitstempel)) + " --> FEHLER\n" + fehler);
 				}
 			} else {
-				System.out.println(DUAKonstanten.ZEIT_FORMAT_GENAU
-						.format(new Date(this.pruefZeitstempel))
-						+ " --> OK " + pruefeAttr + " :\n (Wert >= 0) (SOLL)==(IST) " + wert); //$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$
+				System.out
+						.println(dateFormat.format(new Date(
+								this.pruefZeitstempel))
+								+ " --> OK " + pruefeAttr + " :\n (Wert >= 0) (SOLL)==(IST) " + wert); //$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$
 			}
 		}
 
@@ -456,14 +451,13 @@ public class PruefeMarkierung implements ClientReceiverInterface {
 					// Date(this.pruefZeitstempel)) + " --> FEHLER\n" + fehler);
 					Assert.assertTrue(fehler, false);
 				} else {
-					System.out.println(DUAKonstanten.ZEIT_FORMAT_GENAU
-							.format(new Date(this.pruefZeitstempel))
-							+ " --> FEHLER\n" + fehler);
+					System.out.println(dateFormat.format(new Date(
+							this.pruefZeitstempel)) + " --> FEHLER\n" + fehler);
 				}
 			} else {
 				System.out
-						.println(DUAKonstanten.ZEIT_FORMAT_GENAU
-								.format(new Date(this.pruefZeitstempel))
+						.println(dateFormat.format(new Date(
+								this.pruefZeitstempel))
 								+ " --> OK " + pruefeAttr + " (" + sollImplausibel + "):\n" + (impl == 0 ? "nicht implausibel" : "implausibel") + " (SOLL)==(IST) " + (sollImplausibel == 0 ? "nicht implausibel" : "implausibel")); //$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$
 			}
 		}
@@ -487,8 +481,8 @@ public class PruefeMarkierung implements ClientReceiverInterface {
 	 * Soll Assert zur Fehlermeldung genutzt werden?
 	 * 
 	 * @param useAssert
-	 *            <code>True</code> wenn Asserts verwendet werden sollen,
-	 *            sonst <code>False</code>
+	 *            <code>True</code> wenn Asserts verwendet werden sollen, sonst
+	 *            <code>False</code>
 	 */
 	public void benutzeAssert(final boolean useAssert) {
 		this.useAssert = useAssert;

@@ -26,9 +26,11 @@
 
 package de.bsvrz.dua.plloglve.util;
 
+import java.text.SimpleDateFormat;
 import java.util.Date; // import java.util.Random;
 
-import junit.framework.Assert;
+import org.junit.Assert;
+
 import de.bsvrz.dav.daf.main.ClientDavInterface;
 import de.bsvrz.dav.daf.main.ClientSenderInterface;
 import de.bsvrz.dav.daf.main.Data;
@@ -211,6 +213,8 @@ public class PlPruefungAusfall implements ClientSenderInterface,
 				.info(
 						"Meldungsfilter initialisiert: Erwarte 1457 Meldungen mit \"Ausfallhäufigkeit\"");
 
+		final SimpleDateFormat dateFormat = new SimpleDateFormat(DUAKonstanten.ZEIT_FORMAT_GENAU_STR);
+
 		/*
 		 * Sende 2500 Datensätze
 		 */
@@ -258,14 +262,14 @@ public class PlPruefungAusfall implements ClientSenderInterface,
 				// dummy.getItem("qPkw").getUnscaledValue("Wert").set(DUAKonstanten.FEHLERHAFT);
 				// }
 
-				System.out.println(DUAKonstanten.ZEIT_FORMAT_GENAU
+				System.out.println(dateFormat
 						.format(new Date(pruefZeit))
 						+ ": Intervall " + i + ": Sende Datum FEHLER");
 				ResultData resultat1 = new ResultData(fs, ddKzdSend, pruefZeit,
 						dummy);
 				this.dav.sendData(resultat1);
 			} else {
-				System.out.println(DUAKonstanten.ZEIT_FORMAT_GENAU
+				System.out.println(dateFormat
 						.format(new Date(pruefZeit))
 						+ ": Intervall " + i + ": Sende Datum OK");
 				if ((zeileFSOK = paraImpFSOK.getNaechstenDatensatz(ddKzdSend

@@ -26,7 +26,7 @@
 
 package de.bsvrz.dua.plloglve.util;
 
-import junit.framework.Assert;
+import org.junit.Assert;
 
 import com.bitctrl.Constants;
 

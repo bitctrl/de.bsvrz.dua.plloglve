@@ -28,7 +28,7 @@ package de.bsvrz.dua.plloglve.util;
 
 import java.util.Random;
 
-import junit.framework.Assert;
+import org.junit.Assert;
 import de.bsvrz.dav.daf.main.ClientDavInterface;
 import de.bsvrz.dav.daf.main.ClientSenderInterface;
 import de.bsvrz.dav.daf.main.Data;

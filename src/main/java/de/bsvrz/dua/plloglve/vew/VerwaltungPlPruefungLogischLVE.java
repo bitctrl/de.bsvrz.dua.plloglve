@@ -26,6 +26,7 @@
 
 package de.bsvrz.dua.plloglve.vew;
 
+import java.text.SimpleDateFormat;
 import java.util.Collection;
 import java.util.Date;
 
@@ -186,9 +187,10 @@ public class VerwaltungPlPruefungLogischLVE extends
 	 */
 	public static final String getPlLogIdent(ResultData originalDatum) {
 		if (originalDatum != null) {
+			final SimpleDateFormat dateFormat = new SimpleDateFormat(DUAKonstanten.ZEIT_FORMAT_GENAU_STR);
 			String ident = originalDatum.getObject().getPid()
 					+ " (DZ: "
-					+ DUAKonstanten.ZEIT_FORMAT_GENAU.format(new Date(
+					+ dateFormat.format(new Date(
 							originalDatum.getDataTime()))
 					+ "), ["
 					+ originalDatum.getDataDescription().getAttributeGroup()
