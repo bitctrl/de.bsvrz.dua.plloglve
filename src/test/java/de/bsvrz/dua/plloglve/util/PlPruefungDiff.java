@@ -66,7 +66,7 @@ PlPruefungInterface {
 	/**
 	 * Testfahrstreifen KZD.
 	 */
-	public static SystemObject FS = null;
+	public static SystemObject fahrStreifen;
 
 	/**
 	 * KZD Importer.
@@ -76,7 +76,7 @@ PlPruefungInterface {
 	/**
 	 * Sende-Datenbeschreibung für KZD
 	 */
-	public static DataDescription DD_KZD_SEND = null;
+	public static DataDescription ddKzdSend;
 
 	/**
 	 * Datenverteiler-Verbindung
@@ -103,16 +103,16 @@ PlPruefungInterface {
 		/*
 		 * Melde Sender für FS an
 		 */
-		PlPruefungDiff.FS = this.dav.getDataModel().getObject(
+		PlPruefungDiff.fahrStreifen = this.dav.getDataModel().getObject(
 				Konfiguration.PID_TESTFS1_KZD);
 
-		PlPruefungDiff.DD_KZD_SEND = new DataDescription(this.dav
+		PlPruefungDiff.ddKzdSend = new DataDescription(this.dav
 				.getDataModel().getAttributeGroup(DUAKonstanten.ATG_KZD),
 				this.dav.getDataModel().getAspect(
 						DUAKonstanten.ASP_EXTERNE_ERFASSUNG));
 
 		try {
-			kzdImport = new ParaKZDLogImport(dav, PlPruefungDiff.FS,
+			kzdImport = new ParaKZDLogImport(dav, PlPruefungDiff.fahrStreifen,
 					Konfiguration.TEST_DATEN_VERZ
 					+ Konfiguration.DATENCSV_PARAMETER);
 			kzdImport.importParaDiff();
@@ -131,8 +131,8 @@ PlPruefungInterface {
 		/*
 		 * Sender anmelden
 		 */
-		this.dav.subscribeSender(this, PlPruefungDiff.FS,
-				PlPruefungDiff.DD_KZD_SEND, SenderRole.source());
+		this.dav.subscribeSender(this, PlPruefungDiff.fahrStreifen,
+				PlPruefungDiff.ddKzdSend, SenderRole.source());
 
 		/*
 		 * Initialisiere FS-Daten-Importer
@@ -166,7 +166,7 @@ PlPruefungInterface {
 		 * auf korrekte Markierung (OK bzw. fehlerhaft/implausibel)
 		 */
 		final PruefeMarkierung markPruefer = new PruefeMarkierung(this, dav,
-				PlPruefungDiff.FS);
+				PlPruefungDiff.fahrStreifen);
 		markPruefer.benutzeAssert(false);// useAssert);
 
 		/*
@@ -180,7 +180,7 @@ PlPruefungInterface {
 		 */
 		for (int i = 0; i < 5; i++) {
 			while ((zeileFSDiff = fsImpFSDiff
-					.getNaechstenDatensatz(PlPruefungDiff.DD_KZD_SEND
+					.getNaechstenDatensatz(PlPruefungDiff.ddKzdSend
 							.getAttributeGroup())) != null) {
 
 				dsGesamt++;
@@ -289,8 +289,8 @@ PlPruefungInterface {
 					markPruefer.listenFehlImpl("b", aktZeit); //$NON-NLS-1$
 				}
 
-				final ResultData resultat1 = new ResultData(PlPruefungDiff.FS,
-						PlPruefungDiff.DD_KZD_SEND, aktZeit, zeileFSDiff);
+				final ResultData resultat1 = new ResultData(PlPruefungDiff.fahrStreifen,
+						PlPruefungDiff.ddKzdSend, aktZeit, zeileFSDiff);
 
 				synchronized (this) {
 					this.dav.sendData(resultat1);
@@ -333,8 +333,8 @@ PlPruefungInterface {
 		/*
 		 * Sender abmelden
 		 */
-		this.dav.unsubscribeSender(this, PlPruefungDiff.FS,
-				PlPruefungDiff.DD_KZD_SEND);
+		this.dav.unsubscribeSender(this, PlPruefungDiff.fahrStreifen,
+				PlPruefungDiff.ddKzdSend);
 	}
 
 	/**

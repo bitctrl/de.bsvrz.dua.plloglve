@@ -39,7 +39,6 @@ import de.bsvrz.dav.daf.main.ReceiveOptions;
 import de.bsvrz.dav.daf.main.ReceiverRole;
 import de.bsvrz.dav.daf.main.ResultData;
 import de.bsvrz.dav.daf.main.config.SystemObject;
-import de.bsvrz.dav.daf.main.impl.InvalidArgumentException;
 import de.bsvrz.dua.plloglve.util.PlPruefungLogisch;
 import de.bsvrz.sys.funclib.bitctrl.dua.DUAKonstanten;
 import de.bsvrz.sys.funclib.bitctrl.dua.DUAUtensilien;
@@ -487,7 +486,6 @@ public class PruefeDatenLogisch implements ClientReceiverInterface {
 	 *
 	 * @param results
 	 *            Ergebnisdatensätze vom DaV
-	 * @throws InvalidArgumentException
 	 */
 	@Override
 	public void update(final ResultData[] results) {
@@ -616,11 +614,6 @@ class VergleicheDaten extends Thread {
 	 * Assert-Statements benutzen?
 	 */
 	private boolean useAssert = true;
-
-	/**
-	 * Hält die aktuelle Debug.getLogger()ausgabe.
-	 */
-	private String pruefLog;
 
 	/**
 	 * Hält den aktuellen Warntext.
@@ -878,7 +871,6 @@ class VergleicheDaten extends Thread {
 		// CSV("+(hmCSV.size()-8)+") <>
 		// Results("+hmResult.size()+")");
 
-		pruefLog = "";
 		for (final String element : attributNamenPraefix) {
 			for (final String element2 : attributNamen) {
 				attribut = element + element2;
@@ -965,23 +957,11 @@ class VergleicheDaten extends Thread {
 							} else {
 								Debug.getLogger().warning(warnung);
 							}
-
-							pruefLog += ident + "DIFF (" + attribut + "):"
-									+ hmCSV.get(attribut) + sollWertErl
-									+ " (SOLL)<>(IST) "
-									+ hmResult.get(attribut) + istWertErl
-									+ "\n\r";
 						} else {
 							System.out.println(ident + " OK  (" + attribut
 									+ "):" + hmCSV.get(attribut) + sollWertErl
 									+ " (SOLL)==(IST) "
 									+ hmResult.get(attribut) + istWertErl);
-
-							pruefLog += ident + " OK  (" + attribut + "):"
-									+ hmCSV.get(attribut) + sollWertErl
-									+ " (SOLL)==(IST) "
-									+ hmResult.get(attribut) + istWertErl
-									+ "\n\r";
 						}
 					} else {
 						/*
@@ -1025,19 +1005,7 @@ class VergleicheDaten extends Thread {
 							} else {
 								Debug.getLogger().warning(warnung);
 							}
-
-							pruefLog += ident + "DIFF (" + attribut + "):"
-									+ hmCSV.get(attribut) + sollWertErl
-									+ " (SOLL)<>(IST) "
-									+ hmResult.get(attribut) + istWertErl
-									+ "\n\r";
-						} else {
-							pruefLog += ident + " OK  (" + attribut + "):"
-									+ hmCSV.get(attribut) + sollWertErl
-									+ " (SOLL)==(IST) "
-									+ hmResult.get(attribut) + istWertErl
-									+ "\n\r";
-						}
+						} 
 					}
 				} else if (attribut.equals("tNetto.Wert")) {
 					/*
@@ -1059,16 +1027,7 @@ class VergleicheDaten extends Thread {
 											+ " (SOLL)<>(IST) "
 											+ resultWerttNetto + istWertErl);
 						}
-						pruefLog += ident + "DIFF (" + attribut + "):"
-								+ csvWerttNetto + sollWertErl
-								+ " (SOLL)<>(IST) " + resultWerttNetto
-								+ istWertErl + "\n\r";
-					} else {
-						pruefLog += ident + " OK  (" + attribut + "):"
-								+ csvWerttNetto + sollWertErl
-								+ " (SOLL)<>(IST) " + resultWerttNetto
-								+ istWertErl + "\n\r";
-					}
+					} 
 				}
 
 				/*

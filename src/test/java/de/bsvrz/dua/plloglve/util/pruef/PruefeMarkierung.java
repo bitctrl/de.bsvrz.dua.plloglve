@@ -103,28 +103,28 @@ public class PruefeMarkierung implements ClientReceiverInterface {
 	/**
 	 * Der repräsentative Wert um die Prüfung des Wertes abzuschalten
 	 */
-	private static int SOLL_WERT_KEINE_PRUEFUNG = 0;
+	private static final int SOLL_WERT_KEINE_PRUEFUNG = 0;
 
 	/**
 	 * Der repräsentative Wert für die Prüfung auf einen fehlerfreien Wert
 	 */
-	private static int SOLL_WERT_KEIN_FEHLER = 1;
+	private static final int SOLL_WERT_KEIN_FEHLER = 1;
 
 	/**
 	 * Der repräsentative Wert um die Prüfung des Implausibelzustandes
 	 * abzuschalten
 	 */
-	private static int SOLL_IMPLAUSIBEL_KEINE_PRUEFUNG = -1;
+	private static final int SOLL_IMPLAUSIBEL_KEINE_PRUEFUNG = -1;
 
 	/**
 	 * Empfange-Datenbeschreibung für KZD
 	 */
-	public static DataDescription DD_KZD_EMPF = null;
+	public static DataDescription ddKzdEmpf;
 
 	/**
 	 * Empfange-Datenbeschreibung für LZD
 	 */
-	public static DataDescription DD_LZD_EMPF = null;
+	public static DataDescription ddLzdEmpf;
 
 	/**
 	 * Prüft einen Ergebnisdatensatz mit entsprechendem Zeitstempel auf
@@ -147,12 +147,12 @@ public class PruefeMarkierung implements ClientReceiverInterface {
 		/*
 		 * Melde Empfänger für KZD und LZD unter dem Aspekt PlPrüfung Logisch an
 		 */
-		PruefeMarkierung.DD_KZD_EMPF = new DataDescription(this.dav
+		PruefeMarkierung.ddKzdEmpf = new DataDescription(this.dav
 				.getDataModel().getAttributeGroup(DUAKonstanten.ATG_KZD),
 				this.dav.getDataModel().getAspect(
 						DUAKonstanten.ASP_PL_PRUEFUNG_LOGISCH));
 
-		this.dav.subscribeReceiver(this, fs, PruefeMarkierung.DD_KZD_EMPF,
+		this.dav.subscribeReceiver(this, fs, PruefeMarkierung.ddKzdEmpf,
 				ReceiveOptions.normal(), ReceiverRole.receiver());
 	}
 
