@@ -226,6 +226,14 @@ public class BezugsZeitraum {
 											: Constants.MILLIS_PER_HOUR)))
 											/ Constants.MILLIS_PER_MINUTE;
 
+							// Bilde den Text für den Vergleichswert
+							String vwert = "";
+							if (einschaltSchwelleUEBERschritten) {
+								vwert = "" + parameter.getMaxAusfallProBezugsZeitraumEin() + " (Einschaltschwelle)";
+							} else {
+								vwert = "" + parameter.getMaxAusfallProBezugsZeitraumAus() + " (Ausschaltschwelle)";
+							}
+							
 							final String nachricht = "Daten außerhalb des Vertrauensbereichs. Im Zeitraum von " + //$NON-NLS-1$
 									DUAKonstanten.BM_ZEIT_FORMAT.format(start)
 									+ " Uhr bis " + DUAKonstanten.BM_ZEIT_FORMAT.format(ende) + //$NON-NLS-1$
@@ -238,7 +246,7 @@ public class BezugsZeitraum {
 									+ " von "
 									+ DUAUtensilien.runde(ausfallInProzent, 1)
 									+ "% (> " + //$NON-NLS-1$
-									parameter.getMaxAusfallProBezugsZeitraumEin()
+									vwert
 									+ "%) entspricht Ausfall von " + stunden + " Stunde(n) " + //$NON-NLS-1$ //$NON-NLS-2$
 									minuten
 									+ " Minute(n). Fahrstreifenwerte werden auf Implausibel gesetzt."; //$NON-NLS-1$

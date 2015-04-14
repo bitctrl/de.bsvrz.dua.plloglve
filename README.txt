@@ -2,7 +2,7 @@
 *  Segment 4 Datenübernahme und Aufbereitung (DUA), SWE 4.2 Pl-Prüfung logisch LVE  *
 *************************************************************************************
 
-Version: 1.2.0
+Version: 1.2.1
 
 
 Übersicht
@@ -12,10 +12,10 @@ Aufgabe der SWE PL-Prüfung logisch LVE ist es, die logische PL-Prüfung der LVE f
 Kurzzeitdaten und Langzeitdaten durchzuführen. Diese erfolgt innerhalb der SWE für alle
 vorgesehenen Objekte durch die Wertebereichsprüfung (PL-Prüfung formal) und einer nachfolgenden
 logischen Plausibilitätsprüfung. Die logische Plausibilitätsprüfung untergliedert sich in
-•	PL-Prüfung logisch für Kurzzeitdaten Verkehr und Langzeitdaten Verkehr,
-•	Differenzialkontrolle von Fahrstreifendaten,
-•	Ermittlung der Ausfallhäufigkeit von Fahrstreifendaten und
-•	Ermittlung des Vertrauensbereichs von Fahrstreifendaten.
+-	PL-Prüfung logisch für Kurzzeitdaten Verkehr und Langzeitdaten Verkehr,
+-	Differenzialkontrolle von Fahrstreifendaten,
+-	Ermittlung der Ausfallhäufigkeit von Fahrstreifendaten und
+-	Ermittlung des Vertrauensbereichs von Fahrstreifendaten.
 Eine genaue Beschreibung erfolgt in den [AFo]. Nach der Prüfung werden die Daten ggf. unter
 einem parametrierbaren Aspekt publiziert.
 
@@ -23,6 +23,11 @@ einem parametrierbaren Aspekt publiziert.
 
 Versionsgeschichte
 ==================
+
+1.2.1
+- BezugsZeitraum: Fehlerausgabe korrigiert für den Fall, dass die Einschaltschwelle überschritten war und 
+  die Ausschaltschwelle noch nicht unterschritten wurde
+
 
 1.2.0
 - Umstellung auf Maven-Build
