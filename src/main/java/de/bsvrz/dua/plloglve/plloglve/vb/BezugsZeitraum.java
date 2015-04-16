@@ -229,9 +229,9 @@ public class BezugsZeitraum {
 							// Bilde den Text für den Vergleichswert
 							String vwert = "";
 							if (einschaltSchwelleUEBERschritten) {
-								vwert = "" + parameter.getMaxAusfallProBezugsZeitraumEin() + " (Einschaltschwelle)";
+								vwert = "" + parameter.getMaxAusfallProBezugsZeitraumEin() + "% (Einschaltschwelle)";
 							} else {
-								vwert = "" + parameter.getMaxAusfallProBezugsZeitraumAus() + " (Ausschaltschwelle)";
+								vwert = "" + parameter.getMaxAusfallProBezugsZeitraumAus() + "% (Ausschaltschwelle)";
 							}
 							
 							final String nachricht = "Daten außerhalb des Vertrauensbereichs. Im Zeitraum von " + //$NON-NLS-1$
@@ -247,7 +247,7 @@ public class BezugsZeitraum {
 									+ DUAUtensilien.runde(ausfallInProzent, 1)
 									+ "% (> " + //$NON-NLS-1$
 									vwert
-									+ "%) entspricht Ausfall von " + stunden + " Stunde(n) " + //$NON-NLS-1$ //$NON-NLS-2$
+									+ ") entspricht Ausfall von " + stunden + " Stunde(n) " + //$NON-NLS-1$ //$NON-NLS-2$
 									minuten
 									+ " Minute(n). Fahrstreifenwerte werden auf Implausibel gesetzt."; //$NON-NLS-1$
 
