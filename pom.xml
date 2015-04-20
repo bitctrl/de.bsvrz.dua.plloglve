@@ -3,7 +3,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>de.bsvrz.dua</groupId>
 	<artifactId>de.bsvrz.dua.plloglve</artifactId>
-	<version>1.2.1</version>
+	<version>1.2.2-SNAPSHOT</version>
 
 	<name>Pl-Prüfung logisch LVE (SWE 4.2)</name>
 	<url>http://www.bitctrl.de</url>
