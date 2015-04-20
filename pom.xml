@@ -3,7 +3,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>de.bsvrz.dua</groupId>
 	<artifactId>de.bsvrz.dua.plloglve</artifactId>
-	<version>1.2.1-SNAPSHOT</version>
+	<version>1.2.1</version>
 
 	<name>Pl-Prüfung logisch LVE (SWE 4.2)</name>
 	<url>http://www.bitctrl.de</url>
@@ -55,12 +55,12 @@
 		<dependency>
 			<groupId>de.bsvrz.dua</groupId>
 			<artifactId>de.bsvrz.dua.guete</artifactId>
-			<version>1.2.0-SNAPSHOT</version>
+			<version>1.2.0</version>
 		</dependency>
 		<dependency>
 			<groupId>de.bsvrz.dua</groupId>
 			<artifactId>de.bsvrz.dua.plformal</artifactId>
-			<version>1.3.0-SNAPSHOT</version>
+			<version>1.3.0</version>
 		</dependency>
 		<dependency>
 			<groupId>junit</groupId>
@@ -221,9 +221,14 @@
 
 	<distributionManagement>
 		<repository>
+			<id>bitctrl.nexus</id>
+			<name>BitCtrl Nexus Releases Repository</name>
+			<url>http://bitctrlbuildserver:8081/nexus/content/repositories/releases/</url>
+		</repository>
+		<snapshotRepository>
 			<id>bitctrl.nexus.snapshots</id>
 			<name>BitCtrl Nexus Snapshots Repository</name>
 			<url>http://bitctrlbuildserver:8081/nexus/content/repositories/snapshots/</url>
-		</repository>
+		</snapshotRepository>
 	</distributionManagement>
 </project>
