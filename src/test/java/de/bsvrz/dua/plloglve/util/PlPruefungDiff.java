@@ -89,15 +89,12 @@ PlPruefungInterface {
 	private int meldungHyst = 5;
 
 	/**
-	 * Initialisiert die Differenzielkontrolle
+	 * Initialisiert die Differenzielkontrolle.
 	 *
 	 * @param dav
 	 *            Die Datenteilerverbindung
-	 * @param alDebug
-	 *            .getLogger() Die Debug.getLogger()attribute
 	 */
-	public PlPruefungDiff(final ClientDavInterface dav,
-			final ArgumentList alLogger) {
+	public PlPruefungDiff(final ClientDavInterface dav) {
 		this.dav = dav;
 
 		/*

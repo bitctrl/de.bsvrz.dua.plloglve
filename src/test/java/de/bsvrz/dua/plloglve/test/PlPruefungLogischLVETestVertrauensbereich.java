@@ -84,7 +84,7 @@ public class PlPruefungLogischLVETestVertrauensbereich {
 	@Test
 	public void testVB() throws Exception {
 		final PlPruefungVertrauensbereich pruefVertrB = new PlPruefungVertrauensbereich(
-				dav, alLogger);
+				dav);
 		pruefVertrB.benutzeAssert(true);
 		pruefVertrB.setMeldungHysterese(3);
 		pruefVertrB.pruefe();

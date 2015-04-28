@@ -56,7 +56,7 @@ import de.bsvrz.sys.funclib.debug.Debug;
  *          peuker $
  */
 public class PlPruefungVertrauensbereich implements ClientSenderInterface,
-PlPruefungInterface {
+		PlPruefungInterface {
 
 	private static final Debug LOGGER = Debug.getLogger();
 
@@ -110,11 +110,8 @@ PlPruefungInterface {
 	 *
 	 * @param dav
 	 *            Datenverteilerverbindung
-	 * @param alDebug
-	 *            .getLogger() Testdatenverzeichnis
 	 */
-	public PlPruefungVertrauensbereich(final ClientDavInterface dav,
-			final ArgumentList alLogger) {
+	public PlPruefungVertrauensbereich(final ClientDavInterface dav) {
 		this.dav = dav;
 
 		/*
@@ -132,9 +129,9 @@ PlPruefungInterface {
 			kzdImport = new ParaKZDLogImport(dav,
 					PlPruefungVertrauensbereich.fs,
 					Konfiguration.TEST_DATEN_VERZ
-					+ Konfiguration.DATENCSV_PARAMETER);
+							+ Konfiguration.DATENCSV_PARAMETER);
 			kzdImport
-			.setOptionen(OptionenPlausibilitaetsPruefungLogischVerkehr.KEINE_PRUEFUNG);
+					.setOptionen(OptionenPlausibilitaetsPruefungLogischVerkehr.KEINE_PRUEFUNG);
 			kzdImport.importiereParameter(1);
 			kzdImport.importParaVertrauensbereich();
 		} catch (final Exception e) {
@@ -145,14 +142,13 @@ PlPruefungInterface {
 			TestFahrstreifenImporter paraImpFSFehler = null;
 			paraImpFSFehler = new TestFahrstreifenImporter(this.dav,
 					Konfiguration.TEST_DATEN_VERZ
-					+ Konfiguration.DATENCSV_FS_FEHLER);
+							+ Konfiguration.DATENCSV_FS_FEHLER);
 			TestFahrstreifenImporter.setT(TestParameter.INTERVALL_VB);
 			zFSFehlB2 = paraImpFSFehler
 					.getNaechstenDatensatz(PlPruefungVertrauensbereich.ddKzdSend
 							.getAttributeGroup());
 		} catch (final Exception e) {
-			LOGGER.error(
-					"Kann Fehlerdatensätze nicht importieren: " + e);
+			LOGGER.error("Kann Fehlerdatensätze nicht importieren: " + e);
 		}
 
 	}
@@ -201,8 +197,7 @@ PlPruefungInterface {
 		 */
 		final FilterMeldung meldFilter = new FilterMeldung(this, dav,
 				"Vertrauensbereichs", 352, meldungHyst);
-		LOGGER
-		.info("Meldungsfilter initialisiert: Erwarte 352 Meldungen mit \"Vertrauensbereichs\"");
+		LOGGER.info("Meldungsfilter initialisiert: Erwarte 352 Meldungen mit \"Vertrauensbereichs\"");
 
 		/*
 		 * Sendet fehlerfreie DS für eine Stunde
@@ -253,9 +248,8 @@ PlPruefungInterface {
 			 */
 			if (((i >= 29) && (i < 72)) || ((i >= 511) && (i < 552))) {
 				markPruefer.listenImpl(pruefZeit);
-				LOGGER.info(
-						"Intervall " + i
-								+ ": Erwarte alle Attribute als Implausiebel");
+				LOGGER.info("Intervall " + i
+						+ ": Erwarte alle Attribute als Implausiebel");
 			} else {
 				markPruefer.listenOK(pruefZeit);
 			}
@@ -271,22 +265,22 @@ PlPruefungInterface {
 				/*
 				 * Es wird ein fehlerhafter DS (qKfz, qPkw, qLkw, vPkw) gesendet
 				 * Dabei wird der VB entsprechend Afo beim 29. DS verlassen
-				 *
+				 * 
 				 * Der prozentuale Ausfall der Attribute liegt ab dem 65. DS
 				 * unter 20% wobei der VB jedoch aufgrund der anderen
 				 * Fehlerdaten weiterhin verlassen bleibt
-				 *
+				 * 
 				 * Für den zweiten Testbereich liegt der prozentuale Ausfall ab
 				 * dem 513. DS über 20% wobei der VB bereits früher durch die
 				 * anderen Fehlerdaten verlassen wird
-				 *
+				 * 
 				 * Ab dem 552. DS liegt der prozentuale Ausfall entsprechend Afo
 				 * wieder im VB
 				 */
 				System.out
-				.println("Intervall "
-						+ i
-						+ ": Sende fehlerhaftes Datum (qKfz, qPkw, qLkw, vPkw)");
+						.println("Intervall "
+								+ i
+								+ ": Sende fehlerhaftes Datum (qKfz, qPkw, qLkw, vPkw)");
 				markPruefer.addIgnore("b");
 				synchronized (this) {
 					sendeFehler2(pruefZeit);
@@ -410,7 +404,7 @@ PlPruefungInterface {
 		final Data data = zFSFehlB2.createModifiableCopy();
 		if (PlPruefungVertrauensbereich.R.nextBoolean()) {
 			data.getItem("b").getItem("Status").getItem("MessWertErsetzung")
-			.getUnscaledValue("Implausibel").set(DUAKonstanten.JA);
+					.getUnscaledValue("Implausibel").set(DUAKonstanten.JA);
 		} else {
 			data.getItem("b").getUnscaledValue("Wert")
 					.set(DUAKonstanten.FEHLERHAFT);

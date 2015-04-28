@@ -81,8 +81,7 @@ public class PlPruefungLogischLVETestStandardDiff {
 	 */
 	@Test
 	public void testKZDTLS() throws Exception {
-		final PlPruefungLogisch pruefLogisch = new PlPruefungLogisch(dav,
-				alLogger);
+		final PlPruefungLogisch pruefLogisch = new PlPruefungLogisch(dav);
 		pruefLogisch.benutzeAssert(true);
 		final int[][] bereiche = { { 2, 101 } };
 		System.out.println("\n\n*** KZD TLS Test nach Prüfspezifikation ***\n");
@@ -97,8 +96,7 @@ public class PlPruefungLogischLVETestStandardDiff {
 	 */
 	@Test
 	public void testKZDGrenz() throws Exception {
-		final PlPruefungLogisch pruefLogisch = new PlPruefungLogisch(dav,
-				alLogger);
+		final PlPruefungLogisch pruefLogisch = new PlPruefungLogisch(dav);
 		pruefLogisch.benutzeAssert(true);
 		final int[][] bereiche = { { 2, 21 } };
 		System.out
@@ -114,8 +112,7 @@ public class PlPruefungLogischLVETestStandardDiff {
 	 */
 	@Test
 	public void testLZDTLS() throws Exception {
-		final PlPruefungLogisch pruefLogisch = new PlPruefungLogisch(dav,
-				alLogger);
+		final PlPruefungLogisch pruefLogisch = new PlPruefungLogisch(dav);
 		pruefLogisch.benutzeAssert(true);
 		final int[][] bereiche = { { 2, 21 } };
 		System.out
@@ -131,7 +128,7 @@ public class PlPruefungLogischLVETestStandardDiff {
 	 */
 	@Test
 	public void testDiff() throws Exception {
-		final PlPruefungDiff plPruefDiff = new PlPruefungDiff(dav, alLogger);
+		final PlPruefungDiff plPruefDiff = new PlPruefungDiff(dav);
 		plPruefDiff.benutzeAssert(true);
 		plPruefDiff.setMeldungHysterese(5);
 		System.out

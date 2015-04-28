@@ -150,11 +150,8 @@ public class PlPruefungLogisch implements ClientSenderInterface {
 	 *
 	 * @param dav
 	 *            Die Datenverteilerverbindung
-	 * @param alDebug
-	 *            .getLogger() Die Debug.getLogger()attribute
 	 */
-	public PlPruefungLogisch(final ClientDavInterface dav,
-			final ArgumentList alLogger) {
+	public PlPruefungLogisch(final ClientDavInterface dav) {
 		this.dav = dav;
 
 		/*
@@ -209,13 +206,13 @@ public class PlPruefungLogisch implements ClientSenderInterface {
 		 */
 		kzdImport1 = new ParaKZDLogImport(dav, PlPruefungLogisch.fs1,
 				Konfiguration.TEST_DATEN_VERZ
-				+ Konfiguration.DATENCSV_PARAMETER);
+						+ Konfiguration.DATENCSV_PARAMETER);
 		kzdImport2 = new ParaKZDLogImport(dav, PlPruefungLogisch.fs2,
 				Konfiguration.TEST_DATEN_VERZ
-				+ Konfiguration.DATENCSV_PARAMETER);
+						+ Konfiguration.DATENCSV_PARAMETER);
 		kzdImport3 = new ParaKZDLogImport(dav, PlPruefungLogisch.fs3,
 				Konfiguration.TEST_DATEN_VERZ
-				+ Konfiguration.DATENCSV_PARAMETER);
+						+ Konfiguration.DATENCSV_PARAMETER);
 
 		/*
 		 * Starte den Test
@@ -242,13 +239,13 @@ public class PlPruefungLogisch implements ClientSenderInterface {
 		 */
 		kzdImport1 = new ParaKZDLogImport(dav, PlPruefungLogisch.fs1,
 				Konfiguration.TEST_DATEN_VERZ
-				+ Konfiguration.DATENCSV_PARAMETER);
+						+ Konfiguration.DATENCSV_PARAMETER);
 		kzdImport2 = new ParaKZDLogImport(dav, PlPruefungLogisch.fs2,
 				Konfiguration.TEST_DATEN_VERZ
-				+ Konfiguration.DATENCSV_PARAMETER);
+						+ Konfiguration.DATENCSV_PARAMETER);
 		kzdImport3 = new ParaKZDLogImport(dav, PlPruefungLogisch.fs3,
 				Konfiguration.TEST_DATEN_VERZ
-				+ Konfiguration.DATENCSV_PARAMETER);
+						+ Konfiguration.DATENCSV_PARAMETER);
 
 		/*
 		 * Beginne im ersten fünftel mit "nur Max"-Prüfung
@@ -280,13 +277,13 @@ public class PlPruefungLogisch implements ClientSenderInterface {
 		 */
 		lzdImport1 = new ParaLZDLogImport(dav, PlPruefungLogisch.fs1Lz,
 				Konfiguration.TEST_DATEN_VERZ
-				+ Konfiguration.DATENCSV_PARAMETER);
+						+ Konfiguration.DATENCSV_PARAMETER);
 		lzdImport2 = new ParaLZDLogImport(dav, PlPruefungLogisch.fs2Lz,
 				Konfiguration.TEST_DATEN_VERZ
-				+ Konfiguration.DATENCSV_PARAMETER);
+						+ Konfiguration.DATENCSV_PARAMETER);
 		lzdImport3 = new ParaLZDLogImport(dav, PlPruefungLogisch.fs3Lz,
 				Konfiguration.TEST_DATEN_VERZ
-				+ Konfiguration.DATENCSV_PARAMETER);
+						+ Konfiguration.DATENCSV_PARAMETER);
 
 		/*
 		 * Beginne im ersten fünftel mit "nur Max"-Prüfung
@@ -377,8 +374,7 @@ public class PlPruefungLogisch implements ClientSenderInterface {
 			 * Übergebe CSV-Offset und zu prüfenden Zeitstempel an
 			 * FS-Testerobjekt
 			 */
-			LOGGER
-			.info("Setze CSV-Zeile und Zeitstempel fuer Prüfer -> Zeile:" + (csvIndex + 2) + " Zeit:" + aktZeit); //$NON-NLS-1$ //$NON-NLS-2$
+			LOGGER.info("Setze CSV-Zeile und Zeitstempel fuer Prüfer -> Zeile:" + (csvIndex + 2) + " Zeit:" + aktZeit); //$NON-NLS-1$ //$NON-NLS-2$
 			fsPruefer.listen(csvIndex, aktZeit);
 
 			/*
@@ -387,8 +383,7 @@ public class PlPruefungLogisch implements ClientSenderInterface {
 			if ((zeileFS1 = fsImpFS1
 					.getNaechstenDatensatz(PlPruefungLogisch.ddKzdSend
 							.getAttributeGroup())) != null) {
-				LOGGER
-				.info("Sende Daten fuer FS1 (CSV-Zeile " + (csvIndex + 2) + ")"); //$NON-NLS-1$ //$NON-NLS-2$
+				LOGGER.info("Sende Daten fuer FS1 (CSV-Zeile " + (csvIndex + 2) + ")"); //$NON-NLS-1$ //$NON-NLS-2$
 				resultat1 = new ResultData(PlPruefungLogisch.fs1,
 						PlPruefungLogisch.ddKzdSend, aktZeit, zeileFS1);
 			} else {
@@ -398,8 +393,7 @@ public class PlPruefungLogisch implements ClientSenderInterface {
 			if ((zeileFS2 = fsImpFS2
 					.getNaechstenDatensatz(PlPruefungLogisch.ddKzdSend
 							.getAttributeGroup())) != null) {
-				LOGGER
-				.info("Sende Daten fuer FS2 (CSV-Zeile " + (csvIndex + 2) + ")"); //$NON-NLS-1$ //$NON-NLS-2$
+				LOGGER.info("Sende Daten fuer FS2 (CSV-Zeile " + (csvIndex + 2) + ")"); //$NON-NLS-1$ //$NON-NLS-2$
 				resultat2 = new ResultData(PlPruefungLogisch.fs2,
 						PlPruefungLogisch.ddKzdSend, aktZeit, zeileFS2);
 			} else {
@@ -409,8 +403,7 @@ public class PlPruefungLogisch implements ClientSenderInterface {
 			if ((zeileFS3 = fsImpFS3
 					.getNaechstenDatensatz(PlPruefungLogisch.ddKzdSend
 							.getAttributeGroup())) != null) {
-				LOGGER
-				.info("Sende Daten fuer FS3 (CSV-Zeile " + (csvIndex + 2) + ")"); //$NON-NLS-1$ //$NON-NLS-2$
+				LOGGER.info("Sende Daten fuer FS3 (CSV-Zeile " + (csvIndex + 2) + ")"); //$NON-NLS-1$ //$NON-NLS-2$
 				resultat3 = new ResultData(PlPruefungLogisch.fs3,
 						PlPruefungLogisch.ddKzdSend, aktZeit, zeileFS3);
 			} else {
@@ -422,8 +415,7 @@ public class PlPruefungLogisch implements ClientSenderInterface {
 			 */
 			if (!datenFS1Vorhanden || !datenFS2Vorhanden || !datenFS3Vorhanden) {
 				csvDatenVorhanden = false;
-				LOGGER.info(
-						"Keine Daten mehr vorhanedn. Beende Prüfung..."); //$NON-NLS-1$
+				LOGGER.info("Keine Daten mehr vorhanedn. Beende Prüfung..."); //$NON-NLS-1$
 			} else {
 				/*
 				 * Liegen noch Testdaten in dem konfigurierten Bereich vor so
@@ -432,8 +424,7 @@ public class PlPruefungLogisch implements ClientSenderInterface {
 				for (final int[] bereich : bereiche) {
 					if ((csvIndex >= (bereich[0] - 2))
 							&& (csvIndex <= (bereich[1] - 2))) {
-						LOGGER
-						.info("Warte auf SOLL-IST-Vergleich (CSV-Zeile " + (csvIndex + 1) + ")..."); //$NON-NLS-1$//$NON-NLS-2$
+						LOGGER.info("Warte auf SOLL-IST-Vergleich (CSV-Zeile " + (csvIndex + 1) + ")..."); //$NON-NLS-1$//$NON-NLS-2$
 
 						synchronized (this) {
 							this.dav.sendData(new ResultData[] { resultat1,
@@ -547,9 +538,8 @@ public class PlPruefungLogisch implements ClientSenderInterface {
 			 * Übergebe CSV-Offset und zu prüfenden Zeitstempel an
 			 * FS-Testerobjekt
 			 */
-			LOGGER.info(
-					"Setze CSV-Zeile und Zeitstempel für Pruefer -> Zeile:"
-							+ (csvIndex + 2) + " Zeit:" + aktZeit);
+			LOGGER.info("Setze CSV-Zeile und Zeitstempel für Pruefer -> Zeile:"
+					+ (csvIndex + 2) + " Zeit:" + aktZeit);
 			fsPruefer.listen(csvIndex, aktZeit);
 
 			/*
@@ -558,9 +548,8 @@ public class PlPruefungLogisch implements ClientSenderInterface {
 			if ((zeileFS1 = fsImpFS1
 					.getNaechstenDatensatz(PlPruefungLogisch.ddLzdSend
 							.getAttributeGroup())) != null) {
-				LOGGER.info(
-						"Sende Daten fuer FS1 (CSV-Zeile " + (csvIndex + 2)
-								+ ")");
+				LOGGER.info("Sende Daten fuer FS1 (CSV-Zeile " + (csvIndex + 2)
+						+ ")");
 				resultat1 = new ResultData(PlPruefungLogisch.fs1Lz,
 						PlPruefungLogisch.ddLzdSend, aktZeit, zeileFS1);
 			} else {
@@ -570,9 +559,8 @@ public class PlPruefungLogisch implements ClientSenderInterface {
 			if ((zeileFS2 = fsImpFS2
 					.getNaechstenDatensatz(PlPruefungLogisch.ddLzdSend
 							.getAttributeGroup())) != null) {
-				LOGGER.info(
-						"Sende Daten fuer FS2 (CSV-Zeile " + (csvIndex + 2)
-								+ ")");
+				LOGGER.info("Sende Daten fuer FS2 (CSV-Zeile " + (csvIndex + 2)
+						+ ")");
 				resultat2 = new ResultData(PlPruefungLogisch.fs2Lz,
 						PlPruefungLogisch.ddLzdSend, aktZeit, zeileFS2);
 			} else {
@@ -582,9 +570,8 @@ public class PlPruefungLogisch implements ClientSenderInterface {
 			if ((zeileFS3 = fsImpFS3
 					.getNaechstenDatensatz(PlPruefungLogisch.ddLzdSend
 							.getAttributeGroup())) != null) {
-				LOGGER.info(
-						"Sende Daten fuer FS3 (CSV-Zeile " + (csvIndex + 2)
-								+ ")");
+				LOGGER.info("Sende Daten fuer FS3 (CSV-Zeile " + (csvIndex + 2)
+						+ ")");
 				resultat3 = new ResultData(PlPruefungLogisch.fs3Lz,
 						PlPruefungLogisch.ddLzdSend, aktZeit, zeileFS3);
 			} else {
@@ -596,8 +583,7 @@ public class PlPruefungLogisch implements ClientSenderInterface {
 			 */
 			if (!datenFS1Vorhanden && !datenFS2Vorhanden && !datenFS3Vorhanden) {
 				csvDatenVorhanden = false;
-				LOGGER.info(
-						"Keine Daten mehr vorhanedn. Beende Prüfung...");
+				LOGGER.info("Keine Daten mehr vorhanedn. Beende Prüfung...");
 			} else {
 				/*
 				 * Liegen noch Testdaten in dem konfigurierten Bereich vor so
@@ -606,9 +592,8 @@ public class PlPruefungLogisch implements ClientSenderInterface {
 				for (final int[] bereich : bereiche) {
 					if ((csvIndex >= (bereich[0] - 2))
 							&& (csvIndex <= (bereich[1] - 2))) {
-						LOGGER.info(
-								"Warte auf SOLL-IST-Vergleich (CSV-Zeile "
-										+ (csvIndex + 1) + ")...");
+						LOGGER.info("Warte auf SOLL-IST-Vergleich (CSV-Zeile "
+								+ (csvIndex + 1) + ")...");
 
 						synchronized (this) {
 							this.dav.sendData(new ResultData[] { resultat1,
@@ -653,7 +638,7 @@ public class PlPruefungLogisch implements ClientSenderInterface {
 	 */
 	private void importOptionenKZD(
 			final OptionenPlausibilitaetsPruefungLogischVerkehr option)
-					throws Exception {
+			throws Exception {
 		kzdImport1.setOptionen(option);
 		kzdImport1.importiereParameter(1);
 
@@ -674,7 +659,7 @@ public class PlPruefungLogisch implements ClientSenderInterface {
 	 */
 	private void importOptionenLZD(
 			final OptionenPlausibilitaetsPruefungLogischVerkehr option)
-					throws Exception {
+			throws Exception {
 		lzdImport1.setOptionen(option);
 		lzdImport1.importiereParameter(1);
 
@@ -806,9 +791,9 @@ public class PlPruefungLogisch implements ClientSenderInterface {
 		 */
 		for (int i = 0; i <= 2; i++) {
 			if (fsPruefer.getFehlerAlles()[i] > 0) {
-				LOGGER.warning(
-						"ERR: Insgesamt " + fsPruefer.getFehlerAlles()[i]
-								+ " FehlerAlles auf FS" + (i + 1));
+				LOGGER.warning("ERR: Insgesamt "
+						+ fsPruefer.getFehlerAlles()[i] + " FehlerAlles auf FS"
+						+ (i + 1));
 			}
 		}
 
@@ -817,9 +802,9 @@ public class PlPruefungLogisch implements ClientSenderInterface {
 		 */
 		for (int i = 0; i <= 2; i++) {
 			if (fsPruefer.getFehlerLinks()[i] > 0) {
-				LOGGER.warning(
-						"ERR: Insgesamt " + fsPruefer.getFehlerLinks()[i]
-								+ " FehlerLinks auf FS" + (i + 1));
+				LOGGER.warning("ERR: Insgesamt "
+						+ fsPruefer.getFehlerLinks()[i] + " FehlerLinks auf FS"
+						+ (i + 1));
 			}
 		}
 
@@ -828,9 +813,9 @@ public class PlPruefungLogisch implements ClientSenderInterface {
 		 */
 		for (int i = 0; i <= 2; i++) {
 			if (fsPruefer.getFehlerRechts()[i] > 0) {
-				LOGGER.warning(
-						"ERR: Insgesamt " + fsPruefer.getFehlerRechts()[i]
-								+ " FehlerRechts auf FS" + (i + 1));
+				LOGGER.warning("ERR: Insgesamt "
+						+ fsPruefer.getFehlerRechts()[i]
+						+ " FehlerRechts auf FS" + (i + 1));
 			}
 		}
 	}
