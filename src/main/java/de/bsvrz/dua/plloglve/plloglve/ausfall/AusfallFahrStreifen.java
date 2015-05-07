@@ -51,8 +51,6 @@ import de.bsvrz.sys.funclib.operatingMessage.MessageGrade;
  * Speichert die Ausfallhäufigkeit eine Fahrstreifens über einem gleitenden Tag.
  *
  * @author BitCtrl Systems GmbH, Thierfelder
- *
- * @version $Id$
  */
 public class AusfallFahrStreifen implements ClientReceiverInterface {
 

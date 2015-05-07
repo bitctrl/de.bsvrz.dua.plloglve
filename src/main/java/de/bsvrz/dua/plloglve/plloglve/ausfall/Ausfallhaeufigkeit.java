@@ -47,8 +47,6 @@ import de.bsvrz.sys.funclib.debug.Debug;
  * Ausfallhaeufigkeit eines Fahrstreifens pro Tag ueberschritten wurde.
  *
  * @author BitCtrl Systems GmbH, Thierfelder
- *
- * @version $Id$
  */
 public class Ausfallhaeufigkeit extends AbstraktBearbeitungsKnotenAdapter {
 
@@ -57,7 +55,7 @@ public class Ausfallhaeufigkeit extends AbstraktBearbeitungsKnotenAdapter {
 	 * Mapt FS-Systemobjekte auf Fahrstreifenobjekte mit den für dieses Submodul
 	 * notwendigen Informationen.
 	 */
-	private final Map<SystemObject, AusfallFahrStreifen> fahrStreifen = new HashMap<SystemObject, AusfallFahrStreifen>();
+	private final Map<SystemObject, AusfallFahrStreifen> fahrStreifen = new HashMap<>();
 
 	/**
 	 * {@inheritDoc}
@@ -79,7 +77,7 @@ public class Ausfallhaeufigkeit extends AbstraktBearbeitungsKnotenAdapter {
 	@Override
 	public void aktualisiereDaten(final ResultData[] resultate) {
 		if (resultate != null) {
-			final Collection<ResultData> weiterzuleitendeResultate = new ArrayList<ResultData>();
+			final Collection<ResultData> weiterzuleitendeResultate = new ArrayList<>();
 
 			for (final ResultData resultat : resultate) {
 				if (resultat != null) {

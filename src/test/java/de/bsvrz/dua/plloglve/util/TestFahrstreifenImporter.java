@@ -39,9 +39,6 @@ import de.bsvrz.sys.funclib.bitctrl.dua.test.CSVImporter;
  * Liest die Ausgangsdaten eines Fahrstreifens ein.
  *
  * @author BitCtrl Systems GmbH, Thierfelder
- *
- * @version $Id: TestFahrstreifenImporter.java 53825 2015-03-18 09:36:42Z peuker
- *          $
  */
 public class TestFahrstreifenImporter extends CSVImporter {
 

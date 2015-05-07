@@ -32,9 +32,6 @@ package de.bsvrz.dua.plloglve.plloglve;
  * Intervalllänge. Die Objekte sind nach ihrer Datenzeit sortierbar.
  *
  * @author BitCtrl Systems GmbH, Thierfelder
- *
- * @version $Id: AbstraktDAVZeitEinzelDatum.java 53825 2015-03-18 09:36:42Z
- *          peuker $
  */
 public class AbstraktDAVZeitEinzelDatum implements
 Comparable<AbstraktDAVZeitEinzelDatum> {

@@ -39,8 +39,6 @@ import de.bsvrz.sys.funclib.bitctrl.dua.intpuf.IIntervallPufferElement;
  * Eigenschaft ausgefallen zu sein oder nicht.
  *
  * @author BitCtrl Systems GmbH, Thierfelder
- *
- * @version $Id$
  */
 public final class AusfallDatumKomplett implements
 IIntervallPufferElement<AusfallDatum> {

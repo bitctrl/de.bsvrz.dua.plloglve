@@ -35,8 +35,6 @@ import de.bsvrz.sys.funclib.bitctrl.dua.intpuf.IIntervallDatum;
  * Repräsentiert ein ausgefallenes KZ-Datum.
  *
  * @author BitCtrl Systems GmbH, Thierfelder
- *
- * @version $Id$
  */
 public final class AusfallDatum implements IIntervallDatum<AusfallDatum> {
 

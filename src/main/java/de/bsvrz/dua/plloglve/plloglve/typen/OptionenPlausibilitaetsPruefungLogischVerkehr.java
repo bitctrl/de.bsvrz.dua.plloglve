@@ -36,9 +36,6 @@ import de.bsvrz.sys.funclib.bitctrl.daf.AbstractDavZustand;
  * <code>att.optionenPlausibilitätsPrüfungLogischVerkehr</code>.
  *
  * @author BitCtrl Systems GmbH, Thierfelder
- *
- * @version $Id: OptionenPlausibilitaetsPruefungLogischVerkehr.java 53825
- *          2015-03-18 09:36:42Z peuker $
  */
 public final class OptionenPlausibilitaetsPruefungLogischVerkehr extends
 AbstractDavZustand {
@@ -46,7 +43,7 @@ AbstractDavZustand {
 	/**
 	 * Der Wertebereich dieses DAV-Enumerationstypen.
 	 */
-	private static Map<Integer, OptionenPlausibilitaetsPruefungLogischVerkehr> werteBereich = new HashMap<Integer, OptionenPlausibilitaetsPruefungLogischVerkehr>();
+	private static Map<Integer, OptionenPlausibilitaetsPruefungLogischVerkehr> werteBereich = new HashMap<>();
 
 	/**
 	 * Wertebereichsprüfung wird NICHT durchgeführt. Wert wird nicht verändert,

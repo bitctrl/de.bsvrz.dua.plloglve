@@ -36,9 +36,6 @@ import de.bsvrz.sys.funclib.debug.Debug;
  * Standardplausibilisierung LVE für sowohl LZD als auch KZD benötigt werden.
  *
  * @author BitCtrl Systems GmbH, Thierfelder
- *
- * @version $Id: AbstraktAtgPLLogischLVEParameter.java 53825 2015-03-18
- *          09:36:42Z peuker $
  */
 public class AbstraktAtgPLLogischLVEParameter extends AllgemeinerDatenContainer {
 

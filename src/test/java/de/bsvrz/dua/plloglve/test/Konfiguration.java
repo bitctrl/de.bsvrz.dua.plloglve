@@ -30,8 +30,6 @@ package de.bsvrz.dua.plloglve.test;
  * Speichert die Verbindungsdaten.
  *
  * @author BitCtrl Systems GmbH, Thierfelder
- *
- * @version $Id$
  */
 public final class Konfiguration {
 

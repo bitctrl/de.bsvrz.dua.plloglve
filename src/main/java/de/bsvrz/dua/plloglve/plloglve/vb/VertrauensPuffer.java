@@ -32,8 +32,6 @@ import de.bsvrz.sys.funclib.bitctrl.dua.intpuf.IntervallPuffer;
  * Ein Puffer für Ausfalldaten innerhalb der Vertrauensbereichspruefung.
  *
  * @author BitCtrl Systems GmbH, Thierfelder
- *
- * @version $Id$
  */
 public class VertrauensPuffer extends IntervallPuffer<VertrauensDatum> {
 

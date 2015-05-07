@@ -33,9 +33,6 @@ import de.bsvrz.sys.funclib.bitctrl.dua.AllgemeinerDatenContainer;
  * Repräsentiert die DAV-ATG <code>atg.verkehrsDatenVertrauensBereichFs</code>.
  *
  * @author BitCtrl Systems GmbH, Thierfelder
- *
- * @version $Id: AtgVerkehrsDatenVertrauensBereichFs.java 53825 2015-03-18
- *          09:36:42Z peuker $
  */
 public class AtgVerkehrsDatenVertrauensBereichFs extends
 AllgemeinerDatenContainer {

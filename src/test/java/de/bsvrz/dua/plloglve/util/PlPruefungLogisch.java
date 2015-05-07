@@ -48,8 +48,6 @@ import de.bsvrz.sys.funclib.debug.Debug;
  * Standardtest (TLS und Grenzwerte) für KZD und LZD.
  *
  * @author BitCtrl Systems GmbH, Görlitz
- *
- * @version $Id$
  */
 public class PlPruefungLogisch implements ClientSenderInterface {
 

@@ -37,8 +37,6 @@ import de.bsvrz.dua.plloglve.plloglve.typen.OptionenPlausibilitaetsPruefungLogis
  * Importiert die Parameter für die Pl-Prüfung logisch KZD.
  *
  * @author BitCtrl Systems GmbH, Thierfelder
- *
- * @version $Id$
  */
 public class ParaKZDLogImport extends AbstraktParameterImport {
 

@@ -50,9 +50,6 @@ import de.bsvrz.sys.funclib.debug.Debug;
  * Tests.
  *
  * @author BitCtrl Systems GmbH, Görlitz
- *
- *
- * @version $Id$
  */
 public class PlPruefungAusfall implements ClientSenderInterface,
 PlPruefungInterface {

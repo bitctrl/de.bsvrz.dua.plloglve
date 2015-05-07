@@ -49,9 +49,6 @@ import de.bsvrz.sys.funclib.debug.Debug;
  * Test Differenzialkontrolle
  *
  * @author BitCtrl Systems GmbH, Görlitz
- *
- *
- * @version $Id$
  */
 public class PlPruefungDiff implements ClientSenderInterface,
 PlPruefungInterface {

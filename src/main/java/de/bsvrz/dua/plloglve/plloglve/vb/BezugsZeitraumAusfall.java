@@ -33,8 +33,6 @@ import de.bsvrz.sys.funclib.bitctrl.dua.DUAUtensilien;
  * bestimmtes Attribut.
  *
  * @author BitCtrl Systems GmbH, Thierfelder
- *
- * @version $Id$
  */
 public class BezugsZeitraumAusfall implements Comparable<BezugsZeitraumAusfall> {
 

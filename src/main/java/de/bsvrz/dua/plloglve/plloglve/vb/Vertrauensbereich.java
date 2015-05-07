@@ -53,8 +53,6 @@ import de.bsvrz.sys.funclib.debug.Debug;
  * empfangenen Daten statt.
  *
  * @author BitCtrl Systems GmbH, Thierfelder
- *
- * @version $Id$
  */
 public class Vertrauensbereich extends AbstraktBearbeitungsKnotenAdapter {
 
@@ -63,7 +61,7 @@ public class Vertrauensbereich extends AbstraktBearbeitungsKnotenAdapter {
 	 * Map von Systemobjekten auf Fahrstreifenobjekte mit Informationen zu den
 	 * jeweiligen Vertrauensbereichsverletzungen.
 	 */
-	private final Map<SystemObject, VertrauensFahrStreifen> fahrStreifenMap = new HashMap<SystemObject, VertrauensFahrStreifen>();
+	private final Map<SystemObject, VertrauensFahrStreifen> fahrStreifenMap = new HashMap<>();
 
 	/**
 	 * Standardkonstruktor.
@@ -104,7 +102,7 @@ public class Vertrauensbereich extends AbstraktBearbeitungsKnotenAdapter {
 	public void aktualisiereDaten(final ResultData[] resultate) {
 		if (resultate != null) {
 
-			final List<ResultData> weiterzuleitendeResultate = new ArrayList<ResultData>();
+			final List<ResultData> weiterzuleitendeResultate = new ArrayList<>();
 
 			for (final ResultData resultat : resultate) {
 				if (resultat != null) {

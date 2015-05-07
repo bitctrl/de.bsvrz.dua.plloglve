@@ -30,9 +30,6 @@ package de.bsvrz.dua.plloglve.util;
  * Pruefschnittstelle.
  *
  * @author BitCtrl Systems GmbH, Görlitz
- *
- *
- * @version $Id$
  */
 public interface PlPruefungInterface {
 

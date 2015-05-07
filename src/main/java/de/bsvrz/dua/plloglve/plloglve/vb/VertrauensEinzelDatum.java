@@ -38,8 +38,6 @@ import de.bsvrz.sys.funclib.bitctrl.dua.intpuf.IntervallPufferElementAdapter;
  * <code>implausibel</code> gekennzeichnet ist.
  *
  * @author BitCtrl Systems GmbH, Thierfelder
- *
- * @version $Id$
  */
 public class VertrauensEinzelDatum extends
 IntervallPufferElementAdapter<VertrauensDatum> {

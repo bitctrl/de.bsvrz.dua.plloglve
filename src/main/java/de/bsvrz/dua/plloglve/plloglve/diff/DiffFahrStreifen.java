@@ -49,8 +49,6 @@ import de.bsvrz.sys.funclib.operatingMessage.MessageGrade;
  * folge konstant sind.
  *
  * @author BitCtrl Systems GmbH, Thierfelder
- *
- * @version $Id$
  */
 public class DiffFahrStreifen implements ClientReceiverInterface {
 
@@ -82,49 +80,49 @@ public class DiffFahrStreifen implements ClientReceiverInterface {
 	 * Variable <code>qLkw</code> mit der Information wie lange diese Variable
 	 * schon konstant ist.
 	 */
-	private final VariableMitKonstanzZaehler<Long> qLkwZaehler = new VariableMitKonstanzZaehler<Long>(
+	private final VariableMitKonstanzZaehler<Long> qLkwZaehler = new VariableMitKonstanzZaehler<>(
 			"qLkw"); //$NON-NLS-1$
 
 	/**
 	 * Variable <code>qPkw</code> mit der Information wie lange diese Variable
 	 * schon konstant ist..
 	 */
-	private final VariableMitKonstanzZaehler<Long> qPkwZaehler = new VariableMitKonstanzZaehler<Long>(
+	private final VariableMitKonstanzZaehler<Long> qPkwZaehler = new VariableMitKonstanzZaehler<>(
 			"qPkw"); //$NON-NLS-1$
 
 	/**
 	 * Variable <code>vKfz</code> mit der Information wie lange diese Variable
 	 * schon konstant ist.
 	 */
-	private final VariableMitKonstanzZaehler<Long> vKfzZaehler = new VariableMitKonstanzZaehler<Long>(
+	private final VariableMitKonstanzZaehler<Long> vKfzZaehler = new VariableMitKonstanzZaehler<>(
 			"vKfz"); //$NON-NLS-1$
 
 	/**
 	 * Variable <code>vLkw</code> mit der Information wie lange diese Variable
 	 * schon konstant ist.
 	 */
-	private final VariableMitKonstanzZaehler<Long> vLkwZaehler = new VariableMitKonstanzZaehler<Long>(
+	private final VariableMitKonstanzZaehler<Long> vLkwZaehler = new VariableMitKonstanzZaehler<>(
 			"vLkw"); //$NON-NLS-1$
 
 	/**
 	 * Variable <code>vPkw</code> mit der Information wie lange diese Variable
 	 * schon konstant ist.
 	 */
-	private final VariableMitKonstanzZaehler<Long> vPkwZaehler = new VariableMitKonstanzZaehler<Long>(
+	private final VariableMitKonstanzZaehler<Long> vPkwZaehler = new VariableMitKonstanzZaehler<>(
 			"vPkw"); //$NON-NLS-1$
 
 	/**
 	 * Variable <code>sKfz</code> mit der Information wie lange diese Variable
 	 * schon konstant ist.
 	 */
-	private final VariableMitKonstanzZaehler<Long> sKfzZaehler = new VariableMitKonstanzZaehler<Long>(
+	private final VariableMitKonstanzZaehler<Long> sKfzZaehler = new VariableMitKonstanzZaehler<>(
 			"sKfz"); //$NON-NLS-1$
 
 	/**
 	 * Variable <code>b</code> mit der Information wie lange diese Variable
 	 * schon konstant ist.
 	 */
-	private final VariableMitKonstanzZaehler<Long> bZaehler = new VariableMitKonstanzZaehler<Long>(
+	private final VariableMitKonstanzZaehler<Long> bZaehler = new VariableMitKonstanzZaehler<>(
 			"b"); //$NON-NLS-1$
 
 	/**
@@ -207,7 +205,7 @@ public class DiffFahrStreifen implements ClientReceiverInterface {
 					sKfzZaehler.aktualisiere(sKfz);
 					bZaehler.aktualisiere(b);
 
-					final Collection<VariableMitKonstanzZaehler<Long>> puffer = new ArrayList<VariableMitKonstanzZaehler<Long>>();
+					final Collection<VariableMitKonstanzZaehler<Long>> puffer = new ArrayList<>();
 					synchronized (parameter) {
 						if ((qKfz > 0)
 								&& (qKfzZaehler.getWertIstKonstantSeit() > parameter

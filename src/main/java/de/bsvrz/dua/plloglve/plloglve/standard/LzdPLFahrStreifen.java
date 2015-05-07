@@ -49,8 +49,6 @@ import de.bsvrz.sys.funclib.debug.Debug;
  * zu stellen
  *
  * @author BitCtrl Systems GmbH, Thierfelder
- *
- * @version $Id$
  */
 public class LzdPLFahrStreifen extends KzdPLFahrStreifen {
 

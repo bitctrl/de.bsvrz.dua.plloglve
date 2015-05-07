@@ -50,8 +50,6 @@ import de.bsvrz.sys.funclib.debug.Debug;
  * Daten und gibt diese an Vergleicher-Klasse weiter.
  *
  * @author BitCtrl Systems GmbH, Görlitz
- *
- * @version $Id$
  */
 public class PruefeMarkierung implements ClientReceiverInterface {
 
@@ -71,7 +69,7 @@ public class PruefeMarkierung implements ClientReceiverInterface {
 	/**
 	 * die Attribute, die nicht ueberprueft werden sollen.
 	 */
-	private final List<String> ignoreAttributeList = new ArrayList<String>();
+	private final List<String> ignoreAttributeList = new ArrayList<>();
 
 	/**
 	 * Aufrunfende Klasse.

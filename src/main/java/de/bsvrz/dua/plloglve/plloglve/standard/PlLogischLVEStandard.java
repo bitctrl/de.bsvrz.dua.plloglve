@@ -56,8 +56,6 @@ import de.bsvrz.sys.funclib.debug.Debug;
  * - Standardabweichungen, etc..<br>
  *
  * @author BitCtrl Systems GmbH, Thierfelder
- *
- * @version $Id$
  */
 public class PlLogischLVEStandard extends AbstraktBearbeitungsKnotenAdapter {
 
@@ -69,13 +67,13 @@ public class PlLogischLVEStandard extends AbstraktBearbeitungsKnotenAdapter {
 	 * Mapt alle FS-Systemobjekte auf für die Standardplausbibilisierung für LZD
 	 * parametrierte Fahrstreifenobjekte.
 	 */
-	private final Map<SystemObject, AbstraktPLFahrStreifen> lzdFahrStreifen = new HashMap<SystemObject, AbstraktPLFahrStreifen>();
+	private final Map<SystemObject, AbstraktPLFahrStreifen> lzdFahrStreifen = new HashMap<>();
 
 	/**
 	 * Mapt alle FS-Systemobjekte auf für die Standardplausbibilisierung für KZD
 	 * parametrierte Fahrstreifenobjekte.
 	 */
-	private final Map<SystemObject, AbstraktPLFahrStreifen> kzdFahrStreifen = new HashMap<SystemObject, AbstraktPLFahrStreifen>();
+	private final Map<SystemObject, AbstraktPLFahrStreifen> kzdFahrStreifen = new HashMap<>();
 
 	/**
 	 * {@inheritDoc}<br>
@@ -131,7 +129,7 @@ public class PlLogischLVEStandard extends AbstraktBearbeitungsKnotenAdapter {
 	@Override
 	public void aktualisiereDaten(final ResultData[] resultate) {
 		if (resultate != null) {
-			final Collection<ResultData> weiterzuleitendeResultate = new ArrayList<ResultData>();
+			final Collection<ResultData> weiterzuleitendeResultate = new ArrayList<>();
 			for (final ResultData resultat : resultate) {
 				if (resultat != null) {
 

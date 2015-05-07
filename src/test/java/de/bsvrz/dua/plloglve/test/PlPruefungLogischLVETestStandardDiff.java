@@ -39,9 +39,6 @@ import de.bsvrz.sys.funclib.commandLineArgs.ArgumentList;
  * Automatisierter Test nach Prüfspezifikation für SWE Pl-Prüfung logisch LVE.
  *
  * @author BitCtrl Systems GmbH, Thierfelder
- *
- * @version $Id: PlPruefungLogischLVETestStandardDiff.java 53825 2015-03-18
- *          09:36:42Z peuker $
  */
 public class PlPruefungLogischLVETestStandardDiff {
 

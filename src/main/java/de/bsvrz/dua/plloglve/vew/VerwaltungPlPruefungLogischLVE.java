@@ -54,9 +54,6 @@ import de.bsvrz.sys.funclib.operatingMessage.MessageSender;
  * die dann die eigentliche Prüfung durchführen.
  *
  * @author BitCtrl Systems GmbH, Thierfelder
- *
- * @version $Id: VerwaltungPlPruefungLogischLVE.java 53827 2015-03-18 10:04:42Z
- *          peuker $
  */
 public class VerwaltungPlPruefungLogischLVE extends
 AbstraktVerwaltungsAdapterMitGuete {

@@ -41,9 +41,6 @@ import de.bsvrz.sys.funclib.commandLineArgs.ArgumentList;
  * test=ausfall ! zu starten.
  *
  * @author BitCtrl Systems GmbH, Thierfelder
- *
- * @version $Id: PlPruefungLogischLVETestAusfall.java 53825 2015-03-18 09:36:42Z
- *          peuker $
  */
 public class PlPruefungLogischLVETestAusfall {
 

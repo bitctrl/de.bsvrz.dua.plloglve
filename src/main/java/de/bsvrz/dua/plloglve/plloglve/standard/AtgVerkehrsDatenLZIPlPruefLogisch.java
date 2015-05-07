@@ -34,9 +34,6 @@ import de.bsvrz.dua.plloglve.plloglve.typen.OptionenPlausibilitaetsPruefungLogis
  * <code>atg.verkehrsDatenLangZeitIntervallPlausibilitätsPrüfungLogisch</code>.
  *
  * @author BitCtrl Systems GmbH, Thierfelder
- *
- * @version $Id: AtgVerkehrsDatenLZIPlPruefLogisch.java 53825 2015-03-18
- *          09:36:42Z peuker $
  */
 public class AtgVerkehrsDatenLZIPlPruefLogisch extends
 AbstraktAtgPLLogischLVEParameter {

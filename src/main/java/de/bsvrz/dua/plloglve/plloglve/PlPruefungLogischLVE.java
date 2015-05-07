@@ -45,8 +45,6 @@ import de.bsvrz.sys.funclib.bitctrl.dua.schnittstellen.IVerwaltung;
  * welche die eigentliche Plausibilisierung durchführen
  *
  * @author BitCtrl Systems GmbH, Thierfelder
- *
- * @version $Id$
  */
 public class PlPruefungLogischLVE extends AbstraktBearbeitungsKnotenAdapter {
 

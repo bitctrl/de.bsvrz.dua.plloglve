@@ -58,8 +58,6 @@ import de.bsvrz.sys.funclib.debug.Debug;
  * Verfügung zu stellen
  *
  * @author BitCtrl Systems GmbH, Thierfelder
- *
- * @version $Id$
  */
 public abstract class AbstraktPLFahrStreifen implements ClientReceiverInterface {
 

@@ -50,8 +50,6 @@ import de.bsvrz.sys.funclib.debug.Debug;
  * Daten und gibt diese an Vergleicher-Klasse weiter.
  *
  * @author BitCtrl Systems GmbH, Görlitz
- *
- * @version $Id$
  */
 public class PruefeDatenLogisch implements ClientReceiverInterface {
 
@@ -80,17 +78,17 @@ public class PruefeDatenLogisch implements ClientReceiverInterface {
 	/**
 	 * Speichert die eingelesenen CSV Daten des FS1.
 	 */
-	private final ArrayList<HashMap<String, Integer>> csvZeilenFS1 = new ArrayList<HashMap<String, Integer>>();
+	private final ArrayList<HashMap<String, Integer>> csvZeilenFS1 = new ArrayList<>();
 
 	/**
 	 * Speichert die eingelesenen CSV Daten des FS2.
 	 */
-	private final ArrayList<HashMap<String, Integer>> csvZeilenFS2 = new ArrayList<HashMap<String, Integer>>();
+	private final ArrayList<HashMap<String, Integer>> csvZeilenFS2 = new ArrayList<>();
 
 	/**
 	 * Speichert die eingelesenen CSV Daten des FS3.
 	 */
-	private final ArrayList<HashMap<String, Integer>> csvZeilenFS3 = new ArrayList<HashMap<String, Integer>>();
+	private final ArrayList<HashMap<String, Integer>> csvZeilenFS3 = new ArrayList<>();
 
 	/**
 	 * Der aktuelle CSV-Nettowert.
@@ -100,17 +98,17 @@ public class PruefeDatenLogisch implements ClientReceiverInterface {
 	/**
 	 * Speichert die eingelesenen CSV Nettowerte des FS1.
 	 */
-	private final ArrayList<Long> alCSVWerttNettoFS1 = new ArrayList<Long>();
+	private final ArrayList<Long> alCSVWerttNettoFS1 = new ArrayList<>();
 
 	/**
 	 * Speichert die eingelesenen CSV Nettowerte des FS2.
 	 */
-	private final ArrayList<Long> alCSVWerttNettoFS2 = new ArrayList<Long>();
+	private final ArrayList<Long> alCSVWerttNettoFS2 = new ArrayList<>();
 
 	/**
 	 * Speichert die eingelesenen CSV Nettowerte des FS3.
 	 */
-	private final ArrayList<Long> alCSVWerttNettoFS3 = new ArrayList<Long>();
+	private final ArrayList<Long> alCSVWerttNettoFS3 = new ArrayList<>();
 
 	/**
 	 * Zeitstempel der zu pruefenden Daten.
@@ -267,7 +265,7 @@ public class PruefeDatenLogisch implements ClientReceiverInterface {
 			final int fsIndex) throws Exception {
 		final int verschiebung = (fsIndex - 1) * 2;
 
-		final HashMap<String, Integer> hmCSV = new HashMap<String, Integer>();
+		final HashMap<String, Integer> hmCSV = new HashMap<>();
 		int csvPosition = 0 + verschiebung;
 
 		hmCSV.put("qKfz.Wert", Integer.parseInt(aktZeile[csvPosition]));
@@ -342,7 +340,7 @@ public class PruefeDatenLogisch implements ClientReceiverInterface {
 	private HashMap<String, Integer> csvLeseStatus(final String status,
 			final String praefix) {
 
-		final HashMap<String, Integer> hmCSVStatus = new HashMap<String, Integer>();
+		final HashMap<String, Integer> hmCSVStatus = new HashMap<>();
 
 		final String[] statusGeteilt = status.split(" ");
 
@@ -605,8 +603,6 @@ public class PruefeDatenLogisch implements ClientReceiverInterface {
  * Vergleicht CSV Daten mit Ergebnisdaten.
  *
  * @author BitCtrl Systems GmbH, Görlitz
- *
- * @version $Id$
  */
 class VergleicheDaten extends Thread {
 
@@ -788,7 +784,7 @@ class VergleicheDaten extends Thread {
 	 * @return ergebnis
 	 */
 	private HashMap<String, Integer> ergebnisLesen(final int fsIndex1) {
-		final HashMap<String, Integer> hmResult = new HashMap<String, Integer>();
+		final HashMap<String, Integer> hmResult = new HashMap<>();
 		String attribut;
 		int aktuellerWert;
 		for (final String element : attributNamenPraefix) {

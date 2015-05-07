@@ -53,8 +53,6 @@ import de.bsvrz.sys.funclib.operatingMessage.MessageGrade;
  * des Vertrauens in diesen Fahrstreifen notwendig sind.
  *
  * @author BitCtrl Systems GmbH, Thierfelder
- *
- * @version $Id$
  */
 public class VertrauensFahrStreifen implements ClientReceiverInterface {
 
@@ -208,7 +206,7 @@ public class VertrauensFahrStreifen implements ClientReceiverInterface {
 		synchronized (this) {
 			if ((parameter != null) && parameter.isAuswertbar()) {
 
-				final SortedSet<BezugsZeitraumAusfall> ausfallErgebnisse = new TreeSet<BezugsZeitraumAusfall>();
+				final SortedSet<BezugsZeitraumAusfall> ausfallErgebnisse = new TreeSet<>();
 
 				ausfallErgebnisse.add(datenBezugsZeitraumQKfz.ermittleAusfall(
 						originalDatum, parameter));

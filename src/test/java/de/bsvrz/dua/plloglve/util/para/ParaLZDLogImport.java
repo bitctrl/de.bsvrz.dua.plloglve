@@ -38,8 +38,6 @@ import de.bsvrz.sys.funclib.bitctrl.dua.DUAUtensilien;
  * Importiert die Parameter für die Pl-Prüfung logisch LZD.
  *
  * @author BitCtrl Systems GmbH, Thierfelder
- *
- * @version $Id$
  */
 public class ParaLZDLogImport extends AbstraktParameterImport {
 

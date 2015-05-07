@@ -39,8 +39,6 @@ import de.bsvrz.sys.funclib.debug.Debug;
  * Daten und gibt diese an Vergleicher-Klasse weiter.
  *
  * @author BitCtrl Systems GmbH, Görlitz
- *
- * @version $Id$
  */
 public class FilterMeldung implements IBmListener {
 

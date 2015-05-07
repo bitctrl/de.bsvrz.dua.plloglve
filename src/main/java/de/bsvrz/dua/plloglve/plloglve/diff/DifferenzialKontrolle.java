@@ -49,8 +49,6 @@ import de.bsvrz.sys.funclib.debug.Debug;
  * generiert ggf. eine Betriebsmeldung
  *
  * @author BitCtrl Systems GmbH, Thierfelder
- *
- * @version $Id$
  */
 public class DifferenzialKontrolle extends AbstraktBearbeitungsKnotenAdapter {
 
@@ -58,7 +56,7 @@ public class DifferenzialKontrolle extends AbstraktBearbeitungsKnotenAdapter {
 	/**
 	 * Map von Fahrtreifen-Systemobjekten auf Objekte mit Konstanzzählern.
 	 */
-	private final Map<SystemObject, DiffFahrStreifen> fahrStreifen = new HashMap<SystemObject, DiffFahrStreifen>();
+	private final Map<SystemObject, DiffFahrStreifen> fahrStreifen = new HashMap<>();
 
 	/**
 	 * {@inheritDoc}
@@ -80,7 +78,7 @@ public class DifferenzialKontrolle extends AbstraktBearbeitungsKnotenAdapter {
 	@Override
 	public void aktualisiereDaten(final ResultData[] resultate) {
 		if (resultate != null) {
-			final Collection<ResultData> weiterzuleitendeResultate = new ArrayList<ResultData>();
+			final Collection<ResultData> weiterzuleitendeResultate = new ArrayList<>();
 
 			for (final ResultData resultat : resultate) {
 				if (resultat != null) {

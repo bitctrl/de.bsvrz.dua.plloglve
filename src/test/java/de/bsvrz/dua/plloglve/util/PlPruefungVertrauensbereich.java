@@ -51,9 +51,6 @@ import de.bsvrz.sys.funclib.debug.Debug;
  * Testet den Vertrauensbereich.
  *
  * @author BitCtrl Systems GmbH, Thierfelder
- *
- * @version $Id: PlPruefungVertrauensbereich.java 53827 2015-03-18 10:04:42Z
- *          peuker $
  */
 public class PlPruefungVertrauensbereich implements ClientSenderInterface,
 		PlPruefungInterface {

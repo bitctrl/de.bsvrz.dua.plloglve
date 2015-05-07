@@ -46,8 +46,6 @@ import de.bsvrz.sys.funclib.operatingMessage.MessageGrade;
  * <code>qKfz</code>) die ausgefallenen Werte
  *
  * @author BitCtrl Systems GmbH, Thierfelder
- *
- * @version $Id$
  */
 public class BezugsZeitraum {
 

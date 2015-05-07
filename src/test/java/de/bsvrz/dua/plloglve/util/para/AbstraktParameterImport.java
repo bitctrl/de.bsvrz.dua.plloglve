@@ -45,9 +45,6 @@ import de.bsvrz.sys.funclib.bitctrl.dua.test.CSVImporter;
  * Prüfspezifikation.
  *
  * @author BitCtrl Systems GmbH, Thierfelder
- *
- * @version $Id: AbstraktParameterImport.java 53825 2015-03-18 09:36:42Z peuker
- *          $
  */
 public abstract class AbstraktParameterImport extends CSVImporter implements
 ClientSenderInterface {

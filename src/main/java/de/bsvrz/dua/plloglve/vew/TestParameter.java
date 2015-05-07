@@ -32,8 +32,6 @@ import de.bsvrz.sys.funclib.debug.Debug;
  * Klasse mit allen Testflags.
  *
  * @author BitCtrl Systems GmbH, Thierfelder
- *
- * @version $Id$
  */
 public class TestParameter {
 
