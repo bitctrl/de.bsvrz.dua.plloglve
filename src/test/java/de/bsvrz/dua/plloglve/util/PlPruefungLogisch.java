@@ -672,7 +672,7 @@ public class PlPruefungLogisch implements ClientSenderInterface {
 
 	/**
 	 * Wechselt die Reaktionsart auf Grenzwertüberschreitung bei KZD.
-	 * Ausgegangen wird von 100 Datensätzen -> Wechsel alle 20 Datensätze. Im
+	 * Ausgegangen wird von 100 Datensätzen -&gt; Wechsel alle 20 Datensätze. Im
 	 * Falle eier Grenzwertprüfung muss die Option auf "nur Max"-Prüfung vorher
 	 * gesetzt werden da diese hier nicht gesetzt wird
 	 *
@@ -701,7 +701,7 @@ public class PlPruefungLogisch implements ClientSenderInterface {
 
 	/**
 	 * Wechselt die Reaktionsart auf Grenzwertüberschreitung bei LZD.
-	 * Ausgegangen wird von 100 Datensätzen -> Wechsel alle 20 Datensätze. Im
+	 * Ausgegangen wird von 100 Datensätzen -&gt; Wechsel alle 20 Datensätze. Im
 	 * Falle eier Grenzwertprüfung muss die Option auf "nur Max"-Prüfung vorher
 	 * gesetzt werden da diese hier nicht gesetzt wird
 	 *

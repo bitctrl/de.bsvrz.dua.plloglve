@@ -79,7 +79,7 @@ AllgemeinerDatenContainer {
 
 	/**
 	 * Erfragt, ob sich diese Parameter zur Überprüfung eines Datensatzes
-	 * eignen. Dies ist nur der Fall, wenn alle Parameter >= 0 sind.
+	 * eignen. Dies ist nur der Fall, wenn alle Parameter &gt;= 0 sind.
 	 *
 	 * @return ob sich diese Parameter zur Überprüfung eines Datensatzes eignen
 	 */

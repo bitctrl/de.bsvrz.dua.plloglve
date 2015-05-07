@@ -146,13 +146,13 @@ public abstract class AbstraktPLFahrStreifen implements ClientReceiverInterface 
 	 * qPkw = qKfz - qLkw<br>
 	 * <br>
 	 * Wenn qKfz und/oder qLkw == -1, -2, -3 oder implausibel? <br>
-	 * i. Für qKfz == -1, -2, -3 oder implausibel --> qPkw = nicht ermittelbar<br>
-	 * ii. Für qKfz >= 0 und plausibel UND für qLkw == -1, -2, -3 oder
-	 * implausibel --> qPkw = qKfz.<br>
-	 * iii. Für qKfz >= 0 und plausibel UND für qLkw >= 0 und plausibel UND qLkw
-	 * > qKfz --> qPkw = nicht ermittelbar.<br>
-	 * iv. Für qKfz >= 0 und plausibel UND für qLkw >= 0 und plausibel UND qLkw
-	 * <= qKfz --> qPkw = qKfz – qLkw.<br>
+	 * i. Für qKfz == -1, -2, -3 oder implausibel --&gt; qPkw = nicht ermittelbar<br>
+	 * ii. Für qKfz &gt;= 0 und plausibel UND für qLkw == -1, -2, -3 oder
+	 * implausibel --&gt; qPkw = qKfz.<br>
+	 * iii. Für qKfz &gt;= 0 und plausibel UND für qLkw &gt;= 0 und plausibel UND qLkw
+	 * &gt; qKfz --&gt; qPkw = nicht ermittelbar.<br>
+	 * iv. Für qKfz &gt;= 0 und plausibel UND für qLkw &gt;= 0 und plausibel UND qLkw
+	 * &lt;= qKfz --&gt; qPkw = qKfz – qLkw.<br>
 	 * <br>
 	 *
 	 * Berechnung von vKfz (KZD und LZD):<br>
@@ -470,10 +470,10 @@ public abstract class AbstraktPLFahrStreifen implements ClientReceiverInterface 
 	 * <br>
 	 *
 	 * i. Setze Min: mache nichts<br>
-	 * ii. Setze Max: Wenn Wert >= 0 UND Wert > Max --> Ersetzung und
+	 * ii. Setze Max: Wenn Wert &gt;= 0 UND Wert &gt; Max --&gt; Ersetzung und
 	 * Kennzeichnung mit MAX<br>
 	 * iii. Setze MinMax: wie bei ii<br>
-	 * iv. Nur Prüfung: Wenn Wert >= 0 UND Wert > Max --> Kennzeichnung als
+	 * iv. Nur Prüfung: Wenn Wert &gt;= 0 UND Wert &gt; Max --&gt; Kennzeichnung als
 	 * Implausibel UND fehlerhaft<br>
 	 * v. Keine Prüfung: mache nichts<br>
 	 *
