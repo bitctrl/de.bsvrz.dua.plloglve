@@ -55,8 +55,7 @@ import de.bsvrz.sys.funclib.operatingMessage.MessageSender;
  *
  * @author BitCtrl Systems GmbH, Thierfelder
  */
-public class VerwaltungPlPruefungLogischLVE extends
-AbstraktVerwaltungsAdapterMitGuete {
+public class VerwaltungPlPruefungLogischLVE extends AbstraktVerwaltungsAdapterMitGuete {
 
 	private static final Debug LOGGER = Debug.getLogger();
 
@@ -70,17 +69,11 @@ AbstraktVerwaltungsAdapterMitGuete {
 	 */
 	private PlPruefungLogischLVE plPruefungLogischLVE = null;
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
 	public SWETyp getSWETyp() {
 		return SWETyp.PL_PRUEFUNG_LOGISCH_LVE;
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
 	protected void initialisiere() throws DUAInitialisierungsException {
 		super.initialisiere();
@@ -96,57 +89,44 @@ AbstraktVerwaltungsAdapterMitGuete {
 		}
 
 		String infoStr = ""; //$NON-NLS-1$
-		final Collection<SystemObject> plLogLveObjekte = DUAUtensilien
-				.getBasisInstanzen(
-						this.verbindung.getDataModel().getType(
-								DUAKonstanten.TYP_FAHRSTREIFEN),
-						this.verbindung, this.getKonfigurationsBereiche());
+		final Collection<SystemObject> plLogLveObjekte = DUAUtensilien.getBasisInstanzen(
+				this.verbindung.getDataModel().getType(DUAKonstanten.TYP_FAHRSTREIFEN), this.verbindung,
+				this.getKonfigurationsBereiche());
 		this.objekte = plLogLveObjekte.toArray(new SystemObject[0]);
 
 		for (final SystemObject obj : this.objekte) {
 			infoStr += obj + "\n"; //$NON-NLS-1$
 		}
-		LOGGER.config(
-				"---\nBetrachtete Objekte:\n" + infoStr + "---\n"); //$NON-NLS-1$ //$NON-NLS-2$
+		VerwaltungPlPruefungLogischLVE.LOGGER.config("---\nBetrachtete Objekte:\n" + infoStr + "---\n"); //$NON-NLS-1$ //$NON-NLS-2$
 
-		this.plPruefungFormal = new PlPruefungFormal(
-				new PPFStandardAspekteVersorger(this).getStandardPubInfos());
+		this.plPruefungFormal = new PlPruefungFormal(new PPFStandardAspekteVersorger(this).getStandardPubInfos());
 		this.plPruefungFormal.setPublikation(true);
 		this.plPruefungFormal.initialisiere(this);
 
 		this.plPruefungLogischLVE = new PlPruefungLogischLVE(
-				new PlLogLVEStandardAspekteVersorger(this)
-				.getStandardPubInfos());
+				new PlLogLVEStandardAspekteVersorger(this).getStandardPubInfos());
 		this.plPruefungLogischLVE.setPublikation(true);
 		this.plPruefungLogischLVE.initialisiere(this);
 
-		this.plPruefungFormal
-		.setNaechstenBearbeitungsKnoten(this.plPruefungLogischLVE);
+		this.plPruefungFormal.setNaechstenBearbeitungsKnoten(this.plPruefungLogischLVE);
 
 		final DataDescription anmeldungsBeschreibungKZD = new DataDescription(
-				this.verbindung.getDataModel().getAttributeGroup(
-						DUAKonstanten.ATG_KZD), this.verbindung.getDataModel()
-						.getAspect(DUAKonstanten.ASP_EXTERNE_ERFASSUNG));
+				this.verbindung.getDataModel().getAttributeGroup(DUAKonstanten.ATG_KZD),
+				this.verbindung.getDataModel().getAspect(DUAKonstanten.ASP_EXTERNE_ERFASSUNG));
 		final DataDescription anmeldungsBeschreibungLZD = new DataDescription(
-				this.verbindung.getDataModel().getAttributeGroup(
-						DUAKonstanten.ATG_LZD), this.verbindung.getDataModel()
-						.getAspect(DUAKonstanten.ASP_EXTERNE_ERFASSUNG));
+				this.verbindung.getDataModel().getAttributeGroup(DUAKonstanten.ATG_LZD),
+				this.verbindung.getDataModel().getAspect(DUAKonstanten.ASP_EXTERNE_ERFASSUNG));
 
-		this.verbindung.subscribeReceiver(this, this.objekte,
-				anmeldungsBeschreibungKZD, ReceiveOptions.normal(),
+		this.verbindung.subscribeReceiver(this, this.objekte, anmeldungsBeschreibungKZD, ReceiveOptions.normal(),
 				ReceiverRole.receiver());
 		for (final SystemObject fsObj : this.objekte) {
 			if (fsObj.isOfType(DUAKonstanten.TYP_FAHRSTREIFEN_LZ)) {
-				this.verbindung.subscribeReceiver(this, fsObj,
-						anmeldungsBeschreibungLZD, ReceiveOptions.delayed(),
+				this.verbindung.subscribeReceiver(this, fsObj, anmeldungsBeschreibungLZD, ReceiveOptions.delayed(),
 						ReceiverRole.receiver());
 			}
 		}
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
 	public void update(final ResultData[] resultate) {
 		this.plPruefungFormal.aktualisiereDaten(resultate);
@@ -159,13 +139,10 @@ AbstraktVerwaltungsAdapterMitGuete {
 	 *            Argumente der Kommandozeile
 	 */
 	public static void main(final String[] argumente) {
-		StandardApplicationRunner.run(new VerwaltungPlPruefungLogischLVE(),
-				argumente);
+		StandardApplicationRunner.run(new VerwaltungPlPruefungLogischLVE(), argumente);
 	}
 
 	/**
-	 * {@inheritDoc}.<br>
-	 *
 	 * Standard-Gütefaktor für Ersetzungen (90%)<br>
 	 * Wenn das Modul Pl-Prüfung logisch LVE einen Messwert ersetzt (eigentlich
 	 * nur bei Wertebereichsprüfung) so vermindert sich die Güte des
@@ -190,16 +167,11 @@ AbstraktVerwaltungsAdapterMitGuete {
 	 */
 	public static final String getPlLogIdent(final ResultData originalDatum) {
 		if (originalDatum != null) {
-			final SimpleDateFormat dateFormat = new SimpleDateFormat(
-					DUAKonstanten.ZEIT_FORMAT_GENAU_STR);
-			String ident = originalDatum.getObject().getPid()
-					+ " (DZ: "
-					+ dateFormat.format(new Date(originalDatum.getDataTime()))
-							+ "), ["
-							+ originalDatum.getDataDescription().getAttributeGroup()
-							.getPid() + ", "
-							+ originalDatum.getDataDescription().getAspect().getPid()
-							+ "]: ";
+			final SimpleDateFormat dateFormat = new SimpleDateFormat(DUAKonstanten.ZEIT_FORMAT_GENAU_STR);
+			String ident = originalDatum.getObject().getPid() + " (DZ: "
+					+ dateFormat.format(new Date(originalDatum.getDataTime())) + "), ["
+					+ originalDatum.getDataDescription().getAttributeGroup().getPid() + ", "
+					+ originalDatum.getDataDescription().getAspect().getPid() + "]: ";
 			if (originalDatum.getData() != null) {
 				ident += "Nutzdaten. ";
 			} else {

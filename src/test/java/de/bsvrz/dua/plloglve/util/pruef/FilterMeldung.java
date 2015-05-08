@@ -105,8 +105,7 @@ public class FilterMeldung implements IBmListener {
 	 * @throws Exception
 	 *             wird weitergereicht
 	 */
-	public FilterMeldung(final PlPruefungInterface caller,
-			final ClientDavInterface dav, final String filter,
+	public FilterMeldung(final PlPruefungInterface caller, final ClientDavInterface dav, final String filter,
 			final int erfAnz, final int anzHyst) throws Exception {
 		this.dav = dav;
 		this.filter = filter;
@@ -114,38 +113,31 @@ public class FilterMeldung implements IBmListener {
 		this.anzHyst = anzHyst;
 		this.caller = caller;
 
-		LOGGER
-		.info("Filtere Betriebsmeldungen nach \"" + filter + "\" - Erwarte " + erfAnz + " gefilterte Meldungen"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+		FilterMeldung.LOGGER.info(
+				"Filtere Betriebsmeldungen nach \"" + filter + "\" - Erwarte " + erfAnz + " gefilterte Meldungen"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 
 		/*
 		 * Melde Empfänger für Betriebsmeldungen an
 		 */
-		FilterMeldung.ddMeldEmpf = new DataDescription(this.dav.getDataModel()
-				.getAttributeGroup("atg.betriebsMeldung"), //$NON-NLS-1$
+		FilterMeldung.ddMeldEmpf = new DataDescription(this.dav.getDataModel().getAttributeGroup("atg.betriebsMeldung"), //$NON-NLS-1$
 				this.dav.getDataModel().getAspect("asp.information")); //$NON-NLS-1$
 
 		BmClient.getInstanz(dav).addListener(this);
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
-	public void aktualisiereBetriebsMeldungen(final SystemObject obj,
-			final long zeit, final String text) {
+	public void aktualisiereBetriebsMeldungen(final SystemObject obj, final long zeit, final String text) {
 		if (text.contains(filter)) {
 			meldAnzahl++;
 			System.out.println(meldAnzahl + ". Meldung empfangen: " + text); //$NON-NLS-1$
 
 			if (Math.abs(meldAnzahl - erfAnz) < anzHyst) {
-				LOGGER.info(
-						"Erforderliche Anzahl an Meldungen erhalten"); //$NON-NLS-1$
+				FilterMeldung.LOGGER.info("Erforderliche Anzahl an Meldungen erhalten"); //$NON-NLS-1$
 				anzahlEingehalten = true;
 				caller.doNotify();
 			} else {
 				anzahlEingehalten = false;
-				LOGGER.warning(
-						"Mehr Meldungen gefiltert als erwartet"); //$NON-NLS-1$
+				FilterMeldung.LOGGER.warning("Mehr Meldungen gefiltert als erwartet"); //$NON-NLS-1$
 			}
 		}
 	}

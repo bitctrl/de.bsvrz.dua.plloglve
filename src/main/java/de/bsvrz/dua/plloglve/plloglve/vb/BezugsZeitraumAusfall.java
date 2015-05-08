@@ -68,8 +68,7 @@ public class BezugsZeitraumAusfall implements Comparable<BezugsZeitraumAusfall> 
 	 * @param ausfallInMinuten
 	 *            Ausfall in Minuten
 	 */
-	public BezugsZeitraumAusfall(final long grenze,
-			final double ausfallInProzent, final long ausfallInStunden,
+	public BezugsZeitraumAusfall(final long grenze, final double ausfallInProzent, final long ausfallInStunden,
 			final long ausfallInMinuten) {
 		this.grenze = grenze;
 		this.ausfallInProzent = ausfallInProzent;
@@ -77,9 +76,6 @@ public class BezugsZeitraumAusfall implements Comparable<BezugsZeitraumAusfall> 
 		this.ausfallInMinuten = ausfallInMinuten;
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
 	public boolean equals(final Object obj) {
 		boolean result = false;
@@ -92,24 +88,14 @@ public class BezugsZeitraumAusfall implements Comparable<BezugsZeitraumAusfall> 
 		return result;
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
 	public int compareTo(final BezugsZeitraumAusfall that) {
-		return new Double(this.ausfallInProzent)
-		.compareTo(that.ausfallInProzent);
+		return new Double(this.ausfallInProzent).compareTo(that.ausfallInProzent);
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
 	public String toString() {
-		return DUAUtensilien.runde(this.ausfallInProzent, 1)
-				+ "% (< " + this.grenze + "%) entspricht Ausfall von " + //$NON-NLS-1$//$NON-NLS-2$
-				this.ausfallInStunden
-				+ " Stunde(n) " + this.ausfallInMinuten + " Minute(n)"; //$NON-NLS-1$ //$NON-NLS-2$
+		return DUAUtensilien.runde(this.ausfallInProzent, 1) + "% (< " + this.grenze + "%) entspricht Ausfall von " + //$NON-NLS-1$//$NON-NLS-2$
+				this.ausfallInStunden + " Stunde(n) " + this.ausfallInMinuten + " Minute(n)"; //$NON-NLS-1$ //$NON-NLS-2$
 	}
-
 }

@@ -71,8 +71,7 @@ public class KzdPLFahrStreifen extends AbstraktPLFahrStreifen {
 	 * @param obj
 	 *            das mit dem Fahrstreifen assoziierte Systemobjekt
 	 */
-	public KzdPLFahrStreifen(final IVerwaltungMitGuete verwaltung,
-			final SystemObject obj) {
+	public KzdPLFahrStreifen(final IVerwaltungMitGuete verwaltung, final SystemObject obj) {
 		super(verwaltung, obj);
 	}
 
@@ -86,148 +85,111 @@ public class KzdPLFahrStreifen extends AbstraktPLFahrStreifen {
 	 */
 	@Override
 	protected void setAllesImplausibel(final Data veraenderbaresDatum) {
-		final int qKfz = veraenderbaresDatum
-				.getItem("qKfz").getUnscaledValue("Wert").intValue(); //$NON-NLS-1$ //$NON-NLS-2$
+		final int qKfz = veraenderbaresDatum.getItem("qKfz").getUnscaledValue("Wert").intValue(); //$NON-NLS-1$ //$NON-NLS-2$
 		if (qKfz == DUAKonstanten.NICHT_ERMITTELBAR) {
-			veraenderbaresDatum
-			.getItem("qKfz").getUnscaledValue("Wert").set(DUAKonstanten.NICHT_ERMITTELBAR_BZW_FEHLERHAFT); //$NON-NLS-1$ //$NON-NLS-2$
+			veraenderbaresDatum.getItem("qKfz").getUnscaledValue("Wert") //$NON-NLS-1$ //$NON-NLS-2$
+			.set(DUAKonstanten.NICHT_ERMITTELBAR_BZW_FEHLERHAFT);
 		} else {
-			veraenderbaresDatum
-			.getItem("qKfz").getUnscaledValue("Wert").set(DUAKonstanten.FEHLERHAFT); //$NON-NLS-1$ //$NON-NLS-2$
+			veraenderbaresDatum.getItem("qKfz").getUnscaledValue("Wert").set(DUAKonstanten.FEHLERHAFT); //$NON-NLS-1$ //$NON-NLS-2$
 		}
 
-		final int qLkw = veraenderbaresDatum
-				.getItem("qLkw").getUnscaledValue("Wert").intValue(); //$NON-NLS-1$ //$NON-NLS-2$
+		final int qLkw = veraenderbaresDatum.getItem("qLkw").getUnscaledValue("Wert").intValue(); //$NON-NLS-1$ //$NON-NLS-2$
 		if (qLkw == DUAKonstanten.NICHT_ERMITTELBAR) {
-			veraenderbaresDatum
-			.getItem("qLkw").getUnscaledValue("Wert").set(DUAKonstanten.NICHT_ERMITTELBAR_BZW_FEHLERHAFT); //$NON-NLS-1$ //$NON-NLS-2$
+			veraenderbaresDatum.getItem("qLkw").getUnscaledValue("Wert") //$NON-NLS-1$ //$NON-NLS-2$
+			.set(DUAKonstanten.NICHT_ERMITTELBAR_BZW_FEHLERHAFT);
 		} else {
-			veraenderbaresDatum
-			.getItem("qLkw").getUnscaledValue("Wert").set(DUAKonstanten.FEHLERHAFT); //$NON-NLS-1$ //$NON-NLS-2$
+			veraenderbaresDatum.getItem("qLkw").getUnscaledValue("Wert").set(DUAKonstanten.FEHLERHAFT); //$NON-NLS-1$ //$NON-NLS-2$
 		}
 
-		veraenderbaresDatum
-		.getItem("qPkw").getUnscaledValue("Wert").set(DUAKonstanten.NICHT_ERMITTELBAR_BZW_FEHLERHAFT); //$NON-NLS-1$ //$NON-NLS-2$
+		veraenderbaresDatum.getItem("qPkw").getUnscaledValue("Wert") //$NON-NLS-1$ //$NON-NLS-2$
+		.set(DUAKonstanten.NICHT_ERMITTELBAR_BZW_FEHLERHAFT);
 
-		veraenderbaresDatum
-		.getItem("vKfz").getUnscaledValue("Wert").set(DUAKonstanten.NICHT_ERMITTELBAR_BZW_FEHLERHAFT); //$NON-NLS-1$ //$NON-NLS-2$
+		veraenderbaresDatum.getItem("vKfz").getUnscaledValue("Wert") //$NON-NLS-1$ //$NON-NLS-2$
+		.set(DUAKonstanten.NICHT_ERMITTELBAR_BZW_FEHLERHAFT);
 
-		final int vLkw = veraenderbaresDatum
-				.getItem("vLkw").getUnscaledValue("Wert").intValue(); //$NON-NLS-1$ //$NON-NLS-2$
+		final int vLkw = veraenderbaresDatum.getItem("vLkw").getUnscaledValue("Wert").intValue(); //$NON-NLS-1$ //$NON-NLS-2$
 		if (vLkw == DUAKonstanten.NICHT_ERMITTELBAR) {
-			veraenderbaresDatum
-			.getItem("vLkw").getUnscaledValue("Wert").set(DUAKonstanten.NICHT_ERMITTELBAR_BZW_FEHLERHAFT); //$NON-NLS-1$ //$NON-NLS-2$
+			veraenderbaresDatum.getItem("vLkw").getUnscaledValue("Wert") //$NON-NLS-1$ //$NON-NLS-2$
+			.set(DUAKonstanten.NICHT_ERMITTELBAR_BZW_FEHLERHAFT);
 		} else {
-			veraenderbaresDatum
-			.getItem("vLkw").getUnscaledValue("Wert").set(DUAKonstanten.FEHLERHAFT); //$NON-NLS-1$ //$NON-NLS-2$
+			veraenderbaresDatum.getItem("vLkw").getUnscaledValue("Wert").set(DUAKonstanten.FEHLERHAFT); //$NON-NLS-1$ //$NON-NLS-2$
 		}
 
-		final int vPkw = veraenderbaresDatum
-				.getItem("vPkw").getUnscaledValue("Wert").intValue(); //$NON-NLS-1$ //$NON-NLS-2$
+		final int vPkw = veraenderbaresDatum.getItem("vPkw").getUnscaledValue("Wert").intValue(); //$NON-NLS-1$ //$NON-NLS-2$
 		if (vPkw == DUAKonstanten.NICHT_ERMITTELBAR) {
-			veraenderbaresDatum
-			.getItem("vPkw").getUnscaledValue("Wert").set(DUAKonstanten.NICHT_ERMITTELBAR_BZW_FEHLERHAFT); //$NON-NLS-1$ //$NON-NLS-2$
+			veraenderbaresDatum.getItem("vPkw").getUnscaledValue("Wert") //$NON-NLS-1$ //$NON-NLS-2$
+			.set(DUAKonstanten.NICHT_ERMITTELBAR_BZW_FEHLERHAFT);
 		} else {
-			veraenderbaresDatum
-			.getItem("vPkw").getUnscaledValue("Wert").set(DUAKonstanten.FEHLERHAFT); //$NON-NLS-1$ //$NON-NLS-2$
+			veraenderbaresDatum.getItem("vPkw").getUnscaledValue("Wert").set(DUAKonstanten.FEHLERHAFT); //$NON-NLS-1$ //$NON-NLS-2$
 		}
 
-		veraenderbaresDatum.getItem("qKfz").getItem("Status")
-				.getItem("MessWertErsetzung")
+		veraenderbaresDatum.getItem("qKfz").getItem("Status").getItem("MessWertErsetzung")
 				.getUnscaledValue("Implausibel").set(DUAKonstanten.JA); //$NON-NLS-1$
-		veraenderbaresDatum.getItem("qLkw").getItem("Status")
-				.getItem("MessWertErsetzung")
+		veraenderbaresDatum.getItem("qLkw").getItem("Status").getItem("MessWertErsetzung")
 				.getUnscaledValue("Implausibel").set(DUAKonstanten.JA); //$NON-NLS-1$
-		veraenderbaresDatum.getItem("qPkw").getItem("Status")
-				.getItem("MessWertErsetzung")
+		veraenderbaresDatum.getItem("qPkw").getItem("Status").getItem("MessWertErsetzung")
 				.getUnscaledValue("Implausibel").set(DUAKonstanten.JA); //$NON-NLS-1$
 
-		veraenderbaresDatum.getItem("vKfz").getItem("Status")
-				.getItem("MessWertErsetzung")
+		veraenderbaresDatum.getItem("vKfz").getItem("Status").getItem("MessWertErsetzung")
 				.getUnscaledValue("Implausibel").set(DUAKonstanten.JA); //$NON-NLS-1$
-		veraenderbaresDatum.getItem("vLkw").getItem("Status")
-				.getItem("MessWertErsetzung")
+		veraenderbaresDatum.getItem("vLkw").getItem("Status").getItem("MessWertErsetzung")
 				.getUnscaledValue("Implausibel").set(DUAKonstanten.JA); //$NON-NLS-1$
-		veraenderbaresDatum.getItem("vPkw").getItem("Status")
-				.getItem("MessWertErsetzung")
+		veraenderbaresDatum.getItem("vPkw").getItem("Status").getItem("MessWertErsetzung")
 				.getUnscaledValue("Implausibel").set(DUAKonstanten.JA); //$NON-NLS-1$
 
-		final int b = veraenderbaresDatum
-				.getItem("b").getUnscaledValue("Wert").intValue(); //$NON-NLS-1$ //$NON-NLS-2$
+		final int b = veraenderbaresDatum.getItem("b").getUnscaledValue("Wert").intValue(); //$NON-NLS-1$ //$NON-NLS-2$
 		if (b == DUAKonstanten.NICHT_ERMITTELBAR) {
-			veraenderbaresDatum
-			.getItem("b").getUnscaledValue("Wert").set(DUAKonstanten.NICHT_ERMITTELBAR_BZW_FEHLERHAFT); //$NON-NLS-1$ //$NON-NLS-2$
+			veraenderbaresDatum.getItem("b").getUnscaledValue("Wert") //$NON-NLS-1$ //$NON-NLS-2$
+			.set(DUAKonstanten.NICHT_ERMITTELBAR_BZW_FEHLERHAFT);
 		} else {
-			veraenderbaresDatum
-			.getItem("b").getUnscaledValue("Wert").set(DUAKonstanten.FEHLERHAFT); //$NON-NLS-1$ //$NON-NLS-2$
+			veraenderbaresDatum.getItem("b").getUnscaledValue("Wert").set(DUAKonstanten.FEHLERHAFT); //$NON-NLS-1$ //$NON-NLS-2$
 		}
 
-		final long tNetto = veraenderbaresDatum
-				.getItem("tNetto").getUnscaledValue("Wert").longValue(); //$NON-NLS-1$ //$NON-NLS-2$
+		final long tNetto = veraenderbaresDatum.getItem("tNetto").getUnscaledValue("Wert").longValue(); //$NON-NLS-1$ //$NON-NLS-2$
 		if (tNetto == DUAKonstanten.NICHT_ERMITTELBAR) {
-			veraenderbaresDatum
-			.getItem("tNetto").getUnscaledValue("Wert").set(DUAKonstanten.NICHT_ERMITTELBAR_BZW_FEHLERHAFT); //$NON-NLS-1$ //$NON-NLS-2$
+			veraenderbaresDatum.getItem("tNetto").getUnscaledValue("Wert") //$NON-NLS-1$ //$NON-NLS-2$
+			.set(DUAKonstanten.NICHT_ERMITTELBAR_BZW_FEHLERHAFT);
 		} else {
-			veraenderbaresDatum
-			.getItem("tNetto").getUnscaledValue("Wert").set(DUAKonstanten.FEHLERHAFT); //$NON-NLS-1$ //$NON-NLS-2$
+			veraenderbaresDatum.getItem("tNetto").getUnscaledValue("Wert").set(DUAKonstanten.FEHLERHAFT); //$NON-NLS-1$ //$NON-NLS-2$
 		}
 
-		final int sKfz = veraenderbaresDatum
-				.getItem("sKfz").getUnscaledValue("Wert").intValue(); //$NON-NLS-1$ //$NON-NLS-2$
+		final int sKfz = veraenderbaresDatum.getItem("sKfz").getUnscaledValue("Wert").intValue(); //$NON-NLS-1$ //$NON-NLS-2$
 		if (sKfz == DUAKonstanten.NICHT_ERMITTELBAR) {
-			veraenderbaresDatum
-			.getItem("sKfz").getUnscaledValue("Wert").set(DUAKonstanten.NICHT_ERMITTELBAR_BZW_FEHLERHAFT); //$NON-NLS-1$ //$NON-NLS-2$
+			veraenderbaresDatum.getItem("sKfz").getUnscaledValue("Wert") //$NON-NLS-1$ //$NON-NLS-2$
+			.set(DUAKonstanten.NICHT_ERMITTELBAR_BZW_FEHLERHAFT);
 		} else {
-			veraenderbaresDatum
-			.getItem("sKfz").getUnscaledValue("Wert").set(DUAKonstanten.FEHLERHAFT); //$NON-NLS-1$ //$NON-NLS-2$
+			veraenderbaresDatum.getItem("sKfz").getUnscaledValue("Wert").set(DUAKonstanten.FEHLERHAFT); //$NON-NLS-1$ //$NON-NLS-2$
 		}
 
-		final int vgKfz = veraenderbaresDatum
-				.getItem("vgKfz").getUnscaledValue("Wert").intValue(); //$NON-NLS-1$ //$NON-NLS-2$
+		final int vgKfz = veraenderbaresDatum.getItem("vgKfz").getUnscaledValue("Wert").intValue(); //$NON-NLS-1$ //$NON-NLS-2$
 		if (vgKfz == DUAKonstanten.NICHT_ERMITTELBAR) {
-			veraenderbaresDatum
-			.getItem("vgKfz").getUnscaledValue("Wert").set(DUAKonstanten.NICHT_ERMITTELBAR_BZW_FEHLERHAFT); //$NON-NLS-1$ //$NON-NLS-2$
+			veraenderbaresDatum.getItem("vgKfz").getUnscaledValue("Wert") //$NON-NLS-1$ //$NON-NLS-2$
+			.set(DUAKonstanten.NICHT_ERMITTELBAR_BZW_FEHLERHAFT);
 		} else {
-			veraenderbaresDatum
-			.getItem("vgKfz").getUnscaledValue("Wert").set(DUAKonstanten.FEHLERHAFT); //$NON-NLS-1$ //$NON-NLS-2$
+			veraenderbaresDatum.getItem("vgKfz").getUnscaledValue("Wert").set(DUAKonstanten.FEHLERHAFT); //$NON-NLS-1$ //$NON-NLS-2$
 		}
 
-		veraenderbaresDatum.getItem("b").getItem("Status")
-				.getItem("MessWertErsetzung")
+		veraenderbaresDatum.getItem("b").getItem("Status").getItem("MessWertErsetzung").getUnscaledValue("Implausibel") //$NON-NLS-4$
+		.set(DUAKonstanten.JA);
+		veraenderbaresDatum.getItem("tNetto").getItem("Status").getItem("MessWertErsetzung")
 				.getUnscaledValue("Implausibel").set(DUAKonstanten.JA); //$NON-NLS-1$
-		veraenderbaresDatum.getItem("tNetto").getItem("Status")
-				.getItem("MessWertErsetzung")
+		veraenderbaresDatum.getItem("sKfz").getItem("Status").getItem("MessWertErsetzung")
 				.getUnscaledValue("Implausibel").set(DUAKonstanten.JA); //$NON-NLS-1$
-		veraenderbaresDatum.getItem("sKfz").getItem("Status")
-				.getItem("MessWertErsetzung")
-				.getUnscaledValue("Implausibel").set(DUAKonstanten.JA); //$NON-NLS-1$
-		veraenderbaresDatum.getItem("vgKfz").getItem("Status")
-				.getItem("MessWertErsetzung")
+		veraenderbaresDatum.getItem("vgKfz").getItem("Status").getItem("MessWertErsetzung")
 				.getUnscaledValue("Implausibel").set(DUAKonstanten.JA); //$NON-NLS-1$
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
 	protected void ueberpruefe(final Data data, final ResultData resultat) {
 
-		final long qKfz = data
-				.getItem("qKfz").getUnscaledValue("Wert").longValue(); //$NON-NLS-1$ //$NON-NLS-2$
-		final long qLkw = data
-				.getItem("qLkw").getUnscaledValue("Wert").longValue(); //$NON-NLS-1$ //$NON-NLS-2$
-		final long qPkw = data
-				.getItem("qPkw").getUnscaledValue("Wert").longValue(); //$NON-NLS-1$ //$NON-NLS-2$
-		final long vPkw = data
-				.getItem("vPkw").getUnscaledValue("Wert").longValue(); //$NON-NLS-1$ //$NON-NLS-2$
-		final long vLkw = data
-				.getItem("vLkw").getUnscaledValue("Wert").longValue(); //$NON-NLS-1$ //$NON-NLS-2$
-		final long vKfz = data
-				.getItem("vKfz").getUnscaledValue("Wert").longValue(); //$NON-NLS-1$ //$NON-NLS-2$
-		final long vgKfz = data
-				.getItem("vgKfz").getUnscaledValue("Wert").longValue(); //$NON-NLS-1$ //$NON-NLS-2$
-		final long tNetto = data
-				.getItem("tNetto").getUnscaledValue("Wert").longValue(); //$NON-NLS-1$ //$NON-NLS-2$
+		final long qKfz = data.getItem("qKfz").getUnscaledValue("Wert").longValue(); //$NON-NLS-1$ //$NON-NLS-2$
+		final long qLkw = data.getItem("qLkw").getUnscaledValue("Wert").longValue(); //$NON-NLS-1$ //$NON-NLS-2$
+		final long qPkw = data.getItem("qPkw").getUnscaledValue("Wert").longValue(); //$NON-NLS-1$ //$NON-NLS-2$
+		final long vPkw = data.getItem("vPkw").getUnscaledValue("Wert").longValue(); //$NON-NLS-1$ //$NON-NLS-2$
+		final long vLkw = data.getItem("vLkw").getUnscaledValue("Wert").longValue(); //$NON-NLS-1$ //$NON-NLS-2$
+		final long vKfz = data.getItem("vKfz").getUnscaledValue("Wert").longValue(); //$NON-NLS-1$ //$NON-NLS-2$
+		final long vgKfz = data.getItem("vgKfz").getUnscaledValue("Wert").longValue(); //$NON-NLS-1$ //$NON-NLS-2$
+		final long tNetto = data.getItem("tNetto").getUnscaledValue("Wert").longValue(); //$NON-NLS-1$ //$NON-NLS-2$
 		final long t = data.getTimeValue("T").getMillis();
 		final long b = data.getItem("b").getUnscaledValue("Wert").longValue(); //$NON-NLS-1$ //$NON-NLS-2$
 
@@ -235,9 +197,8 @@ public class KzdPLFahrStreifen extends AbstraktPLFahrStreifen {
 		if (letztesKZDatum != null) {
 			if (letztesKZDatum.getData() != null) {
 				if (t == (resultat.getDataTime() - letztesKZDatum.getDataTime())) {
-					vgKfzLetztesIntervall = letztesKZDatum
-							.getData()
-							.getItem("vgKfz").getUnscaledValue("Wert").longValue(); //$NON-NLS-1$
+					vgKfzLetztesIntervall = letztesKZDatum.getData().getItem("vgKfz").getUnscaledValue("Wert") //$NON-NLS-1$
+							.longValue();
 				}
 			}
 		}
@@ -247,19 +208,12 @@ public class KzdPLFahrStreifen extends AbstraktPLFahrStreifen {
 		 */
 		if (qKfz == 0) {
 			if (!((qLkw == 0) && (qPkw == 0))) {
-				LOGGER
-				.fine(VerwaltungPlPruefungLogischLVE
-								.getPlLogIdent(resultat)
-								+ "\nSetze ALLES auf implausibel und fehlerhaft weil Regel(1) verletzt:\n"
-								+ "Wenn qKfz == 0 dann muss qLkw == 0 und qPkw == 0 sein. Aber:\nqKfz = "
-								+ VerwaltungPlPruefungLogischLVE
-										.getWertIdent(qKfz)
-								+ "\nqLkw = "
-								+ VerwaltungPlPruefungLogischLVE
-										.getWertIdent(qLkw)
-								+ "\nqPkw = "
-								+ VerwaltungPlPruefungLogischLVE
-										.getWertIdent(qPkw));
+				KzdPLFahrStreifen.LOGGER.fine(VerwaltungPlPruefungLogischLVE.getPlLogIdent(resultat)
+						+ "\nSetze ALLES auf implausibel und fehlerhaft weil Regel(1) verletzt:\n"
+						+ "Wenn qKfz == 0 dann muss qLkw == 0 und qPkw == 0 sein. Aber:\nqKfz = "
+						+ VerwaltungPlPruefungLogischLVE.getWertIdent(qKfz) + "\nqLkw = "
+						+ VerwaltungPlPruefungLogischLVE.getWertIdent(qLkw) + "\nqPkw = "
+						+ VerwaltungPlPruefungLogischLVE.getWertIdent(qPkw));
 				setAllesImplausibel(data);
 				return;
 			}
@@ -274,22 +228,13 @@ public class KzdPLFahrStreifen extends AbstraktPLFahrStreifen {
 				if ((qKfz >= 0) && (qLkw >= 0)) {
 					if ((qKfz - qLkw) == 0) {
 						if (!((qPkw == 0) && ((vPkw == DUAKonstanten.NICHT_ERMITTELBAR) || (vPkw == 0)))) {
-							LOGGER
-							.fine(VerwaltungPlPruefungLogischLVE
-											.getPlLogIdent(resultat)
-											+ "\nSetze ALLES auf implausibel und fehlerhaft weil Regel(2) verletzt:\n"
-											+ "Wenn (qKfz >= 0 und qLkw >= 0) und (qKfz - qLkw == 0), dann muss qPkw == 0 und vPkw == nicht ermittelbar sein. Aber:\nqKfz = "
-											+ VerwaltungPlPruefungLogischLVE
-													.getWertIdent(qKfz)
-											+ "\nqLkw = "
-											+ VerwaltungPlPruefungLogischLVE
-													.getWertIdent(qLkw)
-											+ "\nqPkw = "
-											+ VerwaltungPlPruefungLogischLVE
-													.getWertIdent(qPkw)
-											+ "\nvPkw = "
-											+ VerwaltungPlPruefungLogischLVE
-													.getWertIdent(vPkw));
+							KzdPLFahrStreifen.LOGGER.fine(VerwaltungPlPruefungLogischLVE.getPlLogIdent(resultat)
+									+ "\nSetze ALLES auf implausibel und fehlerhaft weil Regel(2) verletzt:\n"
+									+ "Wenn (qKfz >= 0 und qLkw >= 0) und (qKfz - qLkw == 0), dann muss qPkw == 0 und vPkw == nicht ermittelbar sein. Aber:\nqKfz = "
+									+ VerwaltungPlPruefungLogischLVE.getWertIdent(qKfz) + "\nqLkw = "
+									+ VerwaltungPlPruefungLogischLVE.getWertIdent(qLkw) + "\nqPkw = "
+									+ VerwaltungPlPruefungLogischLVE.getWertIdent(qPkw) + "\nvPkw = "
+									+ VerwaltungPlPruefungLogischLVE.getWertIdent(vPkw));
 							setAllesImplausibel(data);
 							return;
 						}
@@ -299,22 +244,13 @@ public class KzdPLFahrStreifen extends AbstraktPLFahrStreifen {
 				if ((qKfz >= 0) && (qLkw >= 0)) {
 					if ((qKfz - qLkw) == 0) {
 						if (!((qPkw == 0) && (vPkw == DUAKonstanten.NICHT_ERMITTELBAR))) {
-							LOGGER
-							.fine(VerwaltungPlPruefungLogischLVE
-											.getPlLogIdent(resultat)
-											+ "\nSetze ALLES auf implausibel und fehlerhaft weil Regel(2) verletzt:\n"
-											+ "Wenn (qKfz >= 0 und qLkw >= 0) und (qKfz - qLkw == 0), dann muss qPkw == 0 und vPkw == nicht ermittelbar sein. Aber:\nqKfz = "
-											+ VerwaltungPlPruefungLogischLVE
-													.getWertIdent(qKfz)
-											+ "\nqLkw = "
-											+ VerwaltungPlPruefungLogischLVE
-													.getWertIdent(qLkw)
-											+ "\nqPkw = "
-											+ VerwaltungPlPruefungLogischLVE
-													.getWertIdent(qPkw)
-											+ "\nvPkw = "
-											+ VerwaltungPlPruefungLogischLVE
-													.getWertIdent(vPkw));
+							KzdPLFahrStreifen.LOGGER.fine(VerwaltungPlPruefungLogischLVE.getPlLogIdent(resultat)
+									+ "\nSetze ALLES auf implausibel und fehlerhaft weil Regel(2) verletzt:\n"
+									+ "Wenn (qKfz >= 0 und qLkw >= 0) und (qKfz - qLkw == 0), dann muss qPkw == 0 und vPkw == nicht ermittelbar sein. Aber:\nqKfz = "
+									+ VerwaltungPlPruefungLogischLVE.getWertIdent(qKfz) + "\nqLkw = "
+									+ VerwaltungPlPruefungLogischLVE.getWertIdent(qLkw) + "\nqPkw = "
+									+ VerwaltungPlPruefungLogischLVE.getWertIdent(qPkw) + "\nvPkw = "
+									+ VerwaltungPlPruefungLogischLVE.getWertIdent(vPkw));
 							setAllesImplausibel(data);
 							return;
 						}
@@ -334,13 +270,10 @@ public class KzdPLFahrStreifen extends AbstraktPLFahrStreifen {
 			} else {
 				if (qLkw == 0) {
 					if (!(vLkw == DUAKonstanten.NICHT_ERMITTELBAR)) {
-						LOGGER
-						.fine(VerwaltungPlPruefungLogischLVE
-								.getPlLogIdent(resultat)
+						KzdPLFahrStreifen.LOGGER.fine(VerwaltungPlPruefungLogischLVE.getPlLogIdent(resultat)
 								+ "\nSetze ALLES auf implausibel und fehlerhaft weil Regel(3) verletzt:\n"
 								+ "Wenn qLkw == 0, dann muss vLkw auf nicht ermittelbar stehen. Aber:\nvLkw = "
-								+ VerwaltungPlPruefungLogischLVE
-								.getWertIdent(vLkw));
+								+ VerwaltungPlPruefungLogischLVE.getWertIdent(vLkw));
 						setAllesImplausibel(data);
 						return;
 					}
@@ -359,13 +292,10 @@ public class KzdPLFahrStreifen extends AbstraktPLFahrStreifen {
 			} else {
 				if (qPkw == 0) {
 					if (!(vPkw == DUAKonstanten.NICHT_ERMITTELBAR)) {
-						LOGGER
-						.fine(VerwaltungPlPruefungLogischLVE
-								.getPlLogIdent(resultat)
+						KzdPLFahrStreifen.LOGGER.fine(VerwaltungPlPruefungLogischLVE.getPlLogIdent(resultat)
 								+ "\nSetze ALLES auf implausibel und fehlerhaft weil Regel(4) verletzt:\n"
 								+ "Wenn qPkw == 0, dann muss vPkw auf nicht ermittelbar stehen. Aber:\nvPkw = "
-								+ VerwaltungPlPruefungLogischLVE
-								.getWertIdent(vPkw));
+								+ VerwaltungPlPruefungLogischLVE.getWertIdent(vPkw));
 						setAllesImplausibel(data);
 						return;
 					}
@@ -378,16 +308,11 @@ public class KzdPLFahrStreifen extends AbstraktPLFahrStreifen {
 		 */
 		if ((qKfz >= 0) && (qLkw >= 0)) {
 			if (qKfz < qLkw) {
-				LOGGER
-				.fine(VerwaltungPlPruefungLogischLVE
-								.getPlLogIdent(resultat)
-								+ "\nSetze ALLES auf implausibel und fehlerhaft weil Regel(5) verletzt:\n"
-								+ "Wenn qKfz >= 0 und qLkw >= 0, dann muss qKfz >= qLkw sein. Aber:\nqKfz = "
-								+ VerwaltungPlPruefungLogischLVE
-										.getWertIdent(qKfz)
-								+ "\nqLkw = "
-								+ VerwaltungPlPruefungLogischLVE
-										.getWertIdent(qLkw));
+				KzdPLFahrStreifen.LOGGER.fine(VerwaltungPlPruefungLogischLVE.getPlLogIdent(resultat)
+						+ "\nSetze ALLES auf implausibel und fehlerhaft weil Regel(5) verletzt:\n"
+						+ "Wenn qKfz >= 0 und qLkw >= 0, dann muss qKfz >= qLkw sein. Aber:\nqKfz = "
+						+ VerwaltungPlPruefungLogischLVE.getWertIdent(qKfz) + "\nqLkw = "
+						+ VerwaltungPlPruefungLogischLVE.getWertIdent(qLkw));
 				setAllesImplausibel(data);
 				return;
 			}
@@ -482,19 +407,12 @@ public class KzdPLFahrStreifen extends AbstraktPLFahrStreifen {
 			if ((qKfz - qLkw) > 0) {
 				if ((vPkw >= 0) || (vPkw == DUAKonstanten.NICHT_ERMITTELBAR)) {
 					if (!((0 < vPkw) || (vPkw == DUAKonstanten.NICHT_ERMITTELBAR))) {
-						LOGGER
-						.fine(VerwaltungPlPruefungLogischLVE
-										.getPlLogIdent(resultat)
-										+ "\nSetze ALLES auf implausibel und fehlerhaft weil Regel(6) verletzt:\n"
-										+ "Wenn qKfz >= 0 und qLkw >= 0 und qKfz - qLkw > 0, dann muss vPkw > 0 sein. Aber:\nqKfz = "
-										+ VerwaltungPlPruefungLogischLVE
-												.getWertIdent(qKfz)
-										+ "\nqLkw = "
-										+ VerwaltungPlPruefungLogischLVE
-												.getWertIdent(qLkw)
-										+ "\nvPkw = "
-										+ VerwaltungPlPruefungLogischLVE
-												.getWertIdent(vPkw));
+						KzdPLFahrStreifen.LOGGER.fine(VerwaltungPlPruefungLogischLVE.getPlLogIdent(resultat)
+								+ "\nSetze ALLES auf implausibel und fehlerhaft weil Regel(6) verletzt:\n"
+								+ "Wenn qKfz >= 0 und qLkw >= 0 und qKfz - qLkw > 0, dann muss vPkw > 0 sein. Aber:\nqKfz = "
+								+ VerwaltungPlPruefungLogischLVE.getWertIdent(qKfz) + "\nqLkw = "
+								+ VerwaltungPlPruefungLogischLVE.getWertIdent(qLkw) + "\nvPkw = "
+								+ VerwaltungPlPruefungLogischLVE.getWertIdent(vPkw));
 						setAllesImplausibel(data);
 						return;
 					}
@@ -508,16 +426,11 @@ public class KzdPLFahrStreifen extends AbstraktPLFahrStreifen {
 		if (qKfz > 0) {
 			if ((vKfz >= 0) || (vKfz == DUAKonstanten.NICHT_ERMITTELBAR)) {
 				if (!((0 < vKfz) || (vKfz == DUAKonstanten.NICHT_ERMITTELBAR))) {
-					LOGGER
-					.fine(VerwaltungPlPruefungLogischLVE
-									.getPlLogIdent(resultat)
-									+ "\nSetze ALLES auf implausibel und fehlerhaft weil Regel(7) verletzt:\n"
-									+ "Wenn qKfz > 0 und vKfz >= 0, dann muss vKfz > 0 sein. Aber:\nqKfz = "
-									+ VerwaltungPlPruefungLogischLVE
-											.getWertIdent(qKfz)
-									+ "\nvKfz = "
-									+ VerwaltungPlPruefungLogischLVE
-											.getWertIdent(vKfz));
+					KzdPLFahrStreifen.LOGGER.fine(VerwaltungPlPruefungLogischLVE.getPlLogIdent(resultat)
+							+ "\nSetze ALLES auf implausibel und fehlerhaft weil Regel(7) verletzt:\n"
+							+ "Wenn qKfz > 0 und vKfz >= 0, dann muss vKfz > 0 sein. Aber:\nqKfz = "
+							+ VerwaltungPlPruefungLogischLVE.getWertIdent(qKfz) + "\nvKfz = "
+							+ VerwaltungPlPruefungLogischLVE.getWertIdent(vKfz));
 					setAllesImplausibel(data);
 					return;
 				}
@@ -530,16 +443,11 @@ public class KzdPLFahrStreifen extends AbstraktPLFahrStreifen {
 		if (qLkw > 0) {
 			if ((vLkw >= 0) || (vLkw == DUAKonstanten.NICHT_ERMITTELBAR)) {
 				if (!((0 < vLkw) || (vLkw == DUAKonstanten.NICHT_ERMITTELBAR))) {
-					LOGGER
-					.fine(VerwaltungPlPruefungLogischLVE
-									.getPlLogIdent(resultat)
-									+ "\nSetze ALLES auf implausibel und fehlerhaft weil Regel(8) verletzt:\n"
-									+ "Wenn qLkw > 0, dann muss vLkw > 0 sein. Aber:\nqLkw = "
-									+ VerwaltungPlPruefungLogischLVE
-											.getWertIdent(qLkw)
-									+ "\nvLkw = "
-									+ VerwaltungPlPruefungLogischLVE
-											.getWertIdent(vLkw));
+					KzdPLFahrStreifen.LOGGER.fine(VerwaltungPlPruefungLogischLVE.getPlLogIdent(resultat)
+							+ "\nSetze ALLES auf implausibel und fehlerhaft weil Regel(8) verletzt:\n"
+							+ "Wenn qLkw > 0, dann muss vLkw > 0 sein. Aber:\nqLkw = "
+							+ VerwaltungPlPruefungLogischLVE.getWertIdent(qLkw) + "\nvLkw = "
+							+ VerwaltungPlPruefungLogischLVE.getWertIdent(vLkw));
 					setAllesImplausibel(data);
 					return;
 				}
@@ -553,20 +461,13 @@ public class KzdPLFahrStreifen extends AbstraktPLFahrStreifen {
 			if (tNetto >= 0) {
 				if (!((0 < tNetto) && (tNetto <= t))) {
 					if (qKfz > 0) {
-						LOGGER
-						.fine(VerwaltungPlPruefungLogischLVE
-										.getPlLogIdent(resultat)
-										+ "\nSetze tNetto auf implausibel und fehlerhaft weil Regel(9) verletzt:\n"
-										+ "Wenn tNetto muss im Intervall (0, T] liegen. Aber:\ntNetto = "
-										+ VerwaltungPlPruefungLogischLVE
-												.getWertIdent(tNetto)
-										+ "\nT = "
-										+ VerwaltungPlPruefungLogischLVE
-												.getWertIdent(t));
+						KzdPLFahrStreifen.LOGGER.fine(VerwaltungPlPruefungLogischLVE.getPlLogIdent(resultat)
+								+ "\nSetze tNetto auf implausibel und fehlerhaft weil Regel(9) verletzt:\n"
+								+ "Wenn tNetto muss im Intervall (0, T] liegen. Aber:\ntNetto = "
+								+ VerwaltungPlPruefungLogischLVE.getWertIdent(tNetto) + "\nT = "
+								+ VerwaltungPlPruefungLogischLVE.getWertIdent(t));
 						data.getItem("tNetto").getUnscaledValue("Wert").set(DUAKonstanten.FEHLERHAFT); //$NON-NLS-1$ //$NON-NLS-2$
-						data.getItem("tNetto")
-								.getItem("Status")
-								.getItem("MessWertErsetzung")
+						data.getItem("tNetto").getItem("Status").getItem("MessWertErsetzung")
 								.getUnscaledValue("Implausibel").set(DUAKonstanten.JA); //$NON-NLS-1$
 					}
 				}
@@ -574,20 +475,13 @@ public class KzdPLFahrStreifen extends AbstraktPLFahrStreifen {
 		} else {
 			if (tNetto >= 0) {
 				if (!((0 < tNetto) && (tNetto <= t))) {
-					LOGGER
-					.fine(VerwaltungPlPruefungLogischLVE
-									.getPlLogIdent(resultat)
-									+ "\nSetze tNetto auf implausibel und fehlerhaft weil Regel(9) verletzt:\n"
-									+ "Wenn tNetto muss im Intervall (0, T] liegen. Aber:\ntNetto = "
-									+ VerwaltungPlPruefungLogischLVE
-											.getWertIdent(tNetto)
-									+ "\nT = "
-									+ VerwaltungPlPruefungLogischLVE
-											.getWertIdent(t));
+					KzdPLFahrStreifen.LOGGER.fine(VerwaltungPlPruefungLogischLVE.getPlLogIdent(resultat)
+							+ "\nSetze tNetto auf implausibel und fehlerhaft weil Regel(9) verletzt:\n"
+							+ "Wenn tNetto muss im Intervall (0, T] liegen. Aber:\ntNetto = "
+							+ VerwaltungPlPruefungLogischLVE.getWertIdent(tNetto) + "\nT = "
+							+ VerwaltungPlPruefungLogischLVE.getWertIdent(t));
 					data.getItem("tNetto").getUnscaledValue("Wert").set(DUAKonstanten.FEHLERHAFT); //$NON-NLS-1$ //$NON-NLS-2$
-					data.getItem("tNetto")
-							.getItem("Status")
-							.getItem("MessWertErsetzung")
+					data.getItem("tNetto").getItem("Status").getItem("MessWertErsetzung")
 							.getUnscaledValue("Implausibel").set(DUAKonstanten.JA); //$NON-NLS-1$
 				}
 			}
@@ -599,24 +493,15 @@ public class KzdPLFahrStreifen extends AbstraktPLFahrStreifen {
 		if (qKfz == 0) {
 			if ((vgKfz >= 0) && (vgKfzLetztesIntervall >= 0)) {
 				if (!(vgKfz == vgKfzLetztesIntervall)) {
-					LOGGER
-					.fine(VerwaltungPlPruefungLogischLVE
-									.getPlLogIdent(resultat)
-									+ "\nSetze vgKfz auf implausibel und fehlerhaft weil Regel(10) verletzt:\n"
-									+ "Wenn qKfz == 0 und vgKfz(t) >= 0 und vgKfz(T-1) >= 0, dann muss vgKfz(t) >= 0 == vgKfz(T-1) sein. Aber:\nqKfz = "
-									+ VerwaltungPlPruefungLogischLVE
-											.getWertIdent(qKfz)
-									+ "\nvgKfz(t) = "
-									+ VerwaltungPlPruefungLogischLVE
-											.getWertIdent(vgKfz)
-									+ "\nvgKfz(t-T) = "
-									+ VerwaltungPlPruefungLogischLVE
-											.getWertIdent(vgKfzLetztesIntervall));
+					KzdPLFahrStreifen.LOGGER.fine(VerwaltungPlPruefungLogischLVE.getPlLogIdent(resultat)
+							+ "\nSetze vgKfz auf implausibel und fehlerhaft weil Regel(10) verletzt:\n"
+							+ "Wenn qKfz == 0 und vgKfz(t) >= 0 und vgKfz(T-1) >= 0, dann muss vgKfz(t) >= 0 == vgKfz(T-1) sein. Aber:\nqKfz = "
+							+ VerwaltungPlPruefungLogischLVE.getWertIdent(qKfz) + "\nvgKfz(t) = "
+							+ VerwaltungPlPruefungLogischLVE.getWertIdent(vgKfz) + "\nvgKfz(t-T) = "
+							+ VerwaltungPlPruefungLogischLVE.getWertIdent(vgKfzLetztesIntervall));
 					data.getItem("vgKfz").getUnscaledValue("Wert").set(DUAKonstanten.FEHLERHAFT); //$NON-NLS-1$ //$NON-NLS-2$
-					data.getItem("vgKfz")
-					.getItem("Status")
-					.getItem("MessWertErsetzung")
-					.getUnscaledValue("Implausibel").set(DUAKonstanten.JA); //$NON-NLS-1$
+					data.getItem("vgKfz").getItem("Status").getItem("MessWertErsetzung").getUnscaledValue("Implausibel") //$NON-NLS-4$
+					.set(DUAKonstanten.JA);
 				}
 			}
 		}
@@ -630,28 +515,15 @@ public class KzdPLFahrStreifen extends AbstraktPLFahrStreifen {
 					if (vKfz > parameterAtgLog.getVKfzGrenz()) {
 						if ((b >= 0) && (parameterAtgLog.getBGrenz() >= 0)) {
 							if (!(b < parameterAtgLog.getBGrenz())) {
-								LOGGER
-								.fine(VerwaltungPlPruefungLogischLVE
-												.getPlLogIdent(resultat)
-												+ "\nSetze b auf implausibel und fehlerhaft weil Regel(11) verletzt:\n"
-												+ "Wenn vKfz > vKfzGrenz dann muss b >= bGrenz sein. Aber:\nvKfz = "
-												+ VerwaltungPlPruefungLogischLVE
-														.getWertIdent(vKfz)
-												+ "\nvKfzGrenz = "
-												+ VerwaltungPlPruefungLogischLVE
-														.getWertIdent(parameterAtgLog
-																.getVKfzGrenz())
-												+ "\nb = "
-												+ VerwaltungPlPruefungLogischLVE
-														.getWertIdent(b)
-												+ "\nbGrenz = "
-												+ VerwaltungPlPruefungLogischLVE
-														.getWertIdent(parameterAtgLog
-																.getBGrenz()));
+								KzdPLFahrStreifen.LOGGER.fine(VerwaltungPlPruefungLogischLVE.getPlLogIdent(resultat)
+										+ "\nSetze b auf implausibel und fehlerhaft weil Regel(11) verletzt:\n"
+										+ "Wenn vKfz > vKfzGrenz dann muss b >= bGrenz sein. Aber:\nvKfz = "
+										+ VerwaltungPlPruefungLogischLVE.getWertIdent(vKfz) + "\nvKfzGrenz = "
+										+ VerwaltungPlPruefungLogischLVE.getWertIdent(parameterAtgLog.getVKfzGrenz())
+										+ "\nb = " + VerwaltungPlPruefungLogischLVE.getWertIdent(b) + "\nbGrenz = "
+										+ VerwaltungPlPruefungLogischLVE.getWertIdent(parameterAtgLog.getBGrenz()));
 								data.getItem("b").getUnscaledValue("Wert").set(DUAKonstanten.FEHLERHAFT); //$NON-NLS-1$ //$NON-NLS-2$
-								data.getItem("b")
-										.getItem("Status")
-										.getItem("MessWertErsetzung")
+								data.getItem("b").getItem("Status").getItem("MessWertErsetzung")
 										.getUnscaledValue("Implausibel").set(DUAKonstanten.JA); //$NON-NLS-1$
 							}
 						}
@@ -666,8 +538,7 @@ public class KzdPLFahrStreifen extends AbstraktPLFahrStreifen {
 				 * Regel Nr.12 (aus SE-02.00.00.00.00-AFo-5.2, S.95)
 				 */
 				if (untersucheAufMaxVerletzung(data, resultat, "qKfz",
-						(parameterAtgLog.getQKfzBereichMax() * t)
-						/ Constants.MILLIS_PER_HOUR)) {
+						(parameterAtgLog.getQKfzBereichMax() * t) / Constants.MILLIS_PER_HOUR)) {
 					return;
 				}
 
@@ -675,8 +546,7 @@ public class KzdPLFahrStreifen extends AbstraktPLFahrStreifen {
 				 * Regel Nr.13 (aus SE-02.00.00.00.00-AFo-5.2, S.95)
 				 */
 				if (untersucheAufMaxVerletzung(data, resultat, "qPkw",
-						(parameterAtgLog.getQPkwBereichMax() * t)
-						/ Constants.MILLIS_PER_HOUR)) {
+						(parameterAtgLog.getQPkwBereichMax() * t) / Constants.MILLIS_PER_HOUR)) {
 					return;
 				}
 
@@ -684,8 +554,7 @@ public class KzdPLFahrStreifen extends AbstraktPLFahrStreifen {
 				 * Regel Nr.14 (aus SE-02.00.00.00.00-AFo-5.2, S.95)
 				 */
 				if (untersucheAufMaxVerletzung(data, resultat, "qLkw",
-						(parameterAtgLog.getQLkwBereichMax() * t)
-						/ Constants.MILLIS_PER_HOUR)) {
+						(parameterAtgLog.getQLkwBereichMax() * t) / Constants.MILLIS_PER_HOUR)) {
 					return;
 				}
 				/**
@@ -715,59 +584,46 @@ public class KzdPLFahrStreifen extends AbstraktPLFahrStreifen {
 				/**
 				 * Regel Nr.15 (aus SE-02.00.00.00.00-AFo-5.2, S.95)
 				 */
-				if (untersucheAufMaxVerletzung(data, resultat, "vKfz",
-						parameterAtgLog.getVKfzBereichMax())) {
+				if (untersucheAufMaxVerletzung(data, resultat, "vKfz", parameterAtgLog.getVKfzBereichMax())) {
 					return;
 				}
 
 				/**
 				 * Regel Nr.16 (aus SE-02.00.00.00.00-AFo-5.2, S.96)
 				 */
-				if (untersucheAufMaxVerletzung(data, resultat, "vLkw",
-						parameterAtgLog.getVLkwBereichMax())) {
+				if (untersucheAufMaxVerletzung(data, resultat, "vLkw", parameterAtgLog.getVLkwBereichMax())) {
 					return;
 				}
 
 				/**
 				 * Regel Nr.17 (aus SE-02.00.00.00.00-AFo-5.2, S.96)
 				 */
-				if (untersucheAufMaxVerletzung(data, resultat, "vPkw",
-						parameterAtgLog.getVPkwBereichMax())) {
+				if (untersucheAufMaxVerletzung(data, resultat, "vPkw", parameterAtgLog.getVPkwBereichMax())) {
 					return;
 				}
 
 				/**
 				 * Regel Nr.18 (aus SE-02.00.00.00.00-AFo-5.2, S.96)
 				 */
-				if (untersucheAufMaxVerletzung(data, resultat, "vgKfz",
-						parameterAtgLog.getVgKfzBereichMax())) {
+				if (untersucheAufMaxVerletzung(data, resultat, "vgKfz", parameterAtgLog.getVgKfzBereichMax())) {
 					return;
 				}
 
 				/**
 				 * Regel Nr.19 (aus SE-02.00.00.00.00-AFo-5.2, S.96)
 				 */
-				if (untersucheAufMaxVerletzung(data, resultat, "b",
-						parameterAtgLog.getBelegungBereichMax())) {
+				if (untersucheAufMaxVerletzung(data, resultat, "b", parameterAtgLog.getBelegungBereichMax())) {
 					return;
 				}
 			}
 		}
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
-	protected AttributeGroup getPlausibilisierungsParameterAtg(
-			final ClientDavInterface dav) {
-		return dav.getDataModel().getAttributeGroup(
-				AtgVerkehrsDatenKZIPlPruefLogisch.getPid());
+	protected AttributeGroup getPlausibilisierungsParameterAtg(final ClientDavInterface dav) {
+		return dav.getDataModel().getAttributeGroup(AtgVerkehrsDatenKZIPlPruefLogisch.getPid());
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
 	protected String[] getAttributNamen() {
 		return KzdPLFahrStreifen.ATTRIBUT_NAMEN;

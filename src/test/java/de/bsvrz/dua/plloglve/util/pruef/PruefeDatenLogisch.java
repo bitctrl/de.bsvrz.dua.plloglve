@@ -170,36 +170,32 @@ public class PruefeDatenLogisch implements ClientReceiverInterface {
 	 * @throws Exception
 	 *             wird weitergereicht
 	 */
-	public PruefeDatenLogisch(final PlPruefungLogisch caller,
-			final ClientDavInterface dav1, final SystemObject[] fs,
+	public PruefeDatenLogisch(final PlPruefungLogisch caller, final ClientDavInterface dav1, final SystemObject[] fs,
 			final String csvQuelle) throws Exception {
 		this.caller = caller; // aufrufende Klasse uebernehmen
 		this.dav = dav1;
 
 		// Empfangs-Datenbeschreibung
-		PruefeDatenLogisch.ddKzdEmpf = new DataDescription(this.dav
-				.getDataModel().getAttributeGroup(DUAKonstanten.ATG_KZD),
-				this.dav.getDataModel().getAspect(
-						DUAKonstanten.ASP_PL_PRUEFUNG_LOGISCH));
+		PruefeDatenLogisch.ddKzdEmpf = new DataDescription(
+				this.dav.getDataModel().getAttributeGroup(DUAKonstanten.ATG_KZD),
+				this.dav.getDataModel().getAspect(DUAKonstanten.ASP_PL_PRUEFUNG_LOGISCH));
 
-		PruefeDatenLogisch.ddLzdEmpf = new DataDescription(this.dav
-				.getDataModel().getAttributeGroup(DUAKonstanten.ATG_LZD),
-				this.dav.getDataModel().getAspect(
-						DUAKonstanten.ASP_PL_PRUEFUNG_LOGISCH));
+		PruefeDatenLogisch.ddLzdEmpf = new DataDescription(
+				this.dav.getDataModel().getAttributeGroup(DUAKonstanten.ATG_LZD),
+				this.dav.getDataModel().getAspect(DUAKonstanten.ASP_PL_PRUEFUNG_LOGISCH));
 
 		// Empfänger anmelden
-		this.dav.subscribeReceiver(this, fs, PruefeDatenLogisch.ddKzdEmpf,
-				ReceiveOptions.normal(), ReceiverRole.receiver());
+		this.dav.subscribeReceiver(this, fs, PruefeDatenLogisch.ddKzdEmpf, ReceiveOptions.normal(),
+				ReceiverRole.receiver());
 
-		this.dav.subscribeReceiver(this, fs, PruefeDatenLogisch.ddLzdEmpf,
-				ReceiveOptions.delayed(), ReceiverRole.receiver());
+		this.dav.subscribeReceiver(this, fs, PruefeDatenLogisch.ddLzdEmpf, ReceiveOptions.delayed(),
+				ReceiverRole.receiver());
 
 		try {
 			// CSV Importer initialisieren
 			this.csvImp = new CSVImporter(csvQuelle);
 		} catch (final Exception e) {
-			LOGGER
-			.error("Fehler beim öffnen der CSV Datei (" + csvQuelle + "): " + e); //$NON-NLS-1$ //$NON-NLS-2$
+			PruefeDatenLogisch.LOGGER.error("Fehler beim öffnen der CSV Datei (" + csvQuelle + "): " + e); //$NON-NLS-1$ //$NON-NLS-2$
 		}
 		csvImp.getNaechsteZeile(); // Tabellenkopf in CSV ueberspringen
 		csvEinlesen(); // CSV einlesen
@@ -246,7 +242,7 @@ public class PruefeDatenLogisch implements ClientReceiverInterface {
 				}
 			}
 		} catch (final Exception e) {
-			LOGGER.error("Fehler beim einlesen der CSV Datei: " + e); //$NON-NLS-1$
+			PruefeDatenLogisch.LOGGER.error("Fehler beim einlesen der CSV Datei: " + e); //$NON-NLS-1$
 		}
 	}
 
@@ -261,8 +257,7 @@ public class PruefeDatenLogisch implements ClientReceiverInterface {
 	 * @throws Exception
 	 *             wird weitergereicht
 	 */
-	private HashMap<String, Integer> csvLeseZeile(final String[] aktZeile,
-			final int fsIndex) throws Exception {
+	private HashMap<String, Integer> csvLeseZeile(final String[] aktZeile, final int fsIndex) throws Exception {
 		final int verschiebung = (fsIndex - 1) * 2;
 
 		final HashMap<String, Integer> hmCSV = new HashMap<>();
@@ -337,8 +332,7 @@ public class PruefeDatenLogisch implements ClientReceiverInterface {
 	 *            Das Attribut des auszulesenden Status
 	 * @return Statusdaten (Attributpfad,Wert)
 	 */
-	private HashMap<String, Integer> csvLeseStatus(final String status,
-			final String praefix) {
+	private HashMap<String, Integer> csvLeseStatus(final String status, final String praefix) {
 
 		final HashMap<String, Integer> hmCSVStatus = new HashMap<>();
 
@@ -359,70 +353,45 @@ public class PruefeDatenLogisch implements ClientReceiverInterface {
 			}
 
 			if (element.equalsIgnoreCase("Impl")) {
-				hmCSVStatus.put(praefix
-						+ ".Status.MessWertErsetzung.Implausibel",
-						DUAKonstanten.JA);
-			} else if (!hmCSVStatus.containsKey(praefix
-					+ ".Status.MessWertErsetzung.Implausibel")) {
-				hmCSVStatus.put(praefix
-						+ ".Status.MessWertErsetzung.Implausibel",
-						DUAKonstanten.NEIN);
+				hmCSVStatus.put(praefix + ".Status.MessWertErsetzung.Implausibel", DUAKonstanten.JA);
+			} else if (!hmCSVStatus.containsKey(praefix + ".Status.MessWertErsetzung.Implausibel")) {
+				hmCSVStatus.put(praefix + ".Status.MessWertErsetzung.Implausibel", DUAKonstanten.NEIN);
 			}
 
 			if (element.equalsIgnoreCase("Intp")) {
-				hmCSVStatus.put(praefix
-						+ ".Status.MessWertErsetzung.Interpoliert",
-						DUAKonstanten.JA);
-			} else if (!hmCSVStatus.containsKey(praefix
-					+ ".Status.MessWertErsetzung.Interpoliert")) {
-				hmCSVStatus.put(praefix
-						+ ".Status.MessWertErsetzung.Interpoliert",
-						DUAKonstanten.NEIN);
+				hmCSVStatus.put(praefix + ".Status.MessWertErsetzung.Interpoliert", DUAKonstanten.JA);
+			} else if (!hmCSVStatus.containsKey(praefix + ".Status.MessWertErsetzung.Interpoliert")) {
+				hmCSVStatus.put(praefix + ".Status.MessWertErsetzung.Interpoliert", DUAKonstanten.NEIN);
 			}
 
 			if (element.equalsIgnoreCase("nErf")) {
-				hmCSVStatus.put(praefix + ".Status.Erfassung.NichtErfasst",
-						DUAKonstanten.JA);
-			} else if (!hmCSVStatus.containsKey(praefix
-					+ ".Status.Erfassung.NichtErfasst")) {
-				hmCSVStatus.put(praefix + ".Status.Erfassung.NichtErfasst",
-						DUAKonstanten.NEIN);
+				hmCSVStatus.put(praefix + ".Status.Erfassung.NichtErfasst", DUAKonstanten.JA);
+			} else if (!hmCSVStatus.containsKey(praefix + ".Status.Erfassung.NichtErfasst")) {
+				hmCSVStatus.put(praefix + ".Status.Erfassung.NichtErfasst", DUAKonstanten.NEIN);
 			}
 
 			if (element.equalsIgnoreCase("wMaL")) {
-				hmCSVStatus.put(praefix + ".Status.PlLogisch.WertMaxLogisch",
-						DUAKonstanten.JA);
-			} else if (!hmCSVStatus.containsKey(praefix
-					+ ".Status.PlLogisch.WertMaxLogisch")) {
-				hmCSVStatus.put(praefix + ".Status.PlLogisch.WertMaxLogisch",
-						DUAKonstanten.NEIN);
+				hmCSVStatus.put(praefix + ".Status.PlLogisch.WertMaxLogisch", DUAKonstanten.JA);
+			} else if (!hmCSVStatus.containsKey(praefix + ".Status.PlLogisch.WertMaxLogisch")) {
+				hmCSVStatus.put(praefix + ".Status.PlLogisch.WertMaxLogisch", DUAKonstanten.NEIN);
 			}
 
 			if (element.equalsIgnoreCase("wMax")) {
-				hmCSVStatus.put(praefix + ".Status.PlFormal.WertMax",
-						DUAKonstanten.JA);
-			} else if (!hmCSVStatus.containsKey(praefix
-					+ ".Status.PlFormal.WertMax")) {
-				hmCSVStatus.put(praefix + ".Status.PlFormal.WertMax",
-						DUAKonstanten.NEIN);
+				hmCSVStatus.put(praefix + ".Status.PlFormal.WertMax", DUAKonstanten.JA);
+			} else if (!hmCSVStatus.containsKey(praefix + ".Status.PlFormal.WertMax")) {
+				hmCSVStatus.put(praefix + ".Status.PlFormal.WertMax", DUAKonstanten.NEIN);
 			}
 
 			if (element.equalsIgnoreCase("wMiL")) {
-				hmCSVStatus.put(praefix + ".Status.PlLogisch.WertMinLogisch",
-						DUAKonstanten.JA);
-			} else if (!hmCSVStatus.containsKey(praefix
-					+ ".Status.PlLogisch.WertMinLogisch")) {
-				hmCSVStatus.put(praefix + ".Status.PlLogisch.WertMinLogisch",
-						DUAKonstanten.NEIN);
+				hmCSVStatus.put(praefix + ".Status.PlLogisch.WertMinLogisch", DUAKonstanten.JA);
+			} else if (!hmCSVStatus.containsKey(praefix + ".Status.PlLogisch.WertMinLogisch")) {
+				hmCSVStatus.put(praefix + ".Status.PlLogisch.WertMinLogisch", DUAKonstanten.NEIN);
 			}
 
 			if (element.equalsIgnoreCase("wMin")) {
-				hmCSVStatus.put(praefix + ".Status.PlFormal.WertMin",
-						DUAKonstanten.JA);
-			} else if (!hmCSVStatus.containsKey(praefix
-					+ ".Status.PlFormal.WertMin")) {
-				hmCSVStatus.put(praefix + ".Status.PlFormal.WertMin",
-						DUAKonstanten.NEIN);
+				hmCSVStatus.put(praefix + ".Status.PlFormal.WertMin", DUAKonstanten.JA);
+			} else if (!hmCSVStatus.containsKey(praefix + ".Status.PlFormal.WertMin")) {
+				hmCSVStatus.put(praefix + ".Status.PlFormal.WertMin", DUAKonstanten.NEIN);
 			}
 
 			try {
@@ -479,43 +448,30 @@ public class PruefeDatenLogisch implements ClientReceiverInterface {
 		return alCSVWerttNettoFS3.get(csvOffset1);
 	}
 
-	/**
-	 * {@inheritDoc}
-	 *
-	 * @param results
-	 *            Ergebnisdatensätze vom DaV
-	 */
 	@Override
 	public void update(final ResultData[] results) {
 		for (final ResultData result : results) {
 			// Pruefe Ergebnisdatensatz auf Zeitstempel
-			if ((result.getDataDescription().equals(
-					PruefeDatenLogisch.ddKzdEmpf) || result
-					.getDataDescription().equals(PruefeDatenLogisch.ddLzdEmpf))
-					&& (result.getData() != null)
+			if ((result.getDataDescription().equals(PruefeDatenLogisch.ddKzdEmpf)
+					|| result.getDataDescription().equals(PruefeDatenLogisch.ddLzdEmpf)) && (result.getData() != null)
 					&& (result.getDataTime() == pruefZeitstempel)) {
 
 				try {
 					// Ermittle FS und pruefe Daten
-					if (result.getObject().getName().endsWith(".hfs")
-							|| result.getObject().getName().endsWith(".1")) {
-						vergleicheFS1.vergleiche(result, csvZeilenFS1,
-								csvOffset);
+					if (result.getObject().getName().endsWith(".hfs") || result.getObject().getName().endsWith(".1")) {
+						vergleicheFS1.vergleiche(result, csvZeilenFS1, csvOffset);
 					} else if (result.getObject().getName().endsWith(".1üfs")
 							|| result.getObject().getName().endsWith(".2")) {
-						vergleicheFS2.vergleiche(result, csvZeilenFS2,
-								csvOffset);
+						vergleicheFS2.vergleiche(result, csvZeilenFS2, csvOffset);
 					} else if (result.getObject().getName().endsWith(".2üfs")
 							|| result.getObject().getName().endsWith(".3")) {
-						vergleicheFS3.vergleiche(result, csvZeilenFS3,
-								csvOffset);
+						vergleicheFS3.vergleiche(result, csvZeilenFS3, csvOffset);
 					}
 				} catch (final Exception e) {
 					//
 				}
 
-				LOGGER.info(
-						"Zu prüfendes Datum empfangen. Warte auf Prüfung..."); //$NON-NLS-1$
+				PruefeDatenLogisch.LOGGER.info("Zu prüfendes Datum empfangen. Warte auf Prüfung..."); //$NON-NLS-1$
 			}
 		}
 	}
@@ -525,8 +481,7 @@ public class PruefeDatenLogisch implements ClientReceiverInterface {
 	 */
 	private void pruefungFertig() {
 		if (pruefungFS1Fertig && pruefungFS2Fertig && pruefungFS3Fertig) {
-			LOGGER
-			.info("Prüfung aller Fahrstreifen für diesen Intervall abgeschlossen"); //$NON-NLS-1$
+			PruefeDatenLogisch.LOGGER.info("Prüfung aller Fahrstreifen für diesen Intervall abgeschlossen"); //$NON-NLS-1$
 			caller.doNotify(); // Benachrichtige aufrufende Klasse
 		}
 	}
@@ -571,8 +526,8 @@ public class PruefeDatenLogisch implements ClientReceiverInterface {
 	 * @return ein Array mit der Anzahl der FehlerAlles aller Fehrstreifen
 	 */
 	public int[] getFehlerAlles() {
-		final int[] fehlerAlles = { vergleicheFS1.anzFehlerAlles,
-				vergleicheFS2.anzFehlerAlles, vergleicheFS3.anzFehlerAlles };
+		final int[] fehlerAlles = { vergleicheFS1.anzFehlerAlles, vergleicheFS2.anzFehlerAlles,
+				vergleicheFS3.anzFehlerAlles };
 		return fehlerAlles;
 	}
 
@@ -582,8 +537,8 @@ public class PruefeDatenLogisch implements ClientReceiverInterface {
 	 * @return ein Array mit der Anzahl der FehlerLinks aller Fehrstreifen
 	 */
 	public int[] getFehlerLinks() {
-		final int[] fehlerLinks = { vergleicheFS1.anzFehlerLinks,
-				vergleicheFS2.anzFehlerLinks, vergleicheFS3.anzFehlerLinks };
+		final int[] fehlerLinks = { vergleicheFS1.anzFehlerLinks, vergleicheFS2.anzFehlerLinks,
+				vergleicheFS3.anzFehlerLinks };
 		return fehlerLinks;
 	}
 
@@ -593,8 +548,8 @@ public class PruefeDatenLogisch implements ClientReceiverInterface {
 	 * @return ein Array mit der Anzahl der FehlerRechts aller Fehrstreifen
 	 */
 	public int[] getFehlerRechts() {
-		final int[] fehlerRechts = { vergleicheFS1.anzFehlerRechts,
-				vergleicheFS2.anzFehlerRechts, vergleicheFS3.anzFehlerRechts };
+		final int[] fehlerRechts = { vergleicheFS1.anzFehlerRechts, vergleicheFS2.anzFehlerRechts,
+				vergleicheFS3.anzFehlerRechts };
 		return fehlerRechts;
 	}
 }
@@ -649,12 +604,9 @@ class VergleicheDaten extends Thread {
 	/**
 	 * Attributnamen.
 	 */
-	private final String[] attributNamen = { ".Wert",
-			".Status.Erfassung.NichtErfasst", ".Status.PlFormal.WertMax",
-			".Status.PlFormal.WertMin", ".Status.PlLogisch.WertMaxLogisch",
-			".Status.PlLogisch.WertMinLogisch",
-			".Status.MessWertErsetzung.Implausibel",
-			".Status.MessWertErsetzung.Interpoliert", ".Güte.Index" };
+	private final String[] attributNamen = { ".Wert", ".Status.Erfassung.NichtErfasst", ".Status.PlFormal.WertMax",
+			".Status.PlFormal.WertMin", ".Status.PlLogisch.WertMaxLogisch", ".Status.PlLogisch.WertMinLogisch",
+			".Status.MessWertErsetzung.Implausibel", ".Status.MessWertErsetzung.Interpoliert", ".Güte.Index" };
 
 	/**
 	 * Uebergebene CSV Zeilen des jeweiligen FS.
@@ -715,11 +667,10 @@ class VergleicheDaten extends Thread {
 	 */
 	private void setzeAttributNamen(final String atg) {
 		if (atg.equals(DUAKonstanten.ATG_KZD)) {
-			attributNamenPraefix = new String[] { "qKfz", "qPkw", "qLkw",
-					"vKfz", "vPkw", "vLkw", "vgKfz", "b", "tNetto" };
+			attributNamenPraefix = new String[] { "qKfz", "qPkw", "qLkw", "vKfz", "vPkw", "vLkw", "vgKfz", "b",
+					"tNetto" };
 		} else if (atg.equals(DUAKonstanten.ATG_LZD)) {
-			attributNamenPraefix = new String[] { "qKfz", "qPkw", "qLkw",
-					"vKfz", "vPkw", "vLkw" };
+			attributNamenPraefix = new String[] { "qKfz", "qPkw", "qLkw", "vKfz", "vPkw", "vLkw" };
 		}
 	}
 
@@ -748,14 +699,12 @@ class VergleicheDaten extends Thread {
 	 * @param csvOffset1
 	 *            Aktuelle Position in der CSV-Datei
 	 */
-	public void vergleiche(final ResultData result,
-			final ArrayList<HashMap<String, Integer>> csvZeilen1,
+	public void vergleiche(final ResultData result, final ArrayList<HashMap<String, Integer>> csvZeilen1,
 			final int csvOffset1) {
 		this.csvOffset = csvOffset1; // uebernehme CSV Index
 		this.csvZeilen = csvZeilen1; // uebernehme CSV Daten
 		this.daten = result.getData(); // uebernehme Ergebnisdaten
-		setzeAttributNamen(result.getDataDescription().getAttributeGroup()
-				.getPid());
+		setzeAttributNamen(result.getDataDescription().getAttributeGroup().getPid());
 		synchronized (this) {
 			this.notify(); // trigger thread
 		}
@@ -791,26 +740,21 @@ class VergleicheDaten extends Thread {
 			for (final String element2 : attributNamen) {
 				attribut = element + element2;
 				if (!attribut.equals("tNetto.Wert")) {
-					aktuellerWert = DUAUtensilien
-							.getAttributDatum(attribut, daten)
-							.asUnscaledValue().intValue();
+					aktuellerWert = DUAUtensilien.getAttributDatum(attribut, daten).asUnscaledValue().intValue();
 					hmResult.put(attribut, aktuellerWert);
 				} else {
 					switch (fsIndex1) {
 					case 1:
-						resultWerttNettoFS1 = DUAUtensilien
-								.getAttributDatum("tNetto.Wert", daten)
-								.asUnscaledValue().longValue();
+						resultWerttNettoFS1 = DUAUtensilien.getAttributDatum("tNetto.Wert", daten).asUnscaledValue()
+								.longValue();
 						break;
 					case 2:
-						resultWerttNettoFS2 = DUAUtensilien
-								.getAttributDatum("tNetto.Wert", daten)
-								.asUnscaledValue().longValue();
+						resultWerttNettoFS2 = DUAUtensilien.getAttributDatum("tNetto.Wert", daten).asUnscaledValue()
+								.longValue();
 						break;
 					case 3:
-						resultWerttNettoFS3 = DUAUtensilien
-								.getAttributDatum("tNetto.Wert", daten)
-								.asUnscaledValue().longValue();
+						resultWerttNettoFS3 = DUAUtensilien.getAttributDatum("tNetto.Wert", daten).asUnscaledValue()
+								.longValue();
 						break;
 					default:
 					}
@@ -828,7 +772,7 @@ class VergleicheDaten extends Thread {
 	 */
 	private void doVergleiche() throws Exception {
 		final String ident = "[FS:" + fsIndex + "-Z:" + (csvOffset + 2) + "] "; // FS
-																				// +
+		// +
 		// CSV
 		// Index
 		Debug.getLogger().info("Pruefe Fahrstreifendatum " + ident);
@@ -875,20 +819,15 @@ class VergleicheDaten extends Thread {
 				fehlerLinks = false;
 				fehlerRechts = false;
 
-				if ((element2.length() == 5)
-						&& attribWertKopie.contains(".Wert")) {
-					attribWertKopie = attribWertKopie.replace(".Wert",
-							".Wert.Kopie");
+				if ((element2.length() == 5) && attribWertKopie.contains(".Wert")) {
+					attribWertKopie = attribWertKopie.replace(".Wert", ".Wert.Kopie");
 					/*
 					 * Eingangsgeschwindigkeitswerte >= 255 werden als
 					 * fehlerhaft interpretiert
 					 */
-					if (attribut.startsWith("v")
-							&& (hmCSV.get(attribut) >= 255)) {
+					if (attribut.startsWith("v") && (hmCSV.get(attribut) >= 255)) {
 						hmCSV.put(attribut, DUAKonstanten.FEHLERHAFT);
-						hmCSV.put(element
-								+ ".Status.MessWertErsetzung.Implausibel",
-								DUAKonstanten.JA);
+						hmCSV.put(element + ".Status.MessWertErsetzung.Implausibel", DUAKonstanten.JA);
 					}
 				}
 
@@ -910,15 +849,13 @@ class VergleicheDaten extends Thread {
 					 * Sonderbehandlung für vKfz- und qPkw-Werte (werden
 					 * errechnet)
 					 */
-					if (attribut.equals("vKfz.Wert")
-							|| attribut.equals("qPkw.Wert")) {
+					if (attribut.equals("vKfz.Wert") || attribut.equals("qPkw.Wert")) {
 
 						/*
 						 * Prüfe Fehler links
 						 */
 						if (attribWertKopie.contains(".Wert.Kopie")
-								&& !hmCSV.get(attribWertKopie).equals(
-										hmResult.get(attribut))) {
+								&& !hmCSV.get(attribWertKopie).equals(hmResult.get(attribut))) {
 							fehlerLinks = true;
 						}
 
@@ -926,10 +863,8 @@ class VergleicheDaten extends Thread {
 						 * Hier der eigentliche Wertvergleich von vKfz bzw. qPkw
 						 */
 						if (!hmCSV.get(attribut).equals(hmResult.get(attribut))) {
-							warnung += ident + "DIFF (" + attribut + "):"
-									+ hmCSV.get(attribut) + sollWertErl
-									+ " (SOLL)<>(IST) "
-									+ hmResult.get(attribut) + istWertErl;
+							warnung += ident + "DIFF (" + attribut + "):" + hmCSV.get(attribut) + sollWertErl
+									+ " (SOLL)<>(IST) " + hmResult.get(attribut) + istWertErl;
 
 							/*
 							 * Wenn Werte nicht identisch wird zusätzlich mit
@@ -937,13 +872,9 @@ class VergleicheDaten extends Thread {
 							 * errechneten Wert verglichen
 							 */
 							if (attribWertKopie.contains(".Wert.Kopie")
-									&& hmCSV.get(attribWertKopie).equals(
-											hmResult.get(attribut))) {
-								warnung += "\n\r" + ident + "W-OK ("
-										+ attribWertKopie + "):"
-										+ hmCSV.get(attribWertKopie)
-										+ " (SOLL)==(IST) "
-										+ hmResult.get(attribut);
+									&& hmCSV.get(attribWertKopie).equals(hmResult.get(attribut))) {
+								warnung += "\n\r" + ident + "W-OK (" + attribWertKopie + "):"
+										+ hmCSV.get(attribWertKopie) + " (SOLL)==(IST) " + hmResult.get(attribut);
 							}
 
 							fehlerRechts = true;
@@ -954,10 +885,8 @@ class VergleicheDaten extends Thread {
 								Debug.getLogger().warning(warnung);
 							}
 						} else {
-							System.out.println(ident + " OK  (" + attribut
-									+ "):" + hmCSV.get(attribut) + sollWertErl
-									+ " (SOLL)==(IST) "
-									+ hmResult.get(attribut) + istWertErl);
+							System.out.println(ident + " OK  (" + attribut + "):" + hmCSV.get(attribut) + sollWertErl
+									+ " (SOLL)==(IST) " + hmResult.get(attribut) + istWertErl);
 						}
 					} else {
 						/*
@@ -968,16 +897,13 @@ class VergleicheDaten extends Thread {
 						 * Prüfe Fehler links
 						 */
 						if (attribWertKopie.contains(".Wert.Kopie")
-								&& !hmCSV.get(attribWertKopie).equals(
-										hmResult.get(attribut))) {
+								&& !hmCSV.get(attribWertKopie).equals(hmResult.get(attribut))) {
 							fehlerLinks = true;
 						}
 
 						if (!hmCSV.get(attribut).equals(hmResult.get(attribut))) {
-							warnung += ident + "DIFF (" + attribut + "):"
-									+ hmCSV.get(attribut) + sollWertErl
-									+ " (SOLL)<>(IST) "
-									+ hmResult.get(attribut) + istWertErl;
+							warnung += ident + "DIFF (" + attribut + "):" + hmCSV.get(attribut) + sollWertErl
+									+ " (SOLL)<>(IST) " + hmResult.get(attribut) + istWertErl;
 
 							/*
 							 * Wenn Werte nicht identisch wird zusätzlich mit
@@ -985,13 +911,9 @@ class VergleicheDaten extends Thread {
 							 * errechneten Wert verglichen
 							 */
 							if (attribWertKopie.contains(".Wert.Kopie")
-									&& hmCSV.get(attribWertKopie).equals(
-											hmResult.get(attribut))) {
-								warnung += "\n\r" + ident + "W-OK ("
-										+ attribWertKopie + "):"
-										+ hmCSV.get(attribWertKopie)
-										+ " (SOLL)==(IST) "
-										+ hmResult.get(attribut);
+									&& hmCSV.get(attribWertKopie).equals(hmResult.get(attribut))) {
+								warnung += "\n\r" + ident + "W-OK (" + attribWertKopie + "):"
+										+ hmCSV.get(attribWertKopie) + " (SOLL)==(IST) " + hmResult.get(attribut);
 							}
 
 							fehlerRechts = true;
@@ -1001,7 +923,7 @@ class VergleicheDaten extends Thread {
 							} else {
 								Debug.getLogger().warning(warnung);
 							}
-						} 
+						}
 					}
 				} else if (attribut.equals("tNetto.Wert")) {
 					/*
@@ -1012,45 +934,33 @@ class VergleicheDaten extends Thread {
 
 					if (csvWerttNetto != resultWerttNetto) {
 						if (useAssert) {
-							Assert.assertTrue(ident + "DIFF (" + attribut
-									+ "):" + csvWerttNetto + sollWertErl
-									+ " (SOLL)<>(IST) " + resultWerttNetto
-									+ istWertErl, false);
+							Assert.assertTrue(ident + "DIFF (" + attribut + "):" + csvWerttNetto + sollWertErl
+									+ " (SOLL)<>(IST) " + resultWerttNetto + istWertErl, false);
 						} else {
-							Debug.getLogger().error(
-									ident + "DIFF (" + attribut + "):"
-											+ csvWerttNetto + sollWertErl
-											+ " (SOLL)<>(IST) "
-											+ resultWerttNetto + istWertErl);
+							Debug.getLogger().error(ident + "DIFF (" + attribut + "):" + csvWerttNetto + sollWertErl
+									+ " (SOLL)<>(IST) " + resultWerttNetto + istWertErl);
 						}
-					} 
+					}
 				}
 
 				/*
 				 * Fehlerausgabe
 				 */
 				if (fehlerLinks && fehlerRechts) {
-					Debug.getLogger().warning(
-							"ERR:Fehler Alles @ " + ident + " (" + attribut
-							+ ")");
+					Debug.getLogger().warning("ERR:Fehler Alles @ " + ident + " (" + attribut + ")");
 					anzFehlerAlles++;
 				} else if (fehlerLinks) {
-					Debug.getLogger().warning(
-							"ERR:Fehler Links @ " + ident + " (" + attribut
-							+ ")");
+					Debug.getLogger().warning("ERR:Fehler Links @ " + ident + " (" + attribut + ")");
 					anzFehlerLinks++;
 				} else if (fehlerRechts) {
-					Debug.getLogger().warning(
-							"ERR:Fehler Rechts @ " + ident + " (" + attribut
-							+ ")");
+					Debug.getLogger().warning("ERR:Fehler Rechts @ " + ident + " (" + attribut + ")");
 					anzFehlerRechts++;
 				}
 			}
 		}
 
 		// Debug.getLogger().info(pruefLog);
-		Debug.getLogger()
-		.info("Prüfung der Fahrstreifendaten für diesen Intervall abgeschlossen");
+		Debug.getLogger().info("Prüfung der Fahrstreifendaten für diesen Intervall abgeschlossen");
 		caller.doNotify(fsIndex); // Benachrichtige aufrufende Klasse
 	}
 

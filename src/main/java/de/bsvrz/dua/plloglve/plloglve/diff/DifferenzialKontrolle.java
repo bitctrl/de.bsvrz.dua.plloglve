@@ -58,23 +58,15 @@ public class DifferenzialKontrolle extends AbstraktBearbeitungsKnotenAdapter {
 	 */
 	private final Map<SystemObject, DiffFahrStreifen> fahrStreifen = new HashMap<>();
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
-	public void initialisiere(final IVerwaltung dieVerwaltung)
-			throws DUAInitialisierungsException {
+	public void initialisiere(final IVerwaltung dieVerwaltung) throws DUAInitialisierungsException {
 		super.initialisiere(dieVerwaltung);
 
 		for (final SystemObject obj : dieVerwaltung.getSystemObjekte()) {
-			this.fahrStreifen
-			.put(obj, new DiffFahrStreifen(dieVerwaltung, obj));
+			this.fahrStreifen.put(obj, new DiffFahrStreifen(dieVerwaltung, obj));
 		}
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
 	public void aktualisiereDaten(final ResultData[] resultate) {
 		if (resultate != null) {
@@ -83,32 +75,27 @@ public class DifferenzialKontrolle extends AbstraktBearbeitungsKnotenAdapter {
 			for (final ResultData resultat : resultate) {
 				if (resultat != null) {
 
-					if (!TestParameter.getInstanz().isTestVertrauen()
-							&& !TestParameter.getInstanz().isTestAusfall()) {
+					if (!TestParameter.getInstanz().isTestVertrauen() && !TestParameter.getInstanz().isTestAusfall()) {
 
 						if (resultat.getDataDescription().getAttributeGroup()
 								.getId() == PlPruefungLogischLVE.atgKzdId) {
 							if (resultat.getData() != null) {
 								ResultData resultatNeu = resultat;
 
-								final DiffFahrStreifen fs = this.fahrStreifen
-										.get(resultat.getObject());
+								final DiffFahrStreifen fs = this.fahrStreifen.get(resultat.getObject());
 
 								Data data = null;
 								if (fs != null) {
 									data = fs.plausibilisiere(resultat);
 								} else {
-									LOGGER
-									.error("Fahrstreifen zu Datensatz konnte nicht identifiziert werden:\n" + //$NON-NLS-1$
-											resultat);
+									DifferenzialKontrolle.LOGGER
+											.error("Fahrstreifen zu Datensatz konnte nicht identifiziert werden:\n" + //$NON-NLS-1$
+													resultat);
 								}
 
 								if (data != null) {
-									resultatNeu = new ResultData(
-											resultat.getObject(),
-											resultat.getDataDescription(),
-											resultat.getDataTime(), data,
-											resultat.isDelayedData());
+									resultatNeu = new ResultData(resultat.getObject(), resultat.getDataDescription(),
+											resultat.getDataTime(), data, resultat.isDelayedData());
 								}
 
 								weiterzuleitendeResultate.add(resultatNeu);
@@ -129,23 +116,16 @@ public class DifferenzialKontrolle extends AbstraktBearbeitungsKnotenAdapter {
 			}
 
 			if ((this.knoten != null) && !weiterzuleitendeResultate.isEmpty()) {
-				this.knoten.aktualisiereDaten(weiterzuleitendeResultate
-						.toArray(new ResultData[0]));
+				this.knoten.aktualisiereDaten(weiterzuleitendeResultate.toArray(new ResultData[0]));
 			}
 		}
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
 	public ModulTyp getModulTyp() {
 		return null;
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
 	public void aktualisierePublikation(final IDatenFlussSteuerung dfs) {
 		// hier wird nicht publiziert

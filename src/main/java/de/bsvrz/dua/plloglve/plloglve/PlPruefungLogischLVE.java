@@ -94,19 +94,13 @@ public class PlPruefungLogischLVE extends AbstraktBearbeitungsKnotenAdapter {
 		this.standardAspekte = stdAspekte;
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
-	public void initialisiere(final IVerwaltung dieVerwaltung)
-			throws DUAInitialisierungsException {
+	public void initialisiere(final IVerwaltung dieVerwaltung) throws DUAInitialisierungsException {
 		super.initialisiere(dieVerwaltung);
-		PlPruefungLogischLVE.atgKzdId = dieVerwaltung.getVerbindung()
-				.getDataModel().getAttributeGroup(DUAKonstanten.ATG_KZD)
-				.getId();
-		PlPruefungLogischLVE.atgLzdId = dieVerwaltung.getVerbindung()
-				.getDataModel().getAttributeGroup(DUAKonstanten.ATG_LZD)
-				.getId();
+		PlPruefungLogischLVE.atgKzdId = dieVerwaltung.getVerbindung().getDataModel()
+				.getAttributeGroup(DUAKonstanten.ATG_KZD).getId();
+		PlPruefungLogischLVE.atgLzdId = dieVerwaltung.getVerbindung().getDataModel()
+				.getAttributeGroup(DUAKonstanten.ATG_LZD).getId();
 
 		this.vb = new Vertrauensbereich(this.standardAspekte);
 
@@ -124,29 +118,19 @@ public class PlPruefungLogischLVE extends AbstraktBearbeitungsKnotenAdapter {
 		this.vb.setNaechstenBearbeitungsKnoten(this.knoten);
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
 	public ModulTyp getModulTyp() {
 		return null;
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
 	public void aktualisiereDaten(final ResultData[] resultate) {
 		this.standard.aktualisiereDaten(resultate);
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
 	public void aktualisierePublikation(final IDatenFlussSteuerung dfs) {
 		// wird hier nicht benötigt, da die Publikation erst im letzten Submodul
 		// "Vertrauensbereich" stattfindet
 	}
-
 }

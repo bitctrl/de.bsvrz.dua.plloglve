@@ -40,8 +40,7 @@ import de.bsvrz.sys.funclib.bitctrl.dua.intpuf.IIntervallPufferElement;
  *
  * @author BitCtrl Systems GmbH, Thierfelder
  */
-public final class AusfallDatumKomplett implements
-IIntervallPufferElement<AusfallDatum> {
+public final class AusfallDatumKomplett implements IIntervallPufferElement<AusfallDatum> {
 
 	/**
 	 * Intervallanfang.
@@ -68,8 +67,7 @@ IIntervallPufferElement<AusfallDatum> {
 		final Data data = resultat.getData();
 
 		this.intervallAnfang = resultat.getDataTime();
-		this.intervallEnde = resultat.getDataTime()
-				+ data.getTimeValue("T").getMillis(); //$NON-NLS-1$
+		this.intervallEnde = resultat.getDataTime() + data.getTimeValue("T").getMillis(); //$NON-NLS-1$
 		this.inhalt = AusfallDatum.getAusfallDatumVon(resultat);
 	}
 
@@ -83,8 +81,7 @@ IIntervallPufferElement<AusfallDatum> {
 	 * @return eine mit dem uebergebenen Datum korrespondierende Instanz dieser
 	 *         Klasse oder <code>null</code> fuer keine Quelle usw.
 	 */
-	public static AusfallDatumKomplett getAusfallDatumVon(
-			final ResultData resultat) {
+	public static AusfallDatumKomplett getAusfallDatumVon(final ResultData resultat) {
 		AusfallDatumKomplett datum = null;
 
 		if ((resultat != null) && (resultat.getData() != null)) {
@@ -94,38 +91,24 @@ IIntervallPufferElement<AusfallDatum> {
 		return datum;
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
 	public String toString() {
-		final SimpleDateFormat dateFormat = new SimpleDateFormat(
-				DUAKonstanten.ZEIT_FORMAT_GENAU_STR);
+		final SimpleDateFormat dateFormat = new SimpleDateFormat(DUAKonstanten.ZEIT_FORMAT_GENAU_STR);
 		final String s = "Datenzeit: " + dateFormat.format(new Date(this.intervallAnfang)) + //$NON-NLS-1$
-				" (" + (this.intervallEnde - this.intervallAnfang)
-				+ "ms): " + this.inhalt; //$NON-NLS-1$
+				" (" + (this.intervallEnde - this.intervallAnfang) + "ms): " + this.inhalt; //$NON-NLS-2$
 		return s;
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
 	public long getIntervallEnde() {
 		return this.intervallEnde;
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
 	public long getIntervallStart() {
 		return this.intervallAnfang;
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
 	public AusfallDatum getInhalt() {
 		return this.inhalt;

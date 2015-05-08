@@ -74,30 +74,20 @@ public class Vertrauensbereich extends AbstraktBearbeitungsKnotenAdapter {
 		this.standardAspekte = stdAspekte;
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
-	public void initialisiere(final IVerwaltung dieVerwaltung)
-			throws DUAInitialisierungsException {
+	public void initialisiere(final IVerwaltung dieVerwaltung) throws DUAInitialisierungsException {
 		super.initialisiere(dieVerwaltung);
 
 		if (this.publizieren) {
-			this.publikationsAnmeldungen
-			.modifiziereObjektAnmeldung(this.standardAspekte
-					.getStandardAnmeldungen(this.verwaltung
-							.getSystemObjekte()));
+			this.publikationsAnmeldungen.modifiziereObjektAnmeldung(
+					this.standardAspekte.getStandardAnmeldungen(this.verwaltung.getSystemObjekte()));
 		}
 
 		for (final SystemObject fsObj : dieVerwaltung.getSystemObjekte()) {
-			this.fahrStreifenMap.put(fsObj, new VertrauensFahrStreifen(
-					dieVerwaltung, fsObj));
+			this.fahrStreifenMap.put(fsObj, new VertrauensFahrStreifen(dieVerwaltung, fsObj));
 		}
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
 	public void aktualisiereDaten(final ResultData[] resultate) {
 		if (resultate != null) {
@@ -112,16 +102,14 @@ public class Vertrauensbereich extends AbstraktBearbeitungsKnotenAdapter {
 						if (resultat.getDataDescription().getAttributeGroup()
 								.getId() == PlPruefungLogischLVE.atgKzdId) {
 							if (resultat.getData() != null) {
-								final VertrauensFahrStreifen fs = this.fahrStreifenMap
-										.get(resultat.getObject());
+								final VertrauensFahrStreifen fs = this.fahrStreifenMap.get(resultat.getObject());
 
 								if (fs != null) {
 									datum = fs.plausibilisiere(resultat);
 								} else {
-									LOGGER
-									.warning(
-													"Datum fuer nicht identifizierbaren Fahrstreifen empfangen: " + //$NON-NLS-1$
-															resultat.getObject());
+									Vertrauensbereich.LOGGER
+									.warning("Datum fuer nicht identifizierbaren Fahrstreifen empfangen: " + //$NON-NLS-1$
+											resultat.getObject());
 								}
 							}
 						} else {
@@ -131,18 +119,12 @@ public class Vertrauensbereich extends AbstraktBearbeitungsKnotenAdapter {
 						datum = resultat.getData();
 					}
 
-					final ResultData publikationsDatum = new ResultData(
-							resultat.getObject(),
-							new DataDescription(resultat.getDataDescription()
-									.getAttributeGroup(), standardAspekte
-									.getStandardAspekt(resultat)),
-							resultat.getDataTime(), datum,
-							resultat.isDelayedData());
-					final ResultData weiterzuleitendesDatum = new ResultData(
-							resultat.getObject(),
-							resultat.getDataDescription(),
-							resultat.getDataTime(), datum,
-							resultat.isDelayedData());
+					final ResultData publikationsDatum = new ResultData(resultat.getObject(),
+							new DataDescription(resultat.getDataDescription().getAttributeGroup(),
+									standardAspekte.getStandardAspekt(resultat)),
+							resultat.getDataTime(), datum, resultat.isDelayedData());
+					final ResultData weiterzuleitendesDatum = new ResultData(resultat.getObject(),
+							resultat.getDataDescription(), resultat.getDataTime(), datum, resultat.isDelayedData());
 
 					if (this.publizieren) {
 						this.publikationsAnmeldungen.sende(publikationsDatum);
@@ -153,26 +135,18 @@ public class Vertrauensbereich extends AbstraktBearbeitungsKnotenAdapter {
 			}
 
 			if ((this.knoten != null) && !weiterzuleitendeResultate.isEmpty()) {
-				this.knoten.aktualisiereDaten(weiterzuleitendeResultate
-						.toArray(new ResultData[0]));
+				this.knoten.aktualisiereDaten(weiterzuleitendeResultate.toArray(new ResultData[0]));
 			}
 		}
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
 	public ModulTyp getModulTyp() {
 		return null;
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
 	public void aktualisierePublikation(final IDatenFlussSteuerung dfs) {
 		// Datenflusssteuerung ist hier nicht dynamisch
 	}
-
 }

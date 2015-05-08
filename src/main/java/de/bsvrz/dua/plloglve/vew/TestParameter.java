@@ -81,12 +81,10 @@ public class TestParameter {
 			} else if (testParameter.toLowerCase().equals("vertrauen")) {
 				testVertrauen = true;
 			}
-			LOGGER.info("!!! " + this + " !!!");
+			TestParameter.LOGGER.info("!!! " + this + " !!!");
 			TestParameter.instanz = this;
 		} else {
-			LOGGER.warning(
-					"Testparameter wurden bereits initialisiert mit:\n"
-							+ TestParameter.instanz);
+			TestParameter.LOGGER.warning("Testparameter wurden bereits initialisiert mit:\n" + TestParameter.instanz);
 		}
 	}
 
@@ -126,9 +124,6 @@ public class TestParameter {
 		return testAusfall;
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
 	public String toString() {
 		if (testAusfall) {

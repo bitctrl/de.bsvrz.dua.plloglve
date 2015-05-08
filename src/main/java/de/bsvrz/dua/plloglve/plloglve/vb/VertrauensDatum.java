@@ -63,9 +63,6 @@ public class VertrauensDatum implements IIntervallDatum<VertrauensDatum> {
 		return this.ausgefallen;
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
 	public boolean istGleich(final VertrauensDatum that) {
 		return this.isAusgefallen() == that.isAusgefallen();

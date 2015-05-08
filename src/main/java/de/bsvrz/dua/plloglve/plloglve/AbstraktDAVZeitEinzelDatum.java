@@ -26,15 +26,13 @@
 
 package de.bsvrz.dua.plloglve.plloglve;
 
-
 /**
  * Abstrakter Container für Daten mit den Attributen Zeitstempel und
  * Intervalllänge. Die Objekte sind nach ihrer Datenzeit sortierbar.
  *
  * @author BitCtrl Systems GmbH, Thierfelder
  */
-public class AbstraktDAVZeitEinzelDatum implements
-Comparable<AbstraktDAVZeitEinzelDatum> {
+public class AbstraktDAVZeitEinzelDatum implements Comparable<AbstraktDAVZeitEinzelDatum> {
 
 	/**
 	 * die Datenzeit des Datums.
@@ -64,9 +62,6 @@ Comparable<AbstraktDAVZeitEinzelDatum> {
 		return this.datenZeit;
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
 	public int compareTo(final AbstraktDAVZeitEinzelDatum that) {
 		return new Long(this.getDatenZeit()).compareTo(that.getDatenZeit());
@@ -76,7 +71,7 @@ Comparable<AbstraktDAVZeitEinzelDatum> {
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + (int) (datenZeit ^ (datenZeit >>> 32));
+		result = (prime * result) + (int) (datenZeit ^ (datenZeit >>> 32));
 		return result;
 	}
 

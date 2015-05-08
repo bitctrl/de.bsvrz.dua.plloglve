@@ -57,23 +57,15 @@ public class Ausfallhaeufigkeit extends AbstraktBearbeitungsKnotenAdapter {
 	 */
 	private final Map<SystemObject, AusfallFahrStreifen> fahrStreifen = new HashMap<>();
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
-	public void initialisiere(final IVerwaltung dieVerwaltung)
-			throws DUAInitialisierungsException {
+	public void initialisiere(final IVerwaltung dieVerwaltung) throws DUAInitialisierungsException {
 		super.initialisiere(dieVerwaltung);
 
 		for (final SystemObject obj : dieVerwaltung.getSystemObjekte()) {
-			this.fahrStreifen.put(obj, new AusfallFahrStreifen(dieVerwaltung,
-					obj));
+			this.fahrStreifen.put(obj, new AusfallFahrStreifen(dieVerwaltung, obj));
 		}
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
 	public void aktualisiereDaten(final ResultData[] resultate) {
 		if (resultate != null) {
@@ -83,18 +75,16 @@ public class Ausfallhaeufigkeit extends AbstraktBearbeitungsKnotenAdapter {
 				if (resultat != null) {
 
 					if (!TestParameter.getInstanz().isTestVertrauen()) {
-						if ((resultat.getDataDescription().getAttributeGroup()
-								.getId() == PlPruefungLogischLVE.atgKzdId)
+						if ((resultat.getDataDescription().getAttributeGroup().getId() == PlPruefungLogischLVE.atgKzdId)
 								&& (resultat.getData() != null)) {
-							final AusfallFahrStreifen fs = this.fahrStreifen
-									.get(resultat.getObject());
+							final AusfallFahrStreifen fs = this.fahrStreifen.get(resultat.getObject());
 
 							if (fs != null) {
 								fs.plausibilisiere(resultat);
 							} else {
-								LOGGER.error(
-										"Konnte Fahrstreifen zu Datensatz nicht identifizieren:\n" //$NON-NLS-1$
-										+ resultat);
+								Ausfallhaeufigkeit.LOGGER
+										.error("Konnte Fahrstreifen zu Datensatz nicht identifizieren:\n" //$NON-NLS-1$
+												+ resultat);
 							}
 						}
 					}
@@ -104,23 +94,16 @@ public class Ausfallhaeufigkeit extends AbstraktBearbeitungsKnotenAdapter {
 			}
 
 			if ((this.knoten != null) && !weiterzuleitendeResultate.isEmpty()) {
-				this.knoten.aktualisiereDaten(weiterzuleitendeResultate
-						.toArray(new ResultData[0]));
+				this.knoten.aktualisiereDaten(weiterzuleitendeResultate.toArray(new ResultData[0]));
 			}
 		}
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
 	public ModulTyp getModulTyp() {
 		return null;
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
 	public void aktualisierePublikation(final IDatenFlussSteuerung dfs) {
 		// hier wird nicht publiziert

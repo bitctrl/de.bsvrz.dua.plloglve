@@ -73,57 +73,49 @@ public class DiffFahrStreifen implements ClientReceiverInterface {
 	 * Variable <code>qKfz</code> mit der Information wie lange diese Variable
 	 * schon konstant ist.
 	 */
-	private final VariableMitKonstanzZaehler<Long> qKfzZaehler = new VariableMitKonstanzZaehler<Long>(
-			"qKfz"); //$NON-NLS-1$
+	private final VariableMitKonstanzZaehler<Long> qKfzZaehler = new VariableMitKonstanzZaehler<Long>("qKfz"); //$NON-NLS-1$
 
 	/**
 	 * Variable <code>qLkw</code> mit der Information wie lange diese Variable
 	 * schon konstant ist.
 	 */
-	private final VariableMitKonstanzZaehler<Long> qLkwZaehler = new VariableMitKonstanzZaehler<>(
-			"qLkw"); //$NON-NLS-1$
+	private final VariableMitKonstanzZaehler<Long> qLkwZaehler = new VariableMitKonstanzZaehler<>("qLkw"); //$NON-NLS-1$
 
 	/**
 	 * Variable <code>qPkw</code> mit der Information wie lange diese Variable
 	 * schon konstant ist..
 	 */
-	private final VariableMitKonstanzZaehler<Long> qPkwZaehler = new VariableMitKonstanzZaehler<>(
-			"qPkw"); //$NON-NLS-1$
+	private final VariableMitKonstanzZaehler<Long> qPkwZaehler = new VariableMitKonstanzZaehler<>("qPkw"); //$NON-NLS-1$
 
 	/**
 	 * Variable <code>vKfz</code> mit der Information wie lange diese Variable
 	 * schon konstant ist.
 	 */
-	private final VariableMitKonstanzZaehler<Long> vKfzZaehler = new VariableMitKonstanzZaehler<>(
-			"vKfz"); //$NON-NLS-1$
+	private final VariableMitKonstanzZaehler<Long> vKfzZaehler = new VariableMitKonstanzZaehler<>("vKfz"); //$NON-NLS-1$
 
 	/**
 	 * Variable <code>vLkw</code> mit der Information wie lange diese Variable
 	 * schon konstant ist.
 	 */
-	private final VariableMitKonstanzZaehler<Long> vLkwZaehler = new VariableMitKonstanzZaehler<>(
-			"vLkw"); //$NON-NLS-1$
+	private final VariableMitKonstanzZaehler<Long> vLkwZaehler = new VariableMitKonstanzZaehler<>("vLkw"); //$NON-NLS-1$
 
 	/**
 	 * Variable <code>vPkw</code> mit der Information wie lange diese Variable
 	 * schon konstant ist.
 	 */
-	private final VariableMitKonstanzZaehler<Long> vPkwZaehler = new VariableMitKonstanzZaehler<>(
-			"vPkw"); //$NON-NLS-1$
+	private final VariableMitKonstanzZaehler<Long> vPkwZaehler = new VariableMitKonstanzZaehler<>("vPkw"); //$NON-NLS-1$
 
 	/**
 	 * Variable <code>sKfz</code> mit der Information wie lange diese Variable
 	 * schon konstant ist.
 	 */
-	private final VariableMitKonstanzZaehler<Long> sKfzZaehler = new VariableMitKonstanzZaehler<>(
-			"sKfz"); //$NON-NLS-1$
+	private final VariableMitKonstanzZaehler<Long> sKfzZaehler = new VariableMitKonstanzZaehler<>("sKfz"); //$NON-NLS-1$
 
 	/**
 	 * Variable <code>b</code> mit der Information wie lange diese Variable
 	 * schon konstant ist.
 	 */
-	private final VariableMitKonstanzZaehler<Long> bZaehler = new VariableMitKonstanzZaehler<>(
-			"b"); //$NON-NLS-1$
+	private final VariableMitKonstanzZaehler<Long> bZaehler = new VariableMitKonstanzZaehler<>("b"); //$NON-NLS-1$
 
 	/**
 	 * Standardkonstruktor.
@@ -133,25 +125,19 @@ public class DiffFahrStreifen implements ClientReceiverInterface {
 	 * @param obj
 	 *            ein Systemobjekt eines Fahrstreifens
 	 */
-	protected DiffFahrStreifen(final IVerwaltung verwaltung,
-			final SystemObject obj) {
+	protected DiffFahrStreifen(final IVerwaltung verwaltung, final SystemObject obj) {
 		if (DiffFahrStreifen.dieVerwaltung == null) {
 			DiffFahrStreifen.dieVerwaltung = verwaltung;
 			DiffFahrStreifen.diffParaBeschreibung = new DataDescription(
-					DiffFahrStreifen.dieVerwaltung
-							.getVerbindung()
-							.getDataModel()
-							.getAttributeGroup(
-									"atg.verkehrsDatenDifferenzialKontrolleFs"), //$NON-NLS-1$
-							DiffFahrStreifen.dieVerwaltung.getVerbindung()
-							.getDataModel()
+					DiffFahrStreifen.dieVerwaltung.getVerbindung().getDataModel()
+					.getAttributeGroup("atg.verkehrsDatenDifferenzialKontrolleFs"), //$NON-NLS-1$
+					DiffFahrStreifen.dieVerwaltung.getVerbindung().getDataModel()
 							.getAspect(DaVKonstanten.ASP_PARAMETER_SOLL));
 
 		}
 
-		DiffFahrStreifen.dieVerwaltung.getVerbindung().subscribeReceiver(this,
-				obj, DiffFahrStreifen.diffParaBeschreibung,
-				ReceiveOptions.normal(), ReceiverRole.receiver());
+		DiffFahrStreifen.dieVerwaltung.getVerbindung().subscribeReceiver(this, obj,
+				DiffFahrStreifen.diffParaBeschreibung, ReceiveOptions.normal(), ReceiverRole.receiver());
 
 	}
 
@@ -174,27 +160,18 @@ public class DiffFahrStreifen implements ClientReceiverInterface {
 		Data copy = null;
 
 		if ((resultat != null) && (resultat.getData() != null)) {
-			if (resultat.getDataDescription().getAttributeGroup().getPid()
-					.equals(DUAKonstanten.ATG_KZD)) {
+			if (resultat.getDataDescription().getAttributeGroup().getPid().equals(DUAKonstanten.ATG_KZD)) {
 				final Data data = resultat.getData();
 
 				if (parameter != null) {
-					final long qKfz = data
-							.getItem("qKfz").getUnscaledValue("Wert").longValue(); //$NON-NLS-1$ //$NON-NLS-2$
-					final long qLkw = data
-							.getItem("qLkw").getUnscaledValue("Wert").longValue(); //$NON-NLS-1$ //$NON-NLS-2$
-					final long qPkw = data
-							.getItem("qPkw").getUnscaledValue("Wert").longValue(); //$NON-NLS-1$ //$NON-NLS-2$
-					final long vPkw = data
-							.getItem("vPkw").getUnscaledValue("Wert").longValue(); //$NON-NLS-1$ //$NON-NLS-2$
-					final long vLkw = data
-							.getItem("vLkw").getUnscaledValue("Wert").longValue(); //$NON-NLS-1$ //$NON-NLS-2$
-					final long vKfz = data
-							.getItem("vKfz").getUnscaledValue("Wert").longValue(); //$NON-NLS-1$ //$NON-NLS-2$
-					final long b = data
-							.getItem("b").getUnscaledValue("Wert").longValue(); //$NON-NLS-1$ //$NON-NLS-2$
-					final long sKfz = data
-							.getItem("sKfz").getUnscaledValue("Wert").longValue(); //$NON-NLS-1$ //$NON-NLS-2$
+					final long qKfz = data.getItem("qKfz").getUnscaledValue("Wert").longValue(); //$NON-NLS-1$ //$NON-NLS-2$
+					final long qLkw = data.getItem("qLkw").getUnscaledValue("Wert").longValue(); //$NON-NLS-1$ //$NON-NLS-2$
+					final long qPkw = data.getItem("qPkw").getUnscaledValue("Wert").longValue(); //$NON-NLS-1$ //$NON-NLS-2$
+					final long vPkw = data.getItem("vPkw").getUnscaledValue("Wert").longValue(); //$NON-NLS-1$ //$NON-NLS-2$
+					final long vLkw = data.getItem("vLkw").getUnscaledValue("Wert").longValue(); //$NON-NLS-1$ //$NON-NLS-2$
+					final long vKfz = data.getItem("vKfz").getUnscaledValue("Wert").longValue(); //$NON-NLS-1$ //$NON-NLS-2$
+					final long b = data.getItem("b").getUnscaledValue("Wert").longValue(); //$NON-NLS-1$ //$NON-NLS-2$
+					final long sKfz = data.getItem("sKfz").getUnscaledValue("Wert").longValue(); //$NON-NLS-1$ //$NON-NLS-2$
 
 					qKfzZaehler.aktualisiere(qKfz);
 					qLkwZaehler.aktualisiere(qLkw);
@@ -207,74 +184,50 @@ public class DiffFahrStreifen implements ClientReceiverInterface {
 
 					final Collection<VariableMitKonstanzZaehler<Long>> puffer = new ArrayList<>();
 					synchronized (parameter) {
-						if ((qKfz > 0)
-								&& (qKfzZaehler.getWertIstKonstantSeit() > parameter
-										.getMaxAnzKonstanzqKfz())) {
+						if ((qKfz > 0) && (qKfzZaehler.getWertIstKonstantSeit() > parameter.getMaxAnzKonstanzqKfz())) {
 							puffer.add(qKfzZaehler);
 						}
-						if ((qLkw > 0)
-								&& (qLkwZaehler.getWertIstKonstantSeit() > parameter
-										.getMaxAnzKonstanzqLkw())) {
+						if ((qLkw > 0) && (qLkwZaehler.getWertIstKonstantSeit() > parameter.getMaxAnzKonstanzqLkw())) {
 							puffer.add(qLkwZaehler);
 						}
-						if ((qPkw > 0)
-								&& (qPkwZaehler.getWertIstKonstantSeit() > parameter
-										.getMaxAnzKonstanzqPkw())) {
+						if ((qPkw > 0) && (qPkwZaehler.getWertIstKonstantSeit() > parameter.getMaxAnzKonstanzqPkw())) {
 							puffer.add(qPkwZaehler);
 						}
 
-						if ((vKfz > 0)
-								&& (vKfzZaehler.getWertIstKonstantSeit() > parameter
-										.getMaxAnzKonstanzvKfz())) {
+						if ((vKfz > 0) && (vKfzZaehler.getWertIstKonstantSeit() > parameter.getMaxAnzKonstanzvKfz())) {
 							puffer.add(vKfzZaehler);
 						}
-						if ((vLkw > 0)
-								&& (vLkwZaehler.getWertIstKonstantSeit() > parameter
-										.getMaxAnzKonstanzvLkw())) {
+						if ((vLkw > 0) && (vLkwZaehler.getWertIstKonstantSeit() > parameter.getMaxAnzKonstanzvLkw())) {
 							puffer.add(vLkwZaehler);
 						}
-						if ((vPkw > 0)
-								&& (vPkwZaehler.getWertIstKonstantSeit() > parameter
-										.getMaxAnzKonstanzvPkw())) {
+						if ((vPkw > 0) && (vPkwZaehler.getWertIstKonstantSeit() > parameter.getMaxAnzKonstanzvPkw())) {
 							puffer.add(vPkwZaehler);
 						}
 
 						if ((sKfz > 0)
-								&& (sKfzZaehler.getWertIstKonstantSeit() > parameter
-										.getMaxAnzKonstanzStreung())) {
+								&& (sKfzZaehler.getWertIstKonstantSeit() > parameter.getMaxAnzKonstanzStreung())) {
 							puffer.add(sKfzZaehler);
 						}
-						if ((b > 0)
-								&& (bZaehler.getWertIstKonstantSeit() > parameter
-										.getMaxAnzKonstanzBelegung())) {
+						if ((b > 0) && (bZaehler.getWertIstKonstantSeit() > parameter.getMaxAnzKonstanzBelegung())) {
 							puffer.add(bZaehler);
 						}
 
 						if (!puffer.isEmpty()) {
 							copy = data.createModifiableCopy();
 							for (final VariableMitKonstanzZaehler<Long> wert : puffer) {
-								copy.getItem(wert.getName())
-								.getUnscaledValue("Wert").set(DUAKonstanten.FEHLERHAFT); //$NON-NLS-1$
-								copy.getItem(wert.getName())
-								.getItem("Status")
-								.getItem("MessWertErsetzung")
-								.getUnscaledValue("Implausibel").set(DUAKonstanten.JA); //$NON-NLS-1$
+								copy.getItem(wert.getName()).getUnscaledValue("Wert").set(DUAKonstanten.FEHLERHAFT); //$NON-NLS-1$
+								copy.getItem(wert.getName()).getItem("Status").getItem("MessWertErsetzung")
+										.getUnscaledValue("Implausibel").set(DUAKonstanten.JA); //$NON-NLS-1$
 
-								DUAUtensilien.sendeBetriebsmeldung(
-										DiffFahrStreifen.dieVerwaltung
-												.getVerbindung(),
-										DiffFahrStreifen.dieVerwaltung
-												.getBmvIdKonverter(),
-										MessageGrade.WARNING, resultat
-												.getObject(), "Fahrstreifen " + //$NON-NLS-1$
-												resultat.getObject()
-												+ ": " + wert); //$NON-NLS-1$
+								DUAUtensilien.sendeBetriebsmeldung(DiffFahrStreifen.dieVerwaltung.getVerbindung(),
+										DiffFahrStreifen.dieVerwaltung.getBmvIdKonverter(), MessageGrade.WARNING,
+										resultat.getObject(), "Fahrstreifen " + //$NON-NLS-1$
+												resultat.getObject() + ": " + wert); //$NON-NLS-1$
 							}
 						}
 					}
 				} else {
-					LOGGER
-					.warning("Fuer Fahrstreifen " + this + //$NON-NLS-1$
+					DiffFahrStreifen.LOGGER.warning("Fuer Fahrstreifen " + this + //$NON-NLS-1$
 							" wurden noch keine Parameter für die Differenzialkontrolle empfangen"); //$NON-NLS-1$
 				}
 			}
@@ -283,17 +236,13 @@ public class DiffFahrStreifen implements ClientReceiverInterface {
 		return copy;
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
 	public void update(final ResultData[] davParameterFeld) {
 		if (davParameterFeld != null) {
 			for (final ResultData davParameter : davParameterFeld) {
 				if ((davParameter != null) && (davParameter.getData() != null)) {
 					synchronized (this) {
-						parameter = new AtgVerkehrsDatenDifferenzialKontrolleFs(
-								davParameter.getData());
+						parameter = new AtgVerkehrsDatenDifferenzialKontrolleFs(davParameter.getData());
 					}
 				}
 			}

@@ -51,8 +51,7 @@ import de.bsvrz.sys.funclib.debug.Debug;
  *
  * @author BitCtrl Systems GmbH, Görlitz
  */
-public class PlPruefungAusfall implements ClientSenderInterface,
-PlPruefungInterface {
+public class PlPruefungAusfall implements ClientSenderInterface, PlPruefungInterface {
 
 	private static final Debug LOGGER = Debug.getLogger();
 
@@ -103,28 +102,24 @@ PlPruefungInterface {
 	 * @param alLogger
 	 *            Argumente
 	 */
-	public PlPruefungAusfall(final ClientDavInterface dav,
-			final ArgumentList alLogger) {
+	public PlPruefungAusfall(final ClientDavInterface dav, final ArgumentList alLogger) {
 		this.dav = dav;
 
 		/*
 		 * Melde Sender für FS an
 		 */
-		PlPruefungAusfall.fs = this.dav.getDataModel().getObject(
-				Konfiguration.PID_TESTFS1_KZD);
+		PlPruefungAusfall.fs = this.dav.getDataModel().getObject(Konfiguration.PID_TESTFS1_KZD);
 
-		PlPruefungAusfall.ddKzdSend = new DataDescription(this.dav
-				.getDataModel().getAttributeGroup(DUAKonstanten.ATG_KZD),
-				this.dav.getDataModel().getAspect(
-						DUAKonstanten.ASP_EXTERNE_ERFASSUNG));
+		PlPruefungAusfall.ddKzdSend = new DataDescription(
+				this.dav.getDataModel().getAttributeGroup(DUAKonstanten.ATG_KZD),
+				this.dav.getDataModel().getAspect(DUAKonstanten.ASP_EXTERNE_ERFASSUNG));
 
 		try {
 			kzdImport = new ParaKZDLogImport(dav, PlPruefungAusfall.fs,
-					Konfiguration.TEST_DATEN_VERZ
-					+ Konfiguration.DATENCSV_PARAMETER);
+					Konfiguration.TEST_DATEN_VERZ + Konfiguration.DATENCSV_PARAMETER);
 			kzdImport.importParaAusfall();
 		} catch (final Exception e) {
-			LOGGER.error("Kann Test nicht konfigurieren: " + e);
+			PlPruefungAusfall.LOGGER.error("Kann Test nicht konfigurieren: " + e);
 		}
 	}
 
@@ -138,8 +133,7 @@ PlPruefungInterface {
 		/*
 		 * Sender anmelden
 		 */
-		this.dav.subscribeSender(this, PlPruefungAusfall.fs,
-				PlPruefungAusfall.ddKzdSend, SenderRole.source());
+		this.dav.subscribeSender(this, PlPruefungAusfall.fs, PlPruefungAusfall.ddKzdSend, SenderRole.source());
 
 		/*
 		 * Initialisiere Parameter Importer für fehlerfreie und fehlerhafte DS
@@ -150,8 +144,7 @@ PlPruefungInterface {
 		paraImpFSOK = new TestFahrstreifenImporter(this.dav,
 				Konfiguration.TEST_DATEN_VERZ + Konfiguration.DATENCSV_FS_OK);
 		paraImpFSFehler = new TestFahrstreifenImporter(this.dav,
-				Konfiguration.TEST_DATEN_VERZ
-				+ Konfiguration.DATENCSV_FS_FEHLER);
+				Konfiguration.TEST_DATEN_VERZ + Konfiguration.DATENCSV_FS_FEHLER);
 
 		/*
 		 * Setze Intervallparameter
@@ -177,17 +170,14 @@ PlPruefungInterface {
 		for (int i = 1; i <= 1440; i++) {
 
 			if ((zeileFSOK = paraImpFSOK
-					.getNaechstenDatensatz(PlPruefungAusfall.ddKzdSend
-							.getAttributeGroup())) == null) {
+					.getNaechstenDatensatz(PlPruefungAusfall.ddKzdSend.getAttributeGroup())) == null) {
 				paraImpFSOK.reset();
 				paraImpFSOK.getNaechsteZeile();
-				zeileFSOK = paraImpFSOK
-						.getNaechstenDatensatz(PlPruefungAusfall.ddKzdSend
-								.getAttributeGroup());
+				zeileFSOK = paraImpFSOK.getNaechstenDatensatz(PlPruefungAusfall.ddKzdSend.getAttributeGroup());
 			}
 
-			final ResultData resultat1 = new ResultData(PlPruefungAusfall.fs,
-					PlPruefungAusfall.ddKzdSend, pruefZeit, zeileFSOK);
+			final ResultData resultat1 = new ResultData(PlPruefungAusfall.fs, PlPruefungAusfall.ddKzdSend, pruefZeit,
+					zeileFSOK);
 			this.dav.sendData(resultat1);
 
 			// Erhöht Prüfzeitstempel entsprechend der Intervalllänge
@@ -211,13 +201,10 @@ PlPruefungInterface {
 		/*
 		 * Initialisiert Meldungsfilter
 		 */
-		final FilterMeldung meldFilter = new FilterMeldung(this, dav,
-				"Ausfallhäufigkeit", 1457, meldungHyst);
-		LOGGER
-		.info("Meldungsfilter initialisiert: Erwarte 1457 Meldungen mit \"Ausfallhäufigkeit\"");
+		final FilterMeldung meldFilter = new FilterMeldung(this, dav, "Ausfallhäufigkeit", 1457, meldungHyst);
+		PlPruefungAusfall.LOGGER.info("Meldungsfilter initialisiert: Erwarte 1457 Meldungen mit \"Ausfallhäufigkeit\"");
 
-		final SimpleDateFormat dateFormat = new SimpleDateFormat(
-				DUAKonstanten.ZEIT_FORMAT_GENAU_STR);
+		final SimpleDateFormat dateFormat = new SimpleDateFormat(DUAKonstanten.ZEIT_FORMAT_GENAU_STR);
 
 		/*
 		 * Sende 2500 Datensätze
@@ -234,24 +221,20 @@ PlPruefungInterface {
 			if ((i >= 929) && (i <= 1032)) {
 
 				if ((zeileFSFehler = paraImpFSFehler
-						.getNaechstenDatensatz(PlPruefungAusfall.ddKzdSend
-								.getAttributeGroup())) == null) {
+						.getNaechstenDatensatz(PlPruefungAusfall.ddKzdSend.getAttributeGroup())) == null) {
 					paraImpFSFehler.reset();
 					paraImpFSFehler.getNaechsteZeile();
 					zeileFSFehler = paraImpFSFehler
-							.getNaechstenDatensatz(PlPruefungAusfall.ddKzdSend
-									.getAttributeGroup());
+							.getNaechstenDatensatz(PlPruefungAusfall.ddKzdSend.getAttributeGroup());
 				}
 
 				final Data dummy = zeileFSFehler.createModifiableCopy();
 				// boolean set = false;
-				for (final String attribut : new String[] { "qKfz", "qLkw",
-						"qPkw", "vKfz", "vLkw", "vPkw", "b" }) {
+				for (final String attribut : new String[] { "qKfz", "qLkw", "qPkw", "vKfz", "vLkw", "vPkw", "b" }) {
 					// if(R.nextBoolean()){
 					// set = true;
 					// if(R.nextBoolean()){
-					dummy.getItem(attribut).getUnscaledValue("Wert")
-							.set(DUAKonstanten.FEHLERHAFT);
+					dummy.getItem(attribut).getUnscaledValue("Wert").set(DUAKonstanten.FEHLERHAFT);
 					// if(R.nextBoolean()){
 					// dummy.getItem(attribut).getItem("Status").getItem("MessWertErsetzung").getUnscaledValue("Implausibel").set(DUAKonstanten.JA);
 					// }
@@ -267,26 +250,20 @@ PlPruefungInterface {
 				// dummy.getItem("qPkw").getUnscaledValue("Wert").set(DUAKonstanten.FEHLERHAFT);
 				// }
 
-				System.out.println(dateFormat.format(new Date(pruefZeit))
-						+ ": Intervall " + i + ": Sende Datum FEHLER");
-				final ResultData resultat1 = new ResultData(
-						PlPruefungAusfall.fs, PlPruefungAusfall.ddKzdSend,
+				System.out
+						.println(dateFormat.format(new Date(pruefZeit)) + ": Intervall " + i + ": Sende Datum FEHLER");
+				final ResultData resultat1 = new ResultData(PlPruefungAusfall.fs, PlPruefungAusfall.ddKzdSend,
 						pruefZeit, dummy);
 				this.dav.sendData(resultat1);
 			} else {
-				System.out.println(dateFormat.format(new Date(pruefZeit))
-						+ ": Intervall " + i + ": Sende Datum OK");
+				System.out.println(dateFormat.format(new Date(pruefZeit)) + ": Intervall " + i + ": Sende Datum OK");
 				if ((zeileFSOK = paraImpFSOK
-						.getNaechstenDatensatz(PlPruefungAusfall.ddKzdSend
-								.getAttributeGroup())) == null) {
+						.getNaechstenDatensatz(PlPruefungAusfall.ddKzdSend.getAttributeGroup())) == null) {
 					paraImpFSOK.reset();
 					paraImpFSOK.getNaechsteZeile();
-					zeileFSOK = paraImpFSOK
-							.getNaechstenDatensatz(PlPruefungAusfall.ddKzdSend
-									.getAttributeGroup());
+					zeileFSOK = paraImpFSOK.getNaechstenDatensatz(PlPruefungAusfall.ddKzdSend.getAttributeGroup());
 				}
-				final ResultData resultat1 = new ResultData(
-						PlPruefungAusfall.fs, PlPruefungAusfall.ddKzdSend,
+				final ResultData resultat1 = new ResultData(PlPruefungAusfall.fs, PlPruefungAusfall.ddKzdSend,
 						pruefZeit, zeileFSOK);
 				this.dav.sendData(resultat1);
 			}
@@ -311,8 +288,7 @@ PlPruefungInterface {
 			//
 		}
 
-		final String warnung = meldFilter.getErwarteteAnzahlMeldungen()
-				+ " Betriebsmeldungen erhalten";
+		final String warnung = meldFilter.getErwarteteAnzahlMeldungen() + " Betriebsmeldungen erhalten";
 		if (!meldFilter.wurdeAnzahlEingehalten()) {
 			if (useAssert) {
 				Assert.assertTrue(warnung, false);
@@ -328,8 +304,7 @@ PlPruefungInterface {
 		/*
 		 * Sender abmelden
 		 */
-		this.dav.unsubscribeSender(this, PlPruefungAusfall.fs,
-				PlPruefungAusfall.ddKzdSend);
+		this.dav.unsubscribeSender(this, PlPruefungAusfall.fs, PlPruefungAusfall.ddKzdSend);
 	}
 
 	/**
@@ -345,21 +320,13 @@ PlPruefungInterface {
 		}
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
-	public void dataRequest(final SystemObject object,
-			final DataDescription dataDescription, final byte state) {
+	public void dataRequest(final SystemObject object, final DataDescription dataDescription, final byte state) {
 		// VOID
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
-	public boolean isRequestSupported(final SystemObject object,
-			final DataDescription dataDescription) {
+	public boolean isRequestSupported(final SystemObject object, final DataDescription dataDescription) {
 		return false;
 	}
 

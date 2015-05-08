@@ -136,22 +136,20 @@ public class PruefeMarkierung implements ClientReceiverInterface {
 	 *            Das zu prüfende Fahrstreifenobjekt
 	 * @throws Exception
 	 */
-	public PruefeMarkierung(final PlPruefungInterface caller,
-			final ClientDavInterface dav, final SystemObject fs)
-			throws Exception {
+	public PruefeMarkierung(final PlPruefungInterface caller, final ClientDavInterface dav, final SystemObject fs)
+					throws Exception {
 		this.caller = caller; // aufrufende Klasse uebernehmen
 		this.dav = dav;
 
 		/*
 		 * Melde Empfänger für KZD und LZD unter dem Aspekt PlPrüfung Logisch an
 		 */
-		PruefeMarkierung.ddKzdEmpf = new DataDescription(this.dav
-				.getDataModel().getAttributeGroup(DUAKonstanten.ATG_KZD),
-				this.dav.getDataModel().getAspect(
-						DUAKonstanten.ASP_PL_PRUEFUNG_LOGISCH));
+		PruefeMarkierung.ddKzdEmpf = new DataDescription(
+				this.dav.getDataModel().getAttributeGroup(DUAKonstanten.ATG_KZD),
+				this.dav.getDataModel().getAspect(DUAKonstanten.ASP_PL_PRUEFUNG_LOGISCH));
 
-		this.dav.subscribeReceiver(this, fs, PruefeMarkierung.ddKzdEmpf,
-				ReceiveOptions.normal(), ReceiverRole.receiver());
+		this.dav.subscribeReceiver(this, fs, PruefeMarkierung.ddKzdEmpf, ReceiveOptions.normal(),
+				ReceiverRole.receiver());
 	}
 
 	/**
@@ -166,8 +164,7 @@ public class PruefeMarkierung implements ClientReceiverInterface {
 	public void listenOK(final String pruefeAttr, final long pruefZeitstempel) {
 		pruefeAlleAttr = false;
 		paramOK(pruefeAttr, pruefZeitstempel);
-		LOGGER.info(
-				"Prüfe Datum auf fehlerfreies Attribut: " + pruefeAttr); //$NON-NLS-1$
+		PruefeMarkierung.LOGGER.info("Prüfe Datum auf fehlerfreies Attribut: " + pruefeAttr); //$NON-NLS-1$
 	}
 
 	/**
@@ -180,8 +177,7 @@ public class PruefeMarkierung implements ClientReceiverInterface {
 	public void listenOK(final long pruefZeitstempel) {
 		pruefeAlleAttr = true;
 		paramOK("alle", pruefZeitstempel); //$NON-NLS-1$
-		LOGGER.info(
-				"Prüfe alle Attribute des Datums auf fehlerfreiheit"); //$NON-NLS-1$
+		PruefeMarkierung.LOGGER.info("Prüfe alle Attribute des Datums auf fehlerfreiheit"); //$NON-NLS-1$
 	}
 
 	/**
@@ -212,8 +208,7 @@ public class PruefeMarkierung implements ClientReceiverInterface {
 	public void listenFehl(final String pruefeAttr, final long pruefZeitstempel) {
 		pruefeAlleAttr = false;
 		paramFehl(pruefeAttr, pruefZeitstempel);
-		LOGGER
-		.info("Prüfe Datum auf Fehlerhaft-Markierung des Attributes: " + pruefeAttr); //$NON-NLS-1$
+		PruefeMarkierung.LOGGER.info("Prüfe Datum auf Fehlerhaft-Markierung des Attributes: " + pruefeAttr); //$NON-NLS-1$
 	}
 
 	/**
@@ -226,8 +221,7 @@ public class PruefeMarkierung implements ClientReceiverInterface {
 	public void listenFehl(final long pruefZeitstempel) {
 		pruefeAlleAttr = true;
 		paramFehl("alle", pruefZeitstempel); //$NON-NLS-1$
-		LOGGER.info(
-				"Prüfe Datum auf Fehlerhaft-Markierung aller Attribute"); //$NON-NLS-1$
+		PruefeMarkierung.LOGGER.info("Prüfe Datum auf Fehlerhaft-Markierung aller Attribute"); //$NON-NLS-1$
 	}
 
 	/**
@@ -258,8 +252,7 @@ public class PruefeMarkierung implements ClientReceiverInterface {
 	public void listenImpl(final String pruefeAttr, final long pruefZeitstempel) {
 		pruefeAlleAttr = false;
 		paramImpl(pruefeAttr, pruefZeitstempel);
-		LOGGER
-		.info("Prüfe Datum auf Implausibel-Markierung des Attributes: " + pruefeAttr); //$NON-NLS-1$
+		PruefeMarkierung.LOGGER.info("Prüfe Datum auf Implausibel-Markierung des Attributes: " + pruefeAttr); //$NON-NLS-1$
 	}
 
 	/**
@@ -272,8 +265,7 @@ public class PruefeMarkierung implements ClientReceiverInterface {
 	public void listenImpl(final long pruefZeitstempel) {
 		pruefeAlleAttr = true;
 		paramImpl("alle", pruefZeitstempel); //$NON-NLS-1$
-		LOGGER.info(
-				"Prüfe Datum auf Implausibel-Markierung aller Attribute"); //$NON-NLS-1$
+		PruefeMarkierung.LOGGER.info("Prüfe Datum auf Implausibel-Markierung aller Attribute"); //$NON-NLS-1$
 	}
 
 	/**
@@ -301,12 +293,11 @@ public class PruefeMarkierung implements ClientReceiverInterface {
 	 * @param pruefZeitstempel
 	 *            Der zu prüfende Zeitstempel
 	 */
-	public void listenFehlImpl(final String pruefeAttr,
-			final long pruefZeitstempel) {
+	public void listenFehlImpl(final String pruefeAttr, final long pruefZeitstempel) {
 		pruefeAlleAttr = false;
 		paramFehlImpl(pruefeAttr, pruefZeitstempel);
-		LOGGER
-		.info("Prüfe Datum auf Fehlerhaft- und Implausibel-Markierung des Attributes: " + pruefeAttr); //$NON-NLS-1$
+		PruefeMarkierung.LOGGER
+				.info("Prüfe Datum auf Fehlerhaft- und Implausibel-Markierung des Attributes: " + pruefeAttr); //$NON-NLS-1$
 	}
 
 	/**
@@ -319,8 +310,7 @@ public class PruefeMarkierung implements ClientReceiverInterface {
 	public void listenFehlImpl(final long pruefZeitstempel) {
 		pruefeAlleAttr = true;
 		paramFehlImpl("alle", pruefZeitstempel); //$NON-NLS-1$
-		LOGGER
-		.info("Prüfe Datum auf Fehlerhaft- und Implausibel-Markierung aller Attribute"); //$NON-NLS-1$
+		PruefeMarkierung.LOGGER.info("Prüfe Datum auf Fehlerhaft- und Implausibel-Markierung aller Attribute"); //$NON-NLS-1$
 	}
 
 	/**
@@ -332,8 +322,7 @@ public class PruefeMarkierung implements ClientReceiverInterface {
 	 * @param pruefZeitstempel
 	 *            Der zu prüfende Zeitstempel
 	 */
-	private void paramFehlImpl(final String pruefeAttr,
-			final long pruefZeitstempel) {
+	private void paramFehlImpl(final String pruefeAttr, final long pruefZeitstempel) {
 		this.pruefZeitstempel = pruefZeitstempel;
 		this.pruefeAttr = pruefeAttr;
 		this.sollWert = DUAKonstanten.FEHLERHAFT;
@@ -360,8 +349,7 @@ public class PruefeMarkierung implements ClientReceiverInterface {
 	 */
 	private void pruefeDS(final Data data) {
 		if (pruefeAlleAttr) {
-			for (final String attribut : new String[] { "qKfz", "qLkw", "vPkw",
-					"vLkw", "b", "sKfz" }) {
+			for (final String attribut : new String[] { "qKfz", "qLkw", "vPkw", "vLkw", "b", "sKfz" }) {
 				boolean ignore = false;
 				synchronized (this.ignoreAttributeList) {
 					for (final String attrIgnore : this.ignoreAttributeList) {
@@ -401,31 +389,26 @@ public class PruefeMarkierung implements ClientReceiverInterface {
 	 *            Ergebnisdatensatz
 	 */
 	private void pruefeAttr(final String pruefeAttr, final Data data) {
-		final long wert = data.getItem(pruefeAttr)
-				.getUnscaledValue("Wert").longValue(); //$NON-NLS-1$
-		final int impl = data
-				.getItem(pruefeAttr)
-				.getItem("Status").getItem("MessWertErsetzung").getUnscaledValue("Implausibel").intValue(); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+		final long wert = data.getItem(pruefeAttr).getUnscaledValue("Wert").longValue(); //$NON-NLS-1$
+		final int impl = data.getItem(pruefeAttr).getItem("Status").getItem("MessWertErsetzung") //$NON-NLS-1$ //$NON-NLS-2$
+				.getUnscaledValue("Implausibel").intValue(); //$NON-NLS-1$
 
-		final SimpleDateFormat dateFormat = new SimpleDateFormat(
-				DUAKonstanten.ZEIT_FORMAT_GENAU_STR);
+		final SimpleDateFormat dateFormat = new SimpleDateFormat(DUAKonstanten.ZEIT_FORMAT_GENAU_STR);
 		if (sollWert < 0) {
 			if (wert != sollWert) {
-				final String fehler = "Fehlerhafter Attributwert (" + pruefeAttr + "): " + sollWert + " (SOLL)<>(IST) " + wert + //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+				final String fehler = "Fehlerhafter Attributwert (" + pruefeAttr + "): " + sollWert + " (SOLL)<>(IST) " //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+						+ wert +
 						"\n" + data;
 				if (useAssert) {
 					// System.out.println(DUAKonstanten.ZEIT_FORMAT_GENAU.format(new
 					// Date(this.pruefZeitstempel)) + " --> FEHLER\n" + fehler);
 					Assert.assertTrue(fehler, false);
 				} else {
-					System.out.println(dateFormat.format(new Date(
-							this.pruefZeitstempel)) + " --> FEHLER\n" + fehler);
+					System.out.println(dateFormat.format(new Date(this.pruefZeitstempel)) + " --> FEHLER\n" + fehler);
 				}
 			} else {
-				System.out
-				.println(dateFormat.format(new Date(
-						this.pruefZeitstempel))
-						+ " --> OK (" + pruefeAttr + "):\n" + sollWert + " (SOLL)==(IST) " + wert); //$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$
+				System.out.println(dateFormat.format(new Date(this.pruefZeitstempel)) + " --> OK (" + pruefeAttr //$NON-NLS-1$
+						+ "):\n" + sollWert + " (SOLL)==(IST) " + wert); //$NON-NLS-1$//$NON-NLS-2$
 			}
 		} else if (sollWert == PruefeMarkierung.SOLL_WERT_KEIN_FEHLER) {
 			if (wert < 0) {
@@ -435,46 +418,38 @@ public class PruefeMarkierung implements ClientReceiverInterface {
 					// Date(this.pruefZeitstempel)) + " --> FEHLER\n" + fehler);
 					Assert.assertTrue(fehler, false);
 				} else {
-					System.out.println(dateFormat.format(new Date(
-							this.pruefZeitstempel)) + " --> FEHLER\n" + fehler);
+					System.out.println(dateFormat.format(new Date(this.pruefZeitstempel)) + " --> FEHLER\n" + fehler);
 				}
 			} else {
-				System.out
-				.println(dateFormat.format(new Date(
-						this.pruefZeitstempel))
-						+ " --> OK " + pruefeAttr + " :\n (Wert >= 0) (SOLL)==(IST) " + wert); //$NON-NLS-1$//$NON-NLS-2$
+				System.out.println(dateFormat.format(new Date(this.pruefZeitstempel)) + " --> OK " + pruefeAttr //$NON-NLS-1$
+						+ " :\n (Wert >= 0) (SOLL)==(IST) " + wert); //$NON-NLS-1$
 			}
 		}
 
 		if (sollImplausibel != PruefeMarkierung.SOLL_IMPLAUSIBEL_KEINE_PRUEFUNG) {
 			if (sollImplausibel != impl) {
-				final String fehler = "Fehlerhafte Implausibel-Markierung (" + pruefeAttr + "): " + sollImplausibel + " (SOLL)<>(IST) " + impl + ",\n" + data; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
+				final String fehler = "Fehlerhafte Implausibel-Markierung (" + pruefeAttr + "): " + sollImplausibel //$NON-NLS-1$ //$NON-NLS-2$
+						+ " (SOLL)<>(IST) " + impl + ",\n" + data; //$NON-NLS-1$ //$NON-NLS-2$
 				if (useAssert) {
 					// System.out.println(DUAKonstanten.ZEIT_FORMAT_GENAU.format(new
 					// Date(this.pruefZeitstempel)) + " --> FEHLER\n" + fehler);
 					Assert.assertTrue(fehler, false);
 				} else {
-					System.out.println(dateFormat.format(new Date(
-							this.pruefZeitstempel)) + " --> FEHLER\n" + fehler);
+					System.out.println(dateFormat.format(new Date(this.pruefZeitstempel)) + " --> FEHLER\n" + fehler);
 				}
 			} else {
-				System.out
-				.println(dateFormat.format(new Date(
-						this.pruefZeitstempel))
-						+ " --> OK " + pruefeAttr + " (" + sollImplausibel + "):\n" + (impl == 0 ? "nicht implausibel" : "implausibel") + " (SOLL)==(IST) " + (sollImplausibel == 0 ? "nicht implausibel" : "implausibel")); //$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$
+				System.out.println(dateFormat.format(new Date(this.pruefZeitstempel)) + " --> OK " + pruefeAttr + " (" //$NON-NLS-1$//$NON-NLS-2$
+						+ sollImplausibel + "):\n" + (impl == 0 ? "nicht implausibel" : "implausibel") //$NON-NLS-1$
+						+ " (SOLL)==(IST) " + (sollImplausibel == 0 ? "nicht implausibel" : "implausibel"));
 			}
 		}
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
 	public void update(final ResultData[] results) {
 		for (final ResultData result : results) {
 			// Pruefe Ergebnisdatensatz auf Zeitstempel
-			if ((pruefZeitstempel > 0) && (result.getData() != null)
-					&& (result.getDataTime() == pruefZeitstempel)) {
+			if ((pruefZeitstempel > 0) && (result.getData() != null) && (result.getDataTime() == pruefZeitstempel)) {
 				pruefeDS(result.getData());
 				caller.doNotify();
 			}

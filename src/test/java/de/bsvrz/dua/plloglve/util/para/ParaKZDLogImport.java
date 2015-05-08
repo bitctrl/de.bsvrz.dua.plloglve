@@ -57,8 +57,8 @@ public class ParaKZDLogImport extends AbstraktParameterImport {
 	 * @throws Exception
 	 *             wenn die Datei nicht geöffnet werden konnte
 	 */
-	public ParaKZDLogImport(final ClientDavInterface dav,
-			final SystemObject objekt, final String csvQuelle) throws Exception {
+	public ParaKZDLogImport(final ClientDavInterface dav, final SystemObject objekt, final String csvQuelle)
+			throws Exception {
 		super(dav, objekt, csvQuelle);
 	}
 
@@ -68,22 +68,16 @@ public class ParaKZDLogImport extends AbstraktParameterImport {
 	 * @param optionen
 	 *            aktuelle Prüf-Optionen
 	 */
-	public final void setOptionen(
-			final OptionenPlausibilitaetsPruefungLogischVerkehr optionen) {
+	public final void setOptionen(final OptionenPlausibilitaetsPruefungLogischVerkehr optionen) {
 		this.optionen = optionen;
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
 	public Data fuelleRestAttribute(final Data datensatz) {
 		try {
-			datensatz
-			.getItem("Urlasser").getReferenceValue("BenutzerReferenz").setSystemObject(null); //$NON-NLS-1$//$NON-NLS-2$
-			datensatz.getItem("Urlasser").getTextValue("Ursache").setText(""); //$NON-NLS-1$//$NON-NLS-2$  //$NON-NLS-3$
-			datensatz
-			.getItem("Urlasser").getTextValue("Veranlasser").setText(""); //$NON-NLS-1$//$NON-NLS-2$  //$NON-NLS-3$
+			datensatz.getItem("Urlasser").getReferenceValue("BenutzerReferenz").setSystemObject(null); //$NON-NLS-1$//$NON-NLS-2$
+			datensatz.getItem("Urlasser").getTextValue("Ursache").setText(""); //$NON-NLS-1$//$NON-NLS-2$ //$NON-NLS-3$
+			datensatz.getItem("Urlasser").getTextValue("Veranlasser").setText(""); //$NON-NLS-1$//$NON-NLS-2$ //$NON-NLS-3$
 		} catch (final Exception ex) {
 			System.out.println("Kein Urlasser"); //$NON-NLS-1$
 		}
@@ -91,12 +85,8 @@ public class ParaKZDLogImport extends AbstraktParameterImport {
 		return datensatz;
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
-	protected String getAttributPfadVon(final String attributInCSVDatei,
-			final int index) {
+	protected String getAttributPfadVon(final String attributInCSVDatei, final int index) {
 		if (attributInCSVDatei.equals("vGrenz")) { //$NON-NLS-1$
 			return "vKfzGrenz"; //$NON-NLS-1$
 		}
@@ -105,8 +95,7 @@ public class ParaKZDLogImport extends AbstraktParameterImport {
 		}
 
 		if (attributInCSVDatei.endsWith(")")) { //$NON-NLS-1$
-			final String nummerStr = attributInCSVDatei.substring(
-					attributInCSVDatei.length() - 2,
+			final String nummerStr = attributInCSVDatei.substring(attributInCSVDatei.length() - 2,
 					attributInCSVDatei.length() - 1);
 			int nummer = -1;
 			try {
@@ -170,13 +159,10 @@ public class ParaKZDLogImport extends AbstraktParameterImport {
 		return null;
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
 	protected AttributeGroup getParameterAtg() {
-		return AbstraktParameterImport.sDav.getDataModel().getAttributeGroup(
-				AtgVerkehrsDatenKZIPlPruefLogisch.getPid());
+		return AbstraktParameterImport.sDav.getDataModel()
+				.getAttributeGroup(AtgVerkehrsDatenKZIPlPruefLogisch.getPid());
 	}
 
 }

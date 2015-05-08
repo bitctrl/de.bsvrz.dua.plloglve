@@ -76,9 +76,6 @@ public class PlLogischLVEStandard extends AbstraktBearbeitungsKnotenAdapter {
 	private final Map<SystemObject, AbstraktPLFahrStreifen> kzdFahrStreifen = new HashMap<>();
 
 	/**
-	 * {@inheritDoc}<br>
-	 * .
-	 *
 	 * Es wird fuer alle Fahrstreifen (Systemobjekte vom Typ
 	 * <code>typ.fahrStreifen</code>, also insbesondere auch Objekte vom Typ
 	 * <code>typ.fahrStreifenLangZeit</code>) eine Instanz der Klasse
@@ -91,8 +88,7 @@ public class PlLogischLVEStandard extends AbstraktBearbeitungsKnotenAdapter {
 	 * plausibilisieren Kurzzeitdaten
 	 */
 	@Override
-	public void initialisiere(final IVerwaltung dieVerwaltung)
-			throws DUAInitialisierungsException {
+	public void initialisiere(final IVerwaltung dieVerwaltung) throws DUAInitialisierungsException {
 		super.initialisiere(dieVerwaltung);
 
 		IVerwaltungMitGuete verwaltungMitGuete = null;
@@ -104,13 +100,10 @@ public class PlLogischLVEStandard extends AbstraktBearbeitungsKnotenAdapter {
 		}
 
 		for (final SystemObject obj : dieVerwaltung.getSystemObjekte()) {
-			if (obj.getType().getPid()
-					.equals(DUAKonstanten.TYP_FAHRSTREIFEN_LZ)) {
-				lzdFahrStreifen.put(obj, new LzdPLFahrStreifen(
-						verwaltungMitGuete, obj));
+			if (obj.getType().getPid().equals(DUAKonstanten.TYP_FAHRSTREIFEN_LZ)) {
+				lzdFahrStreifen.put(obj, new LzdPLFahrStreifen(verwaltungMitGuete, obj));
 			}
-			kzdFahrStreifen.put(obj, new KzdPLFahrStreifen(verwaltungMitGuete,
-					obj));
+			kzdFahrStreifen.put(obj, new KzdPLFahrStreifen(verwaltungMitGuete, obj));
 		}
 
 		final String patch = dieVerwaltung.getArgument("altAnlagen");
@@ -123,9 +116,6 @@ public class PlLogischLVEStandard extends AbstraktBearbeitungsKnotenAdapter {
 		return PlLogischLVEStandard.baWuePatch;
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
 	public void aktualisiereDaten(final ResultData[] resultate) {
 		if (resultate != null) {
@@ -133,8 +123,7 @@ public class PlLogischLVEStandard extends AbstraktBearbeitungsKnotenAdapter {
 			for (final ResultData resultat : resultate) {
 				if (resultat != null) {
 
-					if (TestParameter.getInstanz().isTestAusfall()
-							|| TestParameter.getInstanz().isTestVertrauen()) {
+					if (TestParameter.getInstanz().isTestAusfall() || TestParameter.getInstanz().isTestVertrauen()) {
 						weiterzuleitendeResultate.add(resultat);
 					} else {
 						AbstraktPLFahrStreifen fahrStreifen = null;
@@ -144,32 +133,26 @@ public class PlLogischLVEStandard extends AbstraktBearbeitungsKnotenAdapter {
 							/**
 							 * Es wurden KZD empfangen
 							 */
-							fahrStreifen = this.kzdFahrStreifen.get(resultat
-									.getObject());
-						} else if (resultat.getDataDescription()
-								.getAttributeGroup().getId() == PlPruefungLogischLVE.atgLzdId) {
+							fahrStreifen = this.kzdFahrStreifen.get(resultat.getObject());
+						} else if (resultat.getDataDescription().getAttributeGroup()
+								.getId() == PlPruefungLogischLVE.atgLzdId) {
 							/**
 							 * Es wurden LZD empfangen
 							 */
-							fahrStreifen = this.lzdFahrStreifen.get(resultat
-									.getObject());
+							fahrStreifen = this.lzdFahrStreifen.get(resultat.getObject());
 						}
 
 						Data pData = null;
 						if (fahrStreifen != null) {
 							pData = fahrStreifen.plausibilisiere(resultat);
 						} else {
-							LOGGER
-							.warning(
-									"Fahrstreifen " + resultat.getObject() + //$NON-NLS-1$
+							PlLogischLVEStandard.LOGGER.warning("Fahrstreifen " + resultat.getObject() + //$NON-NLS-1$
 									" konnte nicht identifiziert werden"); //$NON-NLS-1$
 						}
 
 						if (pData != null) {
-							final ResultData ersetztesResultat = new ResultData(
-									resultat.getObject(),
-									resultat.getDataDescription(),
-									resultat.getDataTime(), pData,
+							final ResultData ersetztesResultat = new ResultData(resultat.getObject(),
+									resultat.getDataDescription(), resultat.getDataTime(), pData,
 									resultat.isDelayedData());
 							weiterzuleitendeResultate.add(ersetztesResultat);
 						} else {
@@ -180,26 +163,18 @@ public class PlLogischLVEStandard extends AbstraktBearbeitungsKnotenAdapter {
 			}
 
 			if ((this.knoten != null) && !weiterzuleitendeResultate.isEmpty()) {
-				this.knoten.aktualisiereDaten(weiterzuleitendeResultate
-						.toArray(new ResultData[0]));
+				this.knoten.aktualisiereDaten(weiterzuleitendeResultate.toArray(new ResultData[0]));
 			}
 		}
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
 	public ModulTyp getModulTyp() {
 		return null;
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
 	public void aktualisierePublikation(final IDatenFlussSteuerung dfs) {
 		// hier findet keine Publikation statt
 	}
-
 }
