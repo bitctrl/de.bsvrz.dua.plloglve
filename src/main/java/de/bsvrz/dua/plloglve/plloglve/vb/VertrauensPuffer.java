@@ -43,13 +43,9 @@ public class VertrauensPuffer extends IntervallPuffer<VertrauensDatum> {
 	public final long getAusfall() {
 		long ausfall = 0;
 
-		synchronized (this.puffer) {
-			for (final Intervall<VertrauensDatum> intervall : this.puffer
-					.values()) {
-				if (intervall.getInhalt().isAusgefallen()) {
-					ausfall += intervall.getIntervallEnde()
-							- intervall.getIntervallStart();
-				}
+		for (final Intervall<VertrauensDatum> intervall : getPuffer()) {
+			if (intervall.getInhalt().isAusgefallen()) {
+				ausfall += intervall.getIntervallEnde() - intervall.getIntervallStart();
 			}
 		}
 
