@@ -3,7 +3,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>de.bsvrz.dua</groupId>
 	<artifactId>de.bsvrz.dua.plloglve</artifactId>
-	<version>1.2.2</version>
+	<version>1.2.3-SNAPSHOT</version>
 
 	<name>Pl-Prüfung logisch LVE (SWE 4.2)</name>
 	<url>http://www.bitctrl.de</url>
@@ -24,7 +24,7 @@
 		<project.build.sourceEncoding>ISO-8859-1</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>ISO-8859-1</project.reporting.outputEncoding>
 		<java.version>7</java.version>
-		<project.status>FREI</project.status>
+		<project.status>BETA</project.status>
 		<project.standDatum>2015-08-07</project.standDatum>
 	</properties>
 
