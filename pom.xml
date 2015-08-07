@@ -24,8 +24,8 @@
 		<project.build.sourceEncoding>ISO-8859-1</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>ISO-8859-1</project.reporting.outputEncoding>
 		<java.version>7</java.version>
-		<project.status>BETA</project.status>
-		<project.standDatum>2015-04-16</project.standDatum>
+		<project.status>FREI</project.status>
+		<project.standDatum>2015-08-07</project.standDatum>
 	</properties>
 
 	<repositories>
