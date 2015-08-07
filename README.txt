@@ -24,6 +24,9 @@ einem parametrierbaren Aspekt publiziert.
 Versionsgeschichte
 ==================
 
+1.2.2
+- direkter Memberzugriff in Klassen der de.bsvrz.sys.funclib.bitctrl beseitigt
+
 1.2.1
 - BezugsZeitraum: Fehlerausgabe korrigiert für den Fall, dass die Einschaltschwelle überschritten war und 
   die Ausschaltschwelle noch nicht unterschritten wurde
