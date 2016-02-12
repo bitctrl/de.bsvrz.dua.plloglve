@@ -2,8 +2,7 @@
 *  Segment 4 Datenübernahme und Aufbereitung (DUA), SWE 4.2 Pl-Prüfung logisch LVE  *
 *************************************************************************************
 
-Version: 1.2.1
-
+Version: ${version}
 
 Übersicht
 =========
