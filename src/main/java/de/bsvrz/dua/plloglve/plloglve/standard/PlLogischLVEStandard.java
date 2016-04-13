@@ -162,8 +162,8 @@ public class PlLogischLVEStandard extends AbstraktBearbeitungsKnotenAdapter {
 				}
 			}
 
-			if ((this.knoten != null) && !weiterzuleitendeResultate.isEmpty()) {
-				this.knoten.aktualisiereDaten(weiterzuleitendeResultate.toArray(new ResultData[0]));
+			if ((getKnoten() != null) && !weiterzuleitendeResultate.isEmpty()) {
+				getKnoten().aktualisiereDaten(weiterzuleitendeResultate.toArray(new ResultData[0]));
 			}
 		}
 	}

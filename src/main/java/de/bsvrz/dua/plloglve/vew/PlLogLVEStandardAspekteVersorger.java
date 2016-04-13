@@ -57,11 +57,11 @@ public class PlLogLVEStandardAspekteVersorger extends StandardAspekteVersorger {
 	@Override
 	protected void init() throws DUAInitialisierungsException {
 
-		this.standardAspekte = new StandardAspekteAdapter(new StandardPublikationsZuordnung[] {
+		setStandardAspekte(new StandardAspekteAdapter(new StandardPublikationsZuordnung[] {
 				new StandardPublikationsZuordnung(DUAKonstanten.TYP_FAHRSTREIFEN, DUAKonstanten.ATG_KZD,
 						DUAKonstanten.ASP_EXTERNE_ERFASSUNG, DUAKonstanten.ASP_PL_PRUEFUNG_LOGISCH),
 				new StandardPublikationsZuordnung(DUAKonstanten.TYP_FAHRSTREIFEN, DUAKonstanten.ATG_LZD,
-						DUAKonstanten.ASP_EXTERNE_ERFASSUNG, DUAKonstanten.ASP_PL_PRUEFUNG_LOGISCH) });
+						DUAKonstanten.ASP_EXTERNE_ERFASSUNG, DUAKonstanten.ASP_PL_PRUEFUNG_LOGISCH) }));
 
 	}
 }

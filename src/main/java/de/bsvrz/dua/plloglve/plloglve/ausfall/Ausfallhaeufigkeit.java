@@ -83,8 +83,8 @@ public class Ausfallhaeufigkeit extends AbstraktBearbeitungsKnotenAdapter {
 								fs.plausibilisiere(resultat);
 							} else {
 								Ausfallhaeufigkeit.LOGGER
-										.error("Konnte Fahrstreifen zu Datensatz nicht identifizieren:\n" //$NON-NLS-1$
-												+ resultat);
+								.error("Konnte Fahrstreifen zu Datensatz nicht identifizieren:\n" //$NON-NLS-1$
+										+ resultat);
 							}
 						}
 					}
@@ -93,8 +93,8 @@ public class Ausfallhaeufigkeit extends AbstraktBearbeitungsKnotenAdapter {
 				}
 			}
 
-			if ((this.knoten != null) && !weiterzuleitendeResultate.isEmpty()) {
-				this.knoten.aktualisiereDaten(weiterzuleitendeResultate.toArray(new ResultData[0]));
+			if ((getKnoten() != null) && !weiterzuleitendeResultate.isEmpty()) {
+				getKnoten().aktualisiereDaten(weiterzuleitendeResultate.toArray(new ResultData[0]));
 			}
 		}
 	}

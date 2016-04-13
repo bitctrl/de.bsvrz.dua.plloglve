@@ -89,8 +89,8 @@ public class DifferenzialKontrolle extends AbstraktBearbeitungsKnotenAdapter {
 									data = fs.plausibilisiere(resultat);
 								} else {
 									DifferenzialKontrolle.LOGGER
-											.error("Fahrstreifen zu Datensatz konnte nicht identifiziert werden:\n" + //$NON-NLS-1$
-													resultat);
+									.error("Fahrstreifen zu Datensatz konnte nicht identifiziert werden:\n" + //$NON-NLS-1$
+											resultat);
 								}
 
 								if (data != null) {
@@ -115,8 +115,8 @@ public class DifferenzialKontrolle extends AbstraktBearbeitungsKnotenAdapter {
 				}
 			}
 
-			if ((this.knoten != null) && !weiterzuleitendeResultate.isEmpty()) {
-				this.knoten.aktualisiereDaten(weiterzuleitendeResultate.toArray(new ResultData[0]));
+			if ((getKnoten() != null) && !weiterzuleitendeResultate.isEmpty()) {
+				getKnoten().aktualisiereDaten(weiterzuleitendeResultate.toArray(new ResultData[0]));
 			}
 		}
 	}

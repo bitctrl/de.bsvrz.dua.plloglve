@@ -90,11 +90,11 @@ public class VerwaltungPlPruefungLogischLVE extends AbstraktVerwaltungsAdapterMi
 
 		String infoStr = ""; //$NON-NLS-1$
 		final Collection<SystemObject> plLogLveObjekte = DUAUtensilien.getBasisInstanzen(
-				this.verbindung.getDataModel().getType(DUAKonstanten.TYP_FAHRSTREIFEN), this.verbindung,
+				this.getVerbindung().getDataModel().getType(DUAKonstanten.TYP_FAHRSTREIFEN), this.getVerbindung(),
 				this.getKonfigurationsBereiche());
-		this.objekte = plLogLveObjekte.toArray(new SystemObject[0]);
+		setSystemObjekte(plLogLveObjekte);
 
-		for (final SystemObject obj : this.objekte) {
+		for (final SystemObject obj : getSystemObjekte()) {
 			infoStr += obj + "\n"; //$NON-NLS-1$
 		}
 		VerwaltungPlPruefungLogischLVE.LOGGER.config("---\nBetrachtete Objekte:\n" + infoStr + "---\n"); //$NON-NLS-1$ //$NON-NLS-2$
@@ -111,17 +111,17 @@ public class VerwaltungPlPruefungLogischLVE extends AbstraktVerwaltungsAdapterMi
 		this.plPruefungFormal.setNaechstenBearbeitungsKnoten(this.plPruefungLogischLVE);
 
 		final DataDescription anmeldungsBeschreibungKZD = new DataDescription(
-				this.verbindung.getDataModel().getAttributeGroup(DUAKonstanten.ATG_KZD),
-				this.verbindung.getDataModel().getAspect(DUAKonstanten.ASP_EXTERNE_ERFASSUNG));
+				getVerbindung().getDataModel().getAttributeGroup(DUAKonstanten.ATG_KZD),
+				getVerbindung().getDataModel().getAspect(DUAKonstanten.ASP_EXTERNE_ERFASSUNG));
 		final DataDescription anmeldungsBeschreibungLZD = new DataDescription(
-				this.verbindung.getDataModel().getAttributeGroup(DUAKonstanten.ATG_LZD),
-				this.verbindung.getDataModel().getAspect(DUAKonstanten.ASP_EXTERNE_ERFASSUNG));
+				getVerbindung().getDataModel().getAttributeGroup(DUAKonstanten.ATG_LZD),
+				getVerbindung().getDataModel().getAspect(DUAKonstanten.ASP_EXTERNE_ERFASSUNG));
 
-		this.verbindung.subscribeReceiver(this, this.objekte, anmeldungsBeschreibungKZD, ReceiveOptions.normal(),
+		this.getVerbindung().subscribeReceiver(this, getSystemObjekte(), anmeldungsBeschreibungKZD, ReceiveOptions.normal(),
 				ReceiverRole.receiver());
-		for (final SystemObject fsObj : this.objekte) {
+		for (final SystemObject fsObj : getSystemObjekte()) {
 			if (fsObj.isOfType(DUAKonstanten.TYP_FAHRSTREIFEN_LZ)) {
-				this.verbindung.subscribeReceiver(this, fsObj, anmeldungsBeschreibungLZD, ReceiveOptions.delayed(),
+				this.getVerbindung().subscribeReceiver(this, fsObj, anmeldungsBeschreibungLZD, ReceiveOptions.delayed(),
 						ReceiverRole.receiver());
 			}
 		}

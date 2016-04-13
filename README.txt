@@ -23,6 +23,9 @@ einem parametrierbaren Aspekt publiziert.
 Versionsgeschichte
 ==================
 
+1.3.0
+- Umstellung auf Funclib-Bitctrl-Dua
+
 1.2.2
 - direkter Memberzugriff in Klassen der de.bsvrz.sys.funclib.bitctrl beseitigt
 

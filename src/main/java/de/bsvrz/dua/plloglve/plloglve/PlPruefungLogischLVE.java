@@ -91,7 +91,7 @@ public class PlPruefungLogischLVE extends AbstraktBearbeitungsKnotenAdapter {
 	 *            Instanz des Moduls Pl-Prüfung logisch LVE
 	 */
 	public PlPruefungLogischLVE(final IStandardAspekte stdAspekte) {
-		this.standardAspekte = stdAspekte;
+		setStandardAspekte(stdAspekte);
 	}
 
 	@Override
@@ -102,7 +102,7 @@ public class PlPruefungLogischLVE extends AbstraktBearbeitungsKnotenAdapter {
 		PlPruefungLogischLVE.atgLzdId = dieVerwaltung.getVerbindung().getDataModel()
 				.getAttributeGroup(DUAKonstanten.ATG_LZD).getId();
 
-		this.vb = new Vertrauensbereich(this.standardAspekte);
+		this.vb = new Vertrauensbereich(getStandardAspekte());
 
 		this.standard.initialisiere(dieVerwaltung);
 		this.standard.setNaechstenBearbeitungsKnoten(this.diff);
@@ -113,9 +113,9 @@ public class PlPruefungLogischLVE extends AbstraktBearbeitungsKnotenAdapter {
 		this.ausfall.initialisiere(dieVerwaltung);
 		this.ausfall.setNaechstenBearbeitungsKnoten(this.vb);
 
-		this.vb.setPublikation(this.publizieren);
+		this.vb.setPublikation(isPublizieren());
 		this.vb.initialisiere(dieVerwaltung);
-		this.vb.setNaechstenBearbeitungsKnoten(this.knoten);
+		this.vb.setNaechstenBearbeitungsKnoten(getKnoten());
 	}
 
 	@Override

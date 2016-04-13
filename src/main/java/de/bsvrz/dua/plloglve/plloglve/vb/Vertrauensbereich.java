@@ -71,16 +71,16 @@ public class Vertrauensbereich extends AbstraktBearbeitungsKnotenAdapter {
 	 *            Modul
 	 */
 	public Vertrauensbereich(final IStandardAspekte stdAspekte) {
-		this.standardAspekte = stdAspekte;
+		setStandardAspekte(stdAspekte);
 	}
 
 	@Override
 	public void initialisiere(final IVerwaltung dieVerwaltung) throws DUAInitialisierungsException {
 		super.initialisiere(dieVerwaltung);
 
-		if (this.publizieren) {
-			this.publikationsAnmeldungen.modifiziereObjektAnmeldung(
-					this.standardAspekte.getStandardAnmeldungen(this.verwaltung.getSystemObjekte()));
+		if (isPublizieren()) {
+			getPublikationsAnmeldungen().modifiziereObjektAnmeldung(
+					getStandardAspekte().getStandardAnmeldungen(getVerwaltung().getSystemObjekte()));
 		}
 
 		for (final SystemObject fsObj : dieVerwaltung.getSystemObjekte()) {
@@ -121,21 +121,21 @@ public class Vertrauensbereich extends AbstraktBearbeitungsKnotenAdapter {
 
 					final ResultData publikationsDatum = new ResultData(resultat.getObject(),
 							new DataDescription(resultat.getDataDescription().getAttributeGroup(),
-									standardAspekte.getStandardAspekt(resultat)),
+									getStandardAspekte().getStandardAspekt(resultat)),
 							resultat.getDataTime(), datum, resultat.isDelayedData());
 					final ResultData weiterzuleitendesDatum = new ResultData(resultat.getObject(),
 							resultat.getDataDescription(), resultat.getDataTime(), datum, resultat.isDelayedData());
 
-					if (this.publizieren) {
-						this.publikationsAnmeldungen.sende(publikationsDatum);
+					if (isPublizieren()) {
+						getPublikationsAnmeldungen().sende(publikationsDatum);
 					}
 
 					weiterzuleitendeResultate.add(weiterzuleitendesDatum);
 				}
 			}
 
-			if ((this.knoten != null) && !weiterzuleitendeResultate.isEmpty()) {
-				this.knoten.aktualisiereDaten(weiterzuleitendeResultate.toArray(new ResultData[0]));
+			if ((getKnoten() != null) && !weiterzuleitendeResultate.isEmpty()) {
+				getKnoten().aktualisiereDaten(weiterzuleitendeResultate.toArray(new ResultData[0]));
 			}
 		}
 	}
