@@ -59,12 +59,12 @@ IntervallPufferElementAdapter<VertrauensDatum> {
 		 * ein Datum gilt als ausgefallen, wenn es als fehlerhaft bzw.
 		 * implausibel gekennzeichnet ist
 		 */
-		this.inhalt = new VertrauensDatum(
+		setInhalt(new VertrauensDatum(
 				(originalDatum.getData().getItem(name)
 						.getUnscaledValue("Wert").longValue() == DUAKonstanten.FEHLERHAFT) || //$NON-NLS-1$
-						(originalDatum.getData().getItem(name)
-								.getItem("Status").getItem("MessWertErsetzung")
-								.getUnscaledValue("Implausibel").longValue() == DUAKonstanten.JA)); //$NON-NLS-1$
+				(originalDatum.getData().getItem(name)
+						.getItem("Status").getItem("MessWertErsetzung")
+						.getUnscaledValue("Implausibel").longValue() == DUAKonstanten.JA))); //$NON-NLS-1$
 	}
 
 }
