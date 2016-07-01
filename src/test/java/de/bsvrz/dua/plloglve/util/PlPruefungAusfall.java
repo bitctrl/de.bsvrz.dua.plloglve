@@ -1,5 +1,5 @@
 /*
- * Segment 4 Datenübernahme und Aufbereitung (DUA), SWE 4.2 Pl-Prüfung logisch LVE
+ * Segment 4 DatenÃ¼bernahme und Aufbereitung (DUA), SWE 4.2 Pl-PrÃ¼fung logisch LVE
  * Copyright (C) 2007-2015 BitCtrl Systems GmbH
  *
  * This program is free software; you can redistribute it and/or modify it under
@@ -18,7 +18,7 @@
  *
  * Contact Information:<br>
  * BitCtrl Systems GmbH<br>
- * Weißenfelser Straße 67<br>
+ * WeiÃŸenfelser StraÃŸe 67<br>
  * 04229 Leipzig<br>
  * Phone: +49 341-490670<br>
  * mailto: info@bitctrl.de
@@ -49,7 +49,7 @@ import de.bsvrz.sys.funclib.debug.Debug;
 /**
  * Tests.
  *
- * @author BitCtrl Systems GmbH, Görlitz
+ * @author BitCtrl Systems GmbH, GÃ¶rlitz
  */
 public class PlPruefungAusfall implements ClientSenderInterface, PlPruefungInterface {
 
@@ -75,7 +75,7 @@ public class PlPruefungAusfall implements ClientSenderInterface, PlPruefungInter
 	private ParaKZDLogImport kzdImport;
 
 	/**
-	 * Sende-Datenbeschreibung für KZD.
+	 * Sende-Datenbeschreibung fÃ¼r KZD.
 	 */
 	public static DataDescription ddKzdSend = null;
 
@@ -85,7 +85,7 @@ public class PlPruefungAusfall implements ClientSenderInterface, PlPruefungInter
 	private ClientDavInterface dav = null;
 
 	/**
-	 * Intervalllänge in Millisekunden.
+	 * IntervalllÃ¤nge in Millisekunden.
 	 */
 	static long intervall = 100L;
 
@@ -95,7 +95,7 @@ public class PlPruefungAusfall implements ClientSenderInterface, PlPruefungInter
 	private int meldungHyst = 3;
 
 	/**
-	 * Sendet Testdaten und prüft Ausfallkontrolle.
+	 * Sendet Testdaten und prÃ¼ft Ausfallkontrolle.
 	 *
 	 * @param dav
 	 *            Datenverteilerverbindung
@@ -106,7 +106,7 @@ public class PlPruefungAusfall implements ClientSenderInterface, PlPruefungInter
 		this.dav = dav;
 
 		/*
-		 * Melde Sender für FS an
+		 * Melde Sender fÃ¼r FS an
 		 */
 		PlPruefungAusfall.fs = this.dav.getDataModel().getObject(Konfiguration.PID_TESTFS1_KZD);
 
@@ -124,7 +124,7 @@ public class PlPruefungAusfall implements ClientSenderInterface, PlPruefungInter
 	}
 
 	/**
-	 * Prüfung der Ausfallkontrolle.
+	 * PrÃ¼fung der Ausfallkontrolle.
 	 *
 	 * @throws Exception
 	 *             wird weitergereicht
@@ -136,7 +136,7 @@ public class PlPruefungAusfall implements ClientSenderInterface, PlPruefungInter
 		this.dav.subscribeSender(this, PlPruefungAusfall.fs, PlPruefungAusfall.ddKzdSend, SenderRole.source());
 
 		/*
-		 * Initialisiere Parameter Importer für fehlerfreie und fehlerhafte DS
+		 * Initialisiere Parameter Importer fÃ¼r fehlerfreie und fehlerhafte DS
 		 */
 		TestFahrstreifenImporter paraImpFSOK = null;
 		TestFahrstreifenImporter paraImpFSFehler = null;
@@ -164,9 +164,9 @@ public class PlPruefungAusfall implements ClientSenderInterface, PlPruefungInter
 		Long aktZeit;
 
 		/*
-		 * Sendet fehlerfreie DS für einen Tag
+		 * Sendet fehlerfreie DS fÃ¼r einen Tag
 		 */
-		System.out.println("Sende fehlerfreie DS für 1 Tag (1440)");
+		System.out.println("Sende fehlerfreie DS fÃ¼r 1 Tag (1440)");
 		for (int i = 1; i <= 1440; i++) {
 
 			if ((zeileFSOK = paraImpFSOK
@@ -180,7 +180,7 @@ public class PlPruefungAusfall implements ClientSenderInterface, PlPruefungInter
 					zeileFSOK);
 			this.dav.sendData(resultat1);
 
-			// Erhöht Prüfzeitstempel entsprechend der Intervalllänge
+			// ErhÃ¶ht PrÃ¼fzeitstempel entsprechend der IntervalllÃ¤nge
 			pruefZeit = pruefZeit + PlPruefungAusfall.intervall;
 
 			// Warte bis Intervallende
@@ -194,29 +194,29 @@ public class PlPruefungAusfall implements ClientSenderInterface, PlPruefungInter
 		}
 
 		/*
-		 * Prüfung
+		 * PrÃ¼fung
 		 */
-		System.out.println("Beginne Prüfung");
+		System.out.println("Beginne PrÃ¼fung");
 
 		/*
 		 * Initialisiert Meldungsfilter
 		 */
-		final FilterMeldung meldFilter = new FilterMeldung(this, dav, "Ausfallhäufigkeit", 1457, meldungHyst);
-		PlPruefungAusfall.LOGGER.info("Meldungsfilter initialisiert: Erwarte 1457 Meldungen mit \"Ausfallhäufigkeit\"");
+		final FilterMeldung meldFilter = new FilterMeldung(this, dav, "AusfallhÃ¤ufigkeit", 1457, meldungHyst);
+		PlPruefungAusfall.LOGGER.info("Meldungsfilter initialisiert: Erwarte 1457 Meldungen mit \"AusfallhÃ¤ufigkeit\"");
 
 		final SimpleDateFormat dateFormat = new SimpleDateFormat(DUAKonstanten.ZEIT_FORMAT_GENAU_STR);
 
 		/*
-		 * Sende 2500 Datensätze
+		 * Sende 2500 DatensÃ¤tze
 		 */
 		for (int i = 1; i <= 2500; i++) {
 			/*
 			 * Sende im Intervall von 929 - 1032 fehlerhafte Daten Dabei wird
-			 * zum Intervall 972 der Maximalwert der Ausfallhäufigkeit (3% =
-			 * 43,2 Intervalle) überschritten und zum Intervall 2429 wieder
+			 * zum Intervall 972 der Maximalwert der AusfallhÃ¤ufigkeit (3% =
+			 * 43,2 Intervalle) Ã¼berschritten und zum Intervall 2429 wieder
 			 * unterschritten
 			 *
-			 * Für die restlichen Intervalle werden fehlerfreie Daten gesendet
+			 * FÃ¼r die restlichen Intervalle werden fehlerfreie Daten gesendet
 			 */
 			if ((i >= 929) && (i <= 1032)) {
 
@@ -267,7 +267,7 @@ public class PlPruefungAusfall implements ClientSenderInterface, PlPruefungInter
 						pruefZeit, zeileFSOK);
 				this.dav.sendData(resultat1);
 			}
-			// Erhöht Prüfzeitstempel entsprechend der Intervalllänge
+			// ErhÃ¶ht PrÃ¼fzeitstempel entsprechend der IntervalllÃ¤nge
 			pruefZeit = pruefZeit + PlPruefungAusfall.intervall;
 
 			// Warte bis Intervallende
@@ -299,7 +299,7 @@ public class PlPruefungAusfall implements ClientSenderInterface, PlPruefungInter
 			System.out.println(warnung);
 		}
 
-		System.out.println("Prüfung erfolgreich abgeschlossen");
+		System.out.println("PrÃ¼fung erfolgreich abgeschlossen");
 
 		/*
 		 * Sender abmelden

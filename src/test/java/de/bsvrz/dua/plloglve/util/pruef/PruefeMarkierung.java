@@ -1,5 +1,5 @@
 /*
- * Segment 4 Datenübernahme und Aufbereitung (DUA), SWE 4.2 Pl-Prüfung logisch LVE
+ * Segment 4 DatenÃ¼bernahme und Aufbereitung (DUA), SWE 4.2 Pl-PrÃ¼fung logisch LVE
  * Copyright (C) 2007-2015 BitCtrl Systems GmbH
  *
  * This program is free software; you can redistribute it and/or modify it under
@@ -18,7 +18,7 @@
  *
  * Contact Information:<br>
  * BitCtrl Systems GmbH<br>
- * Weißenfelser Straße 67<br>
+ * WeiÃŸenfelser StraÃŸe 67<br>
  * 04229 Leipzig<br>
  * Phone: +49 341-490670<br>
  * mailto: info@bitctrl.de
@@ -49,7 +49,7 @@ import de.bsvrz.sys.funclib.debug.Debug;
  * KZD Listener Liest Ergebnis-CSV-Datei Wartet auf gesendete und gepruefte
  * Daten und gibt diese an Vergleicher-Klasse weiter.
  *
- * @author BitCtrl Systems GmbH, Görlitz
+ * @author BitCtrl Systems GmbH, GÃ¶rlitz
  */
 public class PruefeMarkierung implements ClientReceiverInterface {
 
@@ -82,7 +82,7 @@ public class PruefeMarkierung implements ClientReceiverInterface {
 	private long pruefZeitstempel = -1;
 
 	/**
-	 * Gibt an, welches Attribut getestet werden soll "alle" = prüfe alle
+	 * Gibt an, welches Attribut getestet werden soll "alle" = prÃ¼fe alle
 	 * Attribute.
 	 */
 	private boolean pruefeAlleAttr = false;
@@ -99,33 +99,33 @@ public class PruefeMarkierung implements ClientReceiverInterface {
 	private int sollImplausibel;
 
 	/**
-	 * Der repräsentative Wert um die Prüfung des Wertes abzuschalten
+	 * Der reprÃ¤sentative Wert um die PrÃ¼fung des Wertes abzuschalten
 	 */
 	private static final int SOLL_WERT_KEINE_PRUEFUNG = 0;
 
 	/**
-	 * Der repräsentative Wert für die Prüfung auf einen fehlerfreien Wert
+	 * Der reprÃ¤sentative Wert fÃ¼r die PrÃ¼fung auf einen fehlerfreien Wert
 	 */
 	private static final int SOLL_WERT_KEIN_FEHLER = 1;
 
 	/**
-	 * Der repräsentative Wert um die Prüfung des Implausibelzustandes
+	 * Der reprÃ¤sentative Wert um die PrÃ¼fung des Implausibelzustandes
 	 * abzuschalten
 	 */
 	private static final int SOLL_IMPLAUSIBEL_KEINE_PRUEFUNG = -1;
 
 	/**
-	 * Empfange-Datenbeschreibung für KZD
+	 * Empfange-Datenbeschreibung fÃ¼r KZD
 	 */
 	public static DataDescription ddKzdEmpf;
 
 	/**
-	 * Empfange-Datenbeschreibung für LZD
+	 * Empfange-Datenbeschreibung fÃ¼r LZD
 	 */
 	public static DataDescription ddLzdEmpf;
 
 	/**
-	 * Prüft einen Ergebnisdatensatz mit entsprechendem Zeitstempel auf
+	 * PrÃ¼ft einen Ergebnisdatensatz mit entsprechendem Zeitstempel auf
 	 * Fehlerfreiheit bzw. Fehlerhaftigkeit
 	 *
 	 * @param caller
@@ -133,7 +133,7 @@ public class PruefeMarkierung implements ClientReceiverInterface {
 	 * @param dav
 	 *            Datenverteilerverbindung
 	 * @param fs
-	 *            Das zu prüfende Fahrstreifenobjekt
+	 *            Das zu prÃ¼fende Fahrstreifenobjekt
 	 * @throws Exception
 	 */
 	public PruefeMarkierung(final PlPruefungInterface caller, final ClientDavInterface dav, final SystemObject fs)
@@ -142,7 +142,7 @@ public class PruefeMarkierung implements ClientReceiverInterface {
 		this.dav = dav;
 
 		/*
-		 * Melde Empfänger für KZD und LZD unter dem Aspekt PlPrüfung Logisch an
+		 * Melde EmpfÃ¤nger fÃ¼r KZD und LZD unter dem Aspekt PlPrÃ¼fung Logisch an
 		 */
 		PruefeMarkierung.ddKzdEmpf = new DataDescription(
 				this.dav.getDataModel().getAttributeGroup(DUAKonstanten.ATG_KZD),
@@ -153,41 +153,41 @@ public class PruefeMarkierung implements ClientReceiverInterface {
 	}
 
 	/**
-	 * Konfiguriert dieses Objekt auf die Prüfung von fehlerfreien Daten eines
+	 * Konfiguriert dieses Objekt auf die PrÃ¼fung von fehlerfreien Daten eines
 	 * Attribut
 	 *
 	 * @param pruefeAttr
-	 *            Zu prüfende Attribut
+	 *            Zu prÃ¼fende Attribut
 	 * @param pruefZeitstempel
-	 *            Der zu prüfende Zeitstempel
+	 *            Der zu prÃ¼fende Zeitstempel
 	 */
 	public void listenOK(final String pruefeAttr, final long pruefZeitstempel) {
 		pruefeAlleAttr = false;
 		paramOK(pruefeAttr, pruefZeitstempel);
-		PruefeMarkierung.LOGGER.info("Prüfe Datum auf fehlerfreies Attribut: " + pruefeAttr); //$NON-NLS-1$
+		PruefeMarkierung.LOGGER.info("PrÃ¼fe Datum auf fehlerfreies Attribut: " + pruefeAttr); //$NON-NLS-1$
 	}
 
 	/**
-	 * Konfiguriert dieses Objekt auf die Prüfung von fehlerfreien Daten aller
+	 * Konfiguriert dieses Objekt auf die PrÃ¼fung von fehlerfreien Daten aller
 	 * Attribute
 	 *
 	 * @param pruefZeitstempel
-	 *            Der zu prüfende Zeitstempel
+	 *            Der zu prÃ¼fende Zeitstempel
 	 */
 	public void listenOK(final long pruefZeitstempel) {
 		pruefeAlleAttr = true;
 		paramOK("alle", pruefZeitstempel); //$NON-NLS-1$
-		PruefeMarkierung.LOGGER.info("Prüfe alle Attribute des Datums auf fehlerfreiheit"); //$NON-NLS-1$
+		PruefeMarkierung.LOGGER.info("PrÃ¼fe alle Attribute des Datums auf fehlerfreiheit"); //$NON-NLS-1$
 	}
 
 	/**
-	 * Abschließende Konfiguration des Objektes auf die Prüfung von fehlerfreien
+	 * AbschlieÃŸende Konfiguration des Objektes auf die PrÃ¼fung von fehlerfreien
 	 * Daten
 	 *
 	 * @param pruefeAttr
-	 *            Zu prüfende(s) Attribut(e)
+	 *            Zu prÃ¼fende(s) Attribut(e)
 	 * @param pruefZeitstempel
-	 *            Der zu prüfende Zeitstempel
+	 *            Der zu prÃ¼fende Zeitstempel
 	 */
 	private void paramOK(final String pruefeAttr, final long pruefZeitstempel) {
 		this.pruefZeitstempel = pruefZeitstempel;
@@ -197,41 +197,41 @@ public class PruefeMarkierung implements ClientReceiverInterface {
 	}
 
 	/**
-	 * Konfiguriert dieses Objekt für die Prüfung auf Fehlerhaft-Markierung
+	 * Konfiguriert dieses Objekt fÃ¼r die PrÃ¼fung auf Fehlerhaft-Markierung
 	 * eines Attributes
 	 *
 	 * @param pruefeAttr
-	 *            Zu prüfendes Attribut
+	 *            Zu prÃ¼fendes Attribut
 	 * @param pruefZeitstempel
-	 *            Der zu prüfende Zeitstempel
+	 *            Der zu prÃ¼fende Zeitstempel
 	 */
 	public void listenFehl(final String pruefeAttr, final long pruefZeitstempel) {
 		pruefeAlleAttr = false;
 		paramFehl(pruefeAttr, pruefZeitstempel);
-		PruefeMarkierung.LOGGER.info("Prüfe Datum auf Fehlerhaft-Markierung des Attributes: " + pruefeAttr); //$NON-NLS-1$
+		PruefeMarkierung.LOGGER.info("PrÃ¼fe Datum auf Fehlerhaft-Markierung des Attributes: " + pruefeAttr); //$NON-NLS-1$
 	}
 
 	/**
-	 * Konfiguriert dieses Objekt für die Prüfung auf Fehlerhaft-Markierung
+	 * Konfiguriert dieses Objekt fÃ¼r die PrÃ¼fung auf Fehlerhaft-Markierung
 	 * aller Attribute
 	 *
 	 * @param pruefZeitstempel
-	 *            Der zu prüfende Zeitstempel
+	 *            Der zu prÃ¼fende Zeitstempel
 	 */
 	public void listenFehl(final long pruefZeitstempel) {
 		pruefeAlleAttr = true;
 		paramFehl("alle", pruefZeitstempel); //$NON-NLS-1$
-		PruefeMarkierung.LOGGER.info("Prüfe Datum auf Fehlerhaft-Markierung aller Attribute"); //$NON-NLS-1$
+		PruefeMarkierung.LOGGER.info("PrÃ¼fe Datum auf Fehlerhaft-Markierung aller Attribute"); //$NON-NLS-1$
 	}
 
 	/**
-	 * Abschließende Konfiguration des Objektes für die Prüfung auf
+	 * AbschlieÃŸende Konfiguration des Objektes fÃ¼r die PrÃ¼fung auf
 	 * Fehlerhaft-Markierung
 	 *
 	 * @param pruefeAttr
-	 *            Zu prüfende(s) Attribut(e)
+	 *            Zu prÃ¼fende(s) Attribut(e)
 	 * @param pruefZeitstempel
-	 *            Der zu prüfende Zeitstempel
+	 *            Der zu prÃ¼fende Zeitstempel
 	 */
 	private void paramFehl(final String pruefeAttr, final long pruefZeitstempel) {
 		this.pruefZeitstempel = pruefZeitstempel;
@@ -241,41 +241,41 @@ public class PruefeMarkierung implements ClientReceiverInterface {
 	}
 
 	/**
-	 * Konfiguriert dieses Objekt für die Prüfung auf Implausibel-Markierung
+	 * Konfiguriert dieses Objekt fÃ¼r die PrÃ¼fung auf Implausibel-Markierung
 	 * eines Attributes
 	 *
 	 * @param pruefeAttr
-	 *            Zu prüfendes Attribut
+	 *            Zu prÃ¼fendes Attribut
 	 * @param pruefZeitstempel
-	 *            Der zu prüfende Zeitstempel
+	 *            Der zu prÃ¼fende Zeitstempel
 	 */
 	public void listenImpl(final String pruefeAttr, final long pruefZeitstempel) {
 		pruefeAlleAttr = false;
 		paramImpl(pruefeAttr, pruefZeitstempel);
-		PruefeMarkierung.LOGGER.info("Prüfe Datum auf Implausibel-Markierung des Attributes: " + pruefeAttr); //$NON-NLS-1$
+		PruefeMarkierung.LOGGER.info("PrÃ¼fe Datum auf Implausibel-Markierung des Attributes: " + pruefeAttr); //$NON-NLS-1$
 	}
 
 	/**
-	 * Konfiguriert dieses Objekt für die Prüfung auf Implausibel-Markierung
+	 * Konfiguriert dieses Objekt fÃ¼r die PrÃ¼fung auf Implausibel-Markierung
 	 * aller Attribute
 	 *
 	 * @param pruefZeitstempel
-	 *            Der zu prüfende Zeitstempel
+	 *            Der zu prÃ¼fende Zeitstempel
 	 */
 	public void listenImpl(final long pruefZeitstempel) {
 		pruefeAlleAttr = true;
 		paramImpl("alle", pruefZeitstempel); //$NON-NLS-1$
-		PruefeMarkierung.LOGGER.info("Prüfe Datum auf Implausibel-Markierung aller Attribute"); //$NON-NLS-1$
+		PruefeMarkierung.LOGGER.info("PrÃ¼fe Datum auf Implausibel-Markierung aller Attribute"); //$NON-NLS-1$
 	}
 
 	/**
-	 * Abschließende Konfiguration des Objektes für die Prüfung auf
+	 * AbschlieÃŸende Konfiguration des Objektes fÃ¼r die PrÃ¼fung auf
 	 * Implausibel-Markierung
 	 *
 	 * @param pruefeAttr
-	 *            Zu prüfende(s) Attribut(e)
+	 *            Zu prÃ¼fende(s) Attribut(e)
 	 * @param pruefZeitstempel
-	 *            Der zu prüfende Zeitstempel
+	 *            Der zu prÃ¼fende Zeitstempel
 	 */
 	private void paramImpl(final String pruefeAttr, final long pruefZeitstempel) {
 		this.pruefZeitstempel = pruefZeitstempel;
@@ -285,42 +285,42 @@ public class PruefeMarkierung implements ClientReceiverInterface {
 	}
 
 	/**
-	 * Konfiguriert dieses Objekt für die Prüfung auf Fehlerhaft- und
+	 * Konfiguriert dieses Objekt fÃ¼r die PrÃ¼fung auf Fehlerhaft- und
 	 * Implausibel-Markierung eines Attributes
 	 *
 	 * @param pruefeAttr
-	 *            Zu prüfendes Attribut
+	 *            Zu prÃ¼fendes Attribut
 	 * @param pruefZeitstempel
-	 *            Der zu prüfende Zeitstempel
+	 *            Der zu prÃ¼fende Zeitstempel
 	 */
 	public void listenFehlImpl(final String pruefeAttr, final long pruefZeitstempel) {
 		pruefeAlleAttr = false;
 		paramFehlImpl(pruefeAttr, pruefZeitstempel);
 		PruefeMarkierung.LOGGER
-				.info("Prüfe Datum auf Fehlerhaft- und Implausibel-Markierung des Attributes: " + pruefeAttr); //$NON-NLS-1$
+				.info("PrÃ¼fe Datum auf Fehlerhaft- und Implausibel-Markierung des Attributes: " + pruefeAttr); //$NON-NLS-1$
 	}
 
 	/**
-	 * Konfiguriert dieses Objekt für die Prüfung auf Fehlerhaft- und
+	 * Konfiguriert dieses Objekt fÃ¼r die PrÃ¼fung auf Fehlerhaft- und
 	 * Implausibel-Markierung aller Attribute
 	 *
 	 * @param pruefZeitstempel
-	 *            Der zu prüfende Zeitstempel
+	 *            Der zu prÃ¼fende Zeitstempel
 	 */
 	public void listenFehlImpl(final long pruefZeitstempel) {
 		pruefeAlleAttr = true;
 		paramFehlImpl("alle", pruefZeitstempel); //$NON-NLS-1$
-		PruefeMarkierung.LOGGER.info("Prüfe Datum auf Fehlerhaft- und Implausibel-Markierung aller Attribute"); //$NON-NLS-1$
+		PruefeMarkierung.LOGGER.info("PrÃ¼fe Datum auf Fehlerhaft- und Implausibel-Markierung aller Attribute"); //$NON-NLS-1$
 	}
 
 	/**
-	 * Abschließende Konfiguration des Objektes für die Prüfung auf Fehlerhaft-
+	 * AbschlieÃŸende Konfiguration des Objektes fÃ¼r die PrÃ¼fung auf Fehlerhaft-
 	 * und Implausibel-Markierung
 	 *
 	 * @param pruefeAttr
-	 *            Zu prüfende(s) Attribut(e)
+	 *            Zu prÃ¼fende(s) Attribut(e)
 	 * @param pruefZeitstempel
-	 *            Der zu prüfende Zeitstempel
+	 *            Der zu prÃ¼fende Zeitstempel
 	 */
 	private void paramFehlImpl(final String pruefeAttr, final long pruefZeitstempel) {
 		this.pruefZeitstempel = pruefZeitstempel;
@@ -384,7 +384,7 @@ public class PruefeMarkierung implements ClientReceiverInterface {
 	 * Prueft Attribut entsprechend der Konfiguration
 	 *
 	 * @param pruefeAttr
-	 *            Das zu prüfende Attribut
+	 *            Das zu prÃ¼fende Attribut
 	 * @param data
 	 *            Ergebnisdatensatz
 	 */

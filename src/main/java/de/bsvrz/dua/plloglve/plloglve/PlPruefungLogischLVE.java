@@ -1,5 +1,5 @@
 /*
- * Segment 4 Datenübernahme und Aufbereitung (DUA), SWE 4.2 Pl-Prüfung logisch LVE
+ * Segment 4 DatenÃ¼bernahme und Aufbereitung (DUA), SWE 4.2 Pl-PrÃ¼fung logisch LVE
  * Copyright (C) 2007-2015 BitCtrl Systems GmbH
  *
  * This program is free software; you can redistribute it and/or modify it under
@@ -18,7 +18,7 @@
  *
  * Contact Information:<br>
  * BitCtrl Systems GmbH<br>
- * Weißenfelser Straße 67<br>
+ * WeiÃŸenfelser StraÃŸe 67<br>
  * 04229 Leipzig<br>
  * Phone: +49 341-490670<br>
  * mailto: info@bitctrl.de
@@ -40,21 +40,21 @@ import de.bsvrz.sys.funclib.bitctrl.dua.schnittstellen.IStandardAspekte;
 import de.bsvrz.sys.funclib.bitctrl.dua.schnittstellen.IVerwaltung;
 
 /**
- * Implementierung des Moduls Pl-Prüfung logisch LVE der SWE Pl-Prüfung logisch
+ * Implementierung des Moduls Pl-PrÃ¼fung logisch LVE der SWE Pl-PrÃ¼fung logisch
  * LVE. Dieses Modul leitet nur die empfangenen Daten an seine Submudole weiter,
- * welche die eigentliche Plausibilisierung durchführen
+ * welche die eigentliche Plausibilisierung durchfÃ¼hren
  *
  * @author BitCtrl Systems GmbH, Thierfelder
  */
 public class PlPruefungLogischLVE extends AbstraktBearbeitungsKnotenAdapter {
 
 	/**
-	 * Startzeit des Moduls Pl-Prüfung logisch LVE.
+	 * Startzeit des Moduls Pl-PrÃ¼fung logisch LVE.
 	 */
 	public static final long START_ZEIT = System.currentTimeMillis();
 
 	/**
-	 * Submodul Pl-Prüfung logisch LVE standard.
+	 * Submodul Pl-PrÃ¼fung logisch LVE standard.
 	 */
 	private final PlLogischLVEStandard standard = new PlLogischLVEStandard();
 
@@ -87,8 +87,8 @@ public class PlPruefungLogischLVE extends AbstraktBearbeitungsKnotenAdapter {
 	 * Standardkonstruktor.
 	 *
 	 * @param stdAspekte
-	 *            Informationen zu den Standardpublikationsaspekten für diese
-	 *            Instanz des Moduls Pl-Prüfung logisch LVE
+	 *            Informationen zu den Standardpublikationsaspekten fÃ¼r diese
+	 *            Instanz des Moduls Pl-PrÃ¼fung logisch LVE
 	 */
 	public PlPruefungLogischLVE(final IStandardAspekte stdAspekte) {
 		setStandardAspekte(stdAspekte);
@@ -130,7 +130,7 @@ public class PlPruefungLogischLVE extends AbstraktBearbeitungsKnotenAdapter {
 
 	@Override
 	public void aktualisierePublikation(final IDatenFlussSteuerung dfs) {
-		// wird hier nicht benötigt, da die Publikation erst im letzten Submodul
+		// wird hier nicht benÃ¶tigt, da die Publikation erst im letzten Submodul
 		// "Vertrauensbereich" stattfindet
 	}
 }

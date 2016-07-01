@@ -1,5 +1,5 @@
 /*
- * Segment 4 Datenübernahme und Aufbereitung (DUA), SWE 4.2 Pl-Prüfung logisch LVE
+ * Segment 4 DatenÃ¼bernahme und Aufbereitung (DUA), SWE 4.2 Pl-PrÃ¼fung logisch LVE
  * Copyright (C) 2007-2015 BitCtrl Systems GmbH
  *
  * This program is free software; you can redistribute it and/or modify it under
@@ -18,7 +18,7 @@
  *
  * Contact Information:<br>
  * BitCtrl Systems GmbH<br>
- * Weißenfelser Straße 67<br>
+ * WeiÃŸenfelser StraÃŸe 67<br>
  * 04229 Leipzig<br>
  * Phone: +49 341-490670<br>
  * mailto: info@bitctrl.de
@@ -46,11 +46,11 @@ import de.bsvrz.sys.funclib.bitctrl.dua.schnittstellen.IVerwaltungMitGuete;
 import de.bsvrz.sys.funclib.debug.Debug;
 
 /**
- * Das Submodul PL-Prüfung logisch LVE standard führt zunächst eine
- * Wertebereichsprüfung für die empfangenen Datensätzen durch. Diese orientiert
+ * Das Submodul PL-PrÃ¼fung logisch LVE standard fÃ¼hrt zunÃ¤chst eine
+ * WertebereichsprÃ¼fung fÃ¼r die empfangenen DatensÃ¤tzen durch. Diese orientiert
  * sich an den dazu vorgesehenen Parametern. Folgende Attributarten werden
  * untersucht:<br>
- * - Verkehrsstärken,<br>
+ * - VerkehrsstÃ¤rken,<br>
  * - Mittlere Geschwindigkeiten,<br>
  * - Belegungen,<br>
  * - Standardabweichungen, etc..<br>
@@ -64,13 +64,13 @@ public class PlLogischLVEStandard extends AbstraktBearbeitungsKnotenAdapter {
 	private static boolean baWuePatch = false;
 
 	/**
-	 * Mapt alle FS-Systemobjekte auf für die Standardplausbibilisierung für LZD
+	 * Mapt alle FS-Systemobjekte auf fÃ¼r die Standardplausbibilisierung fÃ¼r LZD
 	 * parametrierte Fahrstreifenobjekte.
 	 */
 	private final Map<SystemObject, AbstraktPLFahrStreifen> lzdFahrStreifen = new HashMap<>();
 
 	/**
-	 * Mapt alle FS-Systemobjekte auf für die Standardplausbibilisierung für KZD
+	 * Mapt alle FS-Systemobjekte auf fÃ¼r die Standardplausbibilisierung fÃ¼r KZD
 	 * parametrierte Fahrstreifenobjekte.
 	 */
 	private final Map<SystemObject, AbstraktPLFahrStreifen> kzdFahrStreifen = new HashMap<>();
@@ -95,7 +95,7 @@ public class PlLogischLVEStandard extends AbstraktBearbeitungsKnotenAdapter {
 		if (dieVerwaltung instanceof IVerwaltungMitGuete) {
 			verwaltungMitGuete = (IVerwaltungMitGuete) dieVerwaltung;
 		} else {
-			throw new RuntimeException("Dieses Modul benötigt Informationen" + //$NON-NLS-1$
+			throw new RuntimeException("Dieses Modul benÃ¶tigt Informationen" + //$NON-NLS-1$
 					" zum Guetefaktor der angeschlossenen SWE"); //$NON-NLS-1$
 		}
 

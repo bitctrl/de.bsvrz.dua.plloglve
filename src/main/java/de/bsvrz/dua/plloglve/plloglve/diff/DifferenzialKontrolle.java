@@ -1,5 +1,5 @@
 /*
- * Segment 4 Datenübernahme und Aufbereitung (DUA), SWE 4.2 Pl-Prüfung logisch LVE
+ * Segment 4 DatenÃ¼bernahme und Aufbereitung (DUA), SWE 4.2 Pl-PrÃ¼fung logisch LVE
  * Copyright (C) 2007-2015 BitCtrl Systems GmbH
  *
  * This program is free software; you can redistribute it and/or modify it under
@@ -18,7 +18,7 @@
  *
  * Contact Information:<br>
  * BitCtrl Systems GmbH<br>
- * Weißenfelser Straße 67<br>
+ * WeiÃŸenfelser StraÃŸe 67<br>
  * 04229 Leipzig<br>
  * Phone: +49 341-490670<br>
  * mailto: info@bitctrl.de
@@ -44,8 +44,8 @@ import de.bsvrz.sys.funclib.bitctrl.dua.schnittstellen.IVerwaltung;
 import de.bsvrz.sys.funclib.debug.Debug;
 
 /**
- * Submodul Differentialkontrolle. Dieses Submodul überprüft, ob die maximal
- * zulässige Anzahl von Intervallen mit Ergebniskonstanz überschritten wurde und
+ * Submodul Differentialkontrolle. Dieses Submodul Ã¼berprÃ¼ft, ob die maximal
+ * zulÃ¤ssige Anzahl von Intervallen mit Ergebniskonstanz Ã¼berschritten wurde und
  * generiert ggf. eine Betriebsmeldung
  *
  * @author BitCtrl Systems GmbH, Thierfelder
@@ -54,7 +54,7 @@ public class DifferenzialKontrolle extends AbstraktBearbeitungsKnotenAdapter {
 
 	private static final Debug LOGGER = Debug.getLogger();
 	/**
-	 * Map von Fahrtreifen-Systemobjekten auf Objekte mit Konstanzzählern.
+	 * Map von Fahrtreifen-Systemobjekten auf Objekte mit KonstanzzÃ¤hlern.
 	 */
 	private final Map<SystemObject, DiffFahrStreifen> fahrStreifen = new HashMap<>();
 

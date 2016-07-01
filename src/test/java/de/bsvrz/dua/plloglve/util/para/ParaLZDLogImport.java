@@ -1,5 +1,5 @@
 /*
- * Segment 4 Datenübernahme und Aufbereitung (DUA), SWE 4.2 Pl-Prüfung logisch LVE
+ * Segment 4 DatenÃ¼bernahme und Aufbereitung (DUA), SWE 4.2 Pl-PrÃ¼fung logisch LVE
  * Copyright (C) 2007-2015 BitCtrl Systems GmbH
  *
  * This program is free software; you can redistribute it and/or modify it under
@@ -18,7 +18,7 @@
  *
  * Contact Information:<br>
  * BitCtrl Systems GmbH<br>
- * Weißenfelser Straße 67<br>
+ * WeiÃŸenfelser StraÃŸe 67<br>
  * 04229 Leipzig<br>
  * Phone: +49 341-490670<br>
  * mailto: info@bitctrl.de
@@ -35,14 +35,14 @@ import de.bsvrz.dua.plloglve.plloglve.typen.OptionenPlausibilitaetsPruefungLogis
 import de.bsvrz.sys.funclib.bitctrl.dua.DUAUtensilien;
 
 /**
- * Importiert die Parameter für die Pl-Prüfung logisch LZD.
+ * Importiert die Parameter fÃ¼r die Pl-PrÃ¼fung logisch LZD.
  *
  * @author BitCtrl Systems GmbH, Thierfelder
  */
 public class ParaLZDLogImport extends AbstraktParameterImport {
 
 	/**
-	 * Prüf-Optionen.
+	 * PrÃ¼f-Optionen.
 	 */
 	private OptionenPlausibilitaetsPruefungLogischVerkehr optionen = null;
 
@@ -52,11 +52,11 @@ public class ParaLZDLogImport extends AbstraktParameterImport {
 	 * @param dav
 	 *            Datenverteier-Verbindung
 	 * @param objekt
-	 *            das Systemobjekt, für das die Parameter gesetzt werden sollen
+	 *            das Systemobjekt, fÃ¼r das die Parameter gesetzt werden sollen
 	 * @param csvQuelle
 	 *            Quelle der Daten (CSV-Datei)
 	 * @throws Exception
-	 *             falls dieses Objekt nicht vollständig initialisiert werden
+	 *             falls dieses Objekt nicht vollstÃ¤ndig initialisiert werden
 	 *             konnte
 	 */
 	public ParaLZDLogImport(final ClientDavInterface dav, final SystemObject objekt, final String csvQuelle)
@@ -65,10 +65,10 @@ public class ParaLZDLogImport extends AbstraktParameterImport {
 	}
 
 	/**
-	 * Setzte die Prüf-Optionen.
+	 * Setzte die PrÃ¼f-Optionen.
 	 *
 	 * @param optionen
-	 *            aktuelle Prüf-Optionen
+	 *            aktuelle PrÃ¼f-Optionen
 	 */
 	public final void setOptionen(final OptionenPlausibilitaetsPruefungLogischVerkehr optionen) {
 		this.optionen = optionen;
@@ -76,8 +76,8 @@ public class ParaLZDLogImport extends AbstraktParameterImport {
 
 	@Override
 	public Data fuelleRestAttribute(final Data datensatz) {
-		DUAUtensilien.getAttributDatum("qPkwÄBereich.Min", datensatz).asUnscaledValue().set(0); //$NON-NLS-1$
-		DUAUtensilien.getAttributDatum("qPkwÄBereich.Max", datensatz).asUnscaledValue().set(0); //$NON-NLS-1$
+		DUAUtensilien.getAttributDatum("qPkwÃ„Bereich.Min", datensatz).asUnscaledValue().set(0); //$NON-NLS-1$
+		DUAUtensilien.getAttributDatum("qPkwÃ„Bereich.Max", datensatz).asUnscaledValue().set(0); //$NON-NLS-1$
 		DUAUtensilien.getAttributDatum("qKfzNkBereich.Min", datensatz).asUnscaledValue().set(0); //$NON-NLS-1$
 		DUAUtensilien.getAttributDatum("qKfzNkBereich.Max", datensatz).asUnscaledValue().set(0); //$NON-NLS-1$
 		DUAUtensilien.getAttributDatum("qPkwGBereich.Min", datensatz).asUnscaledValue().set(0); //$NON-NLS-1$
@@ -90,8 +90,8 @@ public class ParaLZDLogImport extends AbstraktParameterImport {
 		DUAUtensilien.getAttributDatum("qKradBereich.Max", datensatz).asUnscaledValue().set(0); //$NON-NLS-1$
 		DUAUtensilien.getAttributDatum("qLfwBereich.Min", datensatz).asUnscaledValue().set(0); //$NON-NLS-1$
 		DUAUtensilien.getAttributDatum("qLfwBereich.Max", datensatz).asUnscaledValue().set(0); //$NON-NLS-1$
-		DUAUtensilien.getAttributDatum("qLkwÄBereich.Min", datensatz).asUnscaledValue().set(0); //$NON-NLS-1$
-		DUAUtensilien.getAttributDatum("qLkwÄBereich.Max", datensatz).asUnscaledValue().set(0); //$NON-NLS-1$
+		DUAUtensilien.getAttributDatum("qLkwÃ„Bereich.Min", datensatz).asUnscaledValue().set(0); //$NON-NLS-1$
+		DUAUtensilien.getAttributDatum("qLkwÃ„Bereich.Max", datensatz).asUnscaledValue().set(0); //$NON-NLS-1$
 		DUAUtensilien.getAttributDatum("qPkwABereich.Min", datensatz).asUnscaledValue().set(0); //$NON-NLS-1$
 		DUAUtensilien.getAttributDatum("qPkwABereich.Max", datensatz).asUnscaledValue().set(0); //$NON-NLS-1$
 		DUAUtensilien.getAttributDatum("qBusBereich.Min", datensatz).asUnscaledValue().set(0); //$NON-NLS-1$
@@ -104,8 +104,8 @@ public class ParaLZDLogImport extends AbstraktParameterImport {
 		DUAUtensilien.getAttributDatum("qSattelKfzBereich.Max", datensatz).asUnscaledValue().set(0); //$NON-NLS-1$
 		DUAUtensilien.getAttributDatum("vKfzBereich.Min", datensatz).asUnscaledValue().set(0); //$NON-NLS-1$
 		DUAUtensilien.getAttributDatum("vKfzBereich.Max", datensatz).asUnscaledValue().set(0); //$NON-NLS-1$
-		DUAUtensilien.getAttributDatum("vPkwÄBereich.Min", datensatz).asUnscaledValue().set(0); //$NON-NLS-1$
-		DUAUtensilien.getAttributDatum("vPkwÄBereich.Max", datensatz).asUnscaledValue().set(0); //$NON-NLS-1$
+		DUAUtensilien.getAttributDatum("vPkwÃ„Bereich.Min", datensatz).asUnscaledValue().set(0); //$NON-NLS-1$
+		DUAUtensilien.getAttributDatum("vPkwÃ„Bereich.Max", datensatz).asUnscaledValue().set(0); //$NON-NLS-1$
 		DUAUtensilien.getAttributDatum("vKfzNkBereich.Min", datensatz).asUnscaledValue().set(0); //$NON-NLS-1$
 		DUAUtensilien.getAttributDatum("vKfzNkBereich.Max", datensatz).asUnscaledValue().set(0); //$NON-NLS-1$
 		DUAUtensilien.getAttributDatum("vPkwGBereich.Min", datensatz).asUnscaledValue().set(0); //$NON-NLS-1$
@@ -116,8 +116,8 @@ public class ParaLZDLogImport extends AbstraktParameterImport {
 		DUAUtensilien.getAttributDatum("vKradBereich.Max", datensatz).asUnscaledValue().set(0); //$NON-NLS-1$
 		DUAUtensilien.getAttributDatum("vLfwBereich.Min", datensatz).asUnscaledValue().set(0); //$NON-NLS-1$
 		DUAUtensilien.getAttributDatum("vLfwBereich.Max", datensatz).asUnscaledValue().set(0); //$NON-NLS-1$
-		DUAUtensilien.getAttributDatum("vLkwÄBereich.Min", datensatz).asUnscaledValue().set(0); //$NON-NLS-1$
-		DUAUtensilien.getAttributDatum("vLkwÄBereich.Max", datensatz).asUnscaledValue().set(0); //$NON-NLS-1$
+		DUAUtensilien.getAttributDatum("vLkwÃ„Bereich.Min", datensatz).asUnscaledValue().set(0); //$NON-NLS-1$
+		DUAUtensilien.getAttributDatum("vLkwÃ„Bereich.Max", datensatz).asUnscaledValue().set(0); //$NON-NLS-1$
 		DUAUtensilien.getAttributDatum("vPkwABereich.Min", datensatz).asUnscaledValue().set(0); //$NON-NLS-1$
 		DUAUtensilien.getAttributDatum("vPkwABereich.Max", datensatz).asUnscaledValue().set(0); //$NON-NLS-1$
 		DUAUtensilien.getAttributDatum("vLkwBereich.Min", datensatz).asUnscaledValue().set(0); //$NON-NLS-1$
@@ -132,8 +132,8 @@ public class ParaLZDLogImport extends AbstraktParameterImport {
 		DUAUtensilien.getAttributDatum("vSattelKfzBereich.Max", datensatz).asUnscaledValue().set(0); //$NON-NLS-1$
 		DUAUtensilien.getAttributDatum("sKfzBereich.Min", datensatz).asUnscaledValue().set(0); //$NON-NLS-1$
 		DUAUtensilien.getAttributDatum("sKfzBereich.Max", datensatz).asUnscaledValue().set(0); //$NON-NLS-1$
-		DUAUtensilien.getAttributDatum("sPkwÄBereich.Min", datensatz).asUnscaledValue().set(0); //$NON-NLS-1$
-		DUAUtensilien.getAttributDatum("sPkwÄBereich.Max", datensatz).asUnscaledValue().set(0); //$NON-NLS-1$
+		DUAUtensilien.getAttributDatum("sPkwÃ„Bereich.Min", datensatz).asUnscaledValue().set(0); //$NON-NLS-1$
+		DUAUtensilien.getAttributDatum("sPkwÃ„Bereich.Max", datensatz).asUnscaledValue().set(0); //$NON-NLS-1$
 		DUAUtensilien.getAttributDatum("sKfzNkBereich.Min", datensatz).asUnscaledValue().set(0); //$NON-NLS-1$
 		DUAUtensilien.getAttributDatum("sKfzNkBereich.Max", datensatz).asUnscaledValue().set(0); //$NON-NLS-1$
 		DUAUtensilien.getAttributDatum("sPkwGBereich.Min", datensatz).asUnscaledValue().set(0); //$NON-NLS-1$
@@ -144,8 +144,8 @@ public class ParaLZDLogImport extends AbstraktParameterImport {
 		DUAUtensilien.getAttributDatum("sKradBereich.Max", datensatz).asUnscaledValue().set(0); //$NON-NLS-1$
 		DUAUtensilien.getAttributDatum("sLfwBereich.Min", datensatz).asUnscaledValue().set(0); //$NON-NLS-1$
 		DUAUtensilien.getAttributDatum("sLfwBereich.Max", datensatz).asUnscaledValue().set(0); //$NON-NLS-1$
-		DUAUtensilien.getAttributDatum("sLkwÄBereich.Min", datensatz).asUnscaledValue().set(0); //$NON-NLS-1$
-		DUAUtensilien.getAttributDatum("sLkwÄBereich.Max", datensatz).asUnscaledValue().set(0); //$NON-NLS-1$
+		DUAUtensilien.getAttributDatum("sLkwÃ„Bereich.Min", datensatz).asUnscaledValue().set(0); //$NON-NLS-1$
+		DUAUtensilien.getAttributDatum("sLkwÃ„Bereich.Max", datensatz).asUnscaledValue().set(0); //$NON-NLS-1$
 		DUAUtensilien.getAttributDatum("sPkwABereich.Min", datensatz).asUnscaledValue().set(0); //$NON-NLS-1$
 		DUAUtensilien.getAttributDatum("sPkwABereich.Max", datensatz).asUnscaledValue().set(0); //$NON-NLS-1$
 		DUAUtensilien.getAttributDatum("sLkwBereich.Min", datensatz).asUnscaledValue().set(0); //$NON-NLS-1$
@@ -160,8 +160,8 @@ public class ParaLZDLogImport extends AbstraktParameterImport {
 		DUAUtensilien.getAttributDatum("sSattelKfzBereich.Max", datensatz).asUnscaledValue().set(0); //$NON-NLS-1$
 		DUAUtensilien.getAttributDatum("v85KfzBereich.Min", datensatz).asUnscaledValue().set(0); //$NON-NLS-1$
 		DUAUtensilien.getAttributDatum("v85KfzBereich.Max", datensatz).asUnscaledValue().set(0); //$NON-NLS-1$
-		DUAUtensilien.getAttributDatum("v85PkwÄBereich.Min", datensatz).asUnscaledValue().set(0); //$NON-NLS-1$
-		DUAUtensilien.getAttributDatum("v85PkwÄBereich.Max", datensatz).asUnscaledValue().set(0); //$NON-NLS-1$
+		DUAUtensilien.getAttributDatum("v85PkwÃ„Bereich.Min", datensatz).asUnscaledValue().set(0); //$NON-NLS-1$
+		DUAUtensilien.getAttributDatum("v85PkwÃ„Bereich.Max", datensatz).asUnscaledValue().set(0); //$NON-NLS-1$
 		DUAUtensilien.getAttributDatum("v85KfzNkBereich.Min", datensatz).asUnscaledValue().set(0); //$NON-NLS-1$
 		DUAUtensilien.getAttributDatum("v85KfzNkBereich.Max", datensatz).asUnscaledValue().set(0); //$NON-NLS-1$
 		DUAUtensilien.getAttributDatum("v85PkwGBereich.Min", datensatz).asUnscaledValue().set(0); //$NON-NLS-1$
@@ -172,8 +172,8 @@ public class ParaLZDLogImport extends AbstraktParameterImport {
 		DUAUtensilien.getAttributDatum("v85KradBereich.Max", datensatz).asUnscaledValue().set(0); //$NON-NLS-1$
 		DUAUtensilien.getAttributDatum("v85LfwBereich.Min", datensatz).asUnscaledValue().set(0); //$NON-NLS-1$
 		DUAUtensilien.getAttributDatum("v85LfwBereich.Max", datensatz).asUnscaledValue().set(0); //$NON-NLS-1$
-		DUAUtensilien.getAttributDatum("v85LkwÄBereich.Min", datensatz).asUnscaledValue().set(0); //$NON-NLS-1$
-		DUAUtensilien.getAttributDatum("v85LkwÄBereich.Max", datensatz).asUnscaledValue().set(0); //$NON-NLS-1$
+		DUAUtensilien.getAttributDatum("v85LkwÃ„Bereich.Min", datensatz).asUnscaledValue().set(0); //$NON-NLS-1$
+		DUAUtensilien.getAttributDatum("v85LkwÃ„Bereich.Max", datensatz).asUnscaledValue().set(0); //$NON-NLS-1$
 		DUAUtensilien.getAttributDatum("v85PkwABereich.Min", datensatz).asUnscaledValue().set(0); //$NON-NLS-1$
 		DUAUtensilien.getAttributDatum("v85PkwABereich.Max", datensatz).asUnscaledValue().set(0); //$NON-NLS-1$
 		DUAUtensilien.getAttributDatum("v85LkwBereich.Min", datensatz).asUnscaledValue().set(0); //$NON-NLS-1$
@@ -188,8 +188,8 @@ public class ParaLZDLogImport extends AbstraktParameterImport {
 		DUAUtensilien.getAttributDatum("v85SattelKfzBereich.Max", datensatz).asUnscaledValue().set(0); //$NON-NLS-1$
 		DUAUtensilien.getAttributDatum("qKfzGeschwKlasseBereich.Min", datensatz).asUnscaledValue().set(0); //$NON-NLS-1$
 		DUAUtensilien.getAttributDatum("qKfzGeschwKlasseBereich.Max", datensatz).asUnscaledValue().set(0); //$NON-NLS-1$
-		DUAUtensilien.getAttributDatum("qPkwÄGeschwKlasseBereich.Min", datensatz).asUnscaledValue().set(0); //$NON-NLS-1$
-		DUAUtensilien.getAttributDatum("qPkwÄGeschwKlasseBereich.Max", datensatz).asUnscaledValue().set(0); //$NON-NLS-1$
+		DUAUtensilien.getAttributDatum("qPkwÃ„GeschwKlasseBereich.Min", datensatz).asUnscaledValue().set(0); //$NON-NLS-1$
+		DUAUtensilien.getAttributDatum("qPkwÃ„GeschwKlasseBereich.Max", datensatz).asUnscaledValue().set(0); //$NON-NLS-1$
 		DUAUtensilien.getAttributDatum("qKfzNkGeschwKlasseBereich.Min", datensatz).asUnscaledValue().set(0); //$NON-NLS-1$
 		DUAUtensilien.getAttributDatum("qKfzNkGeschwKlasseBereich.Max", datensatz).asUnscaledValue().set(0); //$NON-NLS-1$
 		DUAUtensilien.getAttributDatum("qPkwGGeschwKlasseBereich.Min", datensatz).asUnscaledValue().set(0); //$NON-NLS-1$
@@ -200,8 +200,8 @@ public class ParaLZDLogImport extends AbstraktParameterImport {
 		DUAUtensilien.getAttributDatum("qKradGeschwKlasseBereich.Max", datensatz).asUnscaledValue().set(0); //$NON-NLS-1$
 		DUAUtensilien.getAttributDatum("qLfwGeschwKlasseBereich.Min", datensatz).asUnscaledValue().set(0); //$NON-NLS-1$
 		DUAUtensilien.getAttributDatum("qLfwGeschwKlasseBereich.Max", datensatz).asUnscaledValue().set(0); //$NON-NLS-1$
-		DUAUtensilien.getAttributDatum("qLkwÄGeschwKlasseBereich.Min", datensatz).asUnscaledValue().set(0); //$NON-NLS-1$
-		DUAUtensilien.getAttributDatum("qLkwÄGeschwKlasseBereich.Max", datensatz).asUnscaledValue().set(0); //$NON-NLS-1$
+		DUAUtensilien.getAttributDatum("qLkwÃ„GeschwKlasseBereich.Min", datensatz).asUnscaledValue().set(0); //$NON-NLS-1$
+		DUAUtensilien.getAttributDatum("qLkwÃ„GeschwKlasseBereich.Max", datensatz).asUnscaledValue().set(0); //$NON-NLS-1$
 		DUAUtensilien.getAttributDatum("qPkwAGeschwKlasseBereich.Min", datensatz).asUnscaledValue().set(0); //$NON-NLS-1$
 		DUAUtensilien.getAttributDatum("qPkwAGeschwKlasseBereich.Max", datensatz).asUnscaledValue().set(0); //$NON-NLS-1$
 		DUAUtensilien.getAttributDatum("qLkwGeschwKlasseBereich.Min", datensatz).asUnscaledValue().set(0); //$NON-NLS-1$

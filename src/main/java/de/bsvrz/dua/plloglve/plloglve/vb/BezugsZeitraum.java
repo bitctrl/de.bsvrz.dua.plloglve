@@ -1,5 +1,5 @@
 /*
- * Segment 4 Datenübernahme und Aufbereitung (DUA), SWE 4.2 Pl-Prüfung logisch LVE
+ * Segment 4 DatenÃ¼bernahme und Aufbereitung (DUA), SWE 4.2 Pl-PrÃ¼fung logisch LVE
  * Copyright (C) 2007-2015 BitCtrl Systems GmbH
  *
  * This program is free software; you can redistribute it and/or modify it under
@@ -18,7 +18,7 @@
  *
  * Contact Information:<br>
  * BitCtrl Systems GmbH<br>
- * Weißenfelser Straße 67<br>
+ * WeiÃŸenfelser StraÃŸe 67<br>
  * 04229 Leipzig<br>
  * Phone: +49 341-490670<br>
  * mailto: info@bitctrl.de
@@ -41,7 +41,7 @@ import de.bsvrz.sys.funclib.debug.Debug;
 import de.bsvrz.sys.funclib.operatingMessage.MessageGrade;
 
 /**
- * Speichert für einen Bezugszeitraum und ein finales DAV-Attribut des
+ * Speichert fÃ¼r einen Bezugszeitraum und ein finales DAV-Attribut des
  * Datensatzes <code>atg.verkehrsDatenKurzZeitIntervall</code> (z.B.
  * <code>qKfz</code>) die ausgefallenen Werte
  *
@@ -62,13 +62,13 @@ public class BezugsZeitraum {
 	private final VertrauensPuffer ausgefalleneDaten = new VertrauensPuffer();
 
 	/**
-	 * Name des finalen DAV-Attributs, für den Werte in diesem Bezugszeitraum
+	 * Name des finalen DAV-Attributs, fÃ¼r den Werte in diesem Bezugszeitraum
 	 * gespeichert werden (z.B. <code>qKfz</code>).
 	 */
 	private String name = null;
 
 	/**
-	 * aktueller Zustand der Vertrauensbereichsverletzung für dieses Datum.
+	 * aktueller Zustand der Vertrauensbereichsverletzung fÃ¼r dieses Datum.
 	 */
 	private boolean vertrauensBereichVerletzt = false;
 
@@ -78,7 +78,7 @@ public class BezugsZeitraum {
 	 * @param verwaltung
 	 *            Verbindung zum Verwaltungsmodul
 	 * @param name
-	 *            name Name des finalen DAV-Attributs, für den Werte in diesem
+	 *            name Name des finalen DAV-Attributs, fÃ¼r den Werte in diesem
 	 *            Bezugszeitraum gespeichert werden sollen (z.B.
 	 *            <code>qKfz</code>)
 	 */
@@ -91,8 +91,8 @@ public class BezugsZeitraum {
 
 	/**
 	 * Erfragt, ob im Moment der Vertrauensbereich verletzt ist. Dies ist der
-	 * Fall, wenn die Einschaltschwelle von einem Datum überschritten, und von
-	 * allen späteren Daten (bis jetzt) die Ausschaltschwelle nicht
+	 * Fall, wenn die Einschaltschwelle von einem Datum Ã¼berschritten, und von
+	 * allen spÃ¤teren Daten (bis jetzt) die Ausschaltschwelle nicht
 	 * unterschritten wurde.
 	 *
 	 * @return ob im Moment der Vertrauensbereich verletzt ist
@@ -103,14 +103,14 @@ public class BezugsZeitraum {
 
 	/**
 	 * Aktualisiert diese Datenstruktur mit einem aktuellen Kurzzeitdatum und
-	 * den aktuellen Parametern. Errechnet anhand der übergebenen Parameter, ob
+	 * den aktuellen Parametern. Errechnet anhand der Ã¼bergebenen Parameter, ob
 	 * der Vertrauensbereich (immernoch, nicht mehr) verletzt ist und gibt ggf.
 	 * eine Betriebsmeldung aus
 	 *
 	 * @param originalDatum
 	 *            ein KZD eines Fahrstreifens
 	 * @param parameter
-	 *            die aktuellen Parameter des Vertrauensbereichs für diesen
+	 *            die aktuellen Parameter des Vertrauensbereichs fÃ¼r diesen
 	 *            Fahrstreifen
 	 * @return der aktuelle Ausfall dieses Attributs im Bezugszeitraum, oder
 	 *         <code>null</code> wenn dieser nicht ermittelt werden konnte
@@ -173,8 +173,8 @@ public class BezugsZeitraum {
 					}
 
 					/**
-					 * Lauft das Programm schon länger als der Bezugszeitraum groß ist?
-					 * Nur dann ist eine Vertrauensbereichsprüfung sinnvoll
+					 * Lauft das Programm schon lÃ¤nger als der Bezugszeitraum groÃŸ ist?
+					 * Nur dann ist eine VertrauensbereichsprÃ¼fung sinnvoll
 					 */
 					if ((PlPruefungLogischLVE.START_ZEIT + bezugsZeitraumInMillis) < System
 							.currentTimeMillis()) {
@@ -224,7 +224,7 @@ public class BezugsZeitraum {
 											: Constants.MILLIS_PER_HOUR)))
 											/ Constants.MILLIS_PER_MINUTE;
 
-							// Bilde den Text für den Vergleichswert
+							// Bilde den Text fÃ¼r den Vergleichswert
 							String vwert = "";
 							if (einschaltSchwelleUEBERschritten) {
 								vwert = "" + parameter.getMaxAusfallProBezugsZeitraumEin() + "% (Einschaltschwelle)";
@@ -232,12 +232,12 @@ public class BezugsZeitraum {
 								vwert = "" + parameter.getMaxAusfallProBezugsZeitraumAus() + "% (Ausschaltschwelle)";
 							}
 							
-							final String nachricht = "Daten außerhalb des Vertrauensbereichs. Im Zeitraum von " + //$NON-NLS-1$
+							final String nachricht = "Daten auÃŸerhalb des Vertrauensbereichs. Im Zeitraum von " + //$NON-NLS-1$
 									DUAKonstanten.BM_ZEIT_FORMAT.format(start)
 									+ " Uhr bis " + DUAKonstanten.BM_ZEIT_FORMAT.format(ende) + //$NON-NLS-1$
 									" ("
 									+ parameter.getBezugsZeitraum()
-									+ " Stunde(n)) implausible Fahrstreifenwerte für den Wert " + //$NON-NLS-1$
+									+ " Stunde(n)) implausible Fahrstreifenwerte fÃ¼r den Wert " + //$NON-NLS-1$
 									this.name
 									+ " am Fahrstreifen "
 									+ originalDatum.getObject()

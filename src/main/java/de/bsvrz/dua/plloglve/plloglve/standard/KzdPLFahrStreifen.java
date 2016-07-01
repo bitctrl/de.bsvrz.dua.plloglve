@@ -1,5 +1,5 @@
 /*
- * Segment 4 Datenübernahme und Aufbereitung (DUA), SWE 4.2 Pl-Prüfung logisch LVE
+ * Segment 4 DatenÃ¼bernahme und Aufbereitung (DUA), SWE 4.2 Pl-PrÃ¼fung logisch LVE
  * Copyright (C) 2007-2015 BitCtrl Systems GmbH
  *
  * This program is free software; you can redistribute it and/or modify it under
@@ -18,7 +18,7 @@
  *
  * Contact Information:<br>
  * BitCtrl Systems GmbH<br>
- * Weißenfelser Straße 67<br>
+ * WeiÃŸenfelser StraÃŸe 67<br>
  * 04229 Leipzig<br>
  * Phone: +49 341-490670<br>
  * mailto: info@bitctrl.de
@@ -39,9 +39,9 @@ import de.bsvrz.sys.funclib.bitctrl.dua.schnittstellen.IVerwaltungMitGuete;
 import de.bsvrz.sys.funclib.debug.Debug;
 
 /**
- * Klasse zum Durchführen der speziellen Standardplausibilisierung LVE für LZD.
+ * Klasse zum DurchfÃ¼hren der speziellen Standardplausibilisierung LVE fÃ¼r LZD.
  * Diese Klasse macht nichts weiter, als sich auf die Grenzwertparameter
- * anzumelden und einige Funktionen zur Plausibilisierung von LZD zur Verfügung
+ * anzumelden und einige Funktionen zur Plausibilisierung von LZD zur VerfÃ¼gung
  * zu stellen
  *
  * @author BitCtrl Systems GmbH, Thierfelder
@@ -50,7 +50,7 @@ public class KzdPLFahrStreifen extends AbstraktPLFahrStreifen {
 
 	private static final Debug LOGGER = Debug.getLogger();
 	/**
-	 * Alle Attribute, die innerhalb der PL-Prüfung logisch bzwl eines KZD
+	 * Alle Attribute, die innerhalb der PL-PrÃ¼fung logisch bzwl eines KZD
 	 * veraendert werden koennen.
 	 */
 	private static final String[] ATTRIBUT_NAMEN = { "qKfz", //$NON-NLS-1$

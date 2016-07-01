@@ -1,5 +1,5 @@
 /*
- * Segment 4 Datenübernahme und Aufbereitung (DUA), SWE 4.2 Pl-Prüfung logisch LVE
+ * Segment 4 DatenÃ¼bernahme und Aufbereitung (DUA), SWE 4.2 Pl-PrÃ¼fung logisch LVE
  * Copyright (C) 2007-2015 BitCtrl Systems GmbH
  *
  * This program is free software; you can redistribute it and/or modify it under
@@ -18,7 +18,7 @@
  *
  * Contact Information:<br>
  * BitCtrl Systems GmbH<br>
- * Weißenfelser Straße 67<br>
+ * WeiÃŸenfelser StraÃŸe 67<br>
  * 04229 Leipzig<br>
  * Phone: +49 341-490670<br>
  * mailto: info@bitctrl.de
@@ -42,7 +42,7 @@ import de.bsvrz.sys.funclib.bitctrl.dua.test.CSVImporter;
 
 /**
  * Abstrakte Klasse zum Einlesen von Parametern aus der CSV-Datei innerhalb der
- * Prüfspezifikation.
+ * PrÃ¼fspezifikation.
  *
  * @author BitCtrl Systems GmbH, Thierfelder
  */
@@ -54,7 +54,7 @@ public abstract class AbstraktParameterImport extends CSVImporter implements Cli
 	protected static ClientDavInterface sDav = null;
 
 	/**
-	 * Systemobjekt, für das die Parameter gesetzt werden sollen.
+	 * Systemobjekt, fÃ¼r das die Parameter gesetzt werden sollen.
 	 */
 	protected SystemObject objekt = null;
 
@@ -64,7 +64,7 @@ public abstract class AbstraktParameterImport extends CSVImporter implements Cli
 	private final AttributeGroup diffFs;
 
 	/**
-	 * Attributgruppe VerkehrsDatenAusfallHäufigkeitFs.
+	 * Attributgruppe VerkehrsDatenAusfallHÃ¤ufigkeitFs.
 	 */
 	private final AttributeGroup ausfallHFs;
 
@@ -84,7 +84,7 @@ public abstract class AbstraktParameterImport extends CSVImporter implements Cli
 	private final DataDescription ddDiff;
 
 	/**
-	 * Datenbeschreibung Ausfallhäufigkeit.
+	 * Datenbeschreibung AusfallhÃ¤ufigkeit.
 	 */
 	private final DataDescription ddAusfall;
 
@@ -99,11 +99,11 @@ public abstract class AbstraktParameterImport extends CSVImporter implements Cli
 	 * @param dav
 	 *            Datenverteier-Verbindung
 	 * @param objekt
-	 *            das Systemobjekt, für das die Parameter gesetzt werden sollen
+	 *            das Systemobjekt, fÃ¼r das die Parameter gesetzt werden sollen
 	 * @param csvQuelle
 	 *            Quelle der Daten (CSV-Datei)
 	 * @throws Exception
-	 *             falls dieses Objekt nicht vollständig initialisiert werden
+	 *             falls dieses Objekt nicht vollstÃ¤ndig initialisiert werden
 	 *             konnte
 	 */
 	public AbstraktParameterImport(final ClientDavInterface dav, final SystemObject objekt, final String csvQuelle)
@@ -116,7 +116,7 @@ public abstract class AbstraktParameterImport extends CSVImporter implements Cli
 		diffFs = AbstraktParameterImport.sDav.getDataModel()
 				.getAttributeGroup("atg.verkehrsDatenDifferenzialKontrolleFs"); //$NON-NLS-1$
 		ausfallHFs = AbstraktParameterImport.sDav.getDataModel()
-				.getAttributeGroup("atg.verkehrsDatenAusfallHäufigkeitFs"); //$NON-NLS-1$
+				.getAttributeGroup("atg.verkehrsDatenAusfallHÃ¤ufigkeitFs"); //$NON-NLS-1$
 		vertrauensbereichFs = AbstraktParameterImport.sDav.getDataModel()
 				.getAttributeGroup("atg.verkehrsDatenVertrauensBereichFs"); //$NON-NLS-1$
 
@@ -135,13 +135,13 @@ public abstract class AbstraktParameterImport extends CSVImporter implements Cli
 		this.objekt = objekt;
 
 		/**
-		 * Tabellenkopf überspringen
+		 * Tabellenkopf Ã¼berspringen
 		 */
 		this.getNaechsteZeile();
 
 		/**
-		 * Parameter für Differentialkontrolle, Ausfallhäufigkeit und
-		 * Vertrauensbereich deaktivieren bzw. zurücksetzen
+		 * Parameter fÃ¼r Differentialkontrolle, AusfallhÃ¤ufigkeit und
+		 * Vertrauensbereich deaktivieren bzw. zurÃ¼cksetzen
 		 */
 		if (!AbstraktParameterImport.sDav.getDataModel().getAttributeGroup(AtgVerkehrsDatenLZIPlPruefLogisch.getPid())
 				.equals(this.getParameterAtg())) {
@@ -168,12 +168,12 @@ public abstract class AbstraktParameterImport extends CSVImporter implements Cli
 	}
 
 	/**
-	 * Führt den Parameterimport aus.
+	 * FÃ¼hrt den Parameterimport aus.
 	 *
 	 * @param index
 	 *            der Index
 	 * @throws Exception
-	 *             wenn die Parameter nicht vollständig importiert werden
+	 *             wenn die Parameter nicht vollstÃ¤ndig importiert werden
 	 *             konnten
 	 */
 	public final void importiereParameter(final int index) throws Exception {
@@ -211,7 +211,7 @@ public abstract class AbstraktParameterImport extends CSVImporter implements Cli
 	}
 
 	/**
-	 * Setzt Standard-Attribute zurück.
+	 * Setzt Standard-Attribute zurÃ¼ck.
 	 *
 	 * @param optionen
 	 *            Optioens-Parameter
@@ -278,7 +278,7 @@ public abstract class AbstraktParameterImport extends CSVImporter implements Cli
 	}
 
 	/**
-	 * Setzt Attribute der Differentialkontrolle zurück.
+	 * Setzt Attribute der Differentialkontrolle zurÃ¼ck.
 	 *
 	 * @throws Exception
 	 *             wird weitergereicht
@@ -324,7 +324,7 @@ public abstract class AbstraktParameterImport extends CSVImporter implements Cli
 	}
 
 	/**
-	 * Setzt Attribute der Ausfallkontrolle zurück.
+	 * Setzt Attribute der Ausfallkontrolle zurÃ¼ck.
 	 *
 	 * @throws Exception
 	 *             wird weitergereicht
@@ -365,7 +365,7 @@ public abstract class AbstraktParameterImport extends CSVImporter implements Cli
 	}
 
 	/**
-	 * Setzt Attribute des Vertrauensbereich zurück.
+	 * Setzt Attribute des Vertrauensbereich zurÃ¼ck.
 	 *
 	 * @throws Exception
 	 *             wird weitergereicht
@@ -384,12 +384,12 @@ public abstract class AbstraktParameterImport extends CSVImporter implements Cli
 	}
 
 	/**
-	 * Setzt alle restlichen Attribute innerhalb von diesem Datensatz abhängig
-	 * von der tatsächlichen Attributgruppe.
+	 * Setzt alle restlichen Attribute innerhalb von diesem Datensatz abhÃ¤ngig
+	 * von der tatsÃ¤chlichen Attributgruppe.
 	 *
 	 * @param datensatz
 	 *            ein Datensatz
-	 * @return der veränderte (vollständig ausgefüllte Datensatz)
+	 * @return der verÃ¤nderte (vollstÃ¤ndig ausgefÃ¼llte Datensatz)
 	 */
 	public Data fuelleRestAttribute(final Data datensatz) {
 		return datensatz;
@@ -397,7 +397,7 @@ public abstract class AbstraktParameterImport extends CSVImporter implements Cli
 
 	/**
 	 * Erfragt den Attributpfad zu einem Attribut, das in der CSV-Datei den
-	 * übergebenen Namen hat.
+	 * Ã¼bergebenen Namen hat.
 	 *
 	 * @param attributInCSVDatei
 	 *            Attributname innerhalb der CSV-Datei
@@ -416,7 +416,7 @@ public abstract class AbstraktParameterImport extends CSVImporter implements Cli
 
 	@Override
 	public void dataRequest(final SystemObject object, final DataDescription dataDescription, final byte state) {
-		// keine Überprüfung
+		// keine ÃœberprÃ¼fung
 	}
 
 	@Override

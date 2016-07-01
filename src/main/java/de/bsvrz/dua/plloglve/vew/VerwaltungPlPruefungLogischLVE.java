@@ -1,5 +1,5 @@
 /*
- * Segment 4 Datenübernahme und Aufbereitung (DUA), SWE 4.2 Pl-Prüfung logisch LVE
+ * Segment 4 DatenÃ¼bernahme und Aufbereitung (DUA), SWE 4.2 Pl-PrÃ¼fung logisch LVE
  * Copyright (C) 2007-2015 BitCtrl Systems GmbH
  *
  * This program is free software; you can redistribute it and/or modify it under
@@ -18,7 +18,7 @@
  *
  * Contact Information:<br>
  * BitCtrl Systems GmbH<br>
- * Weißenfelser Straße 67<br>
+ * WeiÃŸenfelser StraÃŸe 67<br>
  * 04229 Leipzig<br>
  * Phone: +49 341-490670<br>
  * mailto: info@bitctrl.de
@@ -48,10 +48,10 @@ import de.bsvrz.sys.funclib.debug.Debug;
 import de.bsvrz.sys.funclib.operatingMessage.MessageSender;
 
 /**
- * Implementierung des Moduls Verwaltung der SWE Pl-Prüfung logisch LVE. Dieses
- * Modul erfragt die zu überprüfenden Daten aus der Parametrierung und
- * initialisiert damit die Module Pl-Prüfung formal und Pl-Prüfung logisch LVE,
- * die dann die eigentliche Prüfung durchführen.
+ * Implementierung des Moduls Verwaltung der SWE Pl-PrÃ¼fung logisch LVE. Dieses
+ * Modul erfragt die zu Ã¼berprÃ¼fenden Daten aus der Parametrierung und
+ * initialisiert damit die Module Pl-PrÃ¼fung formal und Pl-PrÃ¼fung logisch LVE,
+ * die dann die eigentliche PrÃ¼fung durchfÃ¼hren.
  *
  * @author BitCtrl Systems GmbH, Thierfelder
  */
@@ -60,12 +60,12 @@ public class VerwaltungPlPruefungLogischLVE extends AbstraktVerwaltungsAdapterMi
 	private static final Debug LOGGER = Debug.getLogger();
 
 	/**
-	 * Instanz des Moduls PL-Prüfung formal.
+	 * Instanz des Moduls PL-PrÃ¼fung formal.
 	 */
 	private PlPruefungFormal plPruefungFormal = null;
 
 	/**
-	 * Instanz des Moduls PL-Prüfung logisch LVE.
+	 * Instanz des Moduls PL-PrÃ¼fung logisch LVE.
 	 */
 	private PlPruefungLogischLVE plPruefungLogischLVE = null;
 
@@ -143,11 +143,11 @@ public class VerwaltungPlPruefungLogischLVE extends AbstraktVerwaltungsAdapterMi
 	}
 
 	/**
-	 * Standard-Gütefaktor für Ersetzungen (90%)<br>
-	 * Wenn das Modul Pl-Prüfung logisch LVE einen Messwert ersetzt (eigentlich
-	 * nur bei Wertebereichsprüfung) so vermindert sich die Güte des
-	 * Ausgangswertes um diesen Faktor (wenn kein anderer Wert über die
-	 * Kommandozeile übergeben wurde)
+	 * Standard-GÃ¼tefaktor fÃ¼r Ersetzungen (90%)<br>
+	 * Wenn das Modul Pl-PrÃ¼fung logisch LVE einen Messwert ersetzt (eigentlich
+	 * nur bei WertebereichsprÃ¼fung) so vermindert sich die GÃ¼te des
+	 * Ausgangswertes um diesen Faktor (wenn kein anderer Wert Ã¼ber die
+	 * Kommandozeile Ã¼bergeben wurde)
 	 */
 	@Override
 	public double getStandardGueteFaktor() {

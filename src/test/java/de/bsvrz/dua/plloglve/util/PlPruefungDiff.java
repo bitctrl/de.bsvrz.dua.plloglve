@@ -1,5 +1,5 @@
 /*
- * Segment 4 Datenübernahme und Aufbereitung (DUA), SWE 4.2 Pl-Prüfung logisch LVE
+ * Segment 4 DatenÃ¼bernahme und Aufbereitung (DUA), SWE 4.2 Pl-PrÃ¼fung logisch LVE
  * Copyright (C) 2007-2015 BitCtrl Systems GmbH
  *
  * This program is free software; you can redistribute it and/or modify it under
@@ -18,7 +18,7 @@
  *
  * Contact Information:<br>
  * BitCtrl Systems GmbH<br>
- * Weißenfelser Straße 67<br>
+ * WeiÃŸenfelser StraÃŸe 67<br>
  * 04229 Leipzig<br>
  * Phone: +49 341-490670<br>
  * mailto: info@bitctrl.de
@@ -47,7 +47,7 @@ import de.bsvrz.sys.funclib.debug.Debug;
 /**
  * Test Differenzialkontrolle
  *
- * @author BitCtrl Systems GmbH, Görlitz
+ * @author BitCtrl Systems GmbH, GÃ¶rlitz
  */
 public class PlPruefungDiff implements ClientSenderInterface, PlPruefungInterface {
 
@@ -69,7 +69,7 @@ public class PlPruefungDiff implements ClientSenderInterface, PlPruefungInterfac
 	private ParaKZDLogImport kzdImport;
 
 	/**
-	 * Sende-Datenbeschreibung für KZD
+	 * Sende-Datenbeschreibung fÃ¼r KZD
 	 */
 	public static DataDescription ddKzdSend;
 
@@ -93,7 +93,7 @@ public class PlPruefungDiff implements ClientSenderInterface, PlPruefungInterfac
 		this.dav = dav;
 
 		/*
-		 * Melde Sender für FS an
+		 * Melde Sender fÃ¼r FS an
 		 */
 		PlPruefungDiff.fahrStreifen = this.dav.getDataModel().getObject(Konfiguration.PID_TESTFS1_KZD);
 
@@ -110,7 +110,7 @@ public class PlPruefungDiff implements ClientSenderInterface, PlPruefungInterfac
 	}
 
 	/**
-	 * Sendet Testdaten für Differenzialkontrolle und überprüft die
+	 * Sendet Testdaten fÃ¼r Differenzialkontrolle und Ã¼berprÃ¼ft die
 	 * Ergebnisdaten
 	 *
 	 * @throws Exception
@@ -139,7 +139,7 @@ public class PlPruefungDiff implements ClientSenderInterface, PlPruefungInterfac
 		Long aktZeit = System.currentTimeMillis();
 
 		/*
-		 * Meldungsfilter Prüft die Anzahl der durch die Differenzialkontrolle
+		 * Meldungsfilter PrÃ¼ft die Anzahl der durch die Differenzialkontrolle
 		 * erzeugten Betriebsmeldungen Wir erwarten insgesamt 63
 		 * Betriebsmeldungen welche den Text "konstant" enthalten
 		 */
@@ -147,7 +147,7 @@ public class PlPruefungDiff implements ClientSenderInterface, PlPruefungInterfac
 		PlPruefungDiff.LOGGER.info("Meldungsfilter initialisiert: Erwarte 105 Meldungen mit \"konstant\""); //$NON-NLS-1$
 
 		/*
-		 * Markierungsprüfer Prüft die Ausgangsdaten der Differenzialkontrolle
+		 * MarkierungsprÃ¼fer PrÃ¼ft die Ausgangsdaten der Differenzialkontrolle
 		 * auf korrekte Markierung (OK bzw. fehlerhaft/implausibel)
 		 */
 		final PruefeMarkierung markPruefer = new PruefeMarkierung(this, dav, PlPruefungDiff.fahrStreifen);
@@ -160,7 +160,7 @@ public class PlPruefungDiff implements ClientSenderInterface, PlPruefungInterfac
 		int dsDurchlauf;
 
 		/*
-		 * Senden der Testdaten über 3 Durchläufe
+		 * Senden der Testdaten Ã¼ber 3 DurchlÃ¤ufe
 		 */
 		for (int i = 0; i < 5; i++) {
 			while ((zeileFSDiff = fsImpFSDiff
@@ -170,15 +170,15 @@ public class PlPruefungDiff implements ClientSenderInterface, PlPruefungInterfac
 
 				dsDurchlauf = dsGesamt - (480 * i);
 				PlPruefungDiff.LOGGER.info("Durchlauf:" + (i + 1) + " - CSV-Zeile:" + (dsDurchlauf + 1) + " - Zeit:" //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-						+ aktZeit + " -> Konfiguriere Prüfer: Erwarte alle Attribute als fehlerfrei"); //$NON-NLS-1$
+						+ aktZeit + " -> Konfiguriere PrÃ¼fer: Erwarte alle Attribute als fehlerfrei"); //$NON-NLS-1$
 				System.out.println("Durchlauf:" + (i + 1) + " - CSV-Zeile:" + (dsDurchlauf + 1) + " - Zeit:" + aktZeit
-						+ " -> Konfiguriere Prüfer: Erwarte alle Attribute als fehlerfrei");
+						+ " -> Konfiguriere PrÃ¼fer: Erwarte alle Attribute als fehlerfrei");
 
 				/*
-				 * Konfiguriere Markierungsprüfer Wir erwarten generell alle
+				 * Konfiguriere MarkierungsprÃ¼fer Wir erwarten generell alle
 				 * Daten als OK
 				 *
-				 * Überprüfung von s -> OK im Intervall 20-27
+				 * ÃœberprÃ¼fung von s -> OK im Intervall 20-27
 				 */
 				markPruefer.listenOK(aktZeit);
 
@@ -188,9 +188,9 @@ public class PlPruefungDiff implements ClientSenderInterface, PlPruefungInterfac
 				 */
 				if ((dsDurchlauf == 4) || (dsDurchlauf == 13)) {
 					PlPruefungDiff.LOGGER.info("CSV-Zeile:" + (dsDurchlauf + 1) + " - Zeit:" + aktZeit //$NON-NLS-1$ //$NON-NLS-2$
-							+ " -> Konfiguriere Prüfer: Erwarte qKfz als fehlerhaft und implausibel"); //$NON-NLS-1$
+							+ " -> Konfiguriere PrÃ¼fer: Erwarte qKfz als fehlerhaft und implausibel"); //$NON-NLS-1$
 					System.out.println("CSV-Zeile:" + (dsDurchlauf + 1) + " - Zeit:" + aktZeit //$NON-NLS-1$ //$NON-NLS-2$
-							+ " -> Konfiguriere Prüfer: Erwarte qKfz als fehlerhaft und implausibel"); //$NON-NLS-1$
+							+ " -> Konfiguriere PrÃ¼fer: Erwarte qKfz als fehlerhaft und implausibel"); //$NON-NLS-1$
 					markPruefer.listenFehlImpl("qKfz", aktZeit); //$NON-NLS-1$
 				}
 
@@ -200,9 +200,9 @@ public class PlPruefungDiff implements ClientSenderInterface, PlPruefungInterfac
 				 */
 				if ((dsDurchlauf == 6) || ((dsDurchlauf >= 13) && (dsDurchlauf <= 17))) {
 					PlPruefungDiff.LOGGER.info("CSV-Zeile:" + (dsDurchlauf + 1) + " - Zeit:" + aktZeit //$NON-NLS-1$ //$NON-NLS-2$
-							+ " -> Konfiguriere Prüfer: Erwarte qLkw als fehlerhaft und implausibel"); //$NON-NLS-1$
+							+ " -> Konfiguriere PrÃ¼fer: Erwarte qLkw als fehlerhaft und implausibel"); //$NON-NLS-1$
 					System.out.println("CSV-Zeile:" + (dsDurchlauf + 1) + " - Zeit:" + aktZeit //$NON-NLS-1$ //$NON-NLS-2$
-							+ " -> Konfiguriere Prüfer: Erwarte qLkw als fehlerhaft und implausibel"); //$NON-NLS-1$
+							+ " -> Konfiguriere PrÃ¼fer: Erwarte qLkw als fehlerhaft und implausibel"); //$NON-NLS-1$
 					markPruefer.listenFehlImpl("qLkw", aktZeit); //$NON-NLS-1$
 				}
 
@@ -212,9 +212,9 @@ public class PlPruefungDiff implements ClientSenderInterface, PlPruefungInterfac
 				 */
 				if ((dsDurchlauf >= 9) && (dsDurchlauf <= 13)) {
 					PlPruefungDiff.LOGGER.info("CSV-Zeile:" + (dsDurchlauf + 1) + " - Zeit:" + aktZeit //$NON-NLS-1$ //$NON-NLS-2$
-							+ " -> Konfiguriere Prüfer: Erwarte qPkw als fehlerhaft und implausibel"); //$NON-NLS-1$
+							+ " -> Konfiguriere PrÃ¼fer: Erwarte qPkw als fehlerhaft und implausibel"); //$NON-NLS-1$
 					System.out.println("CSV-Zeile:" + (dsDurchlauf + 1) + " - Zeit:" + aktZeit //$NON-NLS-1$ //$NON-NLS-2$
-							+ " -> Konfiguriere Prüfer: Erwarte qPkw als fehlerhaft und implausibel"); //$NON-NLS-1$
+							+ " -> Konfiguriere PrÃ¼fer: Erwarte qPkw als fehlerhaft und implausibel"); //$NON-NLS-1$
 					markPruefer.listenFehlImpl("qPkw", aktZeit); //$NON-NLS-1$
 				}
 
@@ -224,9 +224,9 @@ public class PlPruefungDiff implements ClientSenderInterface, PlPruefungInterfac
 				 */
 				if ((dsDurchlauf >= 30) && (dsDurchlauf <= 31)) {
 					PlPruefungDiff.LOGGER.info("CSV-Zeile:" + (dsDurchlauf + 1) + " - Zeit:" + aktZeit //$NON-NLS-1$ //$NON-NLS-2$
-							+ " -> Konfiguriere Prüfer: Erwarte vKfz als fehlerhaft und implausibel"); //$NON-NLS-1$
+							+ " -> Konfiguriere PrÃ¼fer: Erwarte vKfz als fehlerhaft und implausibel"); //$NON-NLS-1$
 					System.out.println("CSV-Zeile:" + (dsDurchlauf + 1) + " - Zeit:" + aktZeit //$NON-NLS-1$ //$NON-NLS-2$
-							+ " -> Konfiguriere Prüfer: Erwarte vKfz als fehlerhaft und implausibel"); //$NON-NLS-1$
+							+ " -> Konfiguriere PrÃ¼fer: Erwarte vKfz als fehlerhaft und implausibel"); //$NON-NLS-1$
 					markPruefer.listenFehlImpl("vKfz", aktZeit); //$NON-NLS-1$
 				}
 
@@ -236,9 +236,9 @@ public class PlPruefungDiff implements ClientSenderInterface, PlPruefungInterfac
 				 */
 				if ((dsDurchlauf >= 36) && (dsDurchlauf <= 38)) {
 					PlPruefungDiff.LOGGER.info("CSV-Zeile:" + (dsDurchlauf + 1) + " - Zeit:" + aktZeit //$NON-NLS-1$ //$NON-NLS-2$
-							+ " -> Konfiguriere Prüfer: Erwarte vLkw als fehlerhaft und implausibel"); //$NON-NLS-1$
+							+ " -> Konfiguriere PrÃ¼fer: Erwarte vLkw als fehlerhaft und implausibel"); //$NON-NLS-1$
 					System.out.println("CSV-Zeile:" + (dsDurchlauf + 1) + " - Zeit:" + aktZeit //$NON-NLS-1$ //$NON-NLS-2$
-							+ " -> Konfiguriere Prüfer: Erwarte vLkw als fehlerhaft und implausibel"); //$NON-NLS-1$
+							+ " -> Konfiguriere PrÃ¼fer: Erwarte vLkw als fehlerhaft und implausibel"); //$NON-NLS-1$
 					markPruefer.listenFehlImpl("vLkw", aktZeit); //$NON-NLS-1$
 				}
 
@@ -247,9 +247,9 @@ public class PlPruefungDiff implements ClientSenderInterface, PlPruefungInterfac
 				 */
 				if (dsDurchlauf == 32) {
 					PlPruefungDiff.LOGGER.info("CSV-Zeile:" + (dsDurchlauf + 1) + " - Zeit:" + aktZeit //$NON-NLS-1$ //$NON-NLS-2$
-							+ " -> Konfiguriere Prüfer: Erwarte vPkw als fehlerhaft und implausibel"); //$NON-NLS-1$
+							+ " -> Konfiguriere PrÃ¼fer: Erwarte vPkw als fehlerhaft und implausibel"); //$NON-NLS-1$
 					System.out.println("CSV-Zeile:" + (dsDurchlauf + 1) + " - Zeit:" + aktZeit //$NON-NLS-1$ //$NON-NLS-2$
-							+ " -> Konfiguriere Prüfer: Erwarte vPkw als fehlerhaft und implausibel"); //$NON-NLS-1$
+							+ " -> Konfiguriere PrÃ¼fer: Erwarte vPkw als fehlerhaft und implausibel"); //$NON-NLS-1$
 					markPruefer.listenFehlImpl("vPkw", aktZeit); //$NON-NLS-1$
 				}
 
@@ -259,9 +259,9 @@ public class PlPruefungDiff implements ClientSenderInterface, PlPruefungInterfac
 				 */
 				if ((dsDurchlauf == 31) || (dsDurchlauf == 35)) {
 					PlPruefungDiff.LOGGER.info("CSV-Zeile:" + (dsDurchlauf + 1) + " - Zeit:" + aktZeit //$NON-NLS-1$ //$NON-NLS-2$
-							+ " -> Konfiguriere Prüfer: Erwarte b als fehlerhaft und implausibel"); //$NON-NLS-1$
+							+ " -> Konfiguriere PrÃ¼fer: Erwarte b als fehlerhaft und implausibel"); //$NON-NLS-1$
 					System.out.println("CSV-Zeile:" + (dsDurchlauf + 1) + " - Zeit:" + aktZeit //$NON-NLS-1$ //$NON-NLS-2$
-							+ " -> Konfiguriere Prüfer: Erwarte b als fehlerhaft und implausibel"); //$NON-NLS-1$
+							+ " -> Konfiguriere PrÃ¼fer: Erwarte b als fehlerhaft und implausibel"); //$NON-NLS-1$
 					markPruefer.listenFehlImpl("b", aktZeit); //$NON-NLS-1$
 				}
 
@@ -303,7 +303,7 @@ public class PlPruefungDiff implements ClientSenderInterface, PlPruefungInterfac
 			PlPruefungDiff.LOGGER.info(warnung);
 		}
 
-		PlPruefungDiff.LOGGER.info("Prüfung erfolgreich abgeschlossen"); //$NON-NLS-1$
+		PlPruefungDiff.LOGGER.info("PrÃ¼fung erfolgreich abgeschlossen"); //$NON-NLS-1$
 
 		/*
 		 * Sender abmelden
@@ -322,7 +322,7 @@ public class PlPruefungDiff implements ClientSenderInterface, PlPruefungInterfac
 	}
 
 	/**
-	 * Lässten diesen Thread warten
+	 * LÃ¤ssten diesen Thread warten
 	 */
 	private void doWait() {
 		synchronized (this) {

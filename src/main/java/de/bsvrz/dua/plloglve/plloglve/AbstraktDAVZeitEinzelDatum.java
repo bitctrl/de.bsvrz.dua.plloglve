@@ -1,5 +1,5 @@
 /*
- * Segment 4 Daten¸bernahme und Aufbereitung (DUA), SWE 4.2 Pl-Pr¸fung logisch LVE
+ * Segment 4 Daten√ºbernahme und Aufbereitung (DUA), SWE 4.2 Pl-Pr√ºfung logisch LVE
  * Copyright (C) 2007-2015 BitCtrl Systems GmbH
  *
  * This program is free software; you can redistribute it and/or modify it under
@@ -18,7 +18,7 @@
  *
  * Contact Information:<br>
  * BitCtrl Systems GmbH<br>
- * Weiﬂenfelser Straﬂe 67<br>
+ * Wei√üenfelser Stra√üe 67<br>
  * 04229 Leipzig<br>
  * Phone: +49 341-490670<br>
  * mailto: info@bitctrl.de
@@ -27,8 +27,8 @@
 package de.bsvrz.dua.plloglve.plloglve;
 
 /**
- * Abstrakter Container f¸r Daten mit den Attributen Zeitstempel und
- * Intervalll‰nge. Die Objekte sind nach ihrer Datenzeit sortierbar.
+ * Abstrakter Container f√ºr Daten mit den Attributen Zeitstempel und
+ * Intervalll√§nge. Die Objekte sind nach ihrer Datenzeit sortierbar.
  *
  * @author BitCtrl Systems GmbH, Thierfelder
  */
@@ -40,14 +40,14 @@ public class AbstraktDAVZeitEinzelDatum implements Comparable<AbstraktDAVZeitEin
 	protected long datenZeit = -1;
 
 	/**
-	 * die Intervalll‰nge des Datums.
+	 * die Intervalll√§nge des Datums.
 	 */
 	protected long intervallLaenge = -1;
 
 	/**
-	 * Erfragt die Intervalll‰nge des Datums.
+	 * Erfragt die Intervalll√§nge des Datums.
 	 *
-	 * @return die Intervalll‰nge des Datums
+	 * @return die Intervalll√§nge des Datums
 	 */
 	public final long getIntervallLaenge() {
 		return this.intervallLaenge;

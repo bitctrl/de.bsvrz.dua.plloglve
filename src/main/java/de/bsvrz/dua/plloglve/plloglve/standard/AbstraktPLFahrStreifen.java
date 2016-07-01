@@ -1,5 +1,5 @@
 /*
- * Segment 4 Datenübernahme und Aufbereitung (DUA), SWE 4.2 Pl-Prüfung logisch LVE
+ * Segment 4 DatenÃ¼bernahme und Aufbereitung (DUA), SWE 4.2 Pl-PrÃ¼fung logisch LVE
  * Copyright (C) 2007-2015 BitCtrl Systems GmbH
  *
  * This program is free software; you can redistribute it and/or modify it under
@@ -18,7 +18,7 @@
  *
  * Contact Information:<br>
  * BitCtrl Systems GmbH<br>
- * Weißenfelser Straße 67<br>
+ * WeiÃŸenfelser StraÃŸe 67<br>
  * 04229 Leipzig<br>
  * Phone: +49 341-490670<br>
  * mailto: info@bitctrl.de
@@ -53,9 +53,9 @@ import de.bsvrz.sys.funclib.debug.Debug;
 
 /**
  * Abstrakte Klasse zum Ablegen von Informationen der Standardplausibilisierung
- * LVE für LZD und KZD. Diese Klasse macht nichts weiter, als sich auf die
+ * LVE fÃ¼r LZD und KZD. Diese Klasse macht nichts weiter, als sich auf die
  * Grenzwertparameter anzumelden und einige Funktionen zur Plausibilisierung zur
- * Verfügung zu stellen
+ * VerfÃ¼gung zu stellen
  *
  * @author BitCtrl Systems GmbH, Thierfelder
  */
@@ -74,12 +74,12 @@ public abstract class AbstraktPLFahrStreifen implements ClientReceiverInterface 
 	protected static IVerwaltungMitGuete dieVerwaltung = null;
 
 	/**
-	 * letztes zur Plausibilisierung übergebenes Datum.
+	 * letztes zur Plausibilisierung Ã¼bergebenes Datum.
 	 */
 	protected ResultData letztesKZDatum = null;
 
 	/**
-	 * Schnittstelle zu den Parametern der Grenzwertprüfung.
+	 * Schnittstelle zu den Parametern der GrenzwertprÃ¼fung.
 	 */
 	protected AbstraktAtgPLLogischLVEParameter parameterAtgLog = null;
 
@@ -127,18 +127,18 @@ public abstract class AbstraktPLFahrStreifen implements ClientReceiverInterface 
 	 * qPkw = qKfz - qLkw<br>
 	 * <br>
 	 * Wenn qKfz und/oder qLkw == -1, -2, -3 oder implausibel? <br>
-	 * i. Für qKfz == -1, -2, -3 oder implausibel --&gt; qPkw = nicht
+	 * i. FÃ¼r qKfz == -1, -2, -3 oder implausibel --&gt; qPkw = nicht
 	 * ermittelbar<br>
-	 * ii. Für qKfz &gt;= 0 und plausibel UND für qLkw == -1, -2, -3 oder
+	 * ii. FÃ¼r qKfz &gt;= 0 und plausibel UND fÃ¼r qLkw == -1, -2, -3 oder
 	 * implausibel --&gt; qPkw = qKfz.<br>
-	 * iii. Für qKfz &gt;= 0 und plausibel UND für qLkw &gt;= 0 und plausibel
+	 * iii. FÃ¼r qKfz &gt;= 0 und plausibel UND fÃ¼r qLkw &gt;= 0 und plausibel
 	 * UND qLkw &gt; qKfz --&gt; qPkw = nicht ermittelbar.<br>
-	 * iv. Für qKfz &gt;= 0 und plausibel UND für qLkw &gt;= 0 und plausibel UND
-	 * qLkw &lt;= qKfz --&gt; qPkw = qKfz – qLkw.<br>
+	 * iv. FÃ¼r qKfz &gt;= 0 und plausibel UND fÃ¼r qLkw &gt;= 0 und plausibel UND
+	 * qLkw &lt;= qKfz --&gt; qPkw = qKfz Â– qLkw.<br>
 	 * <br>
 	 *
 	 * Berechnung von vKfz (KZD und LZD):<br>
-	 * Wenn einer der Faktoren im Zähler -1, -2, -3 oder implausibel ist, wird
+	 * Wenn einer der Faktoren im ZÃ¤hler -1, -2, -3 oder implausibel ist, wird
 	 * er als 0 angenommen und mit dem Rest weitergerechnet
 	 *
 	 * @param data
@@ -287,12 +287,12 @@ public abstract class AbstraktPLFahrStreifen implements ClientReceiverInterface 
 	// * ii. Setze Max: Wenn Wert != -1, -2, -3 UND Wert > Max --> Ersetzung und
 	// * Kennzeichnung mit MAX<br>
 	// * iii. Setze MinMax: Wie Setze Min UND Setze Max<br>
-	// * iv. Nur Prüfung: Wenn Wert != -1, -2, -3 UND !(Min <= Wert <= Max) -->
+	// * iv. Nur PrÃ¼fung: Wenn Wert != -1, -2, -3 UND !(Min <= Wert <= Max) -->
 	// * Kennzeichnung als Implausibel UND fehlerhaft<br>
-	// * v. Keine Prüfung --> mache nichts<br>
+	// * v. Keine PrÃ¼fung --> mache nichts<br>
 	// *
 	// * @param davDatum
-	// * ein zu veränderndes Verkehrs-Datums (darf nicht
+	// * ein zu verÃ¤nderndes Verkehrs-Datums (darf nicht
 	// * <code>null</code> sein)
 	// * @param resultat
 	// * das Originaldatum
@@ -382,12 +382,12 @@ public abstract class AbstraktPLFahrStreifen implements ClientReceiverInterface 
 	// if (gueteNeuBerechnen) {
 	// GanzZahl guete = GanzZahl.getGueteIndex();
 	// guete.setWert(davDatum.getItem(wertName)
-	// .getItem("Güte").//$NON-NLS-1$
+	// .getItem("GÃ¼te").//$NON-NLS-1$
 	// getUnscaledValue("Index").longValue()); //$NON-NLS-1$
 	// if (!guete.isZustand()) {
 	// double gueteIndex = guete.getSkaliertenWert();
 	// gueteIndex *= dieVerwaltung.getGueteFaktor();
-	// davDatum.getItem(wertName).getItem("Güte").//$NON-NLS-1$
+	// davDatum.getItem(wertName).getItem("GÃ¼te").//$NON-NLS-1$
 	// getScaledValue("Index").set(gueteIndex); //$NON-NLS-1$
 	// }
 	// }
@@ -408,12 +408,12 @@ public abstract class AbstraktPLFahrStreifen implements ClientReceiverInterface 
 	 * ii. Setze Max: Wenn Wert &gt;= 0 UND Wert &gt; Max --&gt; Ersetzung und
 	 * Kennzeichnung mit MAX<br>
 	 * iii. Setze MinMax: wie bei ii<br>
-	 * iv. Nur Prüfung: Wenn Wert &gt;= 0 UND Wert &gt; Max --&gt; Kennzeichnung
+	 * iv. Nur PrÃ¼fung: Wenn Wert &gt;= 0 UND Wert &gt; Max --&gt; Kennzeichnung
 	 * als Implausibel UND fehlerhaft<br>
-	 * v. Keine Prüfung: mache nichts<br>
+	 * v. Keine PrÃ¼fung: mache nichts<br>
 	 *
 	 * @param davDatum
-	 *            ein zu veränderndes Verkehrs-Datums (darf nicht
+	 *            ein zu verÃ¤nderndes Verkehrs-Datums (darf nicht
 	 *            <code>null</code> sein)
 	 * @param resultat
 	 *            das Originaldatum
@@ -465,7 +465,7 @@ public abstract class AbstraktPLFahrStreifen implements ClientReceiverInterface 
 										"Guete von " + wertName + " konnte nicht aktualisiert werden in " + resultat); //$NON-NLS-1$ //$NON-NLS-2$
 								e1.printStackTrace();
 							}
-							davDatum.getItem(wertName).getItem("Güte").//$NON-NLS-1$
+							davDatum.getItem(wertName).getItem("GÃ¼te").//$NON-NLS-1$
 									getUnscaledValue("Index").set(neueGuete.getIndexUnskaliert()); //$NON-NLS-1$
 
 							/**
@@ -477,7 +477,7 @@ public abstract class AbstraktPLFahrStreifen implements ClientReceiverInterface 
 								 * qPkw=qKfzMax-qLkw zu setzen, sonst werden
 								 * alle Werte qKfz, qLkw, qPkw, vKfz, vLkw, vPkw
 								 * mit den Statusflags Implausibel und
-								 * Fehlerhaft gekennzeichnet und die Prüfung
+								 * Fehlerhaft gekennzeichnet und die PrÃ¼fung
 								 * abgebrochen.
 								 */
 
@@ -500,7 +500,7 @@ public abstract class AbstraktPLFahrStreifen implements ClientReceiverInterface 
 											e.printStackTrace();
 										}
 
-										davDatum.getItem("qPkw").getItem("Güte").//$NON-NLS-1$ //$NON-NLS-2$
+										davDatum.getItem("qPkw").getItem("GÃ¼te").//$NON-NLS-1$ //$NON-NLS-2$
 												getUnscaledValue("Index").set(qPkwGueteNeu.getIndexUnskaliert()); //$NON-NLS-1$
 									} else {
 										AbstraktPLFahrStreifen.LOGGER
@@ -517,8 +517,8 @@ public abstract class AbstraktPLFahrStreifen implements ClientReceiverInterface 
 								/**
 								 * Neu aus AFo 5.2: 13. qPkw <= qPkwMax, sonst
 								 * Wert entsprechend Parametrierung setzen und
-								 * kennzeichnen und qKfz = qKfz – (qPkw –
-								 * qPkwMax) sowie qLkw = qKfz – qPkwMax zu
+								 * kennzeichnen und qKfz = qKfz Â– (qPkw Â–
+								 * qPkwMax) sowie qLkw = qKfz Â– qPkwMax zu
 								 * setzen.
 								 */
 								final long qKfz = davDatum.getItem("qKfz").getUnscaledValue("Wert").longValue(); //$NON-NLS-1$ //$NON-NLS-2$
@@ -542,7 +542,7 @@ public abstract class AbstraktPLFahrStreifen implements ClientReceiverInterface 
 										e.printStackTrace();
 									}
 
-									davDatum.getItem("qKfz").getItem("Güte").//$NON-NLS-1$//$NON-NLS-2$
+									davDatum.getItem("qKfz").getItem("GÃ¼te").//$NON-NLS-1$//$NON-NLS-2$
 											getUnscaledValue("Index").set(qKfzGueteNeu.getIndexUnskaliert()); //$NON-NLS-1$
 
 									/**
@@ -564,7 +564,7 @@ public abstract class AbstraktPLFahrStreifen implements ClientReceiverInterface 
 										e.printStackTrace();
 									}
 
-									davDatum.getItem("qLkw").getItem("Güte").//$NON-NLS-1$//$NON-NLS-2$
+									davDatum.getItem("qLkw").getItem("GÃ¼te").//$NON-NLS-1$//$NON-NLS-2$
 											getUnscaledValue("Index").set(qLkwGueteNeu.getIndexUnskaliert()); //$NON-NLS-1$
 								}
 							} else if (wertName.equals("qLkw")) { //$NON-NLS-1$
@@ -575,7 +575,7 @@ public abstract class AbstraktPLFahrStreifen implements ClientReceiverInterface 
 								 * Zusatz: Wenn qPkw > qPkwMax werden alle Werte
 								 * qKfz, qLkw, qPkw, vKfz, vLkw, vPkw mit den
 								 * Statusflags Implausibel und Fehlerhaft
-								 * gekennzeichnet und die Prüfung abgebrochen.
+								 * gekennzeichnet und die PrÃ¼fung abgebrochen.
 								 */
 								final long qKfz = davDatum.getItem("qKfz").getUnscaledValue("Wert").longValue(); //$NON-NLS-1$ //$NON-NLS-2$
 								final long qLkw = davDatum.getItem("qLkw").getUnscaledValue("Wert").longValue(); //$NON-NLS-1$ //$NON-NLS-2$
@@ -622,7 +622,7 @@ public abstract class AbstraktPLFahrStreifen implements ClientReceiverInterface 
 											e.printStackTrace();
 										}
 
-										davDatum.getItem("qPkw").getItem("Güte").//$NON-NLS-1$//$NON-NLS-2$
+										davDatum.getItem("qPkw").getItem("GÃ¼te").//$NON-NLS-1$//$NON-NLS-2$
 												getUnscaledValue("Index").set(qPkwGueteNeu.getIndexUnskaliert()); //$NON-NLS-1$
 									}
 								}
@@ -656,12 +656,12 @@ public abstract class AbstraktPLFahrStreifen implements ClientReceiverInterface 
 	}
 
 	/**
-	 * Plausibilisiert ein übergebenes Datum.
+	 * Plausibilisiert ein Ã¼bergebenes Datum.
 	 *
 	 * @param resultat
 	 *            ein Originaldatum
-	 * @return das veränderte Datum oder <code>null</code>, wenn keine
-	 *         Veränderungen vorgenommen werden mussten
+	 * @return das verÃ¤nderte Datum oder <code>null</code>, wenn keine
+	 *         VerÃ¤nderungen vorgenommen werden mussten
 	 */
 	protected Data plausibilisiere(final ResultData resultat) {
 		Data copy = null;
@@ -695,7 +695,7 @@ public abstract class AbstraktPLFahrStreifen implements ClientReceiverInterface 
 			final long wert = daten.getItem(attributName).getItem("Wert").asUnscaledValue().longValue(); //$NON-NLS-1$
 			if ((wert == DUAKonstanten.NICHT_ERMITTELBAR) || (wert == DUAKonstanten.FEHLERHAFT)
 					|| (wert == DUAKonstanten.NICHT_ERMITTELBAR_BZW_FEHLERHAFT)) {
-				daten.getItem(attributName).getItem("Güte").getUnscaledValue("Index").set(0); //$NON-NLS-1$//$NON-NLS-2$
+				daten.getItem(attributName).getItem("GÃ¼te").getUnscaledValue("Index").set(0); //$NON-NLS-1$//$NON-NLS-2$
 			}
 		}
 	}
@@ -720,7 +720,7 @@ public abstract class AbstraktPLFahrStreifen implements ClientReceiverInterface 
 	protected abstract void setAllesImplausibel(Data veraenderbaresDatum);
 
 	/**
-	 * Erfragt das Systemobjekt der Attributgruppe, unter der die Parameter für
+	 * Erfragt das Systemobjekt der Attributgruppe, unter der die Parameter fÃ¼r
 	 * die Intervallgrenzwerte stehen.
 	 *
 	 * @param dav
@@ -730,7 +730,7 @@ public abstract class AbstraktPLFahrStreifen implements ClientReceiverInterface 
 	protected abstract AttributeGroup getPlausibilisierungsParameterAtg(final ClientDavInterface dav);
 
 	/**
-	 * Führt eine.
+	 * FÃ¼hrt eine.
 	 *
 	 * @param data
 	 *            das Datum

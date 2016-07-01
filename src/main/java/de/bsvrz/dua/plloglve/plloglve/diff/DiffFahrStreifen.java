@@ -1,5 +1,5 @@
 /*
- * Segment 4 Datenübernahme und Aufbereitung (DUA), SWE 4.2 Pl-Prüfung logisch LVE
+ * Segment 4 DatenÃ¼bernahme und Aufbereitung (DUA), SWE 4.2 Pl-PrÃ¼fung logisch LVE
  * Copyright (C) 2007-2015 BitCtrl Systems GmbH
  *
  * This program is free software; you can redistribute it and/or modify it under
@@ -18,7 +18,7 @@
  *
  * Contact Information:<br>
  * BitCtrl Systems GmbH<br>
- * Weißenfelser Straße 67<br>
+ * WeiÃŸenfelser StraÃŸe 67<br>
  * 04229 Leipzig<br>
  * Phone: +49 341-490670<br>
  * mailto: info@bitctrl.de
@@ -60,7 +60,7 @@ public class DiffFahrStreifen implements ClientReceiverInterface {
 	private static IVerwaltung dieVerwaltung = null;
 
 	/**
-	 * Datenbeschreibung für Parameter der Differezialkontrolle.
+	 * Datenbeschreibung fÃ¼r Parameter der Differezialkontrolle.
 	 */
 	private static DataDescription diffParaBeschreibung = null;
 
@@ -142,12 +142,12 @@ public class DiffFahrStreifen implements ClientReceiverInterface {
 	}
 
 	/**
-	 * Für die empfangenen Daten wird geprüft, ob innerhalb eines zu
+	 * FÃ¼r die empfangenen Daten wird geprÃ¼ft, ob innerhalb eines zu
 	 * definierenden Zeitraums (parametrierbare Anzahl der Erfassungsintervalle,
-	 * parametrierbar je Fahrstreifen) eine Änderung des Messwerts vorliegt.
-	 * Liegt eine Ergebniskonstanz für eine frei parametrierbare Anzahl von
-	 * Erfassungsintervallen für einzelne (oder alle Werte) vor, so erfolgt eine
-	 * Kennzeichnung der Werte als Implausibel und Fehlerhaft. Darüber hinaus
+	 * parametrierbar je Fahrstreifen) eine Ã„nderung des Messwerts vorliegt.
+	 * Liegt eine Ergebniskonstanz fÃ¼r eine frei parametrierbare Anzahl von
+	 * Erfassungsintervallen fÃ¼r einzelne (oder alle Werte) vor, so erfolgt eine
+	 * Kennzeichnung der Werte als Implausibel und Fehlerhaft. DarÃ¼ber hinaus
 	 * wird eine entsprechende Betriebsmeldung versendet.
 	 *
 	 * @param resultat
@@ -228,7 +228,7 @@ public class DiffFahrStreifen implements ClientReceiverInterface {
 					}
 				} else {
 					DiffFahrStreifen.LOGGER.warning("Fuer Fahrstreifen " + this + //$NON-NLS-1$
-							" wurden noch keine Parameter für die Differenzialkontrolle empfangen"); //$NON-NLS-1$
+							" wurden noch keine Parameter fÃ¼r die Differenzialkontrolle empfangen"); //$NON-NLS-1$
 				}
 			}
 		}

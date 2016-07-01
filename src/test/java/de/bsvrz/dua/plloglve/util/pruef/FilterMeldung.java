@@ -1,5 +1,5 @@
 /*
- * Segment 4 Datenübernahme und Aufbereitung (DUA), SWE 4.2 Pl-Prüfung logisch LVE
+ * Segment 4 DatenÃ¼bernahme und Aufbereitung (DUA), SWE 4.2 Pl-PrÃ¼fung logisch LVE
  * Copyright (C) 2007-2015 BitCtrl Systems GmbH
  *
  * This program is free software; you can redistribute it and/or modify it under
@@ -18,7 +18,7 @@
  *
  * Contact Information:<br>
  * BitCtrl Systems GmbH<br>
- * Weißenfelser Straße 67<br>
+ * WeiÃŸenfelser StraÃŸe 67<br>
  * 04229 Leipzig<br>
  * Phone: +49 341-490670<br>
  * mailto: info@bitctrl.de
@@ -38,7 +38,7 @@ import de.bsvrz.sys.funclib.debug.Debug;
  * KZD Listener Liest Ergebnis-CSV-Datei Wartet auf gesendete und gepruefte
  * Daten und gibt diese an Vergleicher-Klasse weiter.
  *
- * @author BitCtrl Systems GmbH, Görlitz
+ * @author BitCtrl Systems GmbH, GÃ¶rlitz
  */
 public class FilterMeldung implements IBmListener {
 
@@ -60,12 +60,12 @@ public class FilterMeldung implements IBmListener {
 	SystemObject meld;
 
 	/**
-	 * Gibt an, ob Ergebnisdatensätze auf Fehlerfreiheit geprüft werden.
+	 * Gibt an, ob ErgebnisdatensÃ¤tze auf Fehlerfreiheit geprÃ¼ft werden.
 	 */
 	private String filter = null;
 
 	/**
-	 * Zählt die Anzahl der gefilterten Meldungen.
+	 * ZÃ¤hlt die Anzahl der gefilterten Meldungen.
 	 */
 	private int meldAnzahl = 0;
 
@@ -80,7 +80,7 @@ public class FilterMeldung implements IBmListener {
 	private final int anzHyst;
 
 	/**
-	 * Empfange-Datenbeschreibung für KZD und LZD.
+	 * Empfange-Datenbeschreibung fÃ¼r KZD und LZD.
 	 */
 	public static DataDescription ddMeldEmpf = null;
 
@@ -117,7 +117,7 @@ public class FilterMeldung implements IBmListener {
 				"Filtere Betriebsmeldungen nach \"" + filter + "\" - Erwarte " + erfAnz + " gefilterte Meldungen"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 
 		/*
-		 * Melde Empfänger für Betriebsmeldungen an
+		 * Melde EmpfÃ¤nger fÃ¼r Betriebsmeldungen an
 		 */
 		FilterMeldung.ddMeldEmpf = new DataDescription(this.dav.getDataModel().getAttributeGroup("atg.betriebsMeldung"), //$NON-NLS-1$
 				this.dav.getDataModel().getAspect("asp.information")); //$NON-NLS-1$

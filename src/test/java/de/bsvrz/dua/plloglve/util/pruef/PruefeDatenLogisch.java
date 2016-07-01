@@ -1,5 +1,5 @@
 /*
- * Segment 4 Datenübernahme und Aufbereitung (DUA), SWE 4.2 Pl-Prüfung logisch LVE
+ * Segment 4 DatenÃ¼bernahme und Aufbereitung (DUA), SWE 4.2 Pl-PrÃ¼fung logisch LVE
  * Copyright (C) 2007-2015 BitCtrl Systems GmbH
  *
  * This program is free software; you can redistribute it and/or modify it under
@@ -18,7 +18,7 @@
  *
  * Contact Information:<br>
  * BitCtrl Systems GmbH<br>
- * Weißenfelser Straße 67<br>
+ * WeiÃŸenfelser StraÃŸe 67<br>
  * 04229 Leipzig<br>
  * Phone: +49 341-490670<br>
  * mailto: info@bitctrl.de
@@ -49,7 +49,7 @@ import de.bsvrz.sys.funclib.debug.Debug;
  * KZD Listener Liest Ergebnis-CSV-Datei Wartet auf gesendete und gepruefte
  * Daten und gibt diese an Vergleicher-Klasse weiter.
  *
- * @author BitCtrl Systems GmbH, Görlitz
+ * @author BitCtrl Systems GmbH, GÃ¶rlitz
  */
 public class PruefeDatenLogisch implements ClientReceiverInterface {
 
@@ -116,55 +116,55 @@ public class PruefeDatenLogisch implements ClientReceiverInterface {
 	private long pruefZeitstempel;
 
 	/**
-	 * Gibt an, ob die Fahrstreifenpruefung für FS1 erfolgt ist.
+	 * Gibt an, ob die Fahrstreifenpruefung fÃ¼r FS1 erfolgt ist.
 	 */
 	private boolean pruefungFS1Fertig = false;
 
 	/**
-	 * Gibt an, ob die Fahrstreifenpruefung für FS2 erfolgt ist.
+	 * Gibt an, ob die Fahrstreifenpruefung fÃ¼r FS2 erfolgt ist.
 	 */
 	private boolean pruefungFS2Fertig = false;
 
 	/**
-	 * Gibt an, ob die Fahrstreifenpruefung für FS3 erfolgt ist.
+	 * Gibt an, ob die Fahrstreifenpruefung fÃ¼r FS3 erfolgt ist.
 	 */
 	private boolean pruefungFS3Fertig = false;
 
 	/**
-	 * Vergleicherthread für FS1 .
+	 * Vergleicherthread fÃ¼r FS1 .
 	 */
 	private final VergleicheDaten vergleicheFS1;
 
 	/**
-	 * Vergleicherthread für FS2 .
+	 * Vergleicherthread fÃ¼r FS2 .
 	 */
 	private final VergleicheDaten vergleicheFS2;
 
 	/**
-	 * Vergleicherthread für FS3 .
+	 * Vergleicherthread fÃ¼r FS3 .
 	 */
 	private final VergleicheDaten vergleicheFS3;
 
 	/**
-	 * Empfange-Datenbeschreibung für KZD.
+	 * Empfange-Datenbeschreibung fÃ¼r KZD.
 	 */
 	public static DataDescription ddKzdEmpf = null;
 
 	/**
-	 * Empfange-Datenbeschreibung für LZD.
+	 * Empfange-Datenbeschreibung fÃ¼r LZD.
 	 */
 	public static DataDescription ddLzdEmpf = null;
 
 	/**
-	 * Listener, der auf ein bestimmtes Ergenis wartet und dann eine Prüfung der
-	 * Ergebnisdaten durchführt.
+	 * Listener, der auf ein bestimmtes Ergenis wartet und dann eine PrÃ¼fung der
+	 * Ergebnisdaten durchfÃ¼hrt.
 	 *
 	 * @param caller
 	 *            Die aufrufende Klasse
 	 * @param dav1
 	 *            Datenverteiler-Verbindung
 	 * @param fs
-	 *            Die zu überwachenden Fahrstreifenobjekte
+	 *            Die zu Ã¼berwachenden Fahrstreifenobjekte
 	 * @param csvQuelle
 	 *            Die Quell CSV-Datei mit Soll-Werten
 	 * @throws Exception
@@ -184,7 +184,7 @@ public class PruefeDatenLogisch implements ClientReceiverInterface {
 				this.dav.getDataModel().getAttributeGroup(DUAKonstanten.ATG_LZD),
 				this.dav.getDataModel().getAspect(DUAKonstanten.ASP_PL_PRUEFUNG_LOGISCH));
 
-		// Empfänger anmelden
+		// EmpfÃ¤nger anmelden
 		this.dav.subscribeReceiver(this, fs, PruefeDatenLogisch.ddKzdEmpf, ReceiveOptions.normal(),
 				ReceiverRole.receiver());
 
@@ -195,7 +195,7 @@ public class PruefeDatenLogisch implements ClientReceiverInterface {
 			// CSV Importer initialisieren
 			this.csvImp = new CSVImporter(csvQuelle);
 		} catch (final Exception e) {
-			PruefeDatenLogisch.LOGGER.error("Fehler beim öffnen der CSV Datei (" + csvQuelle + "): " + e); //$NON-NLS-1$ //$NON-NLS-2$
+			PruefeDatenLogisch.LOGGER.error("Fehler beim Ã¶ffnen der CSV Datei (" + csvQuelle + "): " + e); //$NON-NLS-1$ //$NON-NLS-2$
 		}
 		csvImp.getNaechsteZeile(); // Tabellenkopf in CSV ueberspringen
 		csvEinlesen(); // CSV einlesen
@@ -247,10 +247,10 @@ public class PruefeDatenLogisch implements ClientReceiverInterface {
 	}
 
 	/**
-	 * Gibt eine HashMap mit den Soll-Werten eines Fahrstreifens zurück.
+	 * Gibt eine HashMap mit den Soll-Werten eines Fahrstreifens zurÃ¼ck.
 	 *
 	 * @param aktZeile
-	 *            Der Prüf-CSV Offset
+	 *            Der PrÃ¼f-CSV Offset
 	 * @param fsIndex
 	 *            Der zu verwendende Fahrstreifen
 	 * @return Fahrstreifen-Soll-Daten (AttributPfad,Wert)
@@ -324,7 +324,7 @@ public class PruefeDatenLogisch implements ClientReceiverInterface {
 
 	/**
 	 * Liest ein Statusfeld, extrahiert Daten in eine HashMap und gibt diese
-	 * zurück.
+	 * zurÃ¼ck.
 	 *
 	 * @param status
 	 *            Die Statuszeile. Parameter durch Leerzeichen getrennt
@@ -396,7 +396,7 @@ public class PruefeDatenLogisch implements ClientReceiverInterface {
 
 			try {
 				guete = Float.parseFloat(element.replace(",", ".")) * 10000;
-				hmCSVStatus.put(praefix + ".Güte.Index", guete.intValue());
+				hmCSVStatus.put(praefix + ".GÃ¼te.Index", guete.intValue());
 			} catch (final Exception e) {
 				// kein float wert
 			}
@@ -410,39 +410,39 @@ public class PruefeDatenLogisch implements ClientReceiverInterface {
 			}
 		}
 
-		// hmCSVStatus.put(praefix+".Güte.Index",100);
+		// hmCSVStatus.put(praefix+".GÃ¼te.Index",100);
 
 		return hmCSVStatus;
 	}
 
 	/**
-	 * Übergebe CSV-Werte (tNetto) für FS1.
+	 * Ãœbergebe CSV-Werte (tNetto) fÃ¼r FS1.
 	 *
 	 * @param csvOffset1
-	 *            DS-Index des zu übergebende DS
-	 * @return Der CSV-Wert tNetto für FS1
+	 *            DS-Index des zu Ã¼bergebende DS
+	 * @return Der CSV-Wert tNetto fÃ¼r FS1
 	 */
 	public long getCSVWerttNettoFS1(final int csvOffset1) {
 		return alCSVWerttNettoFS1.get(csvOffset1);
 	}
 
 	/**
-	 * Übergebe CSV-Werte (tNetto) für FS2.
+	 * Ãœbergebe CSV-Werte (tNetto) fÃ¼r FS2.
 	 *
 	 * @param csvOffset1
-	 *            DS-Index des zu übergebende DS
-	 * @return Der CSV-Wert tNetto für FS2
+	 *            DS-Index des zu Ã¼bergebende DS
+	 * @return Der CSV-Wert tNetto fÃ¼r FS2
 	 */
 	public long getCSVWerttNettoFS2(final int csvOffset1) {
 		return alCSVWerttNettoFS2.get(csvOffset1);
 	}
 
 	/**
-	 * Übergebe CSV-Werte (tNetto) für FS3.
+	 * Ãœbergebe CSV-Werte (tNetto) fÃ¼r FS3.
 	 *
 	 * @param csvOffset1
-	 *            DS-Index des zu übergebende DS
-	 * @return Der CSV-Wert tNetto für FS3
+	 *            DS-Index des zu Ã¼bergebende DS
+	 * @return Der CSV-Wert tNetto fÃ¼r FS3
 	 */
 	public long getCSVWerttNettoFS3(final int csvOffset1) {
 		return alCSVWerttNettoFS3.get(csvOffset1);
@@ -460,10 +460,10 @@ public class PruefeDatenLogisch implements ClientReceiverInterface {
 					// Ermittle FS und pruefe Daten
 					if (result.getObject().getName().endsWith(".hfs") || result.getObject().getName().endsWith(".1")) {
 						vergleicheFS1.vergleiche(result, csvZeilenFS1, csvOffset);
-					} else if (result.getObject().getName().endsWith(".1üfs")
+					} else if (result.getObject().getName().endsWith(".1Ã¼fs")
 							|| result.getObject().getName().endsWith(".2")) {
 						vergleicheFS2.vergleiche(result, csvZeilenFS2, csvOffset);
-					} else if (result.getObject().getName().endsWith(".2üfs")
+					} else if (result.getObject().getName().endsWith(".2Ã¼fs")
 							|| result.getObject().getName().endsWith(".3")) {
 						vergleicheFS3.vergleiche(result, csvZeilenFS3, csvOffset);
 					}
@@ -471,7 +471,7 @@ public class PruefeDatenLogisch implements ClientReceiverInterface {
 					//
 				}
 
-				PruefeDatenLogisch.LOGGER.info("Zu prüfendes Datum empfangen. Warte auf Prüfung..."); //$NON-NLS-1$
+				PruefeDatenLogisch.LOGGER.info("Zu prÃ¼fendes Datum empfangen. Warte auf PrÃ¼fung..."); //$NON-NLS-1$
 			}
 		}
 	}
@@ -481,7 +481,7 @@ public class PruefeDatenLogisch implements ClientReceiverInterface {
 	 */
 	private void pruefungFertig() {
 		if (pruefungFS1Fertig && pruefungFS2Fertig && pruefungFS3Fertig) {
-			PruefeDatenLogisch.LOGGER.info("Prüfung aller Fahrstreifen für diesen Intervall abgeschlossen"); //$NON-NLS-1$
+			PruefeDatenLogisch.LOGGER.info("PrÃ¼fung aller Fahrstreifen fÃ¼r diesen Intervall abgeschlossen"); //$NON-NLS-1$
 			caller.doNotify(); // Benachrichtige aufrufende Klasse
 		}
 	}
@@ -557,7 +557,7 @@ public class PruefeDatenLogisch implements ClientReceiverInterface {
 /**
  * Vergleicht CSV Daten mit Ergebnisdaten.
  *
- * @author BitCtrl Systems GmbH, Görlitz
+ * @author BitCtrl Systems GmbH, GÃ¶rlitz
  */
 class VergleicheDaten extends Thread {
 
@@ -567,7 +567,7 @@ class VergleicheDaten extends Thread {
 	private boolean useAssert = true;
 
 	/**
-	 * Hält den aktuellen Warntext.
+	 * HÃ¤lt den aktuellen Warntext.
 	 */
 	private String warnung;
 
@@ -577,22 +577,22 @@ class VergleicheDaten extends Thread {
 	private final PruefeDatenLogisch caller;
 
 	/**
-	 * Übergebene Ergebnisdaten.
+	 * Ãœbergebene Ergebnisdaten.
 	 */
 	private Data daten;
 
 	/**
-	 * tNetto werte der Ergebnisdaten für FS1.
+	 * tNetto werte der Ergebnisdaten fÃ¼r FS1.
 	 */
 	private long resultWerttNettoFS1;
 
 	/**
-	 * tNetto werte der Ergebnisdaten für FS2.
+	 * tNetto werte der Ergebnisdaten fÃ¼r FS2.
 	 */
 	private long resultWerttNettoFS2;
 
 	/**
-	 * tNetto werte der Ergebnisdaten für FS3.
+	 * tNetto werte der Ergebnisdaten fÃ¼r FS3.
 	 */
 	private long resultWerttNettoFS3;
 
@@ -606,7 +606,7 @@ class VergleicheDaten extends Thread {
 	 */
 	private final String[] attributNamen = { ".Wert", ".Status.Erfassung.NichtErfasst", ".Status.PlFormal.WertMax",
 			".Status.PlFormal.WertMin", ".Status.PlLogisch.WertMaxLogisch", ".Status.PlLogisch.WertMinLogisch",
-			".Status.MessWertErsetzung.Implausibel", ".Status.MessWertErsetzung.Interpoliert", ".Güte.Index" };
+			".Status.MessWertErsetzung.Implausibel", ".Status.MessWertErsetzung.Interpoliert", ".GÃ¼te.Index" };
 
 	/**
 	 * Uebergebene CSV Zeilen des jeweiligen FS.
@@ -626,32 +626,32 @@ class VergleicheDaten extends Thread {
 	/**
 	 * Fehleranzahl der Tabelle mit erwarteten Werten Wert der linken Spalte
 	 * eines Attributes stimmt nicht mit dem entsprechenden gelieferten Wert der
-	 * SWE überein.
+	 * SWE Ã¼berein.
 	 */
 	protected int anzFehlerLinks = 0;
 
 	/**
 	 * Fehleranzahl der Tabelle mit erwarteten Werten Wert der rechten Spalte
 	 * (Statusflags) eines Attributes stimmt. nicht mit dem entsprechenden
-	 * gelieferten Wert der SWE überein
+	 * gelieferten Wert der SWE Ã¼berein
 	 */
 	protected int anzFehlerRechts = 0;
 
 	/**
 	 * Fehleranzahl der Tabelle mit erwarteten Werten Wert der linken und
 	 * rechten Spalte (Statusflags) eines Attributes stimmt nicht mit dem
-	 * entsprechenden gelieferten Wert der SWE überein.
+	 * entsprechenden gelieferten Wert der SWE Ã¼berein.
 	 */
 	protected int anzFehlerAlles = 0;
 
 	/**
-	 * Erstellt einen Prüfthread welcher Soll-Werte und Ergebniswerte vergleicht
+	 * Erstellt einen PrÃ¼fthread welcher Soll-Werte und Ergebniswerte vergleicht
 	 * und das Ergebnis ausgibt.
 	 *
 	 * @param caller
 	 *            Die aufrufende Klasse
 	 * @param fsIndex
-	 *            Der zu prüfende Fahrstreifen
+	 *            Der zu prÃ¼fende Fahrstreifen
 	 */
 	public VergleicheDaten(final PruefeDatenLogisch caller, final int fsIndex) {
 		this.caller = caller; // uebernehme aufrufende Klasse
@@ -679,7 +679,7 @@ class VergleicheDaten extends Thread {
 	 */
 	@Override
 	public void run() {
-		while (true) { // Thread läuft immer
+		while (true) { // Thread lÃ¤uft immer
 			doWait(); // warte auf trigger
 			try {
 				doVergleiche(); // Pruefe Daten
@@ -693,7 +693,7 @@ class VergleicheDaten extends Thread {
 	 * Vergleicht IST- und SOLL-Ergebnisse.
 	 *
 	 * @param result
-	 *            Das zu prüfende Ergebnis
+	 *            Das zu prÃ¼fende Ergebnis
 	 * @param csvZeilen1
 	 *            die Soll-CSV-Werte (aller Fahrstreifen)
 	 * @param csvOffset1
@@ -711,7 +711,7 @@ class VergleicheDaten extends Thread {
 	}
 
 	/**
-	 * Lässt Vergleicherthread warten.
+	 * LÃ¤sst Vergleicherthread warten.
 	 *
 	 */
 	private void doWait() {
@@ -765,7 +765,7 @@ class VergleicheDaten extends Thread {
 	}
 
 	/**
-	 * prüfe Daten.
+	 * prÃ¼fe Daten.
 	 *
 	 * @throws Exception
 	 *             wird weitergereicht
@@ -846,13 +846,13 @@ class VergleicheDaten extends Thread {
 					}
 
 					/*
-					 * Sonderbehandlung für vKfz- und qPkw-Werte (werden
+					 * Sonderbehandlung fÃ¼r vKfz- und qPkw-Werte (werden
 					 * errechnet)
 					 */
 					if (attribut.equals("vKfz.Wert") || attribut.equals("qPkw.Wert")) {
 
 						/*
-						 * Prüfe Fehler links
+						 * PrÃ¼fe Fehler links
 						 */
 						if (attribWertKopie.contains(".Wert.Kopie")
 								&& !hmCSV.get(attribWertKopie).equals(hmResult.get(attribut))) {
@@ -867,8 +867,8 @@ class VergleicheDaten extends Thread {
 									+ " (SOLL)<>(IST) " + hmResult.get(attribut) + istWertErl;
 
 							/*
-							 * Wenn Werte nicht identisch wird zusätzlich mit
-							 * dem separat in der Solltabelle aufgeführten
+							 * Wenn Werte nicht identisch wird zusÃ¤tzlich mit
+							 * dem separat in der Solltabelle aufgefÃ¼hrten
 							 * errechneten Wert verglichen
 							 */
 							if (attribWertKopie.contains(".Wert.Kopie")
@@ -890,11 +890,11 @@ class VergleicheDaten extends Thread {
 						}
 					} else {
 						/*
-						 * Überprüfung der restlichen Attribute
+						 * ÃœberprÃ¼fung der restlichen Attribute
 						 */
 
 						/*
-						 * Prüfe Fehler links
+						 * PrÃ¼fe Fehler links
 						 */
 						if (attribWertKopie.contains(".Wert.Kopie")
 								&& !hmCSV.get(attribWertKopie).equals(hmResult.get(attribut))) {
@@ -906,8 +906,8 @@ class VergleicheDaten extends Thread {
 									+ " (SOLL)<>(IST) " + hmResult.get(attribut) + istWertErl;
 
 							/*
-							 * Wenn Werte nicht identisch wird zusätzlich mit
-							 * dem separat in der Solltabelle aufgeführten
+							 * Wenn Werte nicht identisch wird zusÃ¤tzlich mit
+							 * dem separat in der Solltabelle aufgefÃ¼hrten
 							 * errechneten Wert verglichen
 							 */
 							if (attribWertKopie.contains(".Wert.Kopie")
@@ -927,7 +927,7 @@ class VergleicheDaten extends Thread {
 					}
 				} else if (attribut.equals("tNetto.Wert")) {
 					/*
-					 * Sonderbehandlung für tNetto (long)
+					 * Sonderbehandlung fÃ¼r tNetto (long)
 					 */
 					sollWertErl = wertErl((int) csvWerttNetto);
 					istWertErl = wertErl((int) resultWerttNetto);
@@ -960,15 +960,15 @@ class VergleicheDaten extends Thread {
 		}
 
 		// Debug.getLogger().info(pruefLog);
-		Debug.getLogger().info("Prüfung der Fahrstreifendaten für diesen Intervall abgeschlossen");
+		Debug.getLogger().info("PrÃ¼fung der Fahrstreifendaten fÃ¼r diesen Intervall abgeschlossen");
 		caller.doNotify(fsIndex); // Benachrichtige aufrufende Klasse
 	}
 
 	/**
-	 * Übersetzt negative Werte in entsprechenden String.
+	 * Ãœbersetzt negative Werte in entsprechenden String.
 	 *
 	 * @param wert
-	 *            Der zu übersetzende wert
+	 *            Der zu Ã¼bersetzende wert
 	 * @return Wertbedeutung als String
 	 */
 	private String wertErl(final long wert) {

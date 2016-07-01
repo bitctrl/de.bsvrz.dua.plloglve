@@ -1,5 +1,5 @@
 /*
- * Segment 4 Daten¸bernahme und Aufbereitung (DUA), SWE 4.2 Pl-Pr¸fung logisch LVE
+ * Segment 4 Daten√ºbernahme und Aufbereitung (DUA), SWE 4.2 Pl-Pr√ºfung logisch LVE
  * Copyright (C) 2007-2015 BitCtrl Systems GmbH
  *
  * This program is free software; you can redistribute it and/or modify it under
@@ -18,7 +18,7 @@
  *
  * Contact Information:<br>
  * BitCtrl Systems GmbH<br>
- * Weiﬂenfelser Straﬂe 67<br>
+ * Wei√üenfelser Stra√üe 67<br>
  * 04229 Leipzig<br>
  * Phone: +49 341-490670<br>
  * mailto: info@bitctrl.de
@@ -30,7 +30,7 @@ import de.bsvrz.dav.daf.main.Data;
 import de.bsvrz.sys.funclib.bitctrl.dua.AllgemeinerDatenContainer;
 
 /**
- * Repr‰sentiert aktuelle Daten der DAV-ATG
+ * Repr√§sentiert aktuelle Daten der DAV-ATG
  * <code>atg.verkehrsDatenDifferenzialKontrolleFs</code>.
  *
  * @author BitCtrl Systems GmbH, Thierfelder
@@ -39,43 +39,43 @@ public class AtgVerkehrsDatenDifferenzialKontrolleFs extends
 AllgemeinerDatenContainer {
 
 	/**
-	 * Maximal zul‰ssige Anzahl von Intervallen mit Ergebniskonstanz f¸r qKfz.
+	 * Maximal zul√§ssige Anzahl von Intervallen mit Ergebniskonstanz f√ºr qKfz.
 	 */
 	private final long maxAnzKonstanzqKfz;
 
 	/**
-	 * Maximal zul‰ssige Anzahl von Intervallen mit Ergebniskonstanz f¸r qLkw.
+	 * Maximal zul√§ssige Anzahl von Intervallen mit Ergebniskonstanz f√ºr qLkw.
 	 */
 	private final long maxAnzKonstanzqLkw;
 
 	/**
-	 * Maximal zul‰ssige Anzahl von Intervallen mit Ergebniskonstanz f¸r qPkw.
+	 * Maximal zul√§ssige Anzahl von Intervallen mit Ergebniskonstanz f√ºr qPkw.
 	 */
 	private final long maxAnzKonstanzqPkw;
 
 	/**
-	 * Maximal zul‰ssige Anzahl von Intervallen mit Ergebniskonstanz f¸r vKfz.
+	 * Maximal zul√§ssige Anzahl von Intervallen mit Ergebniskonstanz f√ºr vKfz.
 	 */
 	private final long maxAnzKonstanzvKfz;
 
 	/**
-	 * Maximal zul‰ssige Anzahl von Intervallen mit Ergebniskonstanz f¸r vLkw.
+	 * Maximal zul√§ssige Anzahl von Intervallen mit Ergebniskonstanz f√ºr vLkw.
 	 */
 	private final long maxAnzKonstanzvLkw;
 
 	/**
-	 * Maximal zul‰ssige Anzahl von Intervallen mit Ergebniskonstanz f¸r vPkw.
+	 * Maximal zul√§ssige Anzahl von Intervallen mit Ergebniskonstanz f√ºr vPkw.
 	 */
 	private final long maxAnzKonstanzvPkw;
 
 	/**
-	 * Maximal zul‰ssige Anzahl von Intervallen mit Ergebniskonstanz f¸r die
+	 * Maximal zul√§ssige Anzahl von Intervallen mit Ergebniskonstanz f√ºr die
 	 * Streung S.
 	 */
 	private final long maxAnzKonstanzStreung;
 
 	/**
-	 * Maximal zul‰ssige Anzahl von Intervallen mit Ergebniskonstanz f¸r die
+	 * Maximal zul√§ssige Anzahl von Intervallen mit Ergebniskonstanz f√ºr die
 	 * Belegung b.
 	 */
 	private final long maxAnzKonstanzBelegung;

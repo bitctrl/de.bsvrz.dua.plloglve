@@ -1,5 +1,5 @@
 /*
- * Segment 4 Datenübernahme und Aufbereitung (DUA), SWE 4.2 Pl-Prüfung logisch LVE
+ * Segment 4 DatenÃ¼bernahme und Aufbereitung (DUA), SWE 4.2 Pl-PrÃ¼fung logisch LVE
  * Copyright (C) 2007-2015 BitCtrl Systems GmbH
  *
  * This program is free software; you can redistribute it and/or modify it under
@@ -18,7 +18,7 @@
  *
  * Contact Information:<br>
  * BitCtrl Systems GmbH<br>
- * Weißenfelser Straße 67<br>
+ * WeiÃŸenfelser StraÃŸe 67<br>
  * 04229 Leipzig<br>
  * Phone: +49 341-490670<br>
  * mailto: info@bitctrl.de
@@ -36,7 +36,7 @@ import de.bsvrz.sys.funclib.bitctrl.dua.test.DAVTest;
 import de.bsvrz.sys.funclib.commandLineArgs.ArgumentList;
 
 /**
- * Automatisierter Test nach Prüfspezifikation für SWE Pl-Prüfung logisch LVE.
+ * Automatisierter Test nach PrÃ¼fspezifikation fÃ¼r SWE Pl-PrÃ¼fung logisch LVE.
  *
  * @author BitCtrl Systems GmbH, Thierfelder
  */
@@ -71,7 +71,7 @@ public class PlPruefungLogischLVETestStandardDiff {
 	}
 
 	/**
-	 * KZD TLS Test nach Prüfspezifikation.
+	 * KZD TLS Test nach PrÃ¼fspezifikation.
 	 *
 	 * @throws Exception
 	 *             wird weitergereicht
@@ -81,12 +81,12 @@ public class PlPruefungLogischLVETestStandardDiff {
 		final PlPruefungLogisch pruefLogisch = new PlPruefungLogisch(dav);
 		pruefLogisch.benutzeAssert(true);
 		final int[][] bereiche = { { 2, 101 } };
-		System.out.println("\n\n*** KZD TLS Test nach Prüfspezifikation ***\n");
+		System.out.println("\n\n*** KZD TLS Test nach PrÃ¼fspezifikation ***\n");
 		pruefLogisch.pruefeKZDTLS(bereiche);
 	}
 
 	/**
-	 * KZD Grenz Test nach Prüfspezifikation.
+	 * KZD Grenz Test nach PrÃ¼fspezifikation.
 	 *
 	 * @throws Exception
 	 *             wird weitergereicht
@@ -97,12 +97,12 @@ public class PlPruefungLogischLVETestStandardDiff {
 		pruefLogisch.benutzeAssert(true);
 		final int[][] bereiche = { { 2, 21 } };
 		System.out
-				.println("\n\n*** KZD Grenz Test nach Prüfspezifikation ***\n");
+				.println("\n\n*** KZD Grenz Test nach PrÃ¼fspezifikation ***\n");
 		pruefLogisch.pruefeKZDGrenz(bereiche);
 	}
 
 	/**
-	 * LZD Grenz Test nach Prüfspezifikation.
+	 * LZD Grenz Test nach PrÃ¼fspezifikation.
 	 *
 	 * @throws Exception
 	 *             wird weitergereicht
@@ -113,12 +113,12 @@ public class PlPruefungLogischLVETestStandardDiff {
 		pruefLogisch.benutzeAssert(true);
 		final int[][] bereiche = { { 2, 21 } };
 		System.out
-				.println("\n\n*** LZD Grenz Test nach Prüfspezifikation ***\n");
+				.println("\n\n*** LZD Grenz Test nach PrÃ¼fspezifikation ***\n");
 		pruefLogisch.pruefeLZDGrenz(bereiche);
 	}
 
 	/**
-	 * Differentialkontrolle nach Prüfspezifikation.
+	 * Differentialkontrolle nach PrÃ¼fspezifikation.
 	 *
 	 * @throws Exception
 	 *             wird weitergereicht
@@ -129,7 +129,7 @@ public class PlPruefungLogischLVETestStandardDiff {
 		plPruefDiff.benutzeAssert(true);
 		plPruefDiff.setMeldungHysterese(5);
 		System.out
-				.println("\n\n*** Differentialkontrolle nach Prüfspezifikation ***\n");
+				.println("\n\n*** Differentialkontrolle nach PrÃ¼fspezifikation ***\n");
 		plPruefDiff.pruefe();
 	}
 }

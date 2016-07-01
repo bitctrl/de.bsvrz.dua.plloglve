@@ -1,27 +1,31 @@
 *************************************************************************************
-*  Segment 4 Datenübernahme und Aufbereitung (DUA), SWE 4.2 Pl-Prüfung logisch LVE  *
+*  Segment 4 DatenÃ¼bernahme und Aufbereitung (DUA), SWE 4.2 Pl-PrÃ¼fung logisch LVE  *
 *************************************************************************************
 
 Version: ${version}
 
-Übersicht
+Ãœbersicht
 =========
 
-Aufgabe der SWE PL-Prüfung logisch LVE ist es, die logische PL-Prüfung der LVE für die
-Kurzzeitdaten und Langzeitdaten durchzuführen. Diese erfolgt innerhalb der SWE für alle
-vorgesehenen Objekte durch die Wertebereichsprüfung (PL-Prüfung formal) und einer nachfolgenden
-logischen Plausibilitätsprüfung. Die logische Plausibilitätsprüfung untergliedert sich in
--	PL-Prüfung logisch für Kurzzeitdaten Verkehr und Langzeitdaten Verkehr,
+Aufgabe der SWE PL-PrÃ¼fung logisch LVE ist es, die logische PL-PrÃ¼fung der LVE fÃ¼r die
+Kurzzeitdaten und Langzeitdaten durchzufÃ¼hren. Diese erfolgt innerhalb der SWE fÃ¼r alle
+vorgesehenen Objekte durch die WertebereichsprÃ¼fung (PL-PrÃ¼fung formal) und einer nachfolgenden
+logischen PlausibilitÃ¤tsprÃ¼fung. Die logische PlausibilitÃ¤tsprÃ¼fung untergliedert sich in
+-	PL-PrÃ¼fung logisch fÃ¼r Kurzzeitdaten Verkehr und Langzeitdaten Verkehr,
 -	Differenzialkontrolle von Fahrstreifendaten,
--	Ermittlung der Ausfallhäufigkeit von Fahrstreifendaten und
+-	Ermittlung der AusfallhÃ¤ufigkeit von Fahrstreifendaten und
 -	Ermittlung des Vertrauensbereichs von Fahrstreifendaten.
-Eine genaue Beschreibung erfolgt in den [AFo]. Nach der Prüfung werden die Daten ggf. unter
+Eine genaue Beschreibung erfolgt in den [AFo]. Nach der PrÃ¼fung werden die Daten ggf. unter
 einem parametrierbaren Aspekt publiziert.
 
 
 
 Versionsgeschichte
 ==================
+
+1.4.0
+=====
+- Umstellung auf Java 8 und UTF-8
 
 1.3.0
 - Umstellung auf Funclib-Bitctrl-Dua
@@ -30,7 +34,7 @@ Versionsgeschichte
 - direkter Memberzugriff in Klassen der de.bsvrz.sys.funclib.bitctrl beseitigt
 
 1.2.1
-- BezugsZeitraum: Fehlerausgabe korrigiert für den Fall, dass die Einschaltschwelle überschritten war und 
+- BezugsZeitraum: Fehlerausgabe korrigiert fÃ¼r den Fall, dass die Einschaltschwelle Ã¼berschritten war und 
   die Ausschaltschwelle noch nicht unterschritten wurde
 
 
@@ -50,39 +54,39 @@ Versionsgeschichte
 
   - Neuer Aufrufparameter -altAnlagen=[Ja/Nein] eingebaut. Achtung: Dieser Aufrufparameter 
     muss in der Regel beim Aufruf der SWE Messwertersetzung LVE angegeben werden, da diese die 
-    SWE Pl-Prüfung logisch LVE logisch automatisch mitstartet.
+    SWE Pl-PrÃ¼fung logisch LVE logisch automatisch mitstartet.
 
 1.0.2
 
-  - FIX: Sämtliche Konstruktoren DataDescription(atg, asp, sim) ersetzt durch
+  - FIX: SÃ¤mtliche Konstruktoren DataDescription(atg, asp, sim) ersetzt durch
          DataDescription(atg, asp)
 
 1.0.0b
 
-  - Erste Auslieferung (beta, nur teilweise nach Prüfspezifikation getestet)
+  - Erste Auslieferung (beta, nur teilweise nach PrÃ¼fspezifikation getestet)
 
 1.0.0
 
-  - Erste vollständige Auslieferung
+  - Erste vollstÃ¤ndige Auslieferung
 
 
 Bemerkungen
 ===========
 
-Diese SWE ist eine eigenständige Datenverteiler-Applikation, welche über die Klasse
+Diese SWE ist eine eigenstÃ¤ndige Datenverteiler-Applikation, welche Ã¼ber die Klasse
 de.bsvrz.dua.plloglve.vew.VerwaltungPlPruefungLogischLVE mit folgenden Parametern gestartet werden kann
 (zusaetzlich zu den normalen Parametern jeder Datenverteiler-Applikation):
 	-KonfigurationsBereichsPid=pid(,pid)
 
 Der Datenfluss durch diese Applikation ist wie folgt:
 externe Erfassung 
-	--> formale Prüfung (Publikation asp.plPrüfungFormal) 
-		-->	logische Prüfung (Publikation unter asp.plPrüfungLogisch)
+	--> formale PrÃ¼fung (Publikation asp.plPrÃ¼fungFormal) 
+		-->	logische PrÃ¼fung (Publikation unter asp.plPrÃ¼fungLogisch)
 	
 - Tests:
 
-	Die automatischen Tests, die in Zusammenhang mit der Prüfspezifikation durchgeführt
-	werden, sind noch nicht endgültig implementiert.
+	Die automatischen Tests, die in Zusammenhang mit der PrÃ¼fspezifikation durchgefÃ¼hrt
+	werden, sind noch nicht endgÃ¼ltig implementiert.
 
 - Logging-Hierarchie (Wann wird welche Art von Logging-Meldung produziert?):
 
@@ -92,8 +96,8 @@ externe Erfassung
 	- Interne unerwartete Fehler
 	
 	WARNING:
-	- Fehler, die die Funktionalität grundsätzlich nicht
-	  beeinträchtigen, aber zum Datenverlust führen können
+	- Fehler, die die FunktionalitÃ¤t grundsÃ¤tzlich nicht
+	  beeintrÃ¤chtigen, aber zum Datenverlust fÃ¼hren kÃ¶nnen
 	- Nicht identifizierbare Konfigurationsbereiche
 	- Probleme beim Explorieren von Attributpfaden 
 	  (von Plausibilisierungsbeschreibungen)
@@ -101,8 +105,8 @@ externe Erfassung
 	  nur eine Instanz erwartet wird
 	- Wenn Parameter nicht korrekt ausgelesen werden konnten
 	  bzw. nicht interpretierbar sind
-	- Wenn inkompatible Parameter übergeben wurden
-	- Wenn Parameter unvollständig sind
+	- Wenn inkompatible Parameter Ã¼bergeben wurden
+	- Wenn Parameter unvollstÃ¤ndig sind
 	- Wenn ein Wert bzw. Status nicht gesetzt werden konnte
 	
 	INFO:
@@ -112,20 +116,20 @@ externe Erfassung
 	- Allgemeine Ausgaben, welche die Konfiguration betreffen
 	- Benutzte Konfigurationsbereiche der Applikation bzw.
 	  einzelner Funktionen innerhalb der Applikation
-	- Benutzte Objekte für Parametersteuerung von Applikationen
+	- Benutzte Objekte fÃ¼r Parametersteuerung von Applikationen
 	  (z.B. die Instanz der Datenflusssteuerung, die verwendet wird)
 	- An- und Abmeldungen von Daten beim Datenverteiler
 	
 	FINE:
 	- Wenn Daten empfangen wurden, die nicht weiterverarbeitet 
-	  (plausibilisiert) werden können (weil keine Parameter vorliegen)
+	  (plausibilisiert) werden kÃ¶nnen (weil keine Parameter vorliegen)
 	- Informationen, die nur zum Debugging interessant sind 
 	
 
 Disclaimer
 ==========
 
-Segment 4 Datenübernahme und Aufbereitung (DUA), SWE 4.2 Pl-Prüfung logisch LVE
+Segment 4 DatenÃ¼bernahme und Aufbereitung (DUA), SWE 4.2 Pl-PrÃ¼fung logisch LVE
 Copyright (C) 2007 BitCtrl Systems GmbH 
 
 This program is free software; you can redistribute it and/or modify it under
@@ -147,7 +151,7 @@ Kontakt
 =======
 
 BitCtrl Systems GmbH
-Weißenfelser Straße 67
+WeiÃŸenfelser StraÃŸe 67
 04229 Leipzig
 Phone: +49 341-490670
 mailto: info@bitctrl.de

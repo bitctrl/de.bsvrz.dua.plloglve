@@ -1,5 +1,5 @@
 /*
- * Segment 4 Datenübernahme und Aufbereitung (DUA), SWE 4.2 Pl-Prüfung logisch LVE
+ * Segment 4 DatenÃ¼bernahme und Aufbereitung (DUA), SWE 4.2 Pl-PrÃ¼fung logisch LVE
  * Copyright (C) 2007-2015 BitCtrl Systems GmbH
  *
  * This program is free software; you can redistribute it and/or modify it under
@@ -18,7 +18,7 @@
  *
  * Contact Information:<br>
  * BitCtrl Systems GmbH<br>
- * Weißenfelser Straße 67<br>
+ * WeiÃŸenfelser StraÃŸe 67<br>
  * 04229 Leipzig<br>
  * Phone: +49 341-490670<br>
  * mailto: info@bitctrl.de
@@ -65,7 +65,7 @@ public class TestFahrstreifenImporter extends CSVImporter {
 	 * @param csvQuelle
 	 *            Quelle der Daten (CSV-Datei)
 	 * @throws Exception
-	 *             falls dieses Objekt nicht vollständig initialisiert werden
+	 *             falls dieses Objekt nicht vollstÃ¤ndig initialisiert werden
 	 *             konnte
 	 */
 	public TestFahrstreifenImporter(final ClientDavInterface dav,
@@ -76,7 +76,7 @@ public class TestFahrstreifenImporter extends CSVImporter {
 		}
 
 		/**
-		 * Tabellenkopf überspringen
+		 * Tabellenkopf Ã¼berspringen
 		 */
 		this.getNaechsteZeile();
 	}
@@ -92,13 +92,13 @@ public class TestFahrstreifenImporter extends CSVImporter {
 	}
 
 	/**
-	 * Erfragt die nächste Zeile innerhalb der CSV-Datei als einen Datensatz der
-	 * übergebenen Attributgruppe.
+	 * Erfragt die nÃ¤chste Zeile innerhalb der CSV-Datei als einen Datensatz der
+	 * Ã¼bergebenen Attributgruppe.
 	 *
 	 * @param atg
 	 *            eine Attributgruppe (KZD oder LZD)
-	 * @return ein Datensatz der übergebenen Attributgruppe mit den Daten der
-	 *         nächsten Zeile oder <code>null</code>, wenn der Dateizeiger am
+	 * @return ein Datensatz der Ã¼bergebenen Attributgruppe mit den Daten der
+	 *         nÃ¤chsten Zeile oder <code>null</code>, wenn der Dateizeiger am
 	 *         Ende ist
 	 */
 	public final Data getNaechstenDatensatz(final AttributeGroup atg) {
@@ -170,7 +170,7 @@ public class TestFahrstreifenImporter extends CSVImporter {
 	 *            Wert des Attributs
 	 * @param datensatz
 	 *            der Datensatz
-	 * @return der veränderte Datensatz
+	 * @return der verÃ¤nderte Datensatz
 	 */
 	private Data setAttribut(final String attributName, long wert,
 			final Data datensatz) {
@@ -204,9 +204,9 @@ public class TestFahrstreifenImporter extends CSVImporter {
 		.getAttributDatum(
 				attributName + ".Status.MessWertErsetzung.Interpoliert", data).asUnscaledValue().set(DUAKonstanten.NEIN); //$NON-NLS-1$
 		DUAUtensilien
-		.getAttributDatum(attributName + ".Güte.Index", data).asScaledValue().set(1.0); //$NON-NLS-1$
+		.getAttributDatum(attributName + ".GÃ¼te.Index", data).asScaledValue().set(1.0); //$NON-NLS-1$
 		DUAUtensilien
-		.getAttributDatum(attributName + ".Güte.Verfahren", data).asUnscaledValue().set(0); //$NON-NLS-1$
+		.getAttributDatum(attributName + ".GÃ¼te.Verfahren", data).asUnscaledValue().set(0); //$NON-NLS-1$
 
 		return datensatz;
 	}
@@ -221,7 +221,7 @@ public class TestFahrstreifenImporter extends CSVImporter {
 	private Data setLZDleer(Data datensatz) {
 		final String[] praefix = new String[] { "q", "v", "s", "v85" }; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
 		final String[] aName = new String[] {
-				"Kfz", "PkwÄ", "KfzNk", "PkwG", "Pkw", "Krad", "Lfw", "LkwÄ", //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$ //$NON-NLS-6$ //$NON-NLS-7$ //$NON-NLS-8$
+				"Kfz", "PkwÃ„", "KfzNk", "PkwG", "Pkw", "Krad", "Lfw", "LkwÃ„", //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$ //$NON-NLS-6$ //$NON-NLS-7$ //$NON-NLS-8$
 				"PkwA", "Lkw", "Bus", "LkwK", "LkwA", "SattelKfz" }; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$ //$NON-NLS-6$
 
 		for (final String element : praefix) {

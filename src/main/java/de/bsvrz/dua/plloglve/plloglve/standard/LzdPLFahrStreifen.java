@@ -1,5 +1,5 @@
 /*
- * Segment 4 Datenübernahme und Aufbereitung (DUA), SWE 4.2 Pl-Prüfung logisch LVE
+ * Segment 4 DatenÃ¼bernahme und Aufbereitung (DUA), SWE 4.2 Pl-PrÃ¼fung logisch LVE
  * Copyright (C) 2007-2015 BitCtrl Systems GmbH
  *
  * This program is free software; you can redistribute it and/or modify it under
@@ -18,7 +18,7 @@
  *
  * Contact Information:<br>
  * BitCtrl Systems GmbH<br>
- * Weißenfelser Straße 67<br>
+ * WeiÃŸenfelser StraÃŸe 67<br>
  * 04229 Leipzig<br>
  * Phone: +49 341-490670<br>
  * mailto: info@bitctrl.de
@@ -43,9 +43,9 @@ import de.bsvrz.sys.funclib.bitctrl.dua.schnittstellen.IVerwaltungMitGuete;
 import de.bsvrz.sys.funclib.debug.Debug;
 
 /**
- * Klasse zum Durchführen der speziellen Standardplausibilisierung LVE für KZD.
+ * Klasse zum DurchfÃ¼hren der speziellen Standardplausibilisierung LVE fÃ¼r KZD.
  * Diese Klasse macht nichts weiter, als sich auf die Grenzwertparameter
- * anzumelden und einige Funktionen zur Plausibilisierung von KZD zur Verfügung
+ * anzumelden und einige Funktionen zur Plausibilisierung von KZD zur VerfÃ¼gung
  * zu stellen
  *
  * @author BitCtrl Systems GmbH, Thierfelder
@@ -54,7 +54,7 @@ public class LzdPLFahrStreifen extends KzdPLFahrStreifen {
 
 	private static final Debug LOGGER = Debug.getLogger();
 	/**
-	 * Alle Attribute, die innerhalb der PL-Prüfung logisch bzwl eines KZD
+	 * Alle Attribute, die innerhalb der PL-PrÃ¼fung logisch bzwl eines KZD
 	 * veraendert werden koennen.
 	 */
 	private static final String[] ATTRIBUT_NAMEN = { "qKfz", //$NON-NLS-1$
@@ -78,12 +78,12 @@ public class LzdPLFahrStreifen extends KzdPLFahrStreifen {
 	}
 
 	/**
-	 * Plausibilisiert ein übergebenes Datum.
+	 * Plausibilisiert ein Ã¼bergebenes Datum.
 	 *
 	 * @param resultat
 	 *            ein Originaldatum
-	 * @return das veränderte Datum oder <code>null</code>, wenn keine
-	 *         Veränderungen vorgenommen werden mussten
+	 * @return das verÃ¤nderte Datum oder <code>null</code>, wenn keine
+	 *         VerÃ¤nderungen vorgenommen werden mussten
 	 */
 	@Override
 	protected Data plausibilisiere(final ResultData resultat) {
@@ -95,7 +95,7 @@ public class LzdPLFahrStreifen extends KzdPLFahrStreifen {
 			/**
 			 * Aenderung laut Mailverkehr vom 2.4.08 - 4.4.08:
 			 *
-			 * ...mir ist beim Test der PL-Prüfung LVE für die Langzeitdaten
+			 * ...mir ist beim Test der PL-PrÃ¼fung LVE fÃ¼r die Langzeitdaten
 			 * weiterhin aufgefallen, dass (seit 2.7.5) immer wenn qLkw > qKfz
 			 * ist, qKfz auf -2 gesetzt zu werden scheint. Dies ist aber durch
 			 * keine Regel gedeckt.
@@ -104,26 +104,26 @@ public class LzdPLFahrStreifen extends KzdPLFahrStreifen {
 			 * Reaktion auf die hier erkannten fehlerhaften Langzeitwerte (hier
 			 * Lkw>Kfz), ich bin aber der Meinung, dass es nicht verkehrt ist,
 			 * dann einen entsprechenden Status zu setzen, bevor das Programm
-			 * ggf. an einer anderen Stelle aufgrund einer unzulässigen
-			 * Operation abgebrochen wird oder eine unzulässigen Entscheidung
+			 * ggf. an einer anderen Stelle aufgrund einer unzulÃ¤ssigen
+			 * Operation abgebrochen wird oder eine unzulÃ¤ssigen Entscheidung
 			 * trifft....
 			 *
-			 * ...Ich kann dies so ändern, es würde aber wieder auf eine
-			 * explizite Änderung der Anforderungen hinauslaufen. Eigentlich
-			 * heißt das doch, dass für LZD jetzt auch ein Teil der
-			 * Standardtests gemacht werden soll, der bisher nur für KZD
+			 * ...Ich kann dies so Ã¤ndern, es wÃ¼rde aber wieder auf eine
+			 * explizite Ã„nderung der Anforderungen hinauslaufen. Eigentlich
+			 * heiÃŸt das doch, dass fÃ¼r LZD jetzt auch ein Teil der
+			 * Standardtests gemacht werden soll, der bisher nur fÃ¼r KZD
 			 * vorgesehen war. Die Frage ist nun, ob es dann wirklich nur diese
 			 * eine Regel sein soll (R5) oder ob vielleicht noch andere Regeln
-			 * mit dran hängen. Für Rückfragen stehe ich Ihnen gern zur
-			 * Verfügung....
+			 * mit dran hÃ¤ngen. FÃ¼r RÃ¼ckfragen stehe ich Ihnen gern zur
+			 * VerfÃ¼gung....
 			 *
 			 * ...ich wollte eigentlich keine neue Regel vorgeben, sondern nur
-			 * bei der Berechnung von qPkw einen möglichen Fehler ausschließen,
-			 * so wie man bei einer Division den Null-Fall ausschließt oder in
-			 * anderen Fällen z.B. auf negative Werte abgefragt werden könnte,
-			 * d..h. die generelle Anforderung, mögliche Fehler bei Berechnungen
-			 * zu erkennen und zu melden (zu kennzeichnen), ist eine über alles
-			 * stehende Regel. Zukünftig ist aber nicht auszuschließen, dass für
+			 * bei der Berechnung von qPkw einen mÃ¶glichen Fehler ausschlieÃŸen,
+			 * so wie man bei einer Division den Null-Fall ausschlieÃŸt oder in
+			 * anderen FÃ¤llen z.B. auf negative Werte abgefragt werden kÃ¶nnte,
+			 * d..h. die generelle Anforderung, mÃ¶gliche Fehler bei Berechnungen
+			 * zu erkennen und zu melden (zu kennzeichnen), ist eine Ã¼ber alles
+			 * stehende Regel. ZukÃ¼nftig ist aber nicht auszuschlieÃŸen, dass fÃ¼r
 			 * LZD weitere explizite Regeln aufgestellt werden....
 			 */
 			final long qKfz = copy.getItem("qKfz").getUnscaledValue("Wert").longValue(); //$NON-NLS-1$ //$NON-NLS-2$
@@ -146,7 +146,7 @@ public class LzdPLFahrStreifen extends KzdPLFahrStreifen {
 					// "MessWertErsetzung")
 					// .getUnscaledValue("Implausibel").set(
 					// DUAKonstanten.JA);
-					// copy.getItem("qKfz").getItem("Güte").getUnscaledValue(
+					// copy.getItem("qKfz").getItem("GÃ¼te").getUnscaledValue(
 					// "Index").set(0);
 					//
 					// copy.getItem("qLkw").getUnscaledValue("Wert").set(
@@ -155,7 +155,7 @@ public class LzdPLFahrStreifen extends KzdPLFahrStreifen {
 					// "MessWertErsetzung")
 					// .getUnscaledValue("Implausibel").set(
 					// DUAKonstanten.JA);
-					// copy.getItem("qLkw").getItem("Güte").getUnscaledValue(
+					// copy.getItem("qLkw").getItem("GÃ¼te").getUnscaledValue(
 					// "Index").set(0);
 				}
 			}
@@ -223,22 +223,22 @@ public class LzdPLFahrStreifen extends KzdPLFahrStreifen {
 
 		veraenderbaresDatum.getItem("qKfz").getItem("Status").getItem("MessWertErsetzung")
 		.getUnscaledValue("Implausibel").set(DUAKonstanten.JA); //$NON-NLS-1$
-		veraenderbaresDatum.getItem("qKfz").getItem("Güte").getUnscaledValue("Index").set(0);
+		veraenderbaresDatum.getItem("qKfz").getItem("GÃ¼te").getUnscaledValue("Index").set(0);
 		veraenderbaresDatum.getItem("qLkw").getItem("Status").getItem("MessWertErsetzung")
 		.getUnscaledValue("Implausibel").set(DUAKonstanten.JA); //$NON-NLS-1$
-		veraenderbaresDatum.getItem("qLkw").getItem("Güte").getUnscaledValue("Index").set(0);
+		veraenderbaresDatum.getItem("qLkw").getItem("GÃ¼te").getUnscaledValue("Index").set(0);
 		veraenderbaresDatum.getItem("qPkw").getItem("Status").getItem("MessWertErsetzung")
 		.getUnscaledValue("Implausibel").set(DUAKonstanten.JA); //$NON-NLS-1$
-		veraenderbaresDatum.getItem("qPkw").getItem("Güte").getUnscaledValue("Index").set(0);
+		veraenderbaresDatum.getItem("qPkw").getItem("GÃ¼te").getUnscaledValue("Index").set(0);
 		veraenderbaresDatum.getItem("vKfz").getItem("Status").getItem("MessWertErsetzung")
 		.getUnscaledValue("Implausibel").set(DUAKonstanten.JA); //$NON-NLS-1$
-		veraenderbaresDatum.getItem("vKfz").getItem("Güte").getUnscaledValue("Index").set(0);
+		veraenderbaresDatum.getItem("vKfz").getItem("GÃ¼te").getUnscaledValue("Index").set(0);
 		veraenderbaresDatum.getItem("vLkw").getItem("Status").getItem("MessWertErsetzung")
 		.getUnscaledValue("Implausibel").set(DUAKonstanten.JA); //$NON-NLS-1$
-		veraenderbaresDatum.getItem("vLkw").getItem("Güte").getUnscaledValue("Index").set(0);
+		veraenderbaresDatum.getItem("vLkw").getItem("GÃ¼te").getUnscaledValue("Index").set(0);
 		veraenderbaresDatum.getItem("vPkw").getItem("Status").getItem("MessWertErsetzung")
 		.getUnscaledValue("Implausibel").set(DUAKonstanten.JA); //$NON-NLS-1$
-		veraenderbaresDatum.getItem("vPkw").getItem("Güte").getUnscaledValue("Index").set(0);
+		veraenderbaresDatum.getItem("vPkw").getItem("GÃ¼te").getUnscaledValue("Index").set(0);
 
 		final int sKfz = veraenderbaresDatum.getItem("sKfz").getUnscaledValue("Wert").intValue(); //$NON-NLS-1$ //$NON-NLS-2$
 		if (sKfz == DUAKonstanten.NICHT_ERMITTELBAR) {
@@ -422,7 +422,7 @@ public class LzdPLFahrStreifen extends KzdPLFahrStreifen {
 										"Guete von " + wertName + " konnte nicht aktualisiert werden in " + resultat); //$NON-NLS-1$ //$NON-NLS-2$
 								e1.printStackTrace();
 							}
-							davDatum.getItem(wertName).getItem("Güte").//$NON-NLS-1$
+							davDatum.getItem(wertName).getItem("GÃ¼te").//$NON-NLS-1$
 									getUnscaledValue("Index").set(neueGuete.getIndexUnskaliert()); //$NON-NLS-1$
 						} else if (optionen.equals(OptionenPlausibilitaetsPruefungLogischVerkehr.NUR_PRUEFUNG)) {
 							if (wertName.equals("vKfz") || wertName.startsWith("qKfz") || //$NON-NLS-1$ //$NON-NLS-2$

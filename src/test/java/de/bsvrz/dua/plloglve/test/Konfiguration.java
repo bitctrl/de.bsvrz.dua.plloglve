@@ -1,5 +1,5 @@
 /*
- * Segment 4 Datenübernahme und Aufbereitung (DUA), SWE 4.2 Pl-Prüfung logisch LVE
+ * Segment 4 DatenÃ¼bernahme und Aufbereitung (DUA), SWE 4.2 Pl-PrÃ¼fung logisch LVE
  * Copyright (C) 2007-2015 BitCtrl Systems GmbH
  *
  * This program is free software; you can redistribute it and/or modify it under
@@ -18,7 +18,7 @@
  *
  * Contact Information:<br>
  * BitCtrl Systems GmbH<br>
- * Weißenfelser Straße 67<br>
+ * WeiÃŸenfelser StraÃŸe 67<br>
  * 04229 Leipzig<br>
  * Phone: +49 341-490670<br>
  * mailto: info@bitctrl.de
@@ -80,17 +80,17 @@ public final class Konfiguration {
 	public static final String DATENCSV_FS3 = "Fahrstreifen3";
 
 	/**
-	 * Die CSV-Datei mit Daten der Standardprüfung KZD TLS.
+	 * Die CSV-Datei mit Daten der StandardprÃ¼fung KZD TLS.
 	 */
 	public static final String DATENCSV_LVE_TLS = "PL-Pruef_LVE_TLS";
 
 	/**
-	 * Die CSV-Datei mit Daten der Standardprüfung KZD Grenzwerte.
+	 * Die CSV-Datei mit Daten der StandardprÃ¼fung KZD Grenzwerte.
 	 */
 	public static final String DATENCSV_LVE_GRENZ = "PL-Pruef_LVE_Grenz";
 
 	/**
-	 * Die CSV-Datei mit Daten der Standardprüfung LZD Grenzwerte.
+	 * Die CSV-Datei mit Daten der StandardprÃ¼fung LZD Grenzwerte.
 	 */
 	public static final String DATENCSV_LZD = "PL-Pruefung_LZD";
 

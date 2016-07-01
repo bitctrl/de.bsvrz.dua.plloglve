@@ -1,5 +1,5 @@
 /*
- * Segment 4 Datenübernahme und Aufbereitung (DUA), SWE 4.2 Pl-Prüfung logisch LVE
+ * Segment 4 DatenÃ¼bernahme und Aufbereitung (DUA), SWE 4.2 Pl-PrÃ¼fung logisch LVE
  * Copyright (C) 2007-2015 BitCtrl Systems GmbH
  *
  * This program is free software; you can redistribute it and/or modify it under
@@ -18,7 +18,7 @@
  *
  * Contact Information:<br>
  * BitCtrl Systems GmbH<br>
- * Weißenfelser Straße 67<br>
+ * WeiÃŸenfelser StraÃŸe 67<br>
  * 04229 Leipzig<br>
  * Phone: +49 341-490670<br>
  * mailto: info@bitctrl.de
@@ -34,14 +34,14 @@ import de.bsvrz.dua.plloglve.plloglve.standard.AtgVerkehrsDatenKZIPlPruefLogisch
 import de.bsvrz.dua.plloglve.plloglve.typen.OptionenPlausibilitaetsPruefungLogischVerkehr;
 
 /**
- * Importiert die Parameter für die Pl-Prüfung logisch KZD.
+ * Importiert die Parameter fÃ¼r die Pl-PrÃ¼fung logisch KZD.
  *
  * @author BitCtrl Systems GmbH, Thierfelder
  */
 public class ParaKZDLogImport extends AbstraktParameterImport {
 
 	/**
-	 * Prüf-Optionen.
+	 * PrÃ¼f-Optionen.
 	 */
 	public OptionenPlausibilitaetsPruefungLogischVerkehr optionen = null;
 
@@ -55,7 +55,7 @@ public class ParaKZDLogImport extends AbstraktParameterImport {
 	 * @param csvQuelle
 	 *            die CSV-Datei in der die Parameter stehen
 	 * @throws Exception
-	 *             wenn die Datei nicht geöffnet werden konnte
+	 *             wenn die Datei nicht geÃ¶ffnet werden konnte
 	 */
 	public ParaKZDLogImport(final ClientDavInterface dav, final SystemObject objekt, final String csvQuelle)
 			throws Exception {
@@ -63,10 +63,10 @@ public class ParaKZDLogImport extends AbstraktParameterImport {
 	}
 
 	/**
-	 * Setzte die Prüf-Optionen.
+	 * Setzte die PrÃ¼f-Optionen.
 	 *
 	 * @param optionen
-	 *            aktuelle Prüf-Optionen
+	 *            aktuelle PrÃ¼f-Optionen
 	 */
 	public final void setOptionen(final OptionenPlausibilitaetsPruefungLogischVerkehr optionen) {
 		this.optionen = optionen;

@@ -1,5 +1,5 @@
 /*
- * Segment 4 Datenübernahme und Aufbereitung (DUA), SWE 4.2 Pl-Prüfung logisch LVE
+ * Segment 4 DatenÃ¼bernahme und Aufbereitung (DUA), SWE 4.2 Pl-PrÃ¼fung logisch LVE
  * Copyright (C) 2007-2015 BitCtrl Systems GmbH
  *
  * This program is free software; you can redistribute it and/or modify it under
@@ -18,7 +18,7 @@
  *
  * Contact Information:<br>
  * BitCtrl Systems GmbH<br>
- * Weißenfelser Straße 67<br>
+ * WeiÃŸenfelser StraÃŸe 67<br>
  * 04229 Leipzig<br>
  * Phone: +49 341-490670<br>
  * mailto: info@bitctrl.de
@@ -30,7 +30,7 @@ import de.bsvrz.dav.daf.main.Data;
 import de.bsvrz.sys.funclib.bitctrl.dua.AllgemeinerDatenContainer;
 
 /**
- * Repräsentiert die DAV-ATG <code>atg.verkehrsDatenVertrauensBereichFs</code>.
+ * ReprÃ¤sentiert die DAV-ATG <code>atg.verkehrsDatenVertrauensBereichFs</code>.
  *
  * @author BitCtrl Systems GmbH, Thierfelder
  */
@@ -38,21 +38,21 @@ public class AtgVerkehrsDatenVertrauensBereichFs extends
 AllgemeinerDatenContainer {
 
 	/**
-	 * Bezugszeitraum für die Vertrauensbereichsüberprüfung.
+	 * Bezugszeitraum fÃ¼r die VertrauensbereichsÃ¼berprÃ¼fung.
 	 */
 	private long bezugsZeitraum = -1;
 
 	/**
-	 * Einschaltschwelle für den Vertrauensbereich eines Fahrstreifens im
-	 * Bezugszeitraum. Bei Überschreiten dieses Wertes wird eine entsprechende
+	 * Einschaltschwelle fÃ¼r den Vertrauensbereich eines Fahrstreifens im
+	 * Bezugszeitraum. Bei Ãœberschreiten dieses Wertes wird eine entsprechende
 	 * Fehlermeldung generiert.
 	 */
 	private long maxAusfallProBezugsZeitraumEin = -1;
 
 	/**
-	 * Ausschaltschwelle für den Vertrauensbereich eines Fahrstreifens im
+	 * Ausschaltschwelle fÃ¼r den Vertrauensbereich eines Fahrstreifens im
 	 * Bezugszeitraum. Bei Unterschreiten dieses Wertes wird eine entsprechende
-	 * Fehlermeldung zurückgenommen.
+	 * Fehlermeldung zurÃ¼ckgenommen.
 	 */
 	private long maxAusfallProBezugsZeitraumAus = -1;
 
@@ -75,10 +75,10 @@ AllgemeinerDatenContainer {
 	}
 
 	/**
-	 * Erfragt, ob sich diese Parameter zur Überprüfung eines Datensatzes
+	 * Erfragt, ob sich diese Parameter zur ÃœberprÃ¼fung eines Datensatzes
 	 * eignen. Dies ist nur der Fall, wenn alle Parameter &gt;= 0 sind.
 	 *
-	 * @return ob sich diese Parameter zur Überprüfung eines Datensatzes eignen
+	 * @return ob sich diese Parameter zur ÃœberprÃ¼fung eines Datensatzes eignen
 	 */
 	public final boolean isAuswertbar() {
 		return (this.bezugsZeitraum >= 0)
@@ -87,7 +87,7 @@ AllgemeinerDatenContainer {
 	}
 
 	/**
-	 * Erfragt Bezugszeitraum für die Vertrauensbereichsüberprüfung.
+	 * Erfragt Bezugszeitraum fÃ¼r die VertrauensbereichsÃ¼berprÃ¼fung.
 	 *
 	 * @return Bezugszeitraum in Stunden
 	 */
@@ -96,22 +96,22 @@ AllgemeinerDatenContainer {
 	}
 
 	/**
-	 * Erfragt Ausschaltschwelle für den Vertrauensbereich eines Fahrstreifens
+	 * Erfragt Ausschaltschwelle fÃ¼r den Vertrauensbereich eines Fahrstreifens
 	 * im Bezugszeitraum Bei Unterschreiten dieses Wertes wird eine
-	 * entsprechende Fehlermeldung zurückgenommen.
+	 * entsprechende Fehlermeldung zurÃ¼ckgenommen.
 	 *
-	 * @return Ausschaltschwelle für den Vertrauensbereich eines Fahrstreifens
+	 * @return Ausschaltschwelle fÃ¼r den Vertrauensbereich eines Fahrstreifens
 	 */
 	public final long getMaxAusfallProBezugsZeitraumAus() {
 		return this.maxAusfallProBezugsZeitraumAus;
 	}
 
 	/**
-	 * Erfragt Einschaltschwelle für den Vertrauensbereich eines Fahrstreifens
-	 * im Bezugszeitraum. Bei Überschreiten dieses Wertes wird eine
+	 * Erfragt Einschaltschwelle fÃ¼r den Vertrauensbereich eines Fahrstreifens
+	 * im Bezugszeitraum. Bei Ãœberschreiten dieses Wertes wird eine
 	 * entsprechende Fehlermeldung generiert.
 	 *
-	 * @return Einschaltschwelle für den Vertrauensbereich in %
+	 * @return Einschaltschwelle fÃ¼r den Vertrauensbereich in %
 	 */
 	public final long getMaxAusfallProBezugsZeitraumEin() {
 		return this.maxAusfallProBezugsZeitraumEin;

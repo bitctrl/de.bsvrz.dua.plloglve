@@ -1,5 +1,5 @@
 /*
- * Segment 4 Daten¸bernahme und Aufbereitung (DUA), SWE 4.2 Pl-Pr¸fung logisch LVE
+ * Segment 4 Daten√ºbernahme und Aufbereitung (DUA), SWE 4.2 Pl-Pr√ºfung logisch LVE
  * Copyright (C) 2007-2015 BitCtrl Systems GmbH
  *
  * This program is free software; you can redistribute it and/or modify it under
@@ -18,7 +18,7 @@
  *
  * Contact Information:<br>
  * BitCtrl Systems GmbH<br>
- * Weiﬂenfelser Straﬂe 67<br>
+ * Wei√üenfelser Stra√üe 67<br>
  * 04229 Leipzig<br>
  * Phone: +49 341-490670<br>
  * mailto: info@bitctrl.de
@@ -48,7 +48,7 @@ import de.bsvrz.sys.funclib.debug.Debug;
 import de.bsvrz.sys.funclib.operatingMessage.MessageGrade;
 
 /**
- * Speichert die Ausfallh‰ufigkeit eine Fahrstreifens ¸ber einem gleitenden Tag.
+ * Speichert die Ausfallh√§ufigkeit eine Fahrstreifens √ºber einem gleitenden Tag.
  *
  * @author BitCtrl Systems GmbH, Thierfelder
  */
@@ -73,12 +73,12 @@ public class AusfallFahrStreifen implements ClientReceiverInterface {
 
 	/**
 	 * Datenbeschreibung der Parameterattributgruppe
-	 * <code>atg.verkehrsDatenAusfallH‰ufigkeitFs</code>.
+	 * <code>atg.verkehrsDatenAusfallH√§ufigkeitFs</code>.
 	 */
 	private static DataDescription ausfallBeschreibung = null;
 
 	/**
-	 * Maximal zul‰ssige Ausfallh‰ufigkeit eines Fahrstreifens pro Tag.
+	 * Maximal zul√§ssige Ausfallh√§ufigkeit eines Fahrstreifens pro Tag.
 	 */
 	private long maxAusfallProTag = -4;
 
@@ -107,7 +107,7 @@ public class AusfallFahrStreifen implements ClientReceiverInterface {
 			AusfallFahrStreifen.dieVerwaltung = verwaltung;
 			AusfallFahrStreifen.ausfallBeschreibung = new DataDescription(
 					AusfallFahrStreifen.dieVerwaltung.getVerbindung().getDataModel()
-					.getAttributeGroup("atg.verkehrsDatenAusfallH‰ufigkeitFs"), //$NON-NLS-1$
+					.getAttributeGroup("atg.verkehrsDatenAusfallH√§ufigkeitFs"), //$NON-NLS-1$
 							AusfallFahrStreifen.dieVerwaltung.getVerbindung().getDataModel()
 							.getAspect(DaVKonstanten.ASP_PARAMETER_SOLL));
 			AusfallFahrStreifen.atgKzdId = AusfallFahrStreifen.dieVerwaltung.getVerbindung().getDataModel()
@@ -119,7 +119,7 @@ public class AusfallFahrStreifen implements ClientReceiverInterface {
 	}
 
 	/**
-	 * Fuehrt die Plausibilisierung durch. (nur f¸r KZD)
+	 * Fuehrt die Plausibilisierung durch. (nur f√ºr KZD)
 	 *
 	 * @param resultat
 	 *            ein Fahrstreifendatum (KZD)
@@ -182,7 +182,7 @@ public class AusfallFahrStreifen implements ClientReceiverInterface {
 					final long minuten = (ausfallZeit - (stunden * Constants.MILLIS_PER_HOUR))
 							/ Constants.MILLIS_PER_MINUTE;
 
-					final String nachricht = "Ausfallh‰ufigkeit innerhalb der letzten 24 Stunden ¸berschritten. Im Zeitraum von " //$NON-NLS-1$
+					final String nachricht = "Ausfallh√§ufigkeit innerhalb der letzten 24 Stunden √ºberschritten. Im Zeitraum von " //$NON-NLS-1$
 							+
 							AusfallFahrStreifen.FORMAT.format(
 									new Date(System.currentTimeMillis() - Constants.MILLIS_PER_DAY))
@@ -212,11 +212,11 @@ public class AusfallFahrStreifen implements ClientReceiverInterface {
 	}
 
 	/**
-	 * Erfragt, ob diese Applikation (eigentlich das Modul Pl-Pr¸fung logisch
-	 * LVE) schon l‰nger als einen Tag l‰uft (erst dann solltes Objekt Daten
+	 * Erfragt, ob diese Applikation (eigentlich das Modul Pl-Pr√ºfung logisch
+	 * LVE) schon l√§nger als einen Tag l√§uft (erst dann solltes Objekt Daten
 	 * markieren bzw. Betriebsmeldungen ausgeben)
 	 *
-	 * @return ob diese Applikation schon l‰nger als einen Tag l‰uft
+	 * @return ob diese Applikation schon l√§nger als einen Tag l√§uft
 	 */
 	private static boolean programmLaeuftSchonLaengerAlsEinTag() {
 		if (TestParameter.getInstanz().isTestAusfall()) {

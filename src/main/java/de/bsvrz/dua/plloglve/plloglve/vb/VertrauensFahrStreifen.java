@@ -1,5 +1,5 @@
 /*
- * Segment 4 Datenübernahme und Aufbereitung (DUA), SWE 4.2 Pl-Prüfung logisch LVE
+ * Segment 4 DatenÃ¼bernahme und Aufbereitung (DUA), SWE 4.2 Pl-PrÃ¼fung logisch LVE
  * Copyright (C) 2007-2015 BitCtrl Systems GmbH
  *
  * This program is free software; you can redistribute it and/or modify it under
@@ -18,7 +18,7 @@
  *
  * Contact Information:<br>
  * BitCtrl Systems GmbH<br>
- * Weißenfelser Straße 67<br>
+ * WeiÃŸenfelser StraÃŸe 67<br>
  * 04229 Leipzig<br>
  * Phone: +49 341-490670<br>
  * mailto: info@bitctrl.de
@@ -49,7 +49,7 @@ import de.bsvrz.sys.funclib.debug.Debug;
 import de.bsvrz.sys.funclib.operatingMessage.MessageGrade;
 
 /**
- * Repräsentiert einen Fahrstreifen mit allen Informationen, die zur Ermittlung
+ * ReprÃ¤sentiert einen Fahrstreifen mit allen Informationen, die zur Ermittlung
  * des Vertrauens in diesen Fahrstreifen notwendig sind.
  *
  * @author BitCtrl Systems GmbH, Thierfelder
@@ -59,7 +59,7 @@ public class VertrauensFahrStreifen implements ClientReceiverInterface {
 	private static final Debug LOGGER = Debug.getLogger();
 
 	/**
-	 * Alle Attribute, die ggf. auf implausibel gesetzt werden müssen
+	 * Alle Attribute, die ggf. auf implausibel gesetzt werden mÃ¼ssen
 	 */
 	private static final String[] ATTRIBUTE = new String[] { "qKfz", "qLkw", "qPkw", //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 			"vKfz", "vLkw", "vPkw", //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
@@ -72,68 +72,68 @@ public class VertrauensFahrStreifen implements ClientReceiverInterface {
 	protected static IVerwaltung dieVerwaltung = null;
 
 	/**
-	 * Datenbeschreibung für Parameterattributgruppe
+	 * Datenbeschreibung fÃ¼r Parameterattributgruppe
 	 * <code>atg.verkehrsDatenVertrauensBereichFs</code>.
 	 */
 	protected static DataDescription paraVertrauenDD = null;
 
 	/**
 	 * aktuelle Parameter der Attributgruppe
-	 * <code>atg.verkehrsDatenVertrauensBereichFs</code> für diesen
+	 * <code>atg.verkehrsDatenVertrauensBereichFs</code> fÃ¼r diesen
 	 * Fahrstreifen.
 	 */
 	private AtgVerkehrsDatenVertrauensBereichFs parameter = null;
 
 	/**
-	 * Datensätze mit Ausfallinformationen des aktuellen Bezugszeitraums für
+	 * DatensÃ¤tze mit Ausfallinformationen des aktuellen Bezugszeitraums fÃ¼r
 	 * <code>qKfz</code>.
 	 */
 	private BezugsZeitraum datenBezugsZeitraumQKfz = null;
 
 	/**
-	 * Datensätze mit Ausfallinformationen des aktuellen Bezugszeitraums für
+	 * DatensÃ¤tze mit Ausfallinformationen des aktuellen Bezugszeitraums fÃ¼r
 	 * <code>qLkw</code>.
 	 */
 	private BezugsZeitraum datenBezugsZeitraumQLkw = null;
 
 	/**
-	 * Datensätze mit Ausfallinformationen des aktuellen Bezugszeitraums für
+	 * DatensÃ¤tze mit Ausfallinformationen des aktuellen Bezugszeitraums fÃ¼r
 	 * <code>qPkw</code>.
 	 */
 	private BezugsZeitraum datenBezugsZeitraumQPkw = null;
 
 	/**
-	 * Datensätze mit Ausfallinformationen des aktuellen Bezugszeitraums für
+	 * DatensÃ¤tze mit Ausfallinformationen des aktuellen Bezugszeitraums fÃ¼r
 	 * <code>vKfz</code>.
 	 */
 	private BezugsZeitraum datenBezugsZeitraumVKfz = null;
 
 	/**
-	 * Datensätze mit Ausfallinformationen des aktuellen Bezugszeitraums für
+	 * DatensÃ¤tze mit Ausfallinformationen des aktuellen Bezugszeitraums fÃ¼r
 	 * <code>vLkw</code>.
 	 */
 	private BezugsZeitraum datenBezugsZeitraumVLkw = null;
 
 	/**
-	 * Datensätze mit Ausfallinformationen des aktuellen Bezugszeitraums für
+	 * DatensÃ¤tze mit Ausfallinformationen des aktuellen Bezugszeitraums fÃ¼r
 	 * <code>vPkw</code>.
 	 */
 	private BezugsZeitraum datenBezugsZeitraumVPkw = null;
 
 	/**
-	 * Datensätze mit Ausfallinformationen des aktuellen Bezugszeitraums für
+	 * DatensÃ¤tze mit Ausfallinformationen des aktuellen Bezugszeitraums fÃ¼r
 	 * <code>sKfz</code>.
 	 */
 	private BezugsZeitraum datenBezugsZeitraumSKfz = null;
 
 	/**
-	 * Datensätze mit Ausfallinformationen des aktuellen Bezugszeitraums für
+	 * DatensÃ¤tze mit Ausfallinformationen des aktuellen Bezugszeitraums fÃ¼r
 	 * <code>b</code>.
 	 */
 	private BezugsZeitraum datenBezugsZeitraumB = null;
 
 	/**
-	 * zeigt an, ob der Vertrauensbereich für diesen Fahrstreifen durch
+	 * zeigt an, ob der Vertrauensbereich fÃ¼r diesen Fahrstreifen durch
 	 * irgendein Attribut verletzt ist.
 	 */
 	private boolean vertrauenVerletztAllgemein = false;
@@ -177,13 +177,13 @@ public class VertrauensFahrStreifen implements ClientReceiverInterface {
 	}
 
 	/**
-	 * Führt eine Plausibilisierung des übergebenen Originaldatums durch und
+	 * FÃ¼hrt eine Plausibilisierung des Ã¼bergebenen Originaldatums durch und
 	 * gibt ggf. eine Betriebsmeldung aus
 	 *
 	 * @param originalDatum
 	 *            ein DAV-Originaldatum
-	 * @return das plausibilisierte Datum oder unveränderte Originaldatum, wenn
-	 *         das emfangene Originaldatum nicht verändert werden musste
+	 * @return das plausibilisierte Datum oder unverÃ¤nderte Originaldatum, wenn
+	 *         das emfangene Originaldatum nicht verÃ¤ndert werden musste
 	 */
 	protected final Data plausibilisiere(final ResultData originalDatum) {
 		Data copy = originalDatum.getData();
@@ -218,7 +218,7 @@ public class VertrauensFahrStreifen implements ClientReceiverInterface {
 					/**
 					 * Hier nur die Markierungs aller Attribute des Datensatzes.
 					 * Eine Betriebsmeldung muss nicht ausgegeben werden, da
-					 * dies ggf. schon für jeden einzelnen Wert getan wird
+					 * dies ggf. schon fÃ¼r jeden einzelnen Wert getan wird
 					 */
 					for (final String attribut : VertrauensFahrStreifen.ATTRIBUTE) {
 						copy.getItem(attribut).getItem("Status").getItem("MessWertErsetzung")

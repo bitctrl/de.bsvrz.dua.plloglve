@@ -1,5 +1,5 @@
 /*
- * Segment 4 Datenübernahme und Aufbereitung (DUA), SWE 4.2 Pl-Prüfung logisch LVE
+ * Segment 4 DatenÃ¼bernahme und Aufbereitung (DUA), SWE 4.2 Pl-PrÃ¼fung logisch LVE
  * Copyright (C) 2007-2015 BitCtrl Systems GmbH
  *
  * This program is free software; you can redistribute it and/or modify it under
@@ -18,7 +18,7 @@
  *
  * Contact Information:<br>
  * BitCtrl Systems GmbH<br>
- * Weißenfelser Straße 67<br>
+ * WeiÃŸenfelser StraÃŸe 67<br>
  * 04229 Leipzig<br>
  * Phone: +49 341-490670<br>
  * mailto: info@bitctrl.de
@@ -35,9 +35,9 @@ import de.bsvrz.sys.funclib.bitctrl.dua.test.DAVTest;
 import de.bsvrz.sys.funclib.commandLineArgs.ArgumentList;
 
 /**
- * Automatisierter Test nach Prüfspezifikation für SWE Pl-Prüfung logisch LVE.
+ * Automatisierter Test nach PrÃ¼fspezifikation fÃ¼r SWE Pl-PrÃ¼fung logisch LVE.
  *
- * ! Achtung: Die Applikation Pl-Prüfung logisch LVE ist mit dem Parameter
+ * ! Achtung: Die Applikation Pl-PrÃ¼fung logisch LVE ist mit dem Parameter
  * test=ausfall ! zu starten.
  *
  * @author BitCtrl Systems GmbH, Thierfelder
@@ -73,7 +73,7 @@ public class PlPruefungLogischLVETestAusfall {
 	}
 
 	/**
-	 * Ausfallhäufigkeitstest nach Prüfspezifikation.
+	 * AusfallhÃ¤ufigkeitstest nach PrÃ¼fspezifikation.
 	 *
 	 * @throws Exception
 	 *             wird weitergereicht

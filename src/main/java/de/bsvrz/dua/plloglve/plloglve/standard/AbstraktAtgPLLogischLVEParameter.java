@@ -1,5 +1,5 @@
 /*
- * Segment 4 Datenübernahme und Aufbereitung (DUA), SWE 4.2 Pl-Prüfung logisch LVE
+ * Segment 4 DatenÃ¼bernahme und Aufbereitung (DUA), SWE 4.2 Pl-PrÃ¼fung logisch LVE
  * Copyright (C) 2007-2015 BitCtrl Systems GmbH
  *
  * This program is free software; you can redistribute it and/or modify it under
@@ -18,7 +18,7 @@
  *
  * Contact Information:<br>
  * BitCtrl Systems GmbH<br>
- * Weißenfelser Straße 67<br>
+ * WeiÃŸenfelser StraÃŸe 67<br>
  * 04229 Leipzig<br>
  * Phone: +49 341-490670<br>
  * mailto: info@bitctrl.de
@@ -33,7 +33,7 @@ import de.bsvrz.sys.funclib.debug.Debug;
 
 /**
  * Abstrakte Klasse die alle Parameter halten kann, die innerhalb der
- * Standardplausibilisierung LVE für sowohl LZD als auch KZD benötigt werden.
+ * Standardplausibilisierung LVE fÃ¼r sowohl LZD als auch KZD benÃ¶tigt werden.
  *
  * @author BitCtrl Systems GmbH, Thierfelder
  */
@@ -42,55 +42,55 @@ public class AbstraktAtgPLLogischLVEParameter extends AllgemeinerDatenContainer 
 	private static final Debug LOGGER = Debug.getLogger();
 
 	/**
-	 * Legt das Verhalten für den Umgang mit geprüften Werten nach der
-	 * Wertebereichsprüfung fest.
+	 * Legt das Verhalten fÃ¼r den Umgang mit geprÃ¼ften Werten nach der
+	 * WertebereichsprÃ¼fung fest.
 	 */
 	protected OptionenPlausibilitaetsPruefungLogischVerkehr optionen;
 
 	/**
-	 * Minimum der erlaubten Verkehrsstärke (Anzahl der Fahrzeuge) als
+	 * Minimum der erlaubten VerkehrsstÃ¤rke (Anzahl der Fahrzeuge) als
 	 * normierter Stundenwert.
 	 */
 	protected long qKfzBereichMin;
 
 	/**
-	 * Maximum der erlaubten Verkehrsstärke (Anzahl der Fahrzeuge) als
+	 * Maximum der erlaubten VerkehrsstÃ¤rke (Anzahl der Fahrzeuge) als
 	 * normierter Stundenwert.
 	 */
 	protected long qKfzBereichMax;
 
 	/**
-	 * Minimum der erlaubten Verkehrsstärke (Anzahl der Fahrzeuge) als
+	 * Minimum der erlaubten VerkehrsstÃ¤rke (Anzahl der Fahrzeuge) als
 	 * normierter Stundenwert.
 	 */
 	protected long qLkwBereichMin;
 
 	/**
-	 * Maximum der erlaubten Verkehrsstärke (Anzahl der Fahrzeuge) als
+	 * Maximum der erlaubten VerkehrsstÃ¤rke (Anzahl der Fahrzeuge) als
 	 * normierter Stundenwert.
 	 */
 	protected long qLkwBereichMax;
 
 	/**
-	 * Grenzgeschwindigkeit für PL-Prüfung. Ist dieser Wert überschritten, muss
+	 * Grenzgeschwindigkeit fÃ¼r PL-PrÃ¼fung. Ist dieser Wert Ã¼berschritten, muss
 	 * b kleiner bGrenz sein, sonst ist b inplausibel.
 	 */
 	protected long vKfzGrenz;
 
 	/**
-	 * Ist vKfz größer als vKfzGrenz, so muss b kleiner bGrenz sein, sonst ist b
+	 * Ist vKfz grÃ¶ÃŸer als vKfzGrenz, so muss b kleiner bGrenz sein, sonst ist b
 	 * inplausibel.
 	 */
 	protected long bGrenz;
 
 	/**
-	 * Minimum der erlaubten Verkehrsstärke (Anzahl der Fahrzeuge) als
+	 * Minimum der erlaubten VerkehrsstÃ¤rke (Anzahl der Fahrzeuge) als
 	 * normierter Stundenwert.
 	 */
 	protected long qPkwBereichMin;
 
 	/**
-	 * Maximum der erlaubten Verkehrsstärke (Anzahl der Fahrzeuge) als
+	 * Maximum der erlaubten VerkehrsstÃ¤rke (Anzahl der Fahrzeuge) als
 	 * normierter Stundenwert.
 	 */
 	protected long qPkwBereichMax;
@@ -172,7 +172,7 @@ public class AbstraktAtgPLLogischLVEParameter extends AllgemeinerDatenContainer 
 							resultat.getData());
 				} else {
 					LOGGER.warning(
-							"Unbekannter Datensatz übergeben:\n" + //$NON-NLS-1$
+							"Unbekannter Datensatz Ã¼bergeben:\n" + //$NON-NLS-1$
 									resultat.getDataDescription()
 											.getAttributeGroup());
 				}

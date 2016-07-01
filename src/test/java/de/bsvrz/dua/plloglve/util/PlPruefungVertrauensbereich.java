@@ -1,5 +1,5 @@
 /*
- * Segment 4 Datenübernahme und Aufbereitung (DUA), SWE 4.2 Pl-Prüfung logisch LVE
+ * Segment 4 DatenÃ¼bernahme und Aufbereitung (DUA), SWE 4.2 Pl-PrÃ¼fung logisch LVE
  * Copyright (C) 2007-2015 BitCtrl Systems GmbH
  *
  * This program is free software; you can redistribute it and/or modify it under
@@ -18,7 +18,7 @@
  *
  * Contact Information:<br>
  * BitCtrl Systems GmbH<br>
- * Weißenfelser Straße 67<br>
+ * WeiÃŸenfelser StraÃŸe 67<br>
  * 04229 Leipzig<br>
  * Phone: +49 341-490670<br>
  * mailto: info@bitctrl.de
@@ -76,7 +76,7 @@ public class PlPruefungVertrauensbereich implements ClientSenderInterface, PlPru
 	private ParaKZDLogImport kzdImport;
 
 	/**
-	 * Sende-Datenbeschreibung für KZD.
+	 * Sende-Datenbeschreibung fÃ¼r KZD.
 	 */
 	public static DataDescription ddKzdSend = null;
 
@@ -86,12 +86,12 @@ public class PlPruefungVertrauensbereich implements ClientSenderInterface, PlPru
 	private ClientDavInterface dav = null;
 
 	/**
-	 * Intervalllänge in Millisekunden.
+	 * IntervalllÃ¤nge in Millisekunden.
 	 */
 	static long intervall = TestParameter.INTERVALL_VB;
 
 	/**
-	 * Fehlerdatensätze.
+	 * FehlerdatensÃ¤tze.
 	 */
 	private Data zFSFehlB2;
 
@@ -110,7 +110,7 @@ public class PlPruefungVertrauensbereich implements ClientSenderInterface, PlPru
 		this.dav = dav;
 
 		/*
-		 * Melde Sender für FS an
+		 * Melde Sender fÃ¼r FS an
 		 */
 		PlPruefungVertrauensbereich.fs = this.dav.getDataModel().getObject(Konfiguration.PID_TESTFS1_KZD);
 
@@ -136,7 +136,7 @@ public class PlPruefungVertrauensbereich implements ClientSenderInterface, PlPru
 			zFSFehlB2 = paraImpFSFehler
 					.getNaechstenDatensatz(PlPruefungVertrauensbereich.ddKzdSend.getAttributeGroup());
 		} catch (final Exception e) {
-			PlPruefungVertrauensbereich.LOGGER.error("Kann Fehlerdatensätze nicht importieren: " + e);
+			PlPruefungVertrauensbereich.LOGGER.error("Kann FehlerdatensÃ¤tze nicht importieren: " + e);
 		}
 
 	}
@@ -155,7 +155,7 @@ public class PlPruefungVertrauensbereich implements ClientSenderInterface, PlPru
 				SenderRole.source());
 
 		/*
-		 * Initialisiere Parameter Importer für fehlerfreie DS
+		 * Initialisiere Parameter Importer fÃ¼r fehlerfreie DS
 		 */
 		TestFahrstreifenImporter paraImpFSOK = null;
 		paraImpFSOK = new TestFahrstreifenImporter(this.dav,
@@ -175,9 +175,9 @@ public class PlPruefungVertrauensbereich implements ClientSenderInterface, PlPru
 		Long aktZeit;
 
 		/*
-		 * Prüfung
+		 * PrÃ¼fung
 		 */
-		System.out.println("Beginne Prüfung");
+		System.out.println("Beginne PrÃ¼fung");
 
 		/*
 		 * Warte auf 371 Meldungen 36 x 4 (qKfz, qPkw, qLkw, vPkw) 37 (b) 39 x 4
@@ -188,9 +188,9 @@ public class PlPruefungVertrauensbereich implements ClientSenderInterface, PlPru
 				.info("Meldungsfilter initialisiert: Erwarte 352 Meldungen mit \"Vertrauensbereichs\"");
 
 		/*
-		 * Sendet fehlerfreie DS für eine Stunde
+		 * Sendet fehlerfreie DS fÃ¼r eine Stunde
 		 */
-		System.out.println("Sende fehlerfreie DS für 1 Stunde (60)");
+		System.out.println("Sende fehlerfreie DS fÃ¼r 1 Stunde (60)");
 		/*
 		 * Testerobjekt
 		 */
@@ -228,7 +228,7 @@ public class PlPruefungVertrauensbereich implements ClientSenderInterface, PlPru
 		for (int i = 1; i <= 600; i++) {
 
 			/*
-			 * Konfiguriert Testerobjekt Prüfe Markierung der DS als Implausibel
+			 * Konfiguriert Testerobjekt PrÃ¼fe Markierung der DS als Implausibel
 			 */
 			if (((i >= 29) && (i < 72)) || ((i >= 511) && (i < 552))) {
 				markPruefer.listenImpl(pruefZeit);
@@ -252,8 +252,8 @@ public class PlPruefungVertrauensbereich implements ClientSenderInterface, PlPru
 				 * unter 20% wobei der VB jedoch aufgrund der anderen
 				 * Fehlerdaten weiterhin verlassen bleibt
 				 *
-				 * Für den zweiten Testbereich liegt der prozentuale Ausfall ab
-				 * dem 513. DS über 20% wobei der VB bereits früher durch die
+				 * FÃ¼r den zweiten Testbereich liegt der prozentuale Ausfall ab
+				 * dem 513. DS Ã¼ber 20% wobei der VB bereits frÃ¼her durch die
 				 * anderen Fehlerdaten verlassen wird
 				 *
 				 * Ab dem 552. DS liegt der prozentuale Ausfall entsprechend Afo
@@ -326,7 +326,7 @@ public class PlPruefungVertrauensbereich implements ClientSenderInterface, PlPru
 			System.out.println(warnung);
 		}
 
-		System.out.println("Prüfung erfolgreich abgeschlossen");
+		System.out.println("PrÃ¼fung erfolgreich abgeschlossen");
 
 		/*
 		 * Sender abmelden

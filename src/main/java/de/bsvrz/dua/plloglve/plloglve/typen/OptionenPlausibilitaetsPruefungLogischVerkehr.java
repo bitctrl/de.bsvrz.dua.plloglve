@@ -1,5 +1,5 @@
 /*
- * Segment 4 Datenübernahme und Aufbereitung (DUA), SWE 4.2 Pl-Prüfung logisch LVE
+ * Segment 4 DatenÃ¼bernahme und Aufbereitung (DUA), SWE 4.2 Pl-PrÃ¼fung logisch LVE
  * Copyright (C) 2007-2015 BitCtrl Systems GmbH
  *
  * This program is free software; you can redistribute it and/or modify it under
@@ -18,7 +18,7 @@
  *
  * Contact Information:<br>
  * BitCtrl Systems GmbH<br>
- * Weißenfelser Straße 67<br>
+ * WeiÃŸenfelser StraÃŸe 67<br>
  * 04229 Leipzig<br>
  * Phone: +49 341-490670<br>
  * mailto: info@bitctrl.de
@@ -32,8 +32,8 @@ import java.util.Map;
 import de.bsvrz.sys.funclib.bitctrl.daf.AbstractDavZustand;
 
 /**
- * Repräsentiert den DAV-Enumerationstypen
- * <code>att.optionenPlausibilitätsPrüfungLogischVerkehr</code>.
+ * ReprÃ¤sentiert den DAV-Enumerationstypen
+ * <code>att.optionenPlausibilitÃ¤tsPrÃ¼fungLogischVerkehr</code>.
  *
  * @author BitCtrl Systems GmbH, Thierfelder
  */
@@ -46,39 +46,39 @@ AbstractDavZustand {
 	private static Map<Integer, OptionenPlausibilitaetsPruefungLogischVerkehr> werteBereich = new HashMap<>();
 
 	/**
-	 * Wertebereichsprüfung wird NICHT durchgeführt. Wert wird nicht verändert,
+	 * WertebereichsprÃ¼fung wird NICHT durchgefÃ¼hrt. Wert wird nicht verÃ¤ndert,
 	 * es werden keine Statusflags gesetzt.
 	 */
 	public static final OptionenPlausibilitaetsPruefungLogischVerkehr KEINE_PRUEFUNG = new OptionenPlausibilitaetsPruefungLogischVerkehr(
-			"Keine Prüfung", 0); //$NON-NLS-1$
+			"Keine PrÃ¼fung", 0); //$NON-NLS-1$
 
 	/**
-	 * Wertebereichsprüfung wird durchgeführt. Fehlerhafte Werte werden nicht
-	 * verändert, es werden nur die Statusflags gesetzt.
+	 * WertebereichsprÃ¼fung wird durchgefÃ¼hrt. Fehlerhafte Werte werden nicht
+	 * verÃ¤ndert, es werden nur die Statusflags gesetzt.
 	 */
 	public static final OptionenPlausibilitaetsPruefungLogischVerkehr NUR_PRUEFUNG = new OptionenPlausibilitaetsPruefungLogischVerkehr(
-			"NurPrüfung", 1); //$NON-NLS-1$
+			"NurPrÃ¼fung", 1); //$NON-NLS-1$
 
 	/**
-	 * Wertebereichsprüfung wird durchgeführt. Bei Bereichsunter- bzw.
-	 * überschreitung wird der Wert auf den parametrierten Min- bzw. /Max-Wert
+	 * WertebereichsprÃ¼fung wird durchgefÃ¼hrt. Bei Bereichsunter- bzw.
+	 * Ã¼berschreitung wird der Wert auf den parametrierten Min- bzw. /Max-Wert
 	 * korrigiert und die Statusflags gesetzt.
 	 */
 	public static final OptionenPlausibilitaetsPruefungLogischVerkehr SETZE_MIN_MAX = new OptionenPlausibilitaetsPruefungLogischVerkehr(
 			"Setze MinMax", 2); //$NON-NLS-1$
 
 	/**
-	 * Wertebereichsprüfung wird durchgeführt. Bei Bereichsunterschreitung wird
+	 * WertebereichsprÃ¼fung wird durchgefÃ¼hrt. Bei Bereichsunterschreitung wird
 	 * der Wert auf den parametrierten Min-Wert korrigiert und die Statusflags
-	 * gesetzt, ansonsten Verhalten wie bei Option "NurPrüfen"
+	 * gesetzt, ansonsten Verhalten wie bei Option "NurPrÃ¼fen"
 	 */
 	public static final OptionenPlausibilitaetsPruefungLogischVerkehr SETZE_MIN = new OptionenPlausibilitaetsPruefungLogischVerkehr(
 			"Setze Min", 3); //$NON-NLS-1$
 
 	/**
-	 * Wertebereichsprüfung wird durchgeführt. Bei Bereichsüberschreitung wird
+	 * WertebereichsprÃ¼fung wird durchgefÃ¼hrt. Bei BereichsÃ¼berschreitung wird
 	 * der Wert auf den parametrierten Max-Wert korrigiert und die Statusflags
-	 * gesetzt, ansonsten Verhalten wie bei Option "NurPrüfen".
+	 * gesetzt, ansonsten Verhalten wie bei Option "NurPrÃ¼fen".
 	 */
 	public static final OptionenPlausibilitaetsPruefungLogischVerkehr SETZE_MAX = new OptionenPlausibilitaetsPruefungLogischVerkehr(
 			"Setze Max", 4); //$NON-NLS-1$
@@ -99,7 +99,7 @@ AbstractDavZustand {
 	}
 
 	/**
-	 * Erfragt den Wert dieses DAV-Enumerationstypen mit dem übergebenen Code.
+	 * Erfragt den Wert dieses DAV-Enumerationstypen mit dem Ã¼bergebenen Code.
 	 *
 	 * @param code
 	 *            der Kode des Zustands
