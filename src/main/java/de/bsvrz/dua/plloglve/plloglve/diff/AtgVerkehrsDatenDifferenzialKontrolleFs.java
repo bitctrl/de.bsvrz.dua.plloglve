@@ -1,27 +1,29 @@
-/*
- * Segment 4 Datenübernahme und Aufbereitung (DUA), SWE 4.2 Pl-Prüfung logisch LVE
- * Copyright (C) 2007-2015 BitCtrl Systems GmbH
- *
- * This program is free software; you can redistribute it and/or modify it under
- * the terms of the GNU General Public License as published by the Free Software
- * Foundation; either version 2 of the License, or (at your option) any later
- * version.
- *
- * This program is distributed in the hope that it will be useful, but WITHOUT
- * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
- * FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
- * details.
- *
- * You should have received a copy of the GNU General Public License along with
- * this program; if not, write to the Free Software Foundation, Inc., 51
- * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
- *
- * Contact Information:<br>
- * BitCtrl Systems GmbH<br>
- * Weißenfelser Straße 67<br>
- * 04229 Leipzig<br>
- * Phone: +49 341-490670<br>
- * mailto: info@bitctrl.de
+/* 
+ * Segment Datenübernahme und Aufbereitung (DUA), SWE Pl-Prüfung logisch LVE
+ * Copyright (C) 2007 BitCtrl Systems GmbH 
+ * Copyright 2016 by Kappich Systemberatung Aachen
+ * 
+ * This file is part of de.bsvrz.dua.plloglve.
+ * 
+ * de.bsvrz.dua.plloglve is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ * 
+ * de.bsvrz.dua.plloglve is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with de.bsvrz.dua.plloglve.  If not, see <http://www.gnu.org/licenses/>.
+
+ * Contact Information:
+ * Kappich Systemberatung
+ * Martin-Luther-Straße 14
+ * 52062 Aachen, Germany
+ * phone: +49 241 4090 436 
+ * mail: <info@kappich.de>
  */
 
 package de.bsvrz.dua.plloglve.plloglve.diff;
@@ -32,57 +34,39 @@ import de.bsvrz.sys.funclib.bitctrl.dua.AllgemeinerDatenContainer;
 /**
  * Repräsentiert aktuelle Daten der DAV-ATG
  * <code>atg.verkehrsDatenDifferenzialKontrolleFs</code>.
- *
+ * 
  * @author BitCtrl Systems GmbH, Thierfelder
+ * 
+ * @version $Id$
  */
 public class AtgVerkehrsDatenDifferenzialKontrolleFs extends
-AllgemeinerDatenContainer {
+		AllgemeinerDatenContainer {
 
 	/**
-	 * Maximal zulässige Anzahl von Intervallen mit Ergebniskonstanz für qKfz.
+	 * Maximal zulässige Anzahl von Intervallen mit Ergebniskonstanz für q.
 	 */
-	private final long maxAnzKonstanzqKfz;
+	private long maxAnzKonstanzVerkehrsmenge;
 
 	/**
-	 * Maximal zulässige Anzahl von Intervallen mit Ergebniskonstanz für qLkw.
+	 * Maximal zulässige Anzahl von Intervallen mit Ergebniskonstanz für v.
 	 */
-	private final long maxAnzKonstanzqLkw;
-
-	/**
-	 * Maximal zulässige Anzahl von Intervallen mit Ergebniskonstanz für qPkw.
-	 */
-	private final long maxAnzKonstanzqPkw;
-
-	/**
-	 * Maximal zulässige Anzahl von Intervallen mit Ergebniskonstanz für vKfz.
-	 */
-	private final long maxAnzKonstanzvKfz;
-
-	/**
-	 * Maximal zulässige Anzahl von Intervallen mit Ergebniskonstanz für vLkw.
-	 */
-	private final long maxAnzKonstanzvLkw;
-
-	/**
-	 * Maximal zulässige Anzahl von Intervallen mit Ergebniskonstanz für vPkw.
-	 */
-	private final long maxAnzKonstanzvPkw;
+	private long maxAnzKonstanzGeschwindigkeit;
 
 	/**
 	 * Maximal zulässige Anzahl von Intervallen mit Ergebniskonstanz für die
 	 * Streung S.
 	 */
-	private final long maxAnzKonstanzStreung;
+	private long maxAnzKonstanzStreung;
 
 	/**
 	 * Maximal zulässige Anzahl von Intervallen mit Ergebniskonstanz für die
 	 * Belegung b.
 	 */
-	private final long maxAnzKonstanzBelegung;
+	private long maxAnzKonstanzBelegung;
 
 	/**
 	 * Standardkonstruktor.
-	 *
+	 * 
 	 * @param data
 	 *            initialisierendes DAV-Datum
 	 */
@@ -90,18 +74,10 @@ AllgemeinerDatenContainer {
 		if (data == null) {
 			throw new NullPointerException("Uebergebenes Datum ist <<null>>"); //$NON-NLS-1$
 		}
-		this.maxAnzKonstanzqKfz = data
-				.getUnscaledValue("maxAnzKonstanzqKfz").longValue(); //$NON-NLS-1$
-		this.maxAnzKonstanzqLkw = data
-				.getUnscaledValue("maxAnzKonstanzqLkw").longValue(); //$NON-NLS-1$
-		this.maxAnzKonstanzqPkw = data
-				.getUnscaledValue("maxAnzKonstanzqPkw").longValue(); //$NON-NLS-1$
-		this.maxAnzKonstanzvKfz = data
-				.getUnscaledValue("maxAnzKonstanzvKfz").longValue(); //$NON-NLS-1$
-		this.maxAnzKonstanzvLkw = data
-				.getUnscaledValue("maxAnzKonstanzvLkw").longValue(); //$NON-NLS-1$
-		this.maxAnzKonstanzvPkw = data
-				.getUnscaledValue("maxAnzKonstanzvPkw").longValue(); //$NON-NLS-1$
+		this.maxAnzKonstanzVerkehrsmenge = data
+				.getUnscaledValue("maxAnzKonstanzVerkehrsmenge").longValue(); //$NON-NLS-1$
+		this.maxAnzKonstanzGeschwindigkeit = data
+				.getUnscaledValue("maxAnzKonstanzGeschwindigkeit").longValue(); //$NON-NLS-1$
 		this.maxAnzKonstanzStreung = data.getUnscaledValue(
 				"maxAnzKonstanzStreung").longValue(); //$NON-NLS-1$
 		this.maxAnzKonstanzBelegung = data.getUnscaledValue(
@@ -110,7 +86,7 @@ AllgemeinerDatenContainer {
 
 	/**
 	 * Erfragt maxAnzKonstanzBelegung.
-	 *
+	 * 
 	 * @return maxAnzKonstanzBelegung
 	 */
 	public final long getMaxAnzKonstanzBelegung() {
@@ -118,35 +94,17 @@ AllgemeinerDatenContainer {
 	}
 
 	/**
-	 * Erfragt maxAnzKonstanzqKfz.
-	 *
-	 * @return maxAnzKonstanzqKfz
+	 * Erfragt maxAnzKonstanzVerkehrsmenge.
+	 * 
+	 * @return maxAnzKonstanzVerkehrsmenge
 	 */
-	public final long getMaxAnzKonstanzqKfz() {
-		return maxAnzKonstanzqKfz;
-	}
-
-	/**
-	 * Erfragt maxAnzKonstanzqLkw.
-	 *
-	 * @return maxAnzKonstanzqLkw
-	 */
-	public final long getMaxAnzKonstanzqLkw() {
-		return maxAnzKonstanzqLkw;
-	}
-
-	/**
-	 * Erfragt maxAnzKonstanzqPkw.
-	 *
-	 * @return maxAnzKonstanzqPkw
-	 */
-	public final long getMaxAnzKonstanzqPkw() {
-		return maxAnzKonstanzqPkw;
+	public final long getMaxAnzKonstanzQ() {
+		return maxAnzKonstanzVerkehrsmenge;
 	}
 
 	/**
 	 * Erfragt maxAnzKonstanzStreung.
-	 *
+	 * 
 	 * @return maxAnzKonstanzStreung
 	 */
 	public final long getMaxAnzKonstanzStreung() {
@@ -154,30 +112,13 @@ AllgemeinerDatenContainer {
 	}
 
 	/**
-	 * Erfragt maxAnzKonstanzvKfz.
-	 *
-	 * @return maxAnzKonstanzvKfz
+	 * Erfragt maxAnzKonstanzGeschwindigkeit.
+	 * 
+	 * @return maxAnzKonstanzGeschwindigkeit
 	 */
-	public final long getMaxAnzKonstanzvKfz() {
-		return maxAnzKonstanzvKfz;
+	public final long getMaxAnzKonstanzV() {
+		return maxAnzKonstanzGeschwindigkeit;
 	}
 
-	/**
-	 * Erfragt maxAnzKonstanzvLkw.
-	 *
-	 * @return maxAnzKonstanzvLkw
-	 */
-	public final long getMaxAnzKonstanzvLkw() {
-		return maxAnzKonstanzvLkw;
-	}
-
-	/**
-	 * Erfragt maxAnzKonstanzvPkw.
-	 *
-	 * @return maxAnzKonstanzvPkw
-	 */
-	public final long getMaxAnzKonstanzvPkw() {
-		return maxAnzKonstanzvPkw;
-	}
 
 }

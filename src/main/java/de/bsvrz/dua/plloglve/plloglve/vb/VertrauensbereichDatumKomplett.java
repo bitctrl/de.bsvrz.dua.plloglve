@@ -1,6 +1,5 @@
-/* 
+/*
  * Segment Datenübernahme und Aufbereitung (DUA), SWE Pl-Prüfung logisch LVE
- * Copyright (C) 2007 BitCtrl Systems GmbH 
  * Copyright 2016 by Kappich Systemberatung Aachen
  * 
  * This file is part of de.bsvrz.dua.plloglve.
@@ -26,7 +25,7 @@
  * mail: <info@kappich.de>
  */
 
-package de.bsvrz.dua.plloglve.plloglve.ausfall;
+package de.bsvrz.dua.plloglve.plloglve.vb;
 
 import de.bsvrz.dav.daf.main.Data;
 import de.bsvrz.dav.daf.main.ResultData;
@@ -43,8 +42,8 @@ import java.util.Date;
  * 
  * @version $Id$
  */
-public final class AusfallDatumKomplett implements
-		IIntervallPufferElement<AusfallDatum> {
+public final class VertrauensbereichDatumKomplett implements
+		IIntervallPufferElement<VertrauensbereichDatum> {
 
 	/**
 	 * Intervallanfang.
@@ -59,7 +58,7 @@ public final class AusfallDatumKomplett implements
 	/**
 	 * der Inhalt.
 	 */
-	private AusfallDatum inhalt = null;
+	private VertrauensbereichDatum inhalt = null;
 
 	/**
 	 * Standardkonstruktor.
@@ -67,13 +66,13 @@ public final class AusfallDatumKomplett implements
 	 * @param resultat
 	 *            ein KZD-Datum
 	 */
-	private AusfallDatumKomplett(ResultData resultat) {
+	private VertrauensbereichDatumKomplett(ResultData resultat) {
 		Data data = resultat.getData();
 
 		this.intervallAnfang = resultat.getDataTime();
 		this.intervallEnde = resultat.getDataTime()
 				+ data.getTimeValue("T").getMillis(); //$NON-NLS-1$
-		this.inhalt = AusfallDatum.getAusfallDatumVon(resultat);
+		this.inhalt = VertrauensbereichDatum.getAusfallDatumVon(resultat);
 	}
 
 	/**
@@ -86,12 +85,12 @@ public final class AusfallDatumKomplett implements
 	 * @return eine mit dem uebergebenen Datum korrespondierende Instanz dieser
 	 *         Klasse oder <code>null</code> fuer keine Quelle usw.
 	 */
-	public static AusfallDatumKomplett getAusfallDatumVon(
+	public static VertrauensbereichDatumKomplett getAusfallDatumVon(
 			final ResultData resultat) {
-		AusfallDatumKomplett datum = null;
+		VertrauensbereichDatumKomplett datum = null;
 
 		if (resultat != null && resultat.getData() != null) {
-			datum = new AusfallDatumKomplett(resultat);
+			datum = new VertrauensbereichDatumKomplett(resultat);
 		}
 
 		return datum;
@@ -125,7 +124,7 @@ public final class AusfallDatumKomplett implements
 	/**
 	 * {@inheritDoc}
 	 */
-	public AusfallDatum getInhalt() {
+	public VertrauensbereichDatum getInhalt() {
 		return this.inhalt;
 	}
 

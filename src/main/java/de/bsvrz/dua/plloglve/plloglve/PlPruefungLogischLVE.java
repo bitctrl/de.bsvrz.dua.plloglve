@@ -1,32 +1,35 @@
-/*
- * Segment 4 Datenübernahme und Aufbereitung (DUA), SWE 4.2 Pl-Prüfung logisch LVE
- * Copyright (C) 2007-2015 BitCtrl Systems GmbH
- *
- * This program is free software; you can redistribute it and/or modify it under
- * the terms of the GNU General Public License as published by the Free Software
- * Foundation; either version 2 of the License, or (at your option) any later
- * version.
- *
- * This program is distributed in the hope that it will be useful, but WITHOUT
- * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
- * FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
- * details.
- *
- * You should have received a copy of the GNU General Public License along with
- * this program; if not, write to the Free Software Foundation, Inc., 51
- * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
- *
- * Contact Information:<br>
- * BitCtrl Systems GmbH<br>
- * Weißenfelser Straße 67<br>
- * 04229 Leipzig<br>
- * Phone: +49 341-490670<br>
- * mailto: info@bitctrl.de
+/* 
+ * Segment Datenübernahme und Aufbereitung (DUA), SWE Pl-Prüfung logisch LVE
+ * Copyright (C) 2007 BitCtrl Systems GmbH 
+ * Copyright 2016 by Kappich Systemberatung Aachen
+ * 
+ * This file is part of de.bsvrz.dua.plloglve.
+ * 
+ * de.bsvrz.dua.plloglve is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ * 
+ * de.bsvrz.dua.plloglve is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with de.bsvrz.dua.plloglve.  If not, see <http://www.gnu.org/licenses/>.
+
+ * Contact Information:
+ * Kappich Systemberatung
+ * Martin-Luther-Straße 14
+ * 52062 Aachen, Germany
+ * phone: +49 241 4090 436 
+ * mail: <info@kappich.de>
  */
 
 package de.bsvrz.dua.plloglve.plloglve;
 
 import de.bsvrz.dav.daf.main.ResultData;
+import de.bsvrz.dav.daf.main.config.SystemObject;
 import de.bsvrz.dua.plloglve.plloglve.ausfall.Ausfallhaeufigkeit;
 import de.bsvrz.dua.plloglve.plloglve.diff.DifferenzialKontrolle;
 import de.bsvrz.dua.plloglve.plloglve.standard.PlLogischLVEStandard;
@@ -36,6 +39,8 @@ import de.bsvrz.sys.funclib.bitctrl.dua.DUAKonstanten;
 import de.bsvrz.sys.funclib.bitctrl.dua.adapter.AbstraktBearbeitungsKnotenAdapter;
 import de.bsvrz.sys.funclib.bitctrl.dua.dfs.schnittstellen.IDatenFlussSteuerung;
 import de.bsvrz.sys.funclib.bitctrl.dua.dfs.typen.ModulTyp;
+import de.bsvrz.sys.funclib.bitctrl.dua.lve.FahrStreifen;
+import de.bsvrz.sys.funclib.bitctrl.dua.lve.MessQuerschnitt;
 import de.bsvrz.sys.funclib.bitctrl.dua.schnittstellen.IStandardAspekte;
 import de.bsvrz.sys.funclib.bitctrl.dua.schnittstellen.IVerwaltung;
 
@@ -43,8 +48,10 @@ import de.bsvrz.sys.funclib.bitctrl.dua.schnittstellen.IVerwaltung;
  * Implementierung des Moduls Pl-Prüfung logisch LVE der SWE Pl-Prüfung logisch
  * LVE. Dieses Modul leitet nur die empfangenen Daten an seine Submudole weiter,
  * welche die eigentliche Plausibilisierung durchführen
- *
+ * 
  * @author BitCtrl Systems GmbH, Thierfelder
+ * 
+ * @version $Id$
  */
 public class PlPruefungLogischLVE extends AbstraktBearbeitungsKnotenAdapter {
 
@@ -56,17 +63,17 @@ public class PlPruefungLogischLVE extends AbstraktBearbeitungsKnotenAdapter {
 	/**
 	 * Submodul Pl-Prüfung logisch LVE standard.
 	 */
-	private final PlLogischLVEStandard standard = new PlLogischLVEStandard();
+	private PlLogischLVEStandard standard = new PlLogischLVEStandard();
 
 	/**
 	 * Submodul Differenzial-Kontrolle.
 	 */
-	private final DifferenzialKontrolle diff = new DifferenzialKontrolle();
+	private DifferenzialKontrolle diff = new DifferenzialKontrolle();
 
 	/**
 	 * Submodul Ausfallhaeufigkeit.
 	 */
-	private final Ausfallhaeufigkeit ausfall = new Ausfallhaeufigkeit();
+	private Ausfallhaeufigkeit ausfall = new Ausfallhaeufigkeit();
 
 	/**
 	 * Submodul Vertrauensbereich.
@@ -85,24 +92,28 @@ public class PlPruefungLogischLVE extends AbstraktBearbeitungsKnotenAdapter {
 
 	/**
 	 * Standardkonstruktor.
-	 *
+	 * 
 	 * @param stdAspekte
 	 *            Informationen zu den Standardpublikationsaspekten für diese
 	 *            Instanz des Moduls Pl-Prüfung logisch LVE
 	 */
 	public PlPruefungLogischLVE(final IStandardAspekte stdAspekte) {
-		setStandardAspekte(stdAspekte);
+		this.standardAspekte = stdAspekte;
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
-	public void initialisiere(final IVerwaltung dieVerwaltung) throws DUAInitialisierungsException {
-		super.initialisiere(dieVerwaltung);
-		PlPruefungLogischLVE.atgKzdId = dieVerwaltung.getVerbindung().getDataModel()
+	public void initialisiere(IVerwaltung dieVerwaltung)
+			throws DUAInitialisierungsException {
+		super.initialisiere(dieVerwaltung);		
+		atgKzdId = dieVerwaltung.getVerbindung().getDataModel()
 				.getAttributeGroup(DUAKonstanten.ATG_KZD).getId();
-		PlPruefungLogischLVE.atgLzdId = dieVerwaltung.getVerbindung().getDataModel()
+		atgLzdId = dieVerwaltung.getVerbindung().getDataModel()
 				.getAttributeGroup(DUAKonstanten.ATG_LZD).getId();
 
-		this.vb = new Vertrauensbereich(getStandardAspekte());
+		this.vb = new Vertrauensbereich(this.standardAspekte);
 
 		this.standard.initialisiere(dieVerwaltung);
 		this.standard.setNaechstenBearbeitungsKnoten(this.diff);
@@ -113,24 +124,48 @@ public class PlPruefungLogischLVE extends AbstraktBearbeitungsKnotenAdapter {
 		this.ausfall.initialisiere(dieVerwaltung);
 		this.ausfall.setNaechstenBearbeitungsKnoten(this.vb);
 
-		this.vb.setPublikation(isPublizieren());
+		this.vb.setPublikation(this.publizieren);
 		this.vb.initialisiere(dieVerwaltung);
-		this.vb.setNaechstenBearbeitungsKnoten(getKnoten());
+		this.vb.setNaechstenBearbeitungsKnoten(this.knoten);
 	}
 
-	@Override
+	/**
+	 * {@inheritDoc}
+	 */
 	public ModulTyp getModulTyp() {
 		return null;
 	}
 
-	@Override
-	public void aktualisiereDaten(final ResultData[] resultate) {
+	/**
+	 * {@inheritDoc}
+	 */
+	public void aktualisiereDaten(ResultData[] resultate) {
 		this.standard.aktualisiereDaten(resultate);
 	}
 
-	@Override
-	public void aktualisierePublikation(final IDatenFlussSteuerung dfs) {
+	/**
+	 * {@inheritDoc}
+	 */
+	public void aktualisierePublikation(IDatenFlussSteuerung dfs) {
 		// wird hier nicht benötigt, da die Publikation erst im letzten Submodul
 		// "Vertrauensbereich" stattfindet
 	}
+
+
+	/** 
+	 * Gibt zu einem FS den MQ zurück
+	 * @param obj Fahrstreifen
+	 * @return MQ oder null falls kein MQ ermittelbar ist
+	 */
+	public static SystemObject getMq(final SystemObject obj) {
+		for(MessQuerschnitt messQuerschnitt : MessQuerschnitt.getInstanzen()) {
+			for(FahrStreifen fahrStreifen : messQuerschnitt.getFahrStreifen()) {
+				if(fahrStreifen.getSystemObject().equals(obj)){
+					return messQuerschnitt.getSystemObject();
+				}
+			}
+		}
+		return null;
+	}
+
 }

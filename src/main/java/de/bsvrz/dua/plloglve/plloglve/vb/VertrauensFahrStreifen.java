@@ -1,286 +1,305 @@
-/*
- * Segment 4 Datenübernahme und Aufbereitung (DUA), SWE 4.2 Pl-Prüfung logisch LVE
- * Copyright (C) 2007-2015 BitCtrl Systems GmbH
- *
- * This program is free software; you can redistribute it and/or modify it under
- * the terms of the GNU General Public License as published by the Free Software
- * Foundation; either version 2 of the License, or (at your option) any later
- * version.
- *
- * This program is distributed in the hope that it will be useful, but WITHOUT
- * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
- * FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
- * details.
- *
- * You should have received a copy of the GNU General Public License along with
- * this program; if not, write to the Free Software Foundation, Inc., 51
- * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
- *
- * Contact Information:<br>
- * BitCtrl Systems GmbH<br>
- * Weißenfelser Straße 67<br>
- * 04229 Leipzig<br>
- * Phone: +49 341-490670<br>
- * mailto: info@bitctrl.de
+/* 
+ * Segment Datenübernahme und Aufbereitung (DUA), SWE Pl-Prüfung logisch LVE
+ * Copyright (C) 2007 BitCtrl Systems GmbH 
+ * Copyright 2016 by Kappich Systemberatung Aachen
+ * 
+ * This file is part of de.bsvrz.dua.plloglve.
+ * 
+ * de.bsvrz.dua.plloglve is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ * 
+ * de.bsvrz.dua.plloglve is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with de.bsvrz.dua.plloglve.  If not, see <http://www.gnu.org/licenses/>.
+
+ * Contact Information:
+ * Kappich Systemberatung
+ * Martin-Luther-Straße 14
+ * 52062 Aachen, Germany
+ * phone: +49 241 4090 436 
+ * mail: <info@kappich.de>
  */
 
 package de.bsvrz.dua.plloglve.plloglve.vb;
 
-import java.util.Date;
-import java.util.SortedSet;
-import java.util.TreeSet;
-
-import com.bitctrl.Constants;
-
-import de.bsvrz.dav.daf.main.ClientReceiverInterface;
-import de.bsvrz.dav.daf.main.Data;
-import de.bsvrz.dav.daf.main.DataDescription;
-import de.bsvrz.dav.daf.main.ReceiveOptions;
-import de.bsvrz.dav.daf.main.ReceiverRole;
-import de.bsvrz.dav.daf.main.ResultData;
+import de.bsvrz.dav.daf.main.*;
+import de.bsvrz.dav.daf.main.config.AttributeGroup;
 import de.bsvrz.dav.daf.main.config.SystemObject;
-import de.bsvrz.dua.plloglve.vew.TestParameter;
-import de.bsvrz.dua.plloglve.vew.VerwaltungPlPruefungLogischLVE;
+import de.bsvrz.dua.plloglve.plloglve.ausfall.AusfallFahrStreifen;
+import de.bsvrz.dua.plloglve.plloglve.standard.AtgVerkehrsDatenKurzZeitIntervallPlLogisch;
+import de.bsvrz.dua.plloglve.plloglve.standard.PLFahrStreifen;
 import de.bsvrz.sys.funclib.bitctrl.daf.DaVKonstanten;
 import de.bsvrz.sys.funclib.bitctrl.dua.DUAKonstanten;
-import de.bsvrz.sys.funclib.bitctrl.dua.DUAUtensilien;
+import de.bsvrz.sys.funclib.bitctrl.dua.intpuf.IntervallPufferException;
 import de.bsvrz.sys.funclib.bitctrl.dua.schnittstellen.IVerwaltung;
 import de.bsvrz.sys.funclib.debug.Debug;
-import de.bsvrz.sys.funclib.operatingMessage.MessageGrade;
+import de.bsvrz.sys.funclib.operatingMessage.*;
+
+import java.time.Instant;
+import java.time.format.DateTimeFormatter;
+import java.time.format.FormatStyle;
+import java.util.Locale;
+import java.util.Set;
 
 /**
  * Repräsentiert einen Fahrstreifen mit allen Informationen, die zur Ermittlung
  * des Vertrauens in diesen Fahrstreifen notwendig sind.
- *
+ * 
  * @author BitCtrl Systems GmbH, Thierfelder
+ * 
+ * @version $Id$
  */
 public class VertrauensFahrStreifen implements ClientReceiverInterface {
-
-	private static final Debug LOGGER = Debug.getLogger();
 
 	/**
 	 * Alle Attribute, die ggf. auf implausibel gesetzt werden müssen
 	 */
-	private static final String[] ATTRIBUTE = new String[] { "qKfz", "qLkw", "qPkw", //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+	private static final String[] ATTRIBUTE = new String[] {
+			"qKfz", "qLkw", "qPkw", //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 			"vKfz", "vLkw", "vPkw", //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-			"b", "tNetto", "sKfz", //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+			"b", "tNetto", "sKfz", //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ 
 			"vgKfz" }; //$NON-NLS-1$
+
+	private static final Debug _debug = Debug.getLogger();
+	public static final DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormatter.ofLocalizedDateTime(FormatStyle.SHORT).withLocale(Locale.GERMAN);
 
 	/**
 	 * Verbindung zum Verwaltungsmodul.
 	 */
-	protected static IVerwaltung dieVerwaltung = null;
+	private IVerwaltung _verwaltung = null;
+	private final SystemObject _mq;
 
 	/**
-	 * Datenbeschreibung für Parameterattributgruppe
-	 * <code>atg.verkehrsDatenVertrauensBereichFs</code>.
+	 * Datensaetze mit Ausfallinformationen im Bezugszeitraum.
 	 */
-	protected static DataDescription paraVertrauenDD = null;
-
-	/**
-	 * aktuelle Parameter der Attributgruppe
-	 * <code>atg.verkehrsDatenVertrauensBereichFs</code> für diesen
-	 * Fahrstreifen.
-	 */
-	private AtgVerkehrsDatenVertrauensBereichFs parameter = null;
-
-	/**
-	 * Datensätze mit Ausfallinformationen des aktuellen Bezugszeitraums für
-	 * <code>qKfz</code>.
-	 */
-	private BezugsZeitraum datenBezugsZeitraumQKfz = null;
-
-	/**
-	 * Datensätze mit Ausfallinformationen des aktuellen Bezugszeitraums für
-	 * <code>qLkw</code>.
-	 */
-	private BezugsZeitraum datenBezugsZeitraumQLkw = null;
-
-	/**
-	 * Datensätze mit Ausfallinformationen des aktuellen Bezugszeitraums für
-	 * <code>qPkw</code>.
-	 */
-	private BezugsZeitraum datenBezugsZeitraumQPkw = null;
-
-	/**
-	 * Datensätze mit Ausfallinformationen des aktuellen Bezugszeitraums für
-	 * <code>vKfz</code>.
-	 */
-	private BezugsZeitraum datenBezugsZeitraumVKfz = null;
-
-	/**
-	 * Datensätze mit Ausfallinformationen des aktuellen Bezugszeitraums für
-	 * <code>vLkw</code>.
-	 */
-	private BezugsZeitraum datenBezugsZeitraumVLkw = null;
-
-	/**
-	 * Datensätze mit Ausfallinformationen des aktuellen Bezugszeitraums für
-	 * <code>vPkw</code>.
-	 */
-	private BezugsZeitraum datenBezugsZeitraumVPkw = null;
-
-	/**
-	 * Datensätze mit Ausfallinformationen des aktuellen Bezugszeitraums für
-	 * <code>sKfz</code>.
-	 */
-	private BezugsZeitraum datenBezugsZeitraumSKfz = null;
-
-	/**
-	 * Datensätze mit Ausfallinformationen des aktuellen Bezugszeitraums für
-	 * <code>b</code>.
-	 */
-	private BezugsZeitraum datenBezugsZeitraumB = null;
-
-	/**
-	 * zeigt an, ob der Vertrauensbereich für diesen Fahrstreifen durch
-	 * irgendein Attribut verletzt ist.
-	 */
-	private boolean vertrauenVerletztAllgemein = false;
+	private final VertrauensbereichPuffer gleitenderTag = new VertrauensbereichPuffer();
 
 	/**
 	 * das Objekt.
 	 */
-	private final SystemObject objekt;
+	private final SystemObject _objekt;
+
+	/**
+	 * Aktueller Parameter-Datensatz oder null falls nicht vorhanden
+	 */
+	private AtgVerkehrsDatenKurzZeitIntervallPlLogisch _parameter;
+
+	private static final MessageTemplate TEMPLATE_EIN = new MessageTemplate(
+			MessageGrade.INFORMATION,
+			MessageType.APPLICATION_DOMAIN,
+			MessageTemplate.fixed("Daten außerhalb des Vertrauensbereichs: im Zeitraum von "),
+			MessageTemplate.variable("from"),
+			MessageTemplate.fixed(" bis "),
+			MessageTemplate.variable("to"),
+			MessageTemplate.fixed(" ("),
+			MessageTemplate.variable("bezug"),
+			MessageTemplate.fixed(") implausible Fahrstreifenwerte für"),
+			MessageTemplate.set("values", " und ", " den Wert ", " die Werte "),
+			MessageTemplate.fixed(" am Fahrstreifen "),
+			MessageTemplate.object(),
+			MessageTemplate.fixed("("),
+			MessageTemplate.variable("mq"),
+			MessageTemplate.fixed(") während "),
+			MessageTemplate.variable("duration"),
+			MessageTemplate.fixed(" (> "),
+			MessageTemplate.variable("maxDuration"),
+			MessageTemplate.fixed("). Fahrstreifenwerte werden auf fehlerhaft gesetzt und als implausibel gekennzeichnet. "),
+			MessageTemplate.ids()
+	).withIdFactory(message -> message.getObject().getPidOrId() + " [DUA-PP-VB]");
+	
+	private static final MessageTemplate TEMPLATE_AUS = new MessageTemplate(
+			MessageGrade.INFORMATION,
+			MessageType.APPLICATION_DOMAIN,
+			MessageTemplate.fixed("Daten wieder innerhalb des Vertrauensbereichs: im Zeitraum von "),
+			MessageTemplate.variable("from"),
+			MessageTemplate.fixed(" bis "),
+			MessageTemplate.variable("to"),
+			MessageTemplate.fixed(" ("),
+			MessageTemplate.variable("bezug"),
+			MessageTemplate.fixed(") implausible Fahrstreifenwerte am Fahrstreifen "),
+			MessageTemplate.object(),
+			MessageTemplate.fixed("("),
+			MessageTemplate.variable("mq"),
+			MessageTemplate.fixed(") während "),
+			MessageTemplate.variable("duration"),
+			MessageTemplate.fixed(" (< "),
+			MessageTemplate.variable("maxDuration"),
+			MessageTemplate.fixed("). Fahrstreifenwerte werden wieder verarbeitet. "),
+			MessageTemplate.ids()
+	).withIdFactory(message -> message.getObject().getPidOrId() + " [DUA-PP-VB]");
+
+	private Instant _lastCheckTime;
+	
+	private PersistentOperatingMessage _meldung;
 
 	/**
 	 * Standardkonstruktor.
-	 *
-	 * @param verwaltung
+	 *  @param verwaltung
 	 *            Verbindung zum Verwaltungsmodul
-	 * @param objekt
-	 *            das mit einem Fahrstreifen assoziierte Systemobjekt
+	 * @param obj
+	 * @param mq
 	 */
-	protected VertrauensFahrStreifen(final IVerwaltung verwaltung, final SystemObject objekt) {
-		this.objekt = objekt;
+	protected VertrauensFahrStreifen(final IVerwaltung verwaltung,
+			final SystemObject obj, final SystemObject mq) {
+		_objekt = obj;
+		_verwaltung = verwaltung;
+		_mq = mq;
 
-		if (VertrauensFahrStreifen.dieVerwaltung == null) {
-			VertrauensFahrStreifen.dieVerwaltung = verwaltung;
-			VertrauensFahrStreifen.paraVertrauenDD = new DataDescription(
-					VertrauensFahrStreifen.dieVerwaltung.getVerbindung().getDataModel()
-					.getAttributeGroup("atg.verkehrsDatenVertrauensBereichFs"), //$NON-NLS-1$
-							VertrauensFahrStreifen.dieVerwaltung.getVerbindung().getDataModel()
-							.getAspect(DaVKonstanten.ASP_PARAMETER_SOLL));
+		ClientDavInterface connection = verwaltung.getVerbindung();
+
+		AttributeGroup parameterAtg = PLFahrStreifen.getParameterAtg(connection);
+		if(parameterAtg != null) {
+			connection.subscribeReceiver(
+					this,
+					obj,
+					new DataDescription(parameterAtg, connection.getDataModel()
+							.getAspect(DaVKonstanten.ASP_PARAMETER_SOLL)), ReceiveOptions.normal(),
+					ReceiverRole.receiver()
+			);
 		}
-
-		datenBezugsZeitraumQKfz = new BezugsZeitraum(VertrauensFahrStreifen.dieVerwaltung, "qKfz"); //$NON-NLS-1$
-		datenBezugsZeitraumQLkw = new BezugsZeitraum(VertrauensFahrStreifen.dieVerwaltung, "qLkw"); //$NON-NLS-1$
-		datenBezugsZeitraumQPkw = new BezugsZeitraum(VertrauensFahrStreifen.dieVerwaltung, "qPkw"); //$NON-NLS-1$
-		datenBezugsZeitraumVKfz = new BezugsZeitraum(VertrauensFahrStreifen.dieVerwaltung, "vKfz"); //$NON-NLS-1$
-		datenBezugsZeitraumVLkw = new BezugsZeitraum(VertrauensFahrStreifen.dieVerwaltung, "vLkw"); //$NON-NLS-1$
-		datenBezugsZeitraumVPkw = new BezugsZeitraum(VertrauensFahrStreifen.dieVerwaltung, "vPkw"); //$NON-NLS-1$
-		datenBezugsZeitraumSKfz = new BezugsZeitraum(VertrauensFahrStreifen.dieVerwaltung, "sKfz"); //$NON-NLS-1$
-		datenBezugsZeitraumB = new BezugsZeitraum(VertrauensFahrStreifen.dieVerwaltung, "b"); //$NON-NLS-1$
-
-		VertrauensFahrStreifen.dieVerwaltung.getVerbindung().subscribeReceiver(this, objekt,
-				VertrauensFahrStreifen.paraVertrauenDD, ReceiveOptions.normal(), ReceiverRole.receiver());
+		else {
+			_debug.warning("Attributgruppe " + AtgVerkehrsDatenKurzZeitIntervallPlLogisch.getPid() + " ist nicht im Datenmodell vorhanden, die Grenzwerte werden nicht geprüft");
+		}
 	}
 
 	/**
-	 * Führt eine Plausibilisierung des übergebenen Originaldatums durch und
-	 * gibt ggf. eine Betriebsmeldung aus
+	 * Fuehrt die Plausibilisierung durch. (nur für KZD)
 	 *
-	 * @param originalDatum
-	 *            ein DAV-Originaldatum
-	 * @return das plausibilisierte Datum oder unveränderte Originaldatum, wenn
-	 *         das emfangene Originaldatum nicht verändert werden musste
+	 * @param resultat
+	 *            ein Fahrstreifendatum (KZD)
 	 */
-	protected final Data plausibilisiere(final ResultData originalDatum) {
-		Data copy = originalDatum.getData();
+	protected final synchronized Data plausibilisiere(final ResultData resultat) {
+		Data copy = resultat.getData();
 
-		synchronized (this) {
-			if ((parameter != null) && parameter.isAuswertbar()) {
-
-				final SortedSet<BezugsZeitraumAusfall> ausfallErgebnisse = new TreeSet<>();
-
-				ausfallErgebnisse.add(datenBezugsZeitraumQKfz.ermittleAusfall(originalDatum, parameter));
-				ausfallErgebnisse.add(datenBezugsZeitraumQLkw.ermittleAusfall(originalDatum, parameter));
-				ausfallErgebnisse.add(datenBezugsZeitraumQPkw.ermittleAusfall(originalDatum, parameter));
-				ausfallErgebnisse.add(datenBezugsZeitraumVKfz.ermittleAusfall(originalDatum, parameter));
-				ausfallErgebnisse.add(datenBezugsZeitraumVLkw.ermittleAusfall(originalDatum, parameter));
-				ausfallErgebnisse.add(datenBezugsZeitraumVPkw.ermittleAusfall(originalDatum, parameter));
-				ausfallErgebnisse.add(datenBezugsZeitraumSKfz.ermittleAusfall(originalDatum, parameter));
-				ausfallErgebnisse.add(datenBezugsZeitraumB.ermittleAusfall(originalDatum, parameter));
-
-				final boolean verletztAlt = vertrauenVerletztAllgemein;
-				final boolean verletztAktuell = datenBezugsZeitraumQKfz.isVertrauensBereichVerletzt()
-						|| datenBezugsZeitraumQLkw.isVertrauensBereichVerletzt()
-						|| datenBezugsZeitraumQPkw.isVertrauensBereichVerletzt()
-						|| datenBezugsZeitraumVKfz.isVertrauensBereichVerletzt()
-						|| datenBezugsZeitraumVLkw.isVertrauensBereichVerletzt()
-						|| datenBezugsZeitraumVPkw.isVertrauensBereichVerletzt()
-						|| datenBezugsZeitraumSKfz.isVertrauensBereichVerletzt()
-						|| datenBezugsZeitraumB.isVertrauensBereichVerletzt();
-
-				if (verletztAktuell) {
-					copy = copy.createModifiableCopy();
-
-					/**
-					 * Hier nur die Markierungs aller Attribute des Datensatzes.
-					 * Eine Betriebsmeldung muss nicht ausgegeben werden, da
-					 * dies ggf. schon für jeden einzelnen Wert getan wird
-					 */
-					for (final String attribut : VertrauensFahrStreifen.ATTRIBUTE) {
-						copy.getItem(attribut).getItem("Status").getItem("MessWertErsetzung")
-								.getUnscaledValue("Implausibel").set(DUAKonstanten.JA); //$NON-NLS-1$
-					}
-
-					final long vertrauensBereich = TestParameter.getInstanz()
-
-					.isTestVertrauen() ? parameter.getBezugsZeitraum() * TestParameter.INTERVALL_VB * 60L
-							: parameter.getBezugsZeitraum() * Constants.MILLIS_PER_HOUR;
-
-					final Date start = new Date(originalDatum.getDataTime() - vertrauensBereich);
-					final Date ende = new Date(originalDatum.getDataTime());
-
-					final String nachricht = "Setzte alles auf implausibel da Vertrauensbereich verletzt [" + //$NON-NLS-1$
-							DUAKonstanten.BM_ZEIT_FORMAT.format(start) + ", " //$NON-NLS-1$
-							+ DUAKonstanten.BM_ZEIT_FORMAT.format(ende) +
-							"] (" + parameter.getBezugsZeitraum() + " Stunde(n))";
-
-					VertrauensFahrStreifen.LOGGER
-							.fine(VerwaltungPlPruefungLogischLVE.getPlLogIdent(originalDatum) + "\n" + nachricht);
-				} else {
-					if (verletztAlt) {
-						final long vertrauensBereich = TestParameter.getInstanz().isTestVertrauen()
-								? parameter.getBezugsZeitraum() * TestParameter.INTERVALL_VB * 60L
-								: parameter.getBezugsZeitraum() * Constants.MILLIS_PER_HOUR;
-
-						final Date start = new Date(originalDatum.getDataTime() - vertrauensBereich);
-						final Date ende = new Date(originalDatum.getDataTime());
-
-						final String nachricht = "Daten wieder innerhalb des Vertrauensbereichs. Im Zeitraum von " + //$NON-NLS-1$
-								DUAKonstanten.BM_ZEIT_FORMAT.format(start) + " Uhr bis " //$NON-NLS-1$
-								+ DUAKonstanten.BM_ZEIT_FORMAT.format(ende) +
-								" (" + parameter.getBezugsZeitraum()
-								+ " Stunde(n)) implausible Fahrstreifenwerte am Fahrstreifen " + //$NON-NLS-1$
-								originalDatum.getObject() + " von " + ausfallErgebnisse.last() + //$NON-NLS-1$
-								". Fahrstreifenwerte werden wieder verarbeitet."; //$NON-NLS-1$
-
-						DUAUtensilien.sendeBetriebsmeldung(VertrauensFahrStreifen.dieVerwaltung.getVerbindung(),
-								VertrauensFahrStreifen.dieVerwaltung.getBmvIdKonverter(), MessageGrade.WARNING, objekt,
-								nachricht);
-					}
+		final VertrauensbereichDatumKomplett ausfallDatum = VertrauensbereichDatumKomplett
+				.getAusfallDatumVon(resultat);
+		if(_parameter != null) {
+			if(ausfallDatum != null) {
+				try {
+					gleitenderTag.add(ausfallDatum);
+				}
+				catch(final IntervallPufferException e) {
+					_debug.error("Fehler beim Intervallpuffer", e);
 				}
 
-				vertrauenVerletztAllgemein = verletztAktuell;
-			} else {
-				VertrauensFahrStreifen.LOGGER.config("Datum kann nicht plausibilisiert werden, da keine" + //$NON-NLS-1$
-						" (oder nicht verwertbare) Parameter vorliegen: " //$NON-NLS-1$
-						+ this);
+				long startIntervall = ausfallDatum.getIntervallEnde() - _parameter.getVertrauensbereichBezugsZeitraum();
+				try {
+					gleitenderTag.loescheAllesUnterhalbVon(startIntervall);
+				}
+				catch(final IntervallPufferException e) {
+					_debug.error("Fehler beim Intervallpuffer", e);
+				}
+				Instant now = Instant.ofEpochMilli(ausfallDatum.getIntervallEnde());
+				long pruefIntervallAusfall = _parameter.getPruefIntervallVertrauensbereich();
+				Instant nextCheckTime;
+				if(_lastCheckTime == null) {
+					nextCheckTime = now;
+				}
+				else {
+					nextCheckTime = _lastCheckTime.plusMillis(pruefIntervallAusfall);
+				}
+				if(!now.isBefore(nextCheckTime)) {
+					pruefeAusfall(Instant.ofEpochMilli(startIntervall), now);
+					_lastCheckTime = nextCheckTime;
+				}
 			}
+			final boolean verletztAktuell = _meldung != null;
+
+			if(verletztAktuell && copy != null) {
+				copy = copy.createModifiableCopy();
+
+				for(final String attribut : ATTRIBUTE) {
+					copy.getItem(attribut)
+							.getItem("Status")
+							.getItem("MessWertErsetzung")
+							.getUnscaledValue("Implausibel").set(DUAKonstanten.JA); //$NON-NLS-1$
+					copy.getItem(attribut).getItem("Wert").asUnscaledValue().set(DUAKonstanten.FEHLERHAFT);
+				}
+			}
+		} else {
+			Debug.getLogger()
+					.warning("Fuer Fahrstreifen " + this + //$NON-NLS-1$
+							         " wurden noch keine Parameter für die Prüfung des Vertrauensbereichs empfangen"); //$NON-NLS-1$
 		}
 
 		return copy;
 	}
 
 	@Override
-	public void update(final ResultData[] resultate) {
-		if (resultate != null) {
-			for (final ResultData resultat : resultate) {
-				if ((resultat != null) && (resultat.getData() != null)) {
-					synchronized (this) {
-						parameter = new AtgVerkehrsDatenVertrauensBereichFs(resultat.getData());
+	public String toString() {
+		return _objekt.toString();
+	}
+
+	private synchronized void pruefeAusfall(final Instant fromTime, final Instant checkTime){
+		if(_parameter == null) return;
+
+		long ausfallZeit = gleitenderTag.getAusfallZeit();
+		long maxAusfallZeitEin = _parameter.getMaxAusfallProBezugszeitraumEin();
+		long maxAusfallZeitAus = _parameter.getMaxAusfallProBezugszeitraumAus();
+		if(maxAusfallZeitEin <= 0 && maxAusfallZeitAus <= 0) return;
+		if(maxAusfallZeitAus > maxAusfallZeitEin){
+			_debug.warning("Ungültige Vertrauensbereich-Parameter am Fahrstreifen " + _objekt + ": MaxAusfallProBezugszeitraumAus > MaxAusfallProBezugszeitraumEin");
+			return;
+		}
+		if(_meldung != null && ausfallZeit < maxAusfallZeitAus) {
+			sendeGutMeldung(fromTime, checkTime, ausfallZeit);
+		}
+		else if(_meldung != null || ausfallZeit > maxAusfallZeitEin) {
+			erzeugeMeldung(fromTime, checkTime, ausfallZeit, gleitenderTag.getAusfallAttribute());
+		}
+	}
+
+	private void erzeugeMeldung(final Instant fromTime, final Instant checkTime, final long ausfallZeit, final Set<String> values) {
+		OperatingMessage operatingMessage = TEMPLATE_EIN.newMessage(_objekt);
+		operatingMessage.put("mq", _mq);
+		operatingMessage.put("from", AusfallFahrStreifen.formatDate(fromTime));
+		operatingMessage.put("to", AusfallFahrStreifen.formatDate(checkTime));
+		operatingMessage.put("duration", AusfallFahrStreifen.formatDuration(ausfallZeit));
+		operatingMessage.put("maxDuration", AusfallFahrStreifen.formatDuration(_parameter.getMaxAusfallProBezugszeitraumEin()));
+		operatingMessage.put("bezug", AusfallFahrStreifen.formatDuration(_parameter.getVertrauensbereichBezugsZeitraum()));
+		operatingMessage.put("values", values);
+		operatingMessage.addId("[DUA-PP-VB01]");
+		if(_meldung == null){
+			_meldung = operatingMessage.newPersistentMessage();
+		}
+		else {
+			_meldung.update(operatingMessage);
+		}
+	}
+
+	private void sendeGutMeldung(final Instant fromTime, final Instant checkTime, final long ausfallZeit) {
+		OperatingMessage operatingMessage = TEMPLATE_AUS.newMessage(_objekt);
+		operatingMessage.put("mq", _mq);
+		operatingMessage.put("from", AusfallFahrStreifen.formatDate(fromTime));
+		operatingMessage.put("to", AusfallFahrStreifen.formatDate(checkTime));
+		operatingMessage.put("duration", AusfallFahrStreifen.formatDuration(ausfallZeit));
+		operatingMessage.put("maxDuration", AusfallFahrStreifen.formatDuration(_parameter.getMaxAusfallProBezugszeitraumAus()));
+		operatingMessage.put("bezug", AusfallFahrStreifen.formatDuration(_parameter.getVertrauensbereichBezugsZeitraum()));
+		operatingMessage.addId("[DUA-PP-VB02]");
+		_meldung.resolve(operatingMessage);
+		_meldung = null;
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	public void update(final ResultData[] parameterFeld) {
+		if(parameterFeld != null) {
+			for(final ResultData parameter : parameterFeld) {
+				if(parameter != null && parameter.getData() != null) {
+					if(parameter
+							.getDataDescription()
+							.getAttributeGroup()
+							.equals(PLFahrStreifen.getParameterAtg(_verwaltung.getVerbindung()))) {
+						synchronized(this) {
+							_parameter = AtgVerkehrsDatenKurzZeitIntervallPlLogisch.getInstance(parameter);
+						}
 					}
 				}
 			}

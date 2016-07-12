@@ -1,6 +1,5 @@
-/* 
+/*
  * Segment Datenübernahme und Aufbereitung (DUA), SWE Pl-Prüfung logisch LVE
- * Copyright (C) 2007 BitCtrl Systems GmbH 
  * Copyright 2016 by Kappich Systemberatung Aachen
  * 
  * This file is part of de.bsvrz.dua.plloglve.
@@ -27,8 +26,8 @@
  */
 
 /**
- * Klassen für Verwaltungsmodul der SWE Pl-Prüfung logisch LVE
+ * Segment Datenübernahme und Aufbereitung (DUA), SWE Pl-Prüfung logisch LVE
+ *
+ * @author Kappich Systemberatung
  */
-
-package de.bsvrz.dua.plloglve.vew;
-
+package de.bsvrz.dua.plloglve;

@@ -1,6 +1,5 @@
-/* 
+/*
  * Segment Datenübernahme und Aufbereitung (DUA), SWE Pl-Prüfung logisch LVE
- * Copyright (C) 2007 BitCtrl Systems GmbH 
  * Copyright 2016 by Kappich Systemberatung Aachen
  * 
  * This file is part of de.bsvrz.dua.plloglve.
@@ -26,12 +25,16 @@
  * mail: <info@kappich.de>
  */
 
-package de.bsvrz.dua.plloglve.plloglve.ausfall;
+package de.bsvrz.dua.plloglve.plloglve.vb;
 
 import de.bsvrz.dav.daf.main.Data;
 import de.bsvrz.dav.daf.main.ResultData;
 import de.bsvrz.sys.funclib.bitctrl.dua.DUAKonstanten;
 import de.bsvrz.sys.funclib.bitctrl.dua.intpuf.IIntervallDatum;
+
+import java.util.Collections;
+import java.util.LinkedHashSet;
+import java.util.Set;
 
 /**
  * Repräsentiert ein ausgefallenes KZ-Datum.
@@ -40,12 +43,14 @@ import de.bsvrz.sys.funclib.bitctrl.dua.intpuf.IIntervallDatum;
  * 
  * @version $Id$
  */
-public final class AusfallDatum implements IIntervallDatum<AusfallDatum> {
+public final class VertrauensbereichDatum implements IIntervallDatum<VertrauensbereichDatum> {
 
 	/**
 	 * ist dieses Datum "ausgefallen".
 	 */
 	private boolean ausgefallen = false;
+	
+	private final Set<String> _ausgefalleneAttribute = new LinkedHashSet<String>();
 
 	/**
 	 * Standardkonstruktor.
@@ -53,7 +58,7 @@ public final class AusfallDatum implements IIntervallDatum<AusfallDatum> {
 	 * @param resultat
 	 *            ein KZD-Datum
 	 */
-	private AusfallDatum(ResultData resultat) {
+	private VertrauensbereichDatum(ResultData resultat) {
 		Data data = resultat.getData();
 
 		final long qKfzWert = data
@@ -91,26 +96,32 @@ public final class AusfallDatum implements IIntervallDatum<AusfallDatum> {
 		if (qKfzWert == DUAKonstanten.FEHLERHAFT
 				&& qKfzImpl == DUAKonstanten.JA) {
 			this.ausgefallen = true;
+			_ausgefalleneAttribute.add("qKfz");
 		}
 		if (qLkwWert == DUAKonstanten.FEHLERHAFT
 				&& qLkwImpl == DUAKonstanten.JA) {
 			this.ausgefallen = true;
+			_ausgefalleneAttribute.add("qLkw");
 		}
 		if (qPkwWert == DUAKonstanten.FEHLERHAFT
 				&& qPkwImpl == DUAKonstanten.JA) {
 			this.ausgefallen = true;
+			_ausgefalleneAttribute.add("qPkw");
 		}
 		if (vKfzWert == DUAKonstanten.FEHLERHAFT
 				&& vKfzImpl == DUAKonstanten.JA) {
 			this.ausgefallen = true;
+			_ausgefalleneAttribute.add("vKfz");
 		}
 		if (vLkwWert == DUAKonstanten.FEHLERHAFT
 				&& vLkwImpl == DUAKonstanten.JA) {
 			this.ausgefallen = true;
+			_ausgefalleneAttribute.add("vLkw");
 		}
 		if (vPkwWert == DUAKonstanten.FEHLERHAFT
 				&& vPkwImpl == DUAKonstanten.JA) {
 			this.ausgefallen = true;
+			_ausgefalleneAttribute.add("vPkw");
 		}
 	}
 
@@ -125,12 +136,12 @@ public final class AusfallDatum implements IIntervallDatum<AusfallDatum> {
 	 *         Klasse oder <code>null</code> fuer <code>keine Quelle</code>
 	 *         usw.
 	 */
-	public static AusfallDatum getAusfallDatumVon(
+	public static VertrauensbereichDatum getAusfallDatumVon(
 			final ResultData resultat) {
-		AusfallDatum datum = null;
+		VertrauensbereichDatum datum = null;
 
 		if (resultat != null && resultat.getData() != null) {
-			datum = new AusfallDatum(resultat);
+			datum = new VertrauensbereichDatum(resultat);
 		}
 
 		return datum;
@@ -167,8 +178,15 @@ public final class AusfallDatum implements IIntervallDatum<AusfallDatum> {
 	 * Zwei Ausfalldaten sind gleich, wenn deren Attribute
 	 * <code>ausgefallen</code> den selben Wert haben.
 	 */
-	public boolean istGleich(AusfallDatum that) {
-		return this.isAusgefallen() == that.isAusgefallen();
+	public boolean istGleich(VertrauensbereichDatum that) {
+		return this.isAusgefallen() == that.isAusgefallen() && this._ausgefalleneAttribute.equals(that._ausgefalleneAttribute);
 	}
 
+	/** 
+	 * Gibt die Menge der ausgefallenen Attribute im Datum zurück
+	 * @return die Menge der ausgefallenen Attribute im Datum
+	 */
+	public Set<String> getAusgefalleneAttribute() {
+		return Collections.unmodifiableSet(_ausgefalleneAttribute);
+	}
 }

@@ -26,7 +26,6 @@
  * mail: <info@kappich.de>
  */
 
-
 package de.bsvrz.dua.plloglve.vew;
 
 import de.bsvrz.sys.funclib.bitctrl.dua.DUAInitialisierungsException;
@@ -44,7 +43,7 @@ import de.bsvrz.sys.funclib.bitctrl.dua.schnittstellen.IVerwaltung;
  * 
  * @version $Id$
  */
-public class PlLogLVEStandardAspekteVersorger extends StandardAspekteVersorger {
+public class PlLogLVEStandardAspekteVersorgerKurzZeit extends StandardAspekteVersorger {
 
 	/**
 	 * Standardkonstruktor.
@@ -55,7 +54,7 @@ public class PlLogLVEStandardAspekteVersorger extends StandardAspekteVersorger {
 	 *             wenn die Initialisierung nicht vollstaendig durchgefuehrt
 	 *             werden kann
 	 */
-	public PlLogLVEStandardAspekteVersorger(IVerwaltung verwaltung)
+	public PlLogLVEStandardAspekteVersorgerKurzZeit(IVerwaltung verwaltung)
 			throws DUAInitialisierungsException {
 		super(verwaltung);
 	}
@@ -72,12 +71,7 @@ public class PlLogLVEStandardAspekteVersorger extends StandardAspekteVersorger {
 								DUAKonstanten.TYP_FAHRSTREIFEN,
 								DUAKonstanten.ATG_KZD,
 								DUAKonstanten.ASP_EXTERNE_ERFASSUNG,
-								DUAKonstanten.ASP_PL_PRUEFUNG_LOGISCH),
-						new StandardPublikationsZuordnung(
-								DUAKonstanten.TYP_FAHRSTREIFEN,
-								DUAKonstanten.ATG_LZD,
-								DUAKonstanten.ASP_EXTERNE_ERFASSUNG,
-								DUAKonstanten.ASP_PL_PRUEFUNG_LOGISCH) });
+								DUAKonstanten.ASP_PL_PRUEFUNG_LOGISCH)});
 
 	}
 }

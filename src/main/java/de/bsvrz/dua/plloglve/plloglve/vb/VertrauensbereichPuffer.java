@@ -1,6 +1,5 @@
-/* 
+/*
  * Segment Datenübernahme und Aufbereitung (DUA), SWE Pl-Prüfung logisch LVE
- * Copyright (C) 2007 BitCtrl Systems GmbH 
  * Copyright 2016 by Kappich Systemberatung Aachen
  * 
  * This file is part of de.bsvrz.dua.plloglve.
@@ -26,9 +25,12 @@
  * mail: <info@kappich.de>
  */
 
-package de.bsvrz.dua.plloglve.plloglve.ausfall;
+package de.bsvrz.dua.plloglve.plloglve.vb;
 
 import de.bsvrz.sys.funclib.bitctrl.dua.intpuf.IntervallPuffer;
+
+import java.util.LinkedHashSet;
+import java.util.Set;
 
 /**
  * Repraesentiert einen zeitlichen Puffer, dessen einzelne Elemente sich
@@ -38,7 +40,7 @@ import de.bsvrz.sys.funclib.bitctrl.dua.intpuf.IntervallPuffer;
  * 
  * @version $Id$
  */
-public class AusfallPuffer extends IntervallPuffer<AusfallDatum> {
+public class VertrauensbereichPuffer extends IntervallPuffer<VertrauensbereichDatum> {
 
 	/**
 	 * Erfragt die gesamte Ausfallzeit aller im Puffer gespeicherten Daten.
@@ -49,10 +51,28 @@ public class AusfallPuffer extends IntervallPuffer<AusfallDatum> {
 		long ausfall = 0;
 
 		synchronized (this.puffer) {
-			for (Intervall<AusfallDatum> intervall : this.puffer.values()) {
+			for (Intervall<VertrauensbereichDatum> intervall : this.puffer.values()) {
 				if (intervall.getInhalt().isAusgefallen()) {
 					ausfall += intervall.getIntervallEnde()
 							- intervall.getIntervallStart();
+				}
+			}
+		}
+
+		return ausfall;
+	}
+	
+	/** 
+	 * Gibt alle ausgefallenen Attribute im Puffer zurück
+	 * @return alle ausgefallenen Attribute im Puffer
+	 */
+	public final Set<String> getAusfallAttribute() {
+		final Set<String> ausfall = new LinkedHashSet<String>();
+
+		synchronized (this.puffer) {
+			for (Intervall<VertrauensbereichDatum> intervall : this.puffer.values()) {
+				if (intervall.getInhalt().isAusgefallen()) {
+					ausfall.addAll(intervall.getInhalt().getAusgefalleneAttribute());
 				}
 			}
 		}

@@ -1,40 +1,36 @@
-/*
- * Segment 4 Datenübernahme und Aufbereitung (DUA), SWE 4.2 Pl-Prüfung logisch LVE
- * Copyright (C) 2007-2015 BitCtrl Systems GmbH
- *
- * This program is free software; you can redistribute it and/or modify it under
- * the terms of the GNU General Public License as published by the Free Software
- * Foundation; either version 2 of the License, or (at your option) any later
- * version.
- *
- * This program is distributed in the hope that it will be useful, but WITHOUT
- * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
- * FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
- * details.
- *
- * You should have received a copy of the GNU General Public License along with
- * this program; if not, write to the Free Software Foundation, Inc., 51
- * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
- *
- * Contact Information:<br>
- * BitCtrl Systems GmbH<br>
- * Weißenfelser Straße 67<br>
- * 04229 Leipzig<br>
- * Phone: +49 341-490670<br>
- * mailto: info@bitctrl.de
+/* 
+ * Segment Datenübernahme und Aufbereitung (DUA), SWE Pl-Prüfung logisch LVE
+ * Copyright (C) 2007 BitCtrl Systems GmbH 
+ * Copyright 2016 by Kappich Systemberatung Aachen
+ * 
+ * This file is part of de.bsvrz.dua.plloglve.
+ * 
+ * de.bsvrz.dua.plloglve is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ * 
+ * de.bsvrz.dua.plloglve is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with de.bsvrz.dua.plloglve.  If not, see <http://www.gnu.org/licenses/>.
+
+ * Contact Information:
+ * Kappich Systemberatung
+ * Martin-Luther-Straße 14
+ * 52062 Aachen, Germany
+ * phone: +49 241 4090 436 
+ * mail: <info@kappich.de>
  */
 
 package de.bsvrz.dua.plloglve.plloglve.ausfall;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
-
 import de.bsvrz.dav.daf.main.ResultData;
 import de.bsvrz.dav.daf.main.config.SystemObject;
 import de.bsvrz.dua.plloglve.plloglve.PlPruefungLogischLVE;
-import de.bsvrz.dua.plloglve.vew.TestParameter;
 import de.bsvrz.sys.funclib.bitctrl.dua.DUAInitialisierungsException;
 import de.bsvrz.sys.funclib.bitctrl.dua.adapter.AbstraktBearbeitungsKnotenAdapter;
 import de.bsvrz.sys.funclib.bitctrl.dua.dfs.schnittstellen.IDatenFlussSteuerung;
@@ -42,70 +38,79 @@ import de.bsvrz.sys.funclib.bitctrl.dua.dfs.typen.ModulTyp;
 import de.bsvrz.sys.funclib.bitctrl.dua.schnittstellen.IVerwaltung;
 import de.bsvrz.sys.funclib.debug.Debug;
 
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * Dieses Submodul ueberprueft, ob die parametrierte maximal zulaessige
  * Ausfallhaeufigkeit eines Fahrstreifens pro Tag ueberschritten wurde.
- *
+ * 
  * @author BitCtrl Systems GmbH, Thierfelder
+ * 
+ * @version $Id$
  */
 public class Ausfallhaeufigkeit extends AbstraktBearbeitungsKnotenAdapter {
 
-	private static final Debug LOGGER = Debug.getLogger();
 	/**
 	 * Mapt FS-Systemobjekte auf Fahrstreifenobjekte mit den für dieses Submodul
 	 * notwendigen Informationen.
 	 */
-	private final Map<SystemObject, AusfallFahrStreifen> fahrStreifen = new HashMap<>();
+	private Map<SystemObject, AusfallFahrStreifen> fahrStreifen = new HashMap<SystemObject, AusfallFahrStreifen>();
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
-	public void initialisiere(final IVerwaltung dieVerwaltung) throws DUAInitialisierungsException {
+	public void initialisiere(IVerwaltung dieVerwaltung)
+			throws DUAInitialisierungsException {
 		super.initialisiere(dieVerwaltung);
 
-		for (final SystemObject obj : dieVerwaltung.getSystemObjekte()) {
-			this.fahrStreifen.put(obj, new AusfallFahrStreifen(dieVerwaltung, obj));
+		for (SystemObject obj : dieVerwaltung.getSystemObjekte()) {
+			this.fahrStreifen.put(obj, new AusfallFahrStreifen(dieVerwaltung,
+					obj, PlPruefungLogischLVE.getMq(obj)));
 		}
 	}
 
-	@Override
-	public void aktualisiereDaten(final ResultData[] resultate) {
+	/**
+	 * {@inheritDoc}
+	 */
+	public void aktualisiereDaten(ResultData[] resultate) {
 		if (resultate != null) {
-			final Collection<ResultData> weiterzuleitendeResultate = new ArrayList<>();
 
-			for (final ResultData resultat : resultate) {
+			for (ResultData resultat : resultate) {
 				if (resultat != null) {
+					if (resultat.getDataDescription().getAttributeGroup().getId() == PlPruefungLogischLVE.atgKzdId 
+							&& resultat.getData() != null) {
+						AusfallFahrStreifen fs = this.fahrStreifen.get(resultat.getObject());
 
-					if (!TestParameter.getInstanz().isTestVertrauen()) {
-						if ((resultat.getDataDescription().getAttributeGroup().getId() == PlPruefungLogischLVE.atgKzdId)
-								&& (resultat.getData() != null)) {
-							final AusfallFahrStreifen fs = this.fahrStreifen.get(resultat.getObject());
-
-							if (fs != null) {
-								fs.plausibilisiere(resultat);
-							} else {
-								Ausfallhaeufigkeit.LOGGER
-								.error("Konnte Fahrstreifen zu Datensatz nicht identifizieren:\n" //$NON-NLS-1$
-										+ resultat);
-							}
+						if (fs != null) {
+							fs.plausibilisiere(resultat);
+						} else {
+							Debug.getLogger()
+									.error("Konnte Fahrstreifen zu Datensatz nicht identifizieren:\n" //$NON-NLS-1$
+											+ resultat);
 						}
 					}
-
-					weiterzuleitendeResultate.add(resultat);
 				}
 			}
 
-			if ((getKnoten() != null) && !weiterzuleitendeResultate.isEmpty()) {
-				getKnoten().aktualisiereDaten(weiterzuleitendeResultate.toArray(new ResultData[0]));
+			if (this.knoten != null) {
+				this.knoten.aktualisiereDaten(resultate);
 			}
 		}
 	}
 
-	@Override
+	/**
+	 * {@inheritDoc}
+	 */
 	public ModulTyp getModulTyp() {
 		return null;
 	}
 
-	@Override
-	public void aktualisierePublikation(final IDatenFlussSteuerung dfs) {
+	/**
+	 * {@inheritDoc}
+	 */
+	public void aktualisierePublikation(IDatenFlussSteuerung dfs) {
 		// hier wird nicht publiziert
 	}
 
