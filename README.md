@@ -23,6 +23,12 @@ einem parametrierbaren Aspekt publiziert.
 
 ## Versionsgeschichte
 
+### 2.0.2
+
+Releasedatum: 22.07.2016
+
+- Umpacketierung gemäß NERZ-Konvention
+  
 ### 2.0.1
 
 Release-Datum: 25.06.2016
