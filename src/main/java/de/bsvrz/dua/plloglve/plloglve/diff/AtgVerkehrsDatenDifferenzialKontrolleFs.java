@@ -31,7 +31,6 @@ package de.bsvrz.dua.plloglve.plloglve.diff;
 import java.util.Objects;
 
 import de.bsvrz.dav.daf.main.Data;
-import de.bsvrz.sys.funclib.bitctrl.dua.AllgemeinerDatenContainer;
 
 /**
  * Repräsentiert aktuelle Daten der DAV-ATG

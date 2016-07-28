@@ -28,14 +28,15 @@
 
 package de.bsvrz.dua.plloglve.plloglve;
 
-import de.bsvrz.dua.plloglve.plloglve.ausfall.AusfallDatum;
-
 /**
  * Abstrakter Container für Daten mit den Attributen Zeitstempel und
  * Intervalllänge. Die Objekte sind nach ihrer Datenzeit sortierbar.
  * 
  * @author BitCtrl Systems GmbH, Thierfelder
+ * 
+ * @deprecated Klasse wird nicht verwendet
  */
+@Deprecated
 public class AbstraktDAVZeitEinzelDatum implements
 		Comparable<AbstraktDAVZeitEinzelDatum> {
 
@@ -75,12 +76,17 @@ public class AbstraktDAVZeitEinzelDatum implements
 	public boolean equals(Object obj) {
 		boolean resultat = false;
 
-		if (obj instanceof AusfallDatum) {
+		if (obj instanceof AbstraktDAVZeitEinzelDatum) {
 			AbstraktDAVZeitEinzelDatum that = (AbstraktDAVZeitEinzelDatum) obj;
 			resultat = this.getDatenZeit() == that.getDatenZeit();
 		}
 
 		return resultat;
+	}
+	
+	@Override
+	public int hashCode() {
+		throw new UnsupportedOperationException();
 	}
 
 }

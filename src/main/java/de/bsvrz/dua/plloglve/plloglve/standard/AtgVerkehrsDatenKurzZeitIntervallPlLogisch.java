@@ -28,14 +28,13 @@
 
 package de.bsvrz.dua.plloglve.plloglve.standard;
 
-import de.bsvrz.dav.daf.main.Data;
-import de.bsvrz.dav.daf.main.ResultData;
-import de.bsvrz.dua.plloglve.plloglve.typen.OptionenPlausibilitaetsPruefungLogischVerkehr;
-import de.bsvrz.sys.funclib.bitctrl.dua.AllgemeinerDatenContainer;
-
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
+
+import de.bsvrz.dav.daf.main.Data;
+import de.bsvrz.dav.daf.main.ResultData;
+import de.bsvrz.dua.plloglve.plloglve.typen.OptionenPlausibilitaetsPruefungLogischVerkehr;
 
 /**
  * Klasse die alle Parameter halten kann, die innerhalb der
