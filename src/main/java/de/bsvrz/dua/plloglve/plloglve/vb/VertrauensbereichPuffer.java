@@ -37,8 +37,6 @@ import java.util.Set;
  * inhaltlich nur in der Eigenschaft <code>isAusgefallen</code> unterscheiden.
  * 
  * @author BitCtrl Systems GmbH, Thierfelder
- * 
- * @version $Id$
  */
 public class VertrauensbereichPuffer extends IntervallPuffer<VertrauensbereichDatum> {
 

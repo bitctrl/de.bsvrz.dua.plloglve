@@ -23,6 +23,28 @@ einem parametrierbaren Aspekt publiziert.
 
 ## Versionsgeschichte
 
+### 2.0.3
+
+Releasedatum: 28.07.2016
+
+de.bsvrz.dua.plloglve.plloglve.diff.AtgVerkehrsDatenDifferenzialKontrolleFs
+de.bsvrz.dua.plloglve.plloglve.standard.AtgVerkehrsDatenKurzZeitIntervallPlLogisch
+
+- die Klassen erweitert nicht mehr de.bsvrz.sys.funclib.bitctrl.dua.AllgemeinerDatenContainer
+- equals und hashCode sind konform implementiert
+
+de.bsvrz.dua.plloglve.plloglve.AbstraktDAVZeitEinzelDatum.equals(Object)
+- in der equals-Methode wurde auf die falsche Klasse gecastet
+- hashCode nicht implementiert, es wird jetzt eine UnsupportedOperationException geworfen
+- Klasse auf Deprecated gesetzt, da scheinbar nicht verwendet
+
+de.bsvrz.dua.plloglve.tests.DuAPlLogLveTestBase
+- der Member "_pruefungLogischLVE" sollte nicht statisch sein, der er bei jedem Test neu initialisiert wird
+
+- Javadoc für Java8-Kompatibilität korrigiert
+- Obsolete SVN-Tags aus Kommentaren entfernt
+- Obsolete inheritDoc-Kommentare entfernt
+
 ### 2.0.2
 
 Releasedatum: 22.07.2016

@@ -40,7 +40,7 @@ import org.junit.Before;
  * @author Kappich Systemberatung
  */
 public class DuAPlLogLveTestBase extends DuATestBase {
-	protected static VerwaltungPlPruefungLogischLVE _pruefungLogischLVE;
+	protected VerwaltungPlPruefungLogischLVE _pruefungLogischLVE;
 
 	protected static String[] getLveArgs() {
 		return new String[]{"-KonfigurationsBereichsPid=kb.duaTestFs"};

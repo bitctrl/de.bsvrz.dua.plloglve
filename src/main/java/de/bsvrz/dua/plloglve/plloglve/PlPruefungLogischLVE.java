@@ -43,6 +43,7 @@ import de.bsvrz.sys.funclib.bitctrl.dua.lve.FahrStreifen;
 import de.bsvrz.sys.funclib.bitctrl.dua.lve.MessQuerschnitt;
 import de.bsvrz.sys.funclib.bitctrl.dua.schnittstellen.IStandardAspekte;
 import de.bsvrz.sys.funclib.bitctrl.dua.schnittstellen.IVerwaltung;
+import de.bsvrz.sys.funclib.debug.Debug;
 
 /**
  * Implementierung des Moduls Pl-Prüfung logisch LVE der SWE Pl-Prüfung logisch
@@ -50,10 +51,10 @@ import de.bsvrz.sys.funclib.bitctrl.dua.schnittstellen.IVerwaltung;
  * welche die eigentliche Plausibilisierung durchführen
  * 
  * @author BitCtrl Systems GmbH, Thierfelder
- * 
- * @version $Id$
  */
 public class PlPruefungLogischLVE extends AbstraktBearbeitungsKnotenAdapter {
+
+	private static final Debug LOGGER = Debug.getLogger();
 
 	/**
 	 * Startzeit des Moduls Pl-Prüfung logisch LVE.
@@ -101,17 +102,17 @@ public class PlPruefungLogischLVE extends AbstraktBearbeitungsKnotenAdapter {
 		this.standardAspekte = stdAspekte;
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
-	public void initialisiere(IVerwaltung dieVerwaltung)
-			throws DUAInitialisierungsException {
-		super.initialisiere(dieVerwaltung);		
-		atgKzdId = dieVerwaltung.getVerbindung().getDataModel()
-				.getAttributeGroup(DUAKonstanten.ATG_KZD).getId();
-		atgLzdId = dieVerwaltung.getVerbindung().getDataModel()
-				.getAttributeGroup(DUAKonstanten.ATG_LZD).getId();
+	public void initialisiere(IVerwaltung dieVerwaltung) throws DUAInitialisierungsException {
+		super.initialisiere(dieVerwaltung);
+
+		if(( atgKzdId != -1) || (atgLzdId != -1)) {
+			LOGGER.error("SWE wurde bereits initialisiert");	
+			
+		}
+		
+		atgKzdId = dieVerwaltung.getVerbindung().getDataModel().getAttributeGroup(DUAKonstanten.ATG_KZD).getId();
+		atgLzdId = dieVerwaltung.getVerbindung().getDataModel().getAttributeGroup(DUAKonstanten.ATG_LZD).getId();
 
 		this.vb = new Vertrauensbereich(this.standardAspekte);
 
@@ -129,38 +130,30 @@ public class PlPruefungLogischLVE extends AbstraktBearbeitungsKnotenAdapter {
 		this.vb.setNaechstenBearbeitungsKnoten(this.knoten);
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
 	public ModulTyp getModulTyp() {
 		return null;
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
 	public void aktualisiereDaten(ResultData[] resultate) {
 		this.standard.aktualisiereDaten(resultate);
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
 	public void aktualisierePublikation(IDatenFlussSteuerung dfs) {
 		// wird hier nicht benötigt, da die Publikation erst im letzten Submodul
 		// "Vertrauensbereich" stattfindet
 	}
 
-
-	/** 
+	/**
 	 * Gibt zu einem FS den MQ zurück
-	 * @param obj Fahrstreifen
+	 * 
+	 * @param obj
+	 *            Fahrstreifen
 	 * @return MQ oder null falls kein MQ ermittelbar ist
 	 */
 	public static SystemObject getMq(final SystemObject obj) {
-		for(MessQuerschnitt messQuerschnitt : MessQuerschnitt.getInstanzen()) {
-			for(FahrStreifen fahrStreifen : messQuerschnitt.getFahrStreifen()) {
-				if(fahrStreifen.getSystemObject().equals(obj)){
+		for (MessQuerschnitt messQuerschnitt : MessQuerschnitt.getInstanzen()) {
+			for (FahrStreifen fahrStreifen : messQuerschnitt.getFahrStreifen()) {
+				if (fahrStreifen.getSystemObject().equals(obj)) {
 					return messQuerschnitt.getSystemObject();
 				}
 			}

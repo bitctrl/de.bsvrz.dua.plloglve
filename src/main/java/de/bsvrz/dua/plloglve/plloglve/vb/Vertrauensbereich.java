@@ -54,8 +54,6 @@ import java.util.Map;
  * empfangenen Daten statt.
  * 
  * @author BitCtrl Systems GmbH, Thierfelder
- * 
- * @version $Id$
  */
 public class Vertrauensbereich extends AbstraktBearbeitungsKnotenAdapter {
 
@@ -76,9 +74,6 @@ public class Vertrauensbereich extends AbstraktBearbeitungsKnotenAdapter {
 		this.standardAspekte = stdAspekte;
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
 	public void initialisiere(IVerwaltung dieVerwaltung)
 			throws DUAInitialisierungsException {
@@ -97,9 +92,6 @@ public class Vertrauensbereich extends AbstraktBearbeitungsKnotenAdapter {
 		}
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
 	public void aktualisiereDaten(ResultData[] resultate) {
 		if (resultate != null) {
 
@@ -152,16 +144,10 @@ public class Vertrauensbereich extends AbstraktBearbeitungsKnotenAdapter {
 		}
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
 	public ModulTyp getModulTyp() {
 		return null;
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
 	public void aktualisierePublikation(IDatenFlussSteuerung dfs) {
 		// Datenflusssteuerung ist hier nicht dynamisch
 	}

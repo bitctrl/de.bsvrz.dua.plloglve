@@ -54,8 +54,6 @@ import java.util.Collection;
  * die dann die eigentliche Prüfung durchführen.
  * 
  * @author BitCtrl Systems GmbH, Thierfelder
- * 
- * @version $Id$
  */
 public class VerwaltungPlPruefungLogischLVE extends
 		AbstraktVerwaltungsAdapterMitGuete {
@@ -70,16 +68,10 @@ public class VerwaltungPlPruefungLogischLVE extends
 	 */
 	private PlPruefungLogischLVE plPruefungLogischLVE = null;
 
-	/**
-	 * {@inheritDoc}
-	 */
 	public SWETyp getSWETyp() {
 		return SWETyp.PL_PRUEFUNG_LOGISCH_LVE;
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
 	protected void initialisiere() throws DUAInitialisierungsException {
 		super.initialisiere();
@@ -147,9 +139,6 @@ public class VerwaltungPlPruefungLogischLVE extends
 		return !ignoriereLangzeitdaten;
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
 	public void update(ResultData[] resultate) {
 		this.plPruefungFormal.aktualisiereDaten(resultate);
 	}
