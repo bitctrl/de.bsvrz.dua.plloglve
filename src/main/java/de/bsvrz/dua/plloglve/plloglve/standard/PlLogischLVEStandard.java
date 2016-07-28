@@ -57,8 +57,6 @@ import java.util.Map;
  * - Standardabweichungen, etc..<br>
  * 
  * @author BitCtrl Systems GmbH, Thierfelder
- * 
- * @version $Id$
  */
 public class PlLogischLVEStandard extends AbstraktBearbeitungsKnotenAdapter {
 
@@ -90,9 +88,6 @@ public class PlLogischLVEStandard extends AbstraktBearbeitungsKnotenAdapter {
 		}
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
 	public void aktualisiereDaten(ResultData[] resultate) {
 		if (resultate != null) {
 			Collection<ResultData> weiterzuleitendeResultate = new ArrayList<ResultData>();
@@ -146,16 +141,10 @@ public class PlLogischLVEStandard extends AbstraktBearbeitungsKnotenAdapter {
 		}
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
 	public ModulTyp getModulTyp() {
 		return null;
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
 	public void aktualisierePublikation(IDatenFlussSteuerung dfs) {
 		// hier findet keine Publikation statt
 	}

@@ -63,8 +63,6 @@ import java.util.stream.Collectors;
  * -    Grenzwerte
  * 
  * @author BitCtrl Systems GmbH, Thierfelder
- * 
- * @version $Id$
  */
 public final class PLFahrStreifen implements ClientReceiverInterface {
 
@@ -474,9 +472,6 @@ public final class PLFahrStreifen implements ClientReceiverInterface {
 		return ATTRIBUT_NAMEN;
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
 	public void update(final ResultData[] parameterFeld) {
 		if(parameterFeld != null) {
 			for(final ResultData parameter : parameterFeld) {

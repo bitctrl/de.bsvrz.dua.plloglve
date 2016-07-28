@@ -53,8 +53,6 @@ import java.util.Locale;
  * Speichert die Ausfallhäufigkeit eine Fahrstreifens über einem gleitenden Tag.
  * 
  * @author BitCtrl Systems GmbH, Thierfelder
- * 
- * @version $Id$
  */
 public class AusfallFahrStreifen implements ClientReceiverInterface {
 
@@ -278,9 +276,6 @@ public class AusfallFahrStreifen implements ClientReceiverInterface {
 		return stringBuilder.toString();
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
 	public void update(final ResultData[] parameterFeld) {
 		if(parameterFeld != null) {
 			for(final ResultData parameter : parameterFeld) {

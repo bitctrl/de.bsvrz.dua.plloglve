@@ -28,6 +28,8 @@
 
 package de.bsvrz.dua.plloglve.plloglve.diff;
 
+import java.util.Objects;
+
 import de.bsvrz.dav.daf.main.Data;
 import de.bsvrz.sys.funclib.bitctrl.dua.AllgemeinerDatenContainer;
 
@@ -36,33 +38,30 @@ import de.bsvrz.sys.funclib.bitctrl.dua.AllgemeinerDatenContainer;
  * <code>atg.verkehrsDatenDifferenzialKontrolleFs</code>.
  * 
  * @author BitCtrl Systems GmbH, Thierfelder
- * 
- * @version $Id$
  */
-public class AtgVerkehrsDatenDifferenzialKontrolleFs extends
-		AllgemeinerDatenContainer {
+public class AtgVerkehrsDatenDifferenzialKontrolleFs {
 
 	/**
 	 * Maximal zulässige Anzahl von Intervallen mit Ergebniskonstanz für q.
 	 */
-	private long maxAnzKonstanzVerkehrsmenge;
+	private final long maxAnzKonstanzVerkehrsmenge;
 
 	/**
 	 * Maximal zulässige Anzahl von Intervallen mit Ergebniskonstanz für v.
 	 */
-	private long maxAnzKonstanzGeschwindigkeit;
+	private final long maxAnzKonstanzGeschwindigkeit;
 
 	/**
 	 * Maximal zulässige Anzahl von Intervallen mit Ergebniskonstanz für die
 	 * Streung S.
 	 */
-	private long maxAnzKonstanzStreung;
+	private final long maxAnzKonstanzStreung;
 
 	/**
 	 * Maximal zulässige Anzahl von Intervallen mit Ergebniskonstanz für die
 	 * Belegung b.
 	 */
-	private long maxAnzKonstanzBelegung;
+	private final long maxAnzKonstanzBelegung;
 
 	/**
 	 * Standardkonstruktor.
@@ -74,14 +73,10 @@ public class AtgVerkehrsDatenDifferenzialKontrolleFs extends
 		if (data == null) {
 			throw new NullPointerException("Uebergebenes Datum ist <<null>>"); //$NON-NLS-1$
 		}
-		this.maxAnzKonstanzVerkehrsmenge = data
-				.getUnscaledValue("maxAnzKonstanzVerkehrsmenge").longValue(); //$NON-NLS-1$
-		this.maxAnzKonstanzGeschwindigkeit = data
-				.getUnscaledValue("maxAnzKonstanzGeschwindigkeit").longValue(); //$NON-NLS-1$
-		this.maxAnzKonstanzStreung = data.getUnscaledValue(
-				"maxAnzKonstanzStreung").longValue(); //$NON-NLS-1$
-		this.maxAnzKonstanzBelegung = data.getUnscaledValue(
-				"maxAnzKonstanzBelegung").longValue(); //$NON-NLS-1$
+		this.maxAnzKonstanzVerkehrsmenge = data.getUnscaledValue("maxAnzKonstanzVerkehrsmenge").longValue(); //$NON-NLS-1$
+		this.maxAnzKonstanzGeschwindigkeit = data.getUnscaledValue("maxAnzKonstanzGeschwindigkeit").longValue(); //$NON-NLS-1$
+		this.maxAnzKonstanzStreung = data.getUnscaledValue("maxAnzKonstanzStreung").longValue(); //$NON-NLS-1$
+		this.maxAnzKonstanzBelegung = data.getUnscaledValue("maxAnzKonstanzBelegung").longValue(); //$NON-NLS-1$
 	}
 
 	/**
@@ -120,5 +115,29 @@ public class AtgVerkehrsDatenDifferenzialKontrolleFs extends
 		return maxAnzKonstanzGeschwindigkeit;
 	}
 
+	@Override
+	public int hashCode() {
+		return Objects.hash(maxAnzKonstanzBelegung, maxAnzKonstanzGeschwindigkeit, maxAnzKonstanzStreung,
+				maxAnzKonstanzVerkehrsmenge);
+	}
 
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		AtgVerkehrsDatenDifferenzialKontrolleFs other = (AtgVerkehrsDatenDifferenzialKontrolleFs) obj;
+		if (maxAnzKonstanzBelegung != other.maxAnzKonstanzBelegung)
+			return false;
+		if (maxAnzKonstanzGeschwindigkeit != other.maxAnzKonstanzGeschwindigkeit)
+			return false;
+		if (maxAnzKonstanzStreung != other.maxAnzKonstanzStreung)
+			return false;
+		if (maxAnzKonstanzVerkehrsmenge != other.maxAnzKonstanzVerkehrsmenge)
+			return false;
+		return true;
+	}
 }

@@ -50,8 +50,6 @@ import de.bsvrz.sys.funclib.bitctrl.dua.schnittstellen.IVerwaltung;
  * welche die eigentliche Plausibilisierung durchführen
  * 
  * @author BitCtrl Systems GmbH, Thierfelder
- * 
- * @version $Id$
  */
 public class PlPruefungLogischLVE extends AbstraktBearbeitungsKnotenAdapter {
 
@@ -101,9 +99,6 @@ public class PlPruefungLogischLVE extends AbstraktBearbeitungsKnotenAdapter {
 		this.standardAspekte = stdAspekte;
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
 	public void initialisiere(IVerwaltung dieVerwaltung)
 			throws DUAInitialisierungsException {
@@ -129,23 +124,14 @@ public class PlPruefungLogischLVE extends AbstraktBearbeitungsKnotenAdapter {
 		this.vb.setNaechstenBearbeitungsKnoten(this.knoten);
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
 	public ModulTyp getModulTyp() {
 		return null;
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
 	public void aktualisiereDaten(ResultData[] resultate) {
 		this.standard.aktualisiereDaten(resultate);
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
 	public void aktualisierePublikation(IDatenFlussSteuerung dfs) {
 		// wird hier nicht benötigt, da die Publikation erst im letzten Submodul
 		// "Vertrauensbereich" stattfindet

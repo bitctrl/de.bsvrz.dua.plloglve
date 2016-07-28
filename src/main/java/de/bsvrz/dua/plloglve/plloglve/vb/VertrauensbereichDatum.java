@@ -40,8 +40,6 @@ import java.util.Set;
  * Repräsentiert ein ausgefallenes KZ-Datum.
  * 
  * @author BitCtrl Systems GmbH, Thierfelder
- * 
- * @version $Id$
  */
 public final class VertrauensbereichDatum implements IIntervallDatum<VertrauensbereichDatum> {
 
@@ -156,9 +154,6 @@ public final class VertrauensbereichDatum implements IIntervallDatum<Vertrauensb
 		return this.ausgefallen;
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
 	public String toString() {
 		String s = null;

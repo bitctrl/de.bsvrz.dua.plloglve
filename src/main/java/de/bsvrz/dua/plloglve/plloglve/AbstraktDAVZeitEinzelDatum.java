@@ -35,8 +35,6 @@ import de.bsvrz.dua.plloglve.plloglve.ausfall.AusfallDatum;
  * Intervalllänge. Die Objekte sind nach ihrer Datenzeit sortierbar.
  * 
  * @author BitCtrl Systems GmbH, Thierfelder
- * 
- * @version $Id$
  */
 public class AbstraktDAVZeitEinzelDatum implements
 		Comparable<AbstraktDAVZeitEinzelDatum> {
@@ -69,16 +67,10 @@ public class AbstraktDAVZeitEinzelDatum implements
 		return this.datenZeit;
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
 	public int compareTo(AbstraktDAVZeitEinzelDatum that) {
 		return new Long(this.getDatenZeit()).compareTo(that.getDatenZeit());
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
 	public boolean equals(Object obj) {
 		boolean resultat = false;
