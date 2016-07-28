@@ -39,8 +39,6 @@ import java.util.Date;
  * Eigenschaft ausgefallen zu sein oder nicht.
  * 
  * @author BitCtrl Systems GmbH, Thierfelder
- * 
- * @version $Id$
  */
 public final class VertrauensbereichDatumKomplett implements
 		IIntervallPufferElement<VertrauensbereichDatum> {
@@ -96,9 +94,6 @@ public final class VertrauensbereichDatumKomplett implements
 		return datum;
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
 	public String toString() {
 		String s = "Datenzeit: " + DUAKonstanten.ZEIT_FORMAT_GENAU.format(new Date(this.intervallAnfang)) + //$NON-NLS-1$
@@ -107,23 +102,14 @@ public final class VertrauensbereichDatumKomplett implements
 		return s;
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
 	public long getIntervallEnde() {
 		return this.intervallEnde;
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
 	public long getIntervallStart() {
 		return this.intervallAnfang;
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
 	public VertrauensbereichDatum getInhalt() {
 		return this.inhalt;
 	}

@@ -40,8 +40,6 @@ import java.util.Date;
  * Eigenschaft ausgefallen zu sein oder nicht.
  * 
  * @author BitCtrl Systems GmbH, Thierfelder
- * 
- * @version $Id$
  */
 public final class AusfallDatumKomplett implements
 		IIntervallPufferElement<AusfallDatum> {
@@ -97,9 +95,6 @@ public final class AusfallDatumKomplett implements
 		return datum;
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
 	public String toString() {
 		String s = "Datenzeit: " + DUAKonstanten.ZEIT_FORMAT_GENAU.format(new Date(this.intervallAnfang)) + //$NON-NLS-1$
@@ -108,25 +103,15 @@ public final class AusfallDatumKomplett implements
 		return s;
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
 	public long getIntervallEnde() {
 		return this.intervallEnde;
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
 	public long getIntervallStart() {
 		return this.intervallAnfang;
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
 	public AusfallDatum getInhalt() {
 		return this.inhalt;
 	}
-
 }

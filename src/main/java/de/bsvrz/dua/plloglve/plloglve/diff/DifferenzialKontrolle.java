@@ -50,8 +50,6 @@ import java.util.Map;
  * generiert ggf. eine Betriebsmeldung
  * 
  * @author BitCtrl Systems GmbH, Thierfelder
- * 
- * @version $Id$
  */
 public class DifferenzialKontrolle extends AbstraktBearbeitungsKnotenAdapter {
 
@@ -60,9 +58,6 @@ public class DifferenzialKontrolle extends AbstraktBearbeitungsKnotenAdapter {
 	 */
 	private Map<SystemObject, DiffFahrStreifen> fahrStreifen = new HashMap<SystemObject, DiffFahrStreifen>();
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
 	public void initialisiere(IVerwaltung dieVerwaltung)
 			throws DUAInitialisierungsException {
@@ -74,9 +69,6 @@ public class DifferenzialKontrolle extends AbstraktBearbeitungsKnotenAdapter {
 		}
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
 	public void aktualisiereDaten(ResultData[] resultate) {
 		if (resultate != null) {
 			Collection<ResultData> weiterzuleitendeResultate = new ArrayList<ResultData>();
@@ -130,16 +122,10 @@ public class DifferenzialKontrolle extends AbstraktBearbeitungsKnotenAdapter {
 		}
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
 	public ModulTyp getModulTyp() {
 		return null;
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
 	public void aktualisierePublikation(IDatenFlussSteuerung dfs) {
 		// hier wird nicht publiziert
 	}

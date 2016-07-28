@@ -38,8 +38,6 @@ import java.util.Map;
  * <code>att.optionenPlausibilitätsPrüfungLogischVerkehr</code>.
  * 
  * @author BitCtrl Systems GmbH, Thierfelder
- * 
- * @version $Id$
  */
 public final class OptionenPlausibilitaetsPruefungLogischVerkehr extends
 		AbstractDavZustand {

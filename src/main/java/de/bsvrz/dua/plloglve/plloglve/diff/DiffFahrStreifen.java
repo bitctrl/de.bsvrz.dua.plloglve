@@ -45,7 +45,6 @@ import java.util.Collection;
  * Speichert, wie lange einzelne KZD-Werte eines bestimmten Fahrstreifens in folge konstant sind.
  *
  * @author BitCtrl Systems GmbH, Thierfelder
- * @version $Id$
  */
 public class DiffFahrStreifen implements ClientReceiverInterface {
 
@@ -285,9 +284,6 @@ public class DiffFahrStreifen implements ClientReceiverInterface {
 		return copy;
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
 	public void update(final ResultData[] davParameterFeld) {
 		if(davParameterFeld != null) {
 			for(final ResultData davParameter : davParameterFeld) {

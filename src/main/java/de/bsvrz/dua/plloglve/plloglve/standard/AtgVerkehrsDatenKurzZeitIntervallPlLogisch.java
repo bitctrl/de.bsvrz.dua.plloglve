@@ -28,36 +28,26 @@
 
 package de.bsvrz.dua.plloglve.plloglve.standard;
 
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Objects;
+
 import de.bsvrz.dav.daf.main.Data;
 import de.bsvrz.dav.daf.main.ResultData;
 import de.bsvrz.dua.plloglve.plloglve.typen.OptionenPlausibilitaetsPruefungLogischVerkehr;
-import de.bsvrz.sys.funclib.bitctrl.dua.AllgemeinerDatenContainer;
-
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * Klasse die alle Parameter halten kann, die innerhalb der
  * Standardplausibilisierung LVE für KZD benötigt werden.
  * 
  * @author BitCtrl Systems GmbH, Thierfelder
- * 
- * @version $Id$
  */
-public class AtgVerkehrsDatenKurzZeitIntervallPlLogisch extends AllgemeinerDatenContainer {
+public class AtgVerkehrsDatenKurzZeitIntervallPlLogisch {
 
 	/**
 	 * Attribute, für die Maximum-Werte parametriert werden können
 	 */
-	private static final String[] ATTR = {
-			"qKfz",
-			"qLkw",
-			"vPkw",
-			"vLkw",
-			"vKfz",
-			"vgKfz",
-			"b"
-	};
+	private static final String[] ATTR = { "qKfz", "qLkw", "vPkw", "vLkw", "vKfz", "vgKfz", "b" };
 	/**
 	 * Map mit Attribut zu Maximum-Werten
 	 */
@@ -80,7 +70,7 @@ public class AtgVerkehrsDatenKurzZeitIntervallPlLogisch extends AllgemeinerDaten
 	 * Ob Betriebsmeldungen im Modul TLS verschickt werden sollen
 	 */
 	private final boolean _messageTls;
-	
+
 	/**
 	 * Ob Betriebsmeldungen im Modul Verkehr verschickt werden sollen
 	 */
@@ -97,7 +87,7 @@ public class AtgVerkehrsDatenKurzZeitIntervallPlLogisch extends AllgemeinerDaten
 	private final long _pruefIntervallAusfall;
 
 	/**
-	 * Parameter Bezugszeitraum für die Prüfung Vertrauensbereich 
+	 * Parameter Bezugszeitraum für die Prüfung Vertrauensbereich
 	 */
 	private final long _vertrauensbereichBezugsZeitraum;
 
@@ -107,27 +97,30 @@ public class AtgVerkehrsDatenKurzZeitIntervallPlLogisch extends AllgemeinerDaten
 	private final long _pruefIntervallVertrauensbereich;
 
 	/**
-	 * Parameter für die Ausfallzeit zum Einschalten der Implausibilisierung bei der Prüfung Vertrauensbereich
+	 * Parameter für die Ausfallzeit zum Einschalten der Implausibilisierung bei
+	 * der Prüfung Vertrauensbereich
 	 */
 	private final long _maxAusfallProBezugszeitraumEin;
 
 	/**
-	 * Parameter für die Ausfallzeit zum Ausschalten der Implausibilisierung bei der Prüfung Vertrauensbereich
+	 * Parameter für die Ausfallzeit zum Ausschalten der Implausibilisierung bei
+	 * der Prüfung Vertrauensbereich
 	 */
 	private final long _maxAusfallProBezugszeitraumAus;
 
 	public AtgVerkehrsDatenKurzZeitIntervallPlLogisch(final Data data) {
-		for(String attr : ATTR) {
+		for (String attr : ATTR) {
 			_maxMap.put(attr, data.getUnscaledValue(attr + "Max").longValue());
 		}
 
-		_verhalten = OptionenPlausibilitaetsPruefungLogischVerkehr.getZustand(data.getUnscaledValue("VerhaltenGrenzwertPrüfung").intValue());
+		_verhalten = OptionenPlausibilitaetsPruefungLogischVerkehr
+				.getZustand(data.getUnscaledValue("VerhaltenGrenzwertPrüfung").intValue());
 		_VKfzGrenz = data.getUnscaledValue("vKfzGrenz").longValue();
 		_BGrenz = data.getUnscaledValue("bGrenz").longValue();
-		
+
 		_messageTls = data.getUnscaledValue("ErzeugeBetriebsmeldungPrüfungTLS").intValue() != 0;
 		_messageVerkehr = data.getUnscaledValue("ErzeugeBetriebsmeldungPrüfungVerkehr").intValue() != 0;
-		
+
 		_maxAusfallZeitProTag = data.getTimeValue("MaxAusfallZeitProTag").getMillis();
 		_pruefIntervallAusfall = data.getTimeValue("PrüfintervallAusfallHäufigkeit").getMillis();
 
@@ -141,70 +134,83 @@ public class AtgVerkehrsDatenKurzZeitIntervallPlLogisch extends AllgemeinerDaten
 	 * Erfragt eine Schnittstelle zu den Parametern der logischen
 	 * Plausibilisierung.
 	 * 
-	 * @param resultat ein Parameter-Resultat
+	 * @param resultat
+	 *            ein Parameter-Resultat
 	 * @return eine Schnittstelle zu den Parametern der logischen
 	 *         Plausibilisierung oder <code>null</code>, wenn diese nicht
 	 *         ausgelesen werden konnten
 	 */
-	public static AtgVerkehrsDatenKurzZeitIntervallPlLogisch getInstance(
-			final ResultData resultat) {
+	public static AtgVerkehrsDatenKurzZeitIntervallPlLogisch getInstance(final ResultData resultat) {
 		Data data = resultat.getData();
-		if(data == null) return null;
+		if (data == null)
+			return null;
 		return new AtgVerkehrsDatenKurzZeitIntervallPlLogisch(data);
 	}
 
-	/** 
+	/**
 	 * Gibt den Max-Grenzwert zurück
-	 * @param attribut einer aus {@link #ATTR}
+	 * 
+	 * @param attribut
+	 *            einer aus {@link #ATTR}
 	 * @return den Max-Grenzwert
 	 */
-	public final Long getMax(String attribut){
+	public final Long getMax(String attribut) {
 		return _maxMap.get(attribut);
 	}
 
-	/** 
+	/**
 	 * Gibt die Pid der Attributgruppe zurück
+	 * 
 	 * @return die Pid der Attributgruppe
 	 */
 	public static String getPid() {
 		return "atg.verkehrsDatenKurzZeitIntervallPlausibilitätsPrüfungLogisch2";
 	}
 
-	/** 
+	/**
 	 * Gibt das Verhalten Grenzwertprüfung zurück
+	 * 
 	 * @return das Verhalten Grenzwertprüfung
 	 */
 	public OptionenPlausibilitaetsPruefungLogischVerkehr getVerhalten() {
 		return _verhalten;
 	}
 
-	/** 
+	/**
 	 * Gibt vKfzGrenz zurück
+	 * 
 	 * @return vKfzGrenz
 	 */
 	public long getVKfzGrenz() {
 		return _VKfzGrenz;
 	}
 
-	/** 
+	/**
 	 * Gibt bGrenz zurück
+	 * 
 	 * @return bGrenz
 	 */
 	public long getBGrenz() {
 		return _BGrenz;
 	}
 
-	/** 
-	 * Gibt <tt>true</tt> zurück, wenn Betriebsmeldungen TLS erzeugt werden sollen
-	 * @return <tt>true</tt>, wenn Betriebsmeldungen TLS erzeugt werden sollen, sonst <tt>false</tt>
+	/**
+	 * Gibt <tt>true</tt> zurück, wenn Betriebsmeldungen TLS erzeugt werden
+	 * sollen
+	 * 
+	 * @return <tt>true</tt>, wenn Betriebsmeldungen TLS erzeugt werden sollen,
+	 *         sonst <tt>false</tt>
 	 */
 	public boolean isMessageTls() {
 		return _messageTls;
 	}
 
-	/** 
-	 * Gibt <tt>true</tt> zurück, wenn Betriebsmeldungen Verkehr erzeugt werden sollen
-	 * @return <tt>true</tt>, wenn Betriebsmeldungen Verkehr erzeugt werden sollen, sonst <tt>false</tt>
+	/**
+	 * Gibt <tt>true</tt> zurück, wenn Betriebsmeldungen Verkehr erzeugt werden
+	 * sollen
+	 * 
+	 * @return <tt>true</tt>, wenn Betriebsmeldungen Verkehr erzeugt werden
+	 *         sollen, sonst <tt>false</tt>
 	 */
 	public boolean isMessageVerkehr() {
 		return _messageVerkehr;
@@ -212,30 +218,34 @@ public class AtgVerkehrsDatenKurzZeitIntervallPlLogisch extends AllgemeinerDaten
 
 	/**
 	 * Maximale Ausfallzeit pro Tag in Millisekunden
+	 * 
 	 * @return
 	 */
 	public long getMaxAusfallZeitProTag() {
 		return _maxAusfallZeitProTag;
 	}
-	
+
 	/**
 	 * Prüfintervall in Millisekunden
+	 * 
 	 * @return
 	 */
 	public long getPruefIntervallAusfall() {
 		return _pruefIntervallAusfall;
 	}
-	
+
 	/**
 	 * Bezugszeitraum VB in Millisekunden
+	 * 
 	 * @return
 	 */
 	public long getVertrauensbereichBezugsZeitraum() {
 		return _vertrauensbereichBezugsZeitraum;
 	}
-	
+
 	/**
 	 * Prüfintervall in Millisekunden
+	 * 
 	 * @return
 	 */
 	public long getPruefIntervallVertrauensbereich() {
@@ -244,6 +254,7 @@ public class AtgVerkehrsDatenKurzZeitIntervallPlLogisch extends AllgemeinerDaten
 
 	/**
 	 * Einschaltschwelle VB
+	 * 
 	 * @return
 	 */
 	public long getMaxAusfallProBezugszeitraumEin() {
@@ -252,9 +263,60 @@ public class AtgVerkehrsDatenKurzZeitIntervallPlLogisch extends AllgemeinerDaten
 
 	/**
 	 * Ausschaltschwelle VB
+	 * 
 	 * @return
 	 */
 	public long getMaxAusfallProBezugszeitraumAus() {
 		return _maxAusfallProBezugszeitraumAus;
 	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(_BGrenz, _VKfzGrenz, _maxAusfallProBezugszeitraumAus, _maxAusfallProBezugszeitraumEin,
+				_maxAusfallZeitProTag, _maxMap, _messageTls, _messageVerkehr, _pruefIntervallAusfall,
+				_pruefIntervallVertrauensbereich, _verhalten, _vertrauensbereichBezugsZeitraum);
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		AtgVerkehrsDatenKurzZeitIntervallPlLogisch other = (AtgVerkehrsDatenKurzZeitIntervallPlLogisch) obj;
+		if (_BGrenz != other._BGrenz)
+			return false;
+		if (_VKfzGrenz != other._VKfzGrenz)
+			return false;
+		if (_maxAusfallProBezugszeitraumAus != other._maxAusfallProBezugszeitraumAus)
+			return false;
+		if (_maxAusfallProBezugszeitraumEin != other._maxAusfallProBezugszeitraumEin)
+			return false;
+		if (_maxAusfallZeitProTag != other._maxAusfallZeitProTag)
+			return false;
+		if (_maxMap == null) {
+			if (other._maxMap != null)
+				return false;
+		} else if (!_maxMap.equals(other._maxMap))
+			return false;
+		if (_messageTls != other._messageTls)
+			return false;
+		if (_messageVerkehr != other._messageVerkehr)
+			return false;
+		if (_pruefIntervallAusfall != other._pruefIntervallAusfall)
+			return false;
+		if (_pruefIntervallVertrauensbereich != other._pruefIntervallVertrauensbereich)
+			return false;
+		if (_verhalten == null) {
+			if (other._verhalten != null)
+				return false;
+		} else if (!_verhalten.equals(other._verhalten))
+			return false;
+		if (_vertrauensbereichBezugsZeitraum != other._vertrauensbereichBezugsZeitraum)
+			return false;
+		return true;
+	}
+
 }

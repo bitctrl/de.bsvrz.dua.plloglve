@@ -35,8 +35,6 @@ import de.bsvrz.sys.funclib.bitctrl.dua.intpuf.IntervallPuffer;
  * inhaltlich nur in der Eigenschaft <code>isAusgefallen</code> unterscheiden.
  * 
  * @author BitCtrl Systems GmbH, Thierfelder
- * 
- * @version $Id$
  */
 public class AusfallPuffer extends IntervallPuffer<AusfallDatum> {
 

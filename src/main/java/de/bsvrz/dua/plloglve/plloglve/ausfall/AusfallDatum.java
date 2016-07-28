@@ -37,8 +37,6 @@ import de.bsvrz.sys.funclib.bitctrl.dua.intpuf.IIntervallDatum;
  * Repräsentiert ein ausgefallenes KZ-Datum.
  * 
  * @author BitCtrl Systems GmbH, Thierfelder
- * 
- * @version $Id$
  */
 public final class AusfallDatum implements IIntervallDatum<AusfallDatum> {
 
@@ -145,9 +143,6 @@ public final class AusfallDatum implements IIntervallDatum<AusfallDatum> {
 		return this.ausgefallen;
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
 	public String toString() {
 		String s = null;
@@ -162,10 +157,10 @@ public final class AusfallDatum implements IIntervallDatum<AusfallDatum> {
 	}
 
 	/**
-	 * {@inheritDoc}<br>
-	 * 
 	 * Zwei Ausfalldaten sind gleich, wenn deren Attribute
 	 * <code>ausgefallen</code> den selben Wert haben.
+	 * 
+	 * @return das Vergleichsergebnis
 	 */
 	public boolean istGleich(AusfallDatum that) {
 		return this.isAusgefallen() == that.isAusgefallen();

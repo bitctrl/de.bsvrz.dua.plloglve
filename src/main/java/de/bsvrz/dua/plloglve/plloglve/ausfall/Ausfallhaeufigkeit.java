@@ -46,8 +46,6 @@ import java.util.Map;
  * Ausfallhaeufigkeit eines Fahrstreifens pro Tag ueberschritten wurde.
  * 
  * @author BitCtrl Systems GmbH, Thierfelder
- * 
- * @version $Id$
  */
 public class Ausfallhaeufigkeit extends AbstraktBearbeitungsKnotenAdapter {
 
@@ -57,9 +55,6 @@ public class Ausfallhaeufigkeit extends AbstraktBearbeitungsKnotenAdapter {
 	 */
 	private Map<SystemObject, AusfallFahrStreifen> fahrStreifen = new HashMap<SystemObject, AusfallFahrStreifen>();
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
 	public void initialisiere(IVerwaltung dieVerwaltung)
 			throws DUAInitialisierungsException {
@@ -71,9 +66,6 @@ public class Ausfallhaeufigkeit extends AbstraktBearbeitungsKnotenAdapter {
 		}
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
 	public void aktualisiereDaten(ResultData[] resultate) {
 		if (resultate != null) {
 
@@ -100,16 +92,10 @@ public class Ausfallhaeufigkeit extends AbstraktBearbeitungsKnotenAdapter {
 		}
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
 	public ModulTyp getModulTyp() {
 		return null;
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
 	public void aktualisierePublikation(IDatenFlussSteuerung dfs) {
 		// hier wird nicht publiziert
 	}

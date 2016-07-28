@@ -63,8 +63,6 @@ import java.util.stream.Collectors;
  * -    Grenzwerte
  * 
  * @author BitCtrl Systems GmbH, Thierfelder
- * 
- * @version $Id$
  */
 public final class PLFahrStreifen implements ClientReceiverInterface {
 
@@ -474,9 +472,6 @@ public final class PLFahrStreifen implements ClientReceiverInterface {
 		return ATTRIBUT_NAMEN;
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
 	public void update(final ResultData[] parameterFeld) {
 		if(parameterFeld != null) {
 			for(final ResultData parameter : parameterFeld) {
@@ -500,7 +495,6 @@ public final class PLFahrStreifen implements ClientReceiverInterface {
 	 * @param davDatum ein zu veränderndes Verkehrs-Datums (darf nicht <code>null</code> sein)
 	 * @param wertName der Name des final Attributs
 	 * @param messageText
-	 * @return ob die Pl-Pruefung an dieser Stelle abgebrochen werden soll
 	 */
 	protected void untersucheAufMaxVerletzung(final Data davDatum, final String wertName, final OperatingMessage messageText, final String id) {
 		final GanzZahl sweGueteWert = GanzZahl.getGueteIndex();

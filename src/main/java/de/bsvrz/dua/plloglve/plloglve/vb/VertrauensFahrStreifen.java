@@ -52,8 +52,6 @@ import java.util.Set;
  * des Vertrauens in diesen Fahrstreifen notwendig sind.
  * 
  * @author BitCtrl Systems GmbH, Thierfelder
- * 
- * @version $Id$
  */
 public class VertrauensFahrStreifen implements ClientReceiverInterface {
 
@@ -286,9 +284,6 @@ public class VertrauensFahrStreifen implements ClientReceiverInterface {
 		_meldung = null;
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
 	public void update(final ResultData[] parameterFeld) {
 		if(parameterFeld != null) {
 			for(final ResultData parameter : parameterFeld) {
