@@ -35,7 +35,7 @@ de.bsvrz.dua.plloglve.plloglve.standard.AtgVerkehrsDatenKurzZeitIntervallPlLogis
 
 de.bsvrz.dua.plloglve.plloglve.AbstraktDAVZeitEinzelDatum.equals(Object)
 - in der equals-Methode wurde auf die falsche Klasse gecastet
-- hashCode nicht implementiert, es wird jetzt eine UnsupportedOperationException geworfen
+- hashCode und equals werden nicht mehr implementiert
 - Klasse auf Deprecated gesetzt, da scheinbar nicht verwendet
 
 de.bsvrz.dua.plloglve.tests.DuAPlLogLveTestBase
