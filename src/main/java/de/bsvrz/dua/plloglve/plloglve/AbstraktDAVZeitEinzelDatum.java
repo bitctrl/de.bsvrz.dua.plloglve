@@ -71,22 +71,4 @@ public class AbstraktDAVZeitEinzelDatum implements
 	public int compareTo(AbstraktDAVZeitEinzelDatum that) {
 		return new Long(this.getDatenZeit()).compareTo(that.getDatenZeit());
 	}
-
-	@Override
-	public boolean equals(Object obj) {
-		boolean resultat = false;
-
-		if (obj instanceof AbstraktDAVZeitEinzelDatum) {
-			AbstraktDAVZeitEinzelDatum that = (AbstraktDAVZeitEinzelDatum) obj;
-			resultat = this.getDatenZeit() == that.getDatenZeit();
-		}
-
-		return resultat;
-	}
-	
-	@Override
-	public int hashCode() {
-		throw new UnsupportedOperationException();
-	}
-
 }
