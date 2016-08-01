@@ -243,6 +243,7 @@
 							</excludes>
 							<archive>
 								<manifest>
+									<mainClass>de.bsvrz.dua.plloglve.vew.VerwaltungPlPruefungLogischLVE</mainClass>
 									<addDefaultImplementationEntries>true</addDefaultImplementationEntries>
 									<addClasspath>true</addClasspath>
 									<classpathLayoutType>custom</classpathLayoutType>
