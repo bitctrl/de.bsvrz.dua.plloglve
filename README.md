@@ -23,7 +23,11 @@ einem parametrierbaren Aspekt publiziert.
 
 ## Versionsgeschichte
 
-### 2.0.3
+### Version 2.0.4
+
+- Applikationsname für MessageSender entsprechend NERZ-Vorgabe gesetzt
+
+### Version 2.0.3
 
 Releasedatum: 28.07.2016
 
@@ -45,13 +49,13 @@ de.bsvrz.dua.plloglve.tests.DuAPlLogLveTestBase
 - Obsolete SVN-Tags aus Kommentaren entfernt
 - Obsolete inheritDoc-Kommentare entfernt
 
-### 2.0.2
+### Version 2.0.2
 
 Releasedatum: 22.07.2016
 
 - Umpacketierung gemäß NERZ-Konvention
   
-### 2.0.1
+### Version 2.0.1
 
 Release-Datum: 25.06.2016
 
@@ -62,7 +66,7 @@ Folgende Fehler gegenüber vorhergehenden Versionen wurden korrigiert:
 - Bei der Gutmeldung der Vertrauensbereichsprüfung (Betriebsmeldung
   DUA-PP-VB02) kam es zu einer Exception, wenn die neue Aufalldauer 0 war.
 
-### 2.0.0
+### Version 2.0.0
 
 Release-Datum: 31.05.2016
 
@@ -110,52 +114,52 @@ Folgende Änderungen gegenüber vorhergehenden Versionen wurden durchgeführt:
   der SWE entfernt
 - Überarbeitung der Güte-Berechnungen.
 
-### 1.4.0
+### Version 1.4.0
 
 - Umstellung auf Java 8 und UTF-8
 
-### 1.3.0
+### Version 1.3.0
 
 - Umstellung auf Funclib-Bitctrl-Dua
 
-### 1.2.2
+### Version 1.2.2
 
 - direkter Memberzugriff in Klassen der de.bsvrz.sys.funclib.bitctrl beseitigt
 
-### 1.2.1
+### Version 1.2.1
 
 - BezugsZeitraum: Fehlerausgabe korrigiert für den Fall, dass die Einschaltschwelle überschritten war und 
   die Ausschaltschwelle noch nicht unterschritten wurde
 
-### 1.2.0
+### Version 1.2.0
 
 - Umstellung auf Maven-Build
 
-### 1.1.2
+### Version 1.1.2
 
 - Senden von reinen Betriebsmeldungen in DUA um die Umsetzung von Objekt-PID/ID nach
   Betriebsmeldungs-ID erweitert.  
 
-### 1.1.1
+### Version 1.1.1
 
 - FIX 1588: Bezeichnung von Fahrstreifenobjekten in Betriebsmeldungen ueberarbeitet.
 
-### 1.1.0
+### Version 1.1.0
 
 - Neuer Aufrufparameter -altAnlagen=[Ja/Nein] eingebaut. Achtung: Dieser Aufrufparameter 
   muss in der Regel beim Aufruf der SWE Messwertersetzung LVE angegeben werden, da diese die 
   SWE Pl-Prüfung logisch LVE logisch automatisch mitstartet.
 
-### 1.0.2
+### Version 1.0.2
 
 - FIX: Sämtliche Konstruktoren DataDescription(atg, asp, sim) ersetzt durch
        DataDescription(atg, asp)
 
-### 1.0.0
+### Version 1.0.0
 
 - Erste vollständige Auslieferung
 
-### 1.0.0b
+### Version 1.0.0b
 
 - Erste Auslieferung (beta, nur teilweise nach Prüfspezifikation getestet)
 

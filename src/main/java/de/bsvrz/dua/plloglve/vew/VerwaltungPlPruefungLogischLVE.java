@@ -76,7 +76,7 @@ public class VerwaltungPlPruefungLogischLVE extends
 	protected void initialisiere() throws DUAInitialisierungsException {
 		super.initialisiere();
 		
-		MessageSender.getInstance().setApplicationLabel("PL-Logisch LVE");
+		MessageSender.getInstance().setApplicationLabel("PLPruefung logisch LVE");
 
 		String infoStr = ""; //$NON-NLS-1$
 		Collection<SystemObject> plLogLveObjekte = DUAUtensilien
